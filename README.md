@@ -139,6 +139,43 @@ n²:       0  1  4  9  16 ...
 
 目标不是速度竞赛，而是理解“乘法如何被机构分解”。
 
+### Demo 4：古法反向传播机
+
+这是一个**反事实教学机械**，不是历史复原。
+
+设想把一个极小神经网络的：
+
+```text
+forward
+→ output
+→ error
+→ gradient
+→ weight update
+```
+
+全部变成可手摇、可单步、可查看内部状态的机械过程。
+
+用户不是看到一句“backpropagation happened”，而是亲手摇反向曲柄，看误差信号怎样一级一级回到权重。
+
+完整设计：[`docs/ANCIENT_BACKPROP.md`](docs/ANCIENT_BACKPROP.md)。
+
+已有真正的机械神经网络与 in-situ backpropagation 研究已经列入该文档；本项目不得把“机械反向传播”本身当作原创概念。
+
+## 展示方式
+
+普通访客不应该为了看一个机械展品先 clone 仓库。
+
+本仓建议使用自己的 **GitHub Project Pages** 发布纯前端展品：
+
+```text
+GitHub Pages = 展厅
+Git repository = 实验室
+```
+
+个人站 `tmzncty.github.io` 不作为本项目的依赖，也不承担统一 Labs 门户；这样个人站以后私有化、停用或迁移，不影响本仓展示。
+
+详见 [`docs/PUBLISHING.md`](docs/PUBLISHING.md)。
+
 ## 研究问题
 
 - “数字”在机械计算机中究竟是什么：位置、角度、齿数还是状态？
@@ -146,6 +183,7 @@ n²:       0  1  4  9  16 ...
 - 为什么有限差分特别适合机械制表？
 - 为什么机械计算机很早就出现了 input / store / operation / output 的分层？
 - 机械限制如何塑造算法，而不是算法单向决定机器？
+- 如果梯度也必须通过机构显式传播，反向传播还会不会显得像一句抽象咒语？
 
 ## 第一阶段
 
@@ -154,6 +192,8 @@ n²:       0  1  4  9  16 ...
 - [ ] `mechanisms/carry-chain`；
 - [ ] `demos/visible-carry`；
 - [ ] `demos/finite-difference`；
+- [ ] `backprop-core` Stage A；
+- [ ] `demos/hand-crank-backprop`；
 - [ ] 一篇“为什么 Difference Engine 不需要通用乘法器”；
 - [ ] 一篇“Curta 为什么不是一个长得奇怪的电子计算器前身，而是一种机械算法机器”。
 
@@ -162,3 +202,5 @@ n²:       0  1  4  9  16 ...
 **先把机械逻辑讲明白，再追求漂亮的齿轮动画。**
 
 如果一个 demo 把所有齿轮隐藏掉但仍能清楚展示状态转换，它比一个视觉很酷却解释不了进位的 3D 模型更接近本项目目标。
+
+同样，如果“古法反向传播”只是普通 JavaScript backprop 外面套一张齿轮皮肤，它也不算完成；必须能解释每个 reverse phase 到底对应什么状态与梯度。
