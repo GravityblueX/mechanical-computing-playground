@@ -151,6 +151,55 @@ printer / curve output
 
 ---
 
+## M7 — 古法反向传播机 / Hand-Crank Backpropagation
+
+这是反事实教学展品，不是历史复原。完整定义见 [`docs/ANCIENT_BACKPROP.md`](docs/ANCIENT_BACKPROP.md)。
+
+推进顺序：
+
+- [ ] `research/backprop-prior-art.md`：核对 2024 mechanical neural network in-situ backpropagation 与其他 physical learning 工作；
+- [ ] `backprop-core/`：Stage A 单层线性模型，纯逻辑 + tests；
+- [ ] analytic gradient vs finite difference 验证；
+- [ ] 把一轮训练拆成可序列化 phase/event；
+- [ ] Stage B：2→2→1 chain rule 状态模型；
+- [ ] `demos/hand-crank-backprop/`：最后才做浏览器可交互展品；
+- [ ] 对比教学机械模型与真实 all-mechanical neural network，不混淆两者。
+
+### M7 验收
+
+用户不需要先看公式，就能通过一次次手摇观察：
+
+```text
+forward
+→ output
+→ error
+→ reverse/adjoint signal
+→ gradient
+→ weight update
+→ lower loss
+```
+
+同时点击“显示数学”后，每个机械 phase 都能对应到 reference implementation 中的具体量。
+
+必须额外展示一个 learning rate 过大导致 overshoot / oscillation 的实验。
+
+---
+
+## 展示与发布
+
+公开 demo 不依赖个人站仓库；使用每个项目自己的 GitHub Project Pages。隐私与发布边界见 [`docs/PUBLISHING.md`](docs/PUBLISHING.md)。
+
+原则：
+
+```text
+GitHub Pages = 展厅
+Git repository = 实验室
+```
+
+普通访客不应为了看一个进位或反向传播动画先 clone 仓库。
+
+---
+
 ## AI 可直接领取的第一批任务
 
 ### Task A — 状态模型
@@ -173,14 +222,24 @@ printer / curve output
 
 把 Difference Engine、Analytical Engine、Curta 的现有 simulator 跑一遍，记录：输入模型、输出模型、是否逐步、是否显示内部状态、许可证、最后维护时间。输出 `research/simulator-matrix.md`。
 
+### Task F — 古法反向传播 Stage A
+
+读取 `docs/ANCIENT_BACKPROP.md`。先做 prior-art review，再实现单层线性 `backprop-core` 与 gradient tests；**禁止直接开始画齿轮 UI**。
+
 ## Stop conditions
 
 - 已有 simulator 完整覆盖目标，新增实现只有换 UI；
 - 动画先于状态模型，导致无法自动测试；
 - 把教学简化写成历史真实机械结构；
 - 为追求 3D 效果引入复杂物理引擎但没有新的机制解释；
-- 未查原始/博物馆资料就凭现代计算机类比推断机械结构。
+- 未查原始/博物馆资料就凭现代计算机类比推断机械结构；
+- 把已有 mechanical neural network / physical learning 成果改名后当成本项目原创；
+- 把普通 JavaScript backprop 套一张齿轮皮肤，就宣称“机械实现”。
 
 这个仓库最终最好能做到：
 
 > 输入一个算式，不只是告诉你答案，而是告诉你**这台机器为了得到这个答案，到底动了什么。**
+
+以及：
+
+> 给它一个误差，不只是告诉你“梯度是多少”，而是让你看见**误差怎样沿着机器一级一级倒着走回去。**
