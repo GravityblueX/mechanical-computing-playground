@@ -30,9 +30,9 @@ Requirements:
 
 Acceptance:
 
-- [ ] clean install succeeds;
-- [ ] tests run;
-- [ ] production build succeeds.
+- [x] clean install succeeds;
+- [x] tests run;
+- [x] production build succeeds.
 
 ### M0.2 CI
 

@@ -9,6 +9,8 @@
 - [x] `docs/MODEL.md`：mechanism state / transition / event 定义；
 - [x] `src/mechanism-core.ts`：decimal wheel 与 carry chain 的确定性核心；
 - [x] `test/mechanism-core.test.mjs`：M0 carry / phase / replay 验收测试；
+- [x] `src/mechanism-core.ts`：已由 M0.1 harness 纳入严格 TypeScript/Vitest 测试；
+- [x] M0.1：严格 TypeScript + Vite + Vitest 浏览器 harness；
 - [ ] `mechanisms/decimal-wheel/`：面向展品的机制封装；
 - [ ] `mechanisms/carry-chain/`：面向展品的机制封装；
 - [ ] `mechanisms/carriage-shift/`；
