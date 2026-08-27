@@ -40,7 +40,8 @@ Add GitHub Actions for install, typecheck/test, and build on push/PR.
 
 Acceptance:
 
-- [ ] CI green on main.
+- [x] Workflow added for install, typecheck, tests, and production build on push/PR.
+- [ ] CI green on main (requires a remote GitHub Actions run).
 
 ---
 
