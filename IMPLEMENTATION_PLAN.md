@@ -101,6 +101,8 @@ Acceptance:
 
 Write `docs/MODEL.md` from the implemented model.
 
+Status: completed against the shared event, transition, canonical trace, and reducer replay implementation.
+
 Include explicit distinction among:
 
 - mathematical value;
