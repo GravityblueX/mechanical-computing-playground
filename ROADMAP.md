@@ -6,9 +6,11 @@
 
 目标：建立可测试的离散机械状态模型。
 
-- [ ] `docs/MODEL.md`：mechanism state / transition / event 定义；
-- [ ] `mechanisms/decimal-wheel/`；
-- [ ] `mechanisms/carry-chain/`；
+- [x] `docs/MODEL.md`：mechanism state / transition / event 定义；
+- [x] `src/mechanism-core.ts`：decimal wheel 与 carry chain 的确定性核心；
+- [x] `test/mechanism-core.test.mjs`：M0 carry / phase / replay 验收测试；
+- [ ] `mechanisms/decimal-wheel/`：面向展品的机制封装；
+- [ ] `mechanisms/carry-chain/`：面向展品的机制封装；
 - [ ] `mechanisms/carriage-shift/`；
 - [ ] `schemas/mechanism.schema.json`；
 - [ ] 统一 step / crank / phase / carry event 术语。

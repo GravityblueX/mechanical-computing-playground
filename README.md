@@ -188,6 +188,9 @@ Git repository = 实验室
 ## 第一阶段
 
 - [x] `docs/PRIOR_ART.md`：已有模拟器、博物馆和历史资料地图；
+- [x] `docs/MODEL.md`：M0 机制状态、phase 与 carry event 模型；
+- [x] `src/mechanism-core.ts`：无依赖的确定性十进制轮 / 进位链核心；
+- [x] `test/mechanism-core.test.mjs`：本地可执行验收测试；
 - [ ] `mechanisms/decimal-wheel`；
 - [ ] `mechanisms/carry-chain`；
 - [ ] `demos/visible-carry`；
