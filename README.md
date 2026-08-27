@@ -187,7 +187,7 @@ Git repository = 实验室
 
 ## 第一阶段
 
-- [ ] `docs/PRIOR_ART.md`：已有模拟器、博物馆和历史资料地图；
+- [x] `docs/PRIOR_ART.md`：已有模拟器、博物馆和历史资料地图；
 - [ ] `mechanisms/decimal-wheel`；
 - [ ] `mechanisms/carry-chain`；
 - [ ] `demos/visible-carry`；
@@ -196,6 +196,20 @@ Git repository = 实验室
 - [ ] `demos/hand-crank-backprop`；
 - [ ] 一篇“为什么 Difference Engine 不需要通用乘法器”；
 - [ ] 一篇“Curta 为什么不是一个长得奇怪的电子计算器前身，而是一种机械算法机器”。
+
+## AI 施工入口
+
+后续工作已经整理成可以让 coding/research agent 连续执行的施工契约：
+
+- [`AGENTS.md`](AGENTS.md)：架构、研究、测试、提交、历史真实性与停止条件；
+- [`IMPLEMENTATION_PLAN.md`](IMPLEMENTATION_PLAN.md)：从十进制轮、进位、有限差分、乘法机构、Curta、Analytical Engine，到 Stage A/Stage B 古法反向传播、Pages 发布和最终验证的完整顺序；
+- [`PROMPT.md`](PROMPT.md)：可直接复制给有仓库写权限 AI 的一段总指令；
+- [`ROADMAP.md`](ROADMAP.md)：项目级里程碑；
+- [`docs/PRIOR_ART.md`](docs/PRIOR_ART.md)：已有模拟器与历史资料地图；
+- [`docs/ANCIENT_BACKPROP.md`](docs/ANCIENT_BACKPROP.md)：古法反向传播展项边界；
+- [`docs/PUBLISHING.md`](docs/PUBLISHING.md)：独立 Project Pages 发布边界。
+
+默认施工原则：**读完这些文件后直接实现最早的未完成依赖安全任务，验证、测试、构建、提交，然后继续；不要再生成一份新的宏观规划来代替施工。**
 
 ## 项目原则
 
