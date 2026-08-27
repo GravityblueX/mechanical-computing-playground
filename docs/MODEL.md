@@ -1,170 +1,201 @@
 # Mechanism Core Model / 机制核心模型
 
-本文定义第一阶段（M0）共享的离散状态模型。它只描述可观察的机械逻辑，不描述齿轮的几何尺寸、动画时长或具体机器的历史复原。
+本文记录当前已经实现的共享机械状态模型（M1.1–M1.4）。它描述可观察、可重放的离散逻辑，不描述动画时长、齿轮几何尺寸，也不声称复原某一台历史机器。
 
-## 1. 边界与术语
+## 1. 五层边界
 
-- **wheel**：一个十进制数字轮，位置为 `0..9`。
-- **step**：驱动一个轮尝试前进或后退一个数字位置的离散输入动作。
-- **crank**：一次完整的人工驱动周期；一个 crank 可以包含多个按顺序执行的 step 与 carry phase。
-- **phase**：crank 中可单步观察的阶段。
-- **carry event**：某个轮越过边界后，向相邻高位轮传递一次进位（或借位）请求的事件。
-- **carry-out**：最高位继续越过边界，超出当前轮组容量的事件。
+核心严格区分以下对象：
 
-这里的“前进”默认表示加法方向；减法/借位需要在后续模型中明确作为独立方向，而不是隐含在负数里。
+1. **mathematical value**：例如十进制寄存器代表的数值 `99`；
+2. **mechanical representation**：例如从低位到高位排列的轮位置 `[9, 9, 0, 0]`；
+3. **operation phase**：一次 crank 中当前执行的阶段；
+4. **event**：带顺序号、部件身份和 before/after 值的已发生事实；
+5. **visualization**：根据 event 高亮、运动或播放声音的 UI adapter。
 
-## 2. 十进制轮状态
+只有 state + action transition 可以决定新状态。可视化不计算进位，也不修改核心状态。
 
-最小状态：
+```text
+explicit state + explicit action
+              ↓
+pure deterministic transition
+              ↓
+next state + ordered events + warnings/errors
+              ↓
+canonical trace / UI adapter / replay
+```
+
+## 2. 共享 vocabulary
+
+共享类型位于：
+
+- `src/core/types.ts`
+- `src/core/events.ts`
+
+核心标识包括：
+
+- `MechanismId`：机制实例/类别标识；
+- `OperationCycleId`：一次可追踪 crank 或操作周期；
+- `WheelIdentity`：稳定的 wheel/dial `id`、`index` 与种类；
+- `SignedStep` / `SignedRotation`：有方向的离散步进与旋转；
+- `TransferRatio`、`CarriageOffset`、`LatchDetentState`；
+- `HumanOperation`：人工曲柄、拨轮、设定刻度、移位、锁止操作；
+- `WarningCondition` / `ErrorCondition`：与正常事件流分离的警告和错误。
+
+这些类型不包含 Pascaline、Curta 等机器专属历史假设。未被具体机制使用的共享量只是小型数据结构，不承载隐藏行为。
+
+## 3. Event discriminated union
+
+`MechanismEvent` 是以 `type` 区分的联合类型。每个事件都有：
 
 ```ts
-interface DecimalWheelState {
-  /** Least-significant position is 0. */
-  index: number;
-  /** Current digit, always an integer in 0..9. */
-  position: number;
+interface EventBase {
+  mechanismId: MechanismId;
+  cycleId: OperationCycleId;
+  sequence: number;
+  phase: OperationPhase;
+}
+```
+
+当前事件：
+
+| Event | 含义 |
+|---|---|
+| `CRANK_BEGIN` | 显式人工曲柄操作开始 |
+| `WHEEL_STEP` | 指定轮从 `from` 移到 `to` |
+| `CARRY_PENDING` | 低位越界，产生发往相邻高位的请求 |
+| `CARRY_PROPAGATED` | 请求传递到目标轮 |
+| `CARRY_OUT` | 最高位越界，寄存器容量不足 |
+| `CRANK_END` | 全部 pending carry 已处理，周期结束 |
+
+`sequence` 从 `0` 连续递增，是 trace 内的权威事件顺序。动画帧率不能改变此顺序。
+
+## 4. Deterministic transition contract
+
+共享接口位于 `src/core/transition.ts`：
+
+```ts
+interface TransitionResult<State, Event extends MechanismEvent> {
+  state: State;
+  events: readonly Event[];
+  warnings: readonly WarningCondition[];
+  errors: readonly ErrorCondition[];
+}
+
+type Transition<State, Action, Event extends MechanismEvent> = (
+  state: Readonly<State>,
+  action: Readonly<Action>,
+) => TransitionResult<State, Event>;
+```
+
+约束：
+
+- 输入 state 不被修改；
+- 相同 state/action 产生相同 state、events、warnings 和 errors；
+- core 中没有 timer、DOM、animation frame、random 或墙上时钟；
+- overflow 既有 `CARRY_OUT` 事件，也有结构化 `OVERFLOW` warning；
+- reducer 可以只消费 events 重建状态，不重新执行 transition。
+
+当前第一消费者是 `transitionDecimalRegister()`。旧的 `crankPlusOne()` 仅为兼容入口，它委托给同一个 transition，不存在第二套进位实现。
+
+## 5. Decimal register
+
+当前教学寄存器按**低位优先**保存轮位置：
+
+```ts
+interface DecimalRegisterState {
+  mechanismId: 'decimal-register';
+  digits: number[];
 }
 ```
 
 不变量：
 
 ```text
-0 <= position <= 9
-position is an integer
-index is unique within a wheel assembly
+digits is non-empty
+each digit is an integer in 0..9
+index 0 is the least-significant wheel
+wheel identity is decimal-wheel-<index>
 ```
 
-单轮加法 step 的状态转移：
-
-| 当前位 | 输入 step | 新位置 | 事件 |
-|---:|---:|---:|---|
-| 0..8 | +1 | 当前位 + 1 | 无 |
-| 9 | +1 | 0 | `CARRY_PENDING` |
-
-状态转移必须先产生“边界已越过”的事件，再由 carry chain 决定是否传播；不能只把数字直接取模而丢失事件。
-
-## 3. Carry chain
-
-一个 carry chain 是按低位到高位排列的有限轮组：
+当前动作：
 
 ```ts
-interface CarryChainState {
-  wheels: DecimalWheelState[];
-  crank: number;
-}
-
-interface CarryEvent {
-  type: 'CARRY_PENDING' | 'CARRY_PROPAGATED' | 'CARRY_OUT';
-  fromIndex: number;
-  toIndex?: number;
-  crank: number;
+interface CrankAction {
+  type: 'CRANK_PLUS_ONE';
+  cycleId: OperationCycleId;
 }
 ```
 
-### 加法 `+1` 的确定性顺序
+减法尚未实现，因此没有把负数或借位偷偷塞进加法模型。
 
-1. 对 index `0` 的轮执行一个 `+1` step。
-2. 若未越过 `9`，本次 crank 结束。
-3. 若越过边界，发出 `CARRY_PENDING`，将 carry 传给 `index + 1`。
-4. 高位轮接收 carry，先发出对应的 `CARRY_PROPAGATED`，再执行自己的 `+1` step。
-5. 重复步骤 3–4，直到某个轮没有越界。
-6. 若最高位仍越界，发出 `CARRY_OUT`；轮组内部保持归零后的状态。
+## 6. Canonical carry cycle
 
-因此，四位轮组的参考结果是：
+`0099 + 1 → 0100` 的完整事件顺序为：
 
 ```text
-0009 + 1 -> 0010
-  carry: 0 -> 1
-
-0099 + 1 -> 0100
-  carry: 0 -> 1 -> 2
-
-9999 + 1 -> 0000 + carry-out
-  carry: 0 -> 1 -> 2 -> 3 -> 4
+0  CRANK_BEGIN
+1  WHEEL_STEP        wheel=0  9 -> 0
+2  CARRY_PENDING     wheel=0 -> wheel=1
+3  CARRY_PROPAGATED  wheel=0 -> wheel=1
+4  WHEEL_STEP        wheel=1  9 -> 0
+5  CARRY_PENDING     wheel=1 -> wheel=2
+6  CARRY_PROPAGATED  wheel=1 -> wheel=2
+7  WHEEL_STEP        wheel=2  0 -> 1
+8  CRANK_END
 ```
 
-事件序列中的 `fromIndex` / `toIndex` 使用低位为 `0` 的索引，便于与数组和测试断言对应。UI 可以把它显示为个位、十位等人类可读名称，但不能改变核心索引语义。
+这表明最终数字 `0100` 不是一次不可见的数组加法，而是三个轮 step 与两级进位传播。
 
-## 4. Crank 与 phase
+参考 fixture：[`fixtures/carry/0099-plus-one.json`](../fixtures/carry/0099-plus-one.json)。
 
-核心引擎应返回可序列化的 phase，而不是只返回最终数字：
+## 7. Stable trace JSON
+
+trace API 位于 `src/core/trace.ts`：
 
 ```ts
-type CrankPhase =
-  | 'INPUT_STEP'
-  | 'CARRY_PENDING'
-  | 'CARRY_PROPAGATED'
-  | 'CARRY_OUT'
-  | 'CRANK_COMPLETE';
+serializeTrace(trace): string
+parseTrace(json): OperationTrace
+replayTrace(trace, reducer): State
 ```
 
-推荐的单次结果形状：
+格式标识：
 
-```ts
-interface TransitionResult {
-  before: number[];
-  after: number[];
-  crank: number;
-  phases: Array<{
-    phase: CrankPhase;
-    activeIndex?: number;
-    event?: CarryEvent;
-  }>;
+```json
+{
+  "format": "mechanical-computing-trace",
+  "version": 1
 }
 ```
 
-`before` 与 `after` 都按低位到高位存储；展示层如需显示通常书写的高位到低位数字串，应在 adapter 中反转，不能让核心状态同时承担两种顺序。
+`serializeTrace()` 递归排序 object keys、保留 array/event 顺序并省略 `undefined`，因此同一状态和动作在当前 format version 下产生 byte-for-byte 相同 JSON。`parseTrace()` 检查格式与版本；`replayTrace()` 只从 `initialState + events + reducer` 重建 final state，并核对记录的 `finalState`。
 
-### 状态转换要求
+replay 不调用 transition，不需要 UI，也不依赖动画计时。篡改 wheel 的 `from` 前置条件会使 decimal event reducer 拒绝 trace。
 
-- 给定相同的 `before`、输入动作和轮组宽度，结果与 phase 序列必须完全相同。
-- 每个 phase 只改变它负责的局部状态；动画不得偷偷修改核心状态。
-- `CRANK_COMPLETE` 只能出现在所有 pending carry 已处理之后。
-- 任何 phase 都可以被序列化并用于重放；重放不得依赖墙上时钟或随机数。
+## 8. 历史与证据边界
 
-## 5. 机械事件与视觉适配
+这个 decimal register/carry vocabulary 是证据等级 **D：教学抽象**。它不意味着每台历史机器都具有名为 `CARRY_PENDING` 的零件或完全相同的时序。
 
-核心模型只输出数字位置和事件。可视化 adapter 再决定：
+具体历史机器必须另行说明：
 
-- 哪个轮高亮；
-- 棘爪、拨杆或齿轮如何运动；
-- 每个 phase 的动画时长；
-- 用户是点击单步还是拖动曲柄。
+- 哪些状态来自保留实物或直接测量（A）；
+- 哪些来自图纸、手册与忠实复原（B）；
+- 哪些史有记载但需要解释（C）；
+- 哪些为本项目教学离散化（D）。
 
-推荐数据流：
+软件 event 是可观察教学事实，不应未经来源支持就改写为历史机构的字面名称。
 
-```text
-input action
-    ↓
-deterministic transition engine
-    ↓
-serializable phases/events
-    ↓
-SVG / Canvas / other visual adapter
-```
+## 9. 验证范围
 
-这样即使移除所有动画，也可以通过事件序列验证机械逻辑；反过来，动画也不能成为状态真相来源。
+当前自动测试覆盖：
 
-## 6. 测试验收
-
-M0 至少需要覆盖：
-
-1. `0009 + 1 -> 0010`：个位进位到十位；
-2. `0099 + 1 -> 0100`：连续两次进位；
-3. `9999 + 1 -> 0000` 且存在 `CARRY_OUT`；
-4. 普通输入（例如 `1234 + 1 -> 1235`）不产生 carry；
-5. 事件索引按低位到高位递增；
-6. phase 重放得到与首次执行相同的 `after` 和事件序列；
-7. 非法位置（小于 0、大于 9、非整数）在进入引擎时被拒绝。
-
-测试应断言两类事实：最终状态正确，以及中间 carry event/phase 正确。只断言最终数字会掩盖“结果对了但机械过程错了”的实现。
-
-## 7. 历史与模型的证据边界
-
-本文是跨机器共用的教学抽象，不声称每台历史机器都采用同一套 step 或事件边界。具体机器文档必须另外说明：
-
-- 哪些状态来自保留实物、原始图纸或手册；
-- 哪些状态是从资料推导出的解释；
-- 哪些只是为了教学而设计的离散化。
-
-证据等级沿用 [`PRIOR_ART.md`](PRIOR_ART.md) 的 A–D 标记。尤其是 `CARRY_PENDING` 与 `CARRY_PROPAGATED` 是软件可观察事件，不应未经来源支持就写成某一历史机构的字面零件名称。
+- 单轮 `0 + 1`、`8 + 1`、`9 + 1`；
+- `0009 + 1 → 0010`；
+- `0099 + 1 → 0100`；
+- `9999 + 1 → 0000`、`CARRY_OUT` 和 `OVERFLOW`；
+- 非法 wheel state；
+- input state 不变；
+- event sequence 连续且稳定；
+- 相同 state/action 的 canonical JSON 完全一致；
+- trace JSON round trip；
+- canonical fixture 字节匹配；
+- 完整 crank cycle 的 UI-independent replay。
