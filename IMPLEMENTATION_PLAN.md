@@ -41,7 +41,7 @@ Add GitHub Actions for install, typecheck/test, and build on push/PR.
 Acceptance:
 
 - [x] Workflow added for install, typecheck, tests, and production build on push/PR.
-- [ ] CI green on main (requires a remote GitHub Actions run).
+- [x] CI green on main ([run 33108440738](https://github.com/tmzncty/mechanical-computing-playground/actions/runs/33108440738), 2026-08-28).
 
 ---
 
