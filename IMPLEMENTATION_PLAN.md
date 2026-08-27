@@ -85,8 +85,8 @@ No timers, DOM, animation frames, or random state inside core transitions.
 
 Acceptance:
 
-- [ ] same state/action yields identical serialized result;
-- [ ] transition output can be replayed independently of UI.
+- [x] same state/action yields identical serialized result;
+- [x] transition output can be replayed independently of UI.
 
 ### M1.3 Event serialization/replay
 
@@ -94,8 +94,8 @@ Create stable JSON serialization and replay helpers.
 
 Acceptance:
 
-- [ ] golden event traces can be stored in fixtures;
-- [ ] a complete crank cycle can be replayed.
+- [x] golden event traces can be stored in fixtures;
+- [x] a complete crank cycle can be replayed.
 
 ### M1.4 Model documentation
 
