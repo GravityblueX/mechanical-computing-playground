@@ -1,0 +1,6 @@
+export interface StageAState { x1:number; x2:number; w1:number; w2:number; target:number; learningRate:number; output:number; loss:number; gradients:{w1:number;w2:number}; }
+export function evaluate(input: Omit<StageAState,'output'|'loss'|'gradients'>): StageAState { const output=input.w1*input.x1+input.w2*input.x2; const error=output-input.target; return {...input,output,loss:0.5*error*error,gradients:{w1:error*input.x1,w2:error*input.x2}}; }
+export function update(state: StageAState): StageAState { return evaluate({...state,w1:state.w1-state.learningRate*state.gradients.w1,w2:state.w2-state.learningRate*state.gradients.w2}); }
+export type StageAPhase='LOAD_INPUT'|'FORWARD_MULTIPLY'|'FORWARD_ACCUMULATE'|'READ_OUTPUT'|'SET_TARGET'|'LOSS_COMPARE'|'BACKPROP_OUTPUT'|'GRADIENT_READY'|'LEARNING_RATE_SCALE'|'WEIGHT_UPDATE';
+export interface StageAEvent { phase:StageAPhase; value?:number; field?:string; }
+export function cycle(state: StageAState): {state:StageAState;events:StageAEvent[]} { const e:StageAEvent[]=[]; (['LOAD_INPUT','FORWARD_MULTIPLY','FORWARD_ACCUMULATE','READ_OUTPUT','SET_TARGET','LOSS_COMPARE','BACKPROP_OUTPUT','GRADIENT_READY','LEARNING_RATE_SCALE','WEIGHT_UPDATE'] as StageAPhase[]).forEach(phase=>e.push({phase})); return {state:update(state),events:e}; }

@@ -1,7 +1,17 @@
-import { crankPlusOne, digitsToString } from './mechanism-core';
+import { createCrankTrace, digitsToString } from './mechanism-core';
+import { crankDifference, squarePreset, cubicPreset, type DifferenceState } from './mechanisms/difference-column';
+import { cycle, evaluate, type StageAState } from './backprop/core/stage-a';
+import './style.css';
 
-const result = crankPlusOne([9, 9, 0, 0]);
-const message = document.querySelector('main p');
-if (message) {
-  message.textContent = `Visible carry core: ${digitsToString(result.before)} + 1 → ${digitsToString(result.after)}`;
-}
+const root=document.querySelector('main')!;
+let carryTrace=createCrankTrace([9,9,0,0]); let carryIndex=0;
+let diff:DifferenceState=squarePreset(); let diffPreset='n²';
+let back:StageAState=evaluate({x1:2,x2:3,w1:0,w2:0,target:10,learningRate:.01});
+const eventText=()=>carryTrace.events.slice(0,carryIndex).map(e=>`${String(e.sequence).padStart(2,'0')} · ${e.type}${e.type==='WHEEL_STEP'?` wheel ${e.wheel.index}: ${e.from}→${e.to}`:''}`).join('\n')||'—';
+function render(){root.innerHTML=`<h1>Mechanical Computing Playground</h1><p class="lede">A deterministic laboratory: computation is shown as ordered mechanical state transitions.</p>
+<section><h2>Visible carry · 0099 + 1</h2><div class="wheels">${[...carryTrace.finalState.digits].reverse().map((d,i)=>`<span class="wheel ${carryIndex>0?'active':''}">${carryIndex?d:carryTrace.initialState.digits[3-i]}</span>`).join('')}</div><p><b>State:</b> ${digitsToString(carryIndex?carryTrace.finalState.digits:carryTrace.initialState.digits)} · event ${carryIndex}/${carryTrace.events.length}</p><button id="carry-step">Step event</button> <button id="carry-crank">Complete crank</button> <button id="carry-reset">Reset</button><pre>${eventText()}</pre></section>
+<section><h2>Finite differences · ${diffPreset}</h2><p>Repeated addition advances the leading value; the highest difference stays constant.</p><p><b>Row:</b> ${diff.row} · <b>Output:</b> ${diff.output.join(', ')}</p><pre>${diff.columns.map((c,i)=>`Δ${i}: ${c[0]}`).join('\n')}</pre><button id="diff-step">Crank one row</button> <button id="diff-square">n²</button> <button id="diff-cubic">n³</button></section>
+<section><h2>Hand-crank backpropagation · Stage A</h2><p class="badge">PEDAGOGICAL TRANSLATION · not a historical machine</p><p>y = w₁x₁ + w₂x₂ · output <b>${back.output.toFixed(3)}</b> · target ${back.target} · loss <b>${back.loss.toFixed(4)}</b></p><p>∂L/∂w₁ = ${back.gradients.w1.toFixed(3)} · ∂L/∂w₂ = ${back.gradients.w2.toFixed(3)}</p><button id="back-cycle">Turn crank / train one cycle</button><button id="back-reset">Reset weights</button></section>
+<footer>Core state is the source of truth. Animation is intentionally absent: every result is inspectable in text.</footer>`;
+ document.querySelector('#carry-step')!.addEventListener('click',()=>{carryIndex=Math.min(carryIndex+1,carryTrace.events.length);render()}); document.querySelector('#carry-crank')!.addEventListener('click',()=>{carryIndex=carryTrace.events.length;render()}); document.querySelector('#carry-reset')!.addEventListener('click',()=>{carryIndex=0;render()}); document.querySelector('#diff-step')!.addEventListener('click',()=>{diff=crankDifference(diff);render()}); document.querySelector('#diff-square')!.addEventListener('click',()=>{diff=squarePreset();diffPreset='n²';render()}); document.querySelector('#diff-cubic')!.addEventListener('click',()=>{diff=cubicPreset();diffPreset='n³';render()}); document.querySelector('#back-cycle')!.addEventListener('click',()=>{back=cycle(back).state;render()}); document.querySelector('#back-reset')!.addEventListener('click',()=>{back=evaluate({x1:2,x2:3,w1:0,w2:0,target:10,learningRate:.01});render()});}
+render();

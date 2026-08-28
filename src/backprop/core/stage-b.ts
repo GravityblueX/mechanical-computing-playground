@@ -1,0 +1,4 @@
+export interface StageBState { x1:number;x2:number; w11:number;w12:number;w21:number;w22:number;v1:number;v2:number;target:number;learningRate:number; output:number;loss:number; gradients:Record<string,number>; }
+const relu=(x:number)=>Math.max(0,x);
+export function evaluate(i: Omit<StageBState,'output'|'loss'|'gradients'>):StageBState { const h1=relu(i.w11*i.x1+i.w12*i.x2),h2=relu(i.w21*i.x1+i.w22*i.x2),output=i.v1*h1+i.v2*h2,error=output-i.target; const dY=error; return {...i,output,loss:.5*error*error,gradients:{v1:dY*h1,v2:dY*h2,w11:dY*i.v1*(h1>0?1:0)*i.x1,w12:dY*i.v1*(h1>0?1:0)*i.x2,w21:dY*i.v2*(h2>0?1:0)*i.x1,w22:dY*i.v2*(h2>0?1:0)*i.x2,dLdy:dY,dh1:dY*i.v1,dh2:dY*i.v2}}; }
+export function update(s:StageBState):StageBState { const g=s.gradients; return evaluate({...s,v1:s.v1-s.learningRate*g.v1,v2:s.v2-s.learningRate*g.v2,w11:s.w11-s.learningRate*g.w11,w12:s.w12-s.learningRate*g.w12,w21:s.w21-s.learningRate*g.w21,w22:s.w22-s.learningRate*g.w22}); }
