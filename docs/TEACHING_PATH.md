@@ -1,19 +1,24 @@
 # Teaching path / 零基础教学路径
 
-The public site assumes only that a visitor has used an ordinary calculator. Each exhibit now answers three questions before exposing controls:
+The site assumes only that a visitor has used an ordinary calculator. It starts each room with a familiar task, then asks for one action. It does **not** assume the visitor knows the hidden construction of historical machines.
 
-1. **Why play? / 为什么玩？** — connect the mechanism to a familiar hidden calculator operation.
-2. **What to watch / 看什么？** — point to one visible motion, value, or arrow.
-3. **Takeaway / 学到什么？** — state one plain-language idea the visitor should retain.
+## The new structure-reading rule
 
-Recommended route:
+Every structural-looking diagram must answer four questions before the visitor treats it as evidence:
 
-1. **Carry / 进位** — see that `0099 + 1` is multiple wheel and carry actions.
-2. **Finite differences / 有限差分** — generate square numbers using repeated addition.
-3. **Multiplication / 乘法** — decompose `314 × 27` into ones, tens, turns, and shifts.
-4. **Curta** — show how a human and mechanism share an algorithm.
-5. **Analytical Engine / 分析机** — follow cards, control, Store, Mill, and output.
-6. **Continuous integration / 连续积分** — understand integration as accumulating small slices.
-7. **Hand-crank backprop / 手摇反向传播** — follow guess, error, backward responsibility, and dial adjustment.
+1. **Known / 已知** — what a source or reliable reconstruction supports;
+2. **Functional inference / 功能推断** — what must be true for the behavior to work, without claiming the physical route;
+3. **Teaching abstraction / 教学抽象** — what this project draws to make a state stepable;
+4. **Unknown / 未知** — the gears, pawls, springs, shafts, linkages, timing, and connections not established here.
 
-All essential copy is authored bilingually rather than translated by partial text replacement. Symbols are accompanied by words, and color is never the only carrier of meaning.
+An arrow means “influences” by default, not “these two physical parts are connected.” See [`STRUCTURE_EVIDENCE.md`](STRUCTURE_EVIDENCE.md).
+
+## Visitor route
+
+1. **Carry / 进位** — supermarket total `¥99 → ¥100`; observe the behavior, then distinguish the functional carry arrow from an unknown real linkage.
+2. **Finite differences / 有限差分** — predict square-display box counts; distinguish the mathematical column update from Difference Engine hardware.
+3. **Multiplication / 乘法** — decompose a warehouse order into ones, tens, turns, and shifts; do not read the lanes as a cutaway.
+4. **Curta** — follow the human operation path while treating the cylinder drawing as an operational teaching model.
+5. **Analytical Engine / 分析机** — follow cards, control, Store, Mill, and output as information-flow roles; modern terms are analogies.
+6. **Continuous integration / 连续积分** — accumulate small slices; do not infer a historical integrator's exact geometry.
+7. **Hand-crank backprop / 手摇反向传播** — follow numerical influence; the shafts and gears are counterfactual teaching elements.
