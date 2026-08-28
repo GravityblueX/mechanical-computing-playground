@@ -1,4 +1,4 @@
-import { createCrankTrace, digitsToString } from './mechanism-core';
+import { createCrankTrace, digitsToString, createDecimalRegister, reduceDecimalRegisterEvent } from './mechanism-core';
 import { crankDifference, squarePreset, cubicPreset, type DifferenceState } from './mechanisms/difference-column';
 import { cycle, evaluate, type StageAState } from './backprop/core/stage-a';
 import './style.css';

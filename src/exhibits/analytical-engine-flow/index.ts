@@ -1,0 +1,2 @@
+export interface FlowEvent { phase:'CARD_READ'|'CONTROL_DISPATCH'|'STORE_TO_MILL'|'MILL_TO_STORE'|'OUTPUT'; detail:string; }
+export const sampleFlow:readonly FlowEvent[]=[{phase:'CARD_READ',detail:'operation card selected'},{phase:'CONTROL_DISPATCH',detail:'control directs the operation'},{phase:'STORE_TO_MILL',detail:'operand enters Mill'},{phase:'MILL_TO_STORE',detail:'result returns to Store'},{phase:'OUTPUT',detail:'printer/output channel receives value'}];
