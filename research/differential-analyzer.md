@@ -1,5 +1,3 @@
-# Differential analyzer scope
+# Differential Analyzer scope
 
-A differential analyzer represents quantities continuously, commonly through shaft rotation, and combines mechanical integrators with couplings and feedback. Error accumulates through transmission and integration; this differs from the discrete wheel/event model used elsewhere here. Historical claims need machine-specific sources and should not be inferred from digital terminology.
-
-Decision: document the distinction now, but do not block the first public release on a physics simulation. A future 2D continuous integrator is sufficient for a first explanatory model; no 3D engine is justified yet.
+A differential analyzer represents quantities continuously, commonly through shaft rotation, and couples mechanical integrators to solve differential relationships. Integration is an accumulation over time; coupling and feedback expose error and drift rather than discrete carry events. This project uses a minimal Euler integrator as a grade-D teaching model (`src/mechanisms/continuous-integrator`), not a historical machine reconstruction. 2D text/SVG is sufficient to show quantity, time step, coupling, and accumulated error; a physics engine would add complexity without explanatory gain at this stage.
