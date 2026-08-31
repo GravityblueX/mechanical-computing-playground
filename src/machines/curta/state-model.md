@@ -1,3 +1,5 @@
-# Curta — state-model
+# Curta — state-model boundary
 
-This teaching document covers only the operation path needed by the playground. It is not a full historical reconstruction. Historical claims are grade C; simplified state and visualization are grade D. See `research/curta-source-map.md`.
+Operator-facing documents support distinct setting, result/product, counter/quotient, carriage, handle home/plus-minus, reversing and clearing concepts (**H**, conservatively E2–E3 for the specialist-hosted transcription).
+
+The repository has no source-specific Curta core state machine yet. Existing generic carriage, revolution, division and interlock modules are **P/M** studies and must not be relabeled as Curta internals. A future model needs exact manual edition/page and production-revision mapping before claiming detailed phase timing.

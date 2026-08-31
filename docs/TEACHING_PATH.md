@@ -19,7 +19,8 @@ An arrow means “influences” by default, not “these two physical parts are 
 2. **Finite differences / 有限差分** — predict square-display box counts; distinguish the mathematical column update from Difference Engine hardware.
 3. **Multiplication / 乘法** — decompose a warehouse order into ones, tens, turns, and shifts; do not read the lanes as a cutaway.
 4. **Operator division / 操作者除法** — build `8478 ÷ 314 = 27` from repeated subtraction, an overshoot, add-back correction, quotient counting, and carriage shift; the P/M events are not historical machine geometry.
-5. **Curta** — follow the human operation path while treating the cylinder drawing as an operational teaching model.
-6. **Analytical Engine / 分析机** — follow cards, control, Store, Mill, and output as information-flow roles; modern terms are analogies.
-7. **Continuous integration / 连续积分** — accumulate small slices; do not infer a historical integrator's exact geometry.
-8. **Hand-crank backprop / 手摇反向传播** — follow numerical influence; the shafts and gears are counterfactual teaching elements.
+5. **Controls and interlocks / 控制与互锁** — change a setting, begin a crank cycle, observe setting lockout, attempt an invalid change, and return home; the P/M lock state is not Odhner or Curta geometry.
+6. **Curta** — follow the human operation path while treating the cylinder drawing as an operational teaching model.
+7. **Analytical Engine / 分析机** — follow cards, control, Store, Mill, and output as information-flow roles; modern terms are analogies.
+8. **Continuous integration / 连续积分** — accumulate small slices; do not infer a historical integrator's exact geometry.
+9. **Hand-crank backprop / 手摇反向传播** — follow numerical influence; the shafts and gears are counterfactual teaching elements.

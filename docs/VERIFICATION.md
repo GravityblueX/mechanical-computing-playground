@@ -1,5 +1,25 @@
 # Verification record
 
+## 2026-09-01 — control interlock and Curta provenance
+
+Added the generic P/M setting–crank interlock with explicit setting lock, crank release, active cycle, home return, crank relock and setting release events; invalid active-phase actions; invariant validation; and hardened replay. Added `#/controls`, source-backed Odhner/Curta control research, a patent/manual-based Curta source map, and reconciled the Curta machine notes.
+
+- `npm run typecheck` — pass
+- `npm test -- --run` — pass, 78 tests across 10 files
+- `npm run build` — pass
+- `git diff --check` — pass
+
+Desktop browser smoke check against local Vite at the available 1072px viewport:
+
+- `#/controls` rendered with no horizontal overflow;
+- changing `314 → 315` produced a setting event and revision increment;
+- beginning a cycle showed `ACTIVE`, released crank and locked setting, with lock preceding release in the event log;
+- an attempted active-phase setting change was visibly blocked without changing state;
+- completion returned `HOME_FREE`, counted one cycle, locked the crank and released setting;
+- the ordered text log remained understandable without animation/color.
+
+The browser environment did not expose a reliable narrow viewport despite a window resize request, so mobile layout is not claimed in this checkpoint.
+
 ## 2026-09-01 — operator-driven division procedure
 
 Added the generic P/M `operator-division` mechanism, hardened event replay, `8478 ÷ 314 = 27` and `1000 ÷ 64 = 15 remainder 40` traces, source/evidence note, simulator matrix, and a public `#/division` stepping path.

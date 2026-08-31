@@ -74,6 +74,7 @@ Babbage Difference Engine、Analytical Engine、Curta 等已经存在不少模�
 - key-driven accumulation（按键即运算）研究线；
 - direct multiplication（直接乘法）功能状态模型与可重放交互展项；
 - operator-driven division（操作者驱动除法）：重复减法、越界、加回纠正、位架与分位商计数；
+- setting–crank interlock（设定—曲柄互锁）：把合法阶段、锁定权限与周期边界做成可重放状态事件；
 - punched/program cards 与离散控制的后续研究空间。
 
 这些机制可以组合成机器，也可以脱离整机单独比较。
@@ -198,6 +199,10 @@ machines/<name>/
 ### Operator-Driven Division
 
 `8478 ÷ 314` 不由隐藏的 `divide()` 直接给出 27，而由按数位重复减法、显式越界、加回纠正、位架下移和商/转数计数逐步产生。它是 P/M 通用操作者流程，不声称复原 Thomas、Burkhardt 或 Curta 的内部几何。研究入口：[`research/subtraction-and-division.md`](research/subtraction-and-division.md)。
+
+### Controls and Interlocks
+
+`#/controls` 展示一个不承担数值运算、却保护运算正确性的 P/M 机制：原位允许设定；开始曲柄周期时先锁住设定，再释放曲柄；运转中修改设定会被拒绝；完成后曲柄回到原位并重新开放设定。研究入口：[`research/control-and-interlocks.md`](research/control-and-interlocks.md)。
 
 ### Key-Driven Computation
 

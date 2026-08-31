@@ -4,6 +4,7 @@ import { compare314x27 } from './exhibits/multiplication-compare';
 import { createKeyDrivenAccumulator, createKeyStrokeTrace } from './mechanisms/key-driven-accumulator';
 import { reduceDirectMultiplierEvent, type DirectMultiplierEvent } from './mechanisms/direct-multiplier';
 import { quotientValue, reduceDivisionEvent, traceOperatorDivision, type DivisionEvent } from './mechanisms/operator-division';
+import { createSettingCrankInterlock, transitionInterlock, type InterlockEvent, type SettingCrankInterlockState } from './mechanisms/setting-crank-interlock';
 import { sampleFlow } from './exhibits/analytical-engine-flow';
 import { createIntegrator, integrate, type IntegratorState } from './mechanisms/continuous-integrator';
 import { evaluate, type StageAState } from './backprop/core/stage-a';
@@ -29,6 +30,10 @@ let diffEvents: string[] = [];
 let directEventIndex = 0;
 const divisionTrace = traceOperatorDivision(8478, 314, 1);
 let divisionEventIndex = 0;
+let controlState: SettingCrankInterlockState = createSettingCrankInterlock(314);
+let controlEvents: InterlockEvent[] = [];
+let controlMessage = '';
+let controlCycle = 0;
 let integrator: IntegratorState = createIntegrator(1, 0.1);
 let back: StageAState = evaluate({ x1: 2, x2: 3, w1: 0, w2: 0, target: 10, learningRate: 0.01 });
 let phaseMachine: PhaseMachineState = createPhaseMachine(back);
@@ -40,6 +45,7 @@ const routes: Array<[string, Copy]> = [
   ['/finite-difference', { en: 'Differences', zh: '差分' }],
   ['/multiplication', { en: 'Multiplication', zh: '乘法' }],
   ['/division', { en: 'Division', zh: '除法' }],
+  ['/controls', { en: 'Controls', zh: '互锁' }],
   ['/curta', { en: 'Curta', zh: 'Curta' }],
   ['/analytical-engine', { en: 'Analytical Engine', zh: '分析机' }],
   ['/continuous', { en: 'Integration', zh: '积分' }],
@@ -80,7 +86,7 @@ function overview() {
     { en: 'Where did the answer come from?', zh: '计算器按一下就出答案——答案从哪来？' },
     { en: 'Modern calculators hide the work. Mechanical computers let us watch a number being made.', zh: '现代计算器把过程藏起来；机械计算让我们亲眼看到一个数字是怎样被“做”出来的。' },
     `<section class="hero-explainer"><div class="comparison"><div class="machine modern"><span class="machine-label">${t('MODERN CALCULATOR', '现代计算器')}</span><div class="screen">99 + 1</div><div class="mystery">?</div><div class="screen answer">100</div><p>${t('Tap a key. The inside is hidden.', '按一下键，内部过程看不见。')}</p></div><div class="versus">→</div><div class="machine mechanical"><span class="machine-label">${t('MECHANICAL VIEW', '机械视角')}</span><div class="mini-wheels"><i>0</i><i>0</i><i>9</i><i>9</i></div><div class="motion-arrow">↻ → ⚙ → ⚙ →</div><div class="mini-wheels result"><i>0</i><i>1</i><i>0</i><i>0</i></div><p>${t('Turn, carry, turn: every movement is visible.', '转动、进位、再转动：每个动作都看得见。')}</p></div></div></section>
-    <section><h2>${t('Do not study it. Pick a familiar job.', '先别学原理。选一个你做过的实际任务。')}</h2><p class="plain">${t('Every room starts with something modern people already do. You get one mission and one button. The old machine is introduced only after the problem makes sense.', '每个展厅都从现代人做过的事情开始。你只会收到一个任务、一个该按的按钮；先明白问题，再认识老机器。')}</p><div class="journey"><a href="#/visible-carry"><b>1</b><span>🛒 ${t('Shop checkout', '超市结账')}</span><small>${t('A total rises from ¥99 to ¥100', '总价从 99 元变成 100 元')}</small></a><a href="#/finite-difference"><b>2</b><span>📦 ${t('Stacking boxes', '堆放纸箱')}</span><small>${t('Predict how many fit in a square display', '预测方阵展示需要多少箱')}</small></a><a href="#/multiplication"><b>3</b><span>🧾 ${t('Bulk order', '批量订货')}</span><small>${t('27 cartons, 314 items each', '27 箱，每箱 314 件')}</small></a><a href="#/division"><b>4</b><span>➗ ${t('Share a stock count', '分配库存')}</span><small>${t('Build 8478 ÷ 314 by operator steps', '用操作步骤做出 8478 ÷ 314')}</small></a><a href="#/hand-crank-backprop"><b>5</b><span>📱 ${t('Auto-brightness', '手机自动亮度')}</span><small>${t('A bad guess learns from your correction', '猜错后根据你的纠正学习')}</small></a></div></section>
+    <section><h2>${t('Do not study it. Pick a familiar job.', '先别学原理。选一个你做过的实际任务。')}</h2><p class="plain">${t('Every room starts with something modern people already do. You get one mission and one button. The old machine is introduced only after the problem makes sense.', '每个展厅都从现代人做过的事情开始。你只会收到一个任务、一个该按的按钮；先明白问题，再认识老机器。')}</p><div class="journey"><a href="#/visible-carry"><b>1</b><span>🛒 ${t('Shop checkout', '超市结账')}</span><small>${t('A total rises from ¥99 to ¥100', '总价从 99 元变成 100 元')}</small></a><a href="#/finite-difference"><b>2</b><span>📦 ${t('Stacking boxes', '堆放纸箱')}</span><small>${t('Predict how many fit in a square display', '预测方阵展示需要多少箱')}</small></a><a href="#/multiplication"><b>3</b><span>🧾 ${t('Bulk order', '批量订货')}</span><small>${t('27 cartons, 314 items each', '27 箱，每箱 314 件')}</small></a><a href="#/division"><b>4</b><span>➗ ${t('Share a stock count', '分配库存')}</span><small>${t('Build 8478 ÷ 314 by operator steps', '用操作步骤做出 8478 ÷ 314')}</small></a><a href="#/controls"><b>5</b><span>🔒 ${t('Protect one cycle', '保护一次运算')}</span><small>${t('See why setting locks during a crank', '观察曲柄运转时为何锁住设定')}</small></a><a href="#/hand-crank-backprop"><b>6</b><span>📱 ${t('Auto-brightness', '手机自动亮度')}</span><small>${t('A bad guess learns from your correction', '猜错后根据你的纠正学习')}</small></a></div></section>
     <section><h2>${t('A tiny symbol guide', '先认识这些简单符号')}</h2><div class="symbol-guide"><div><b>↻</b><span>${t('turn a crank', '转动曲柄')}</span></div><div><b>⚙</b><span>${t('a part moves another part', '一个零件带动另一个')}</span></div><div><b>→</b><span>${t('value or motion travels', '数值或动作向前传递')}</span></div><div><b>Δ</b><span>${t('difference between neighbors', '相邻数字之间的差')}</span></div><div><b>∫</b><span>${t('keep accumulating small amounts', '不断累积微小的量')}</span></div><div><b>∂</b><span>${t('how sensitive a result is', '结果对某个量有多敏感')}</span></div></div></section>`
   );
 }
@@ -194,6 +200,50 @@ function division() {
   document.querySelector('#division-reset')?.addEventListener('click', () => { divisionEventIndex = 0; division(); });
 }
 
+function controls() {
+  const eventLabel = (event: InterlockEvent) => {
+    if (event.type === 'SETTING_CHANGED') return t(`setting ${event.valueBefore} → ${event.valueAfter}`, `设定值 ${event.valueBefore} → ${event.valueAfter}`);
+    if (event.type === 'CRANK_CYCLE_COMPLETED') return t(`cycle count ${event.cycleCountBefore} → ${event.cycleCountAfter}`, `周期计数 ${event.cycleCountBefore} → ${event.cycleCountAfter}`);
+    return ({
+      SETTING_LOCKED: t('setting locks before motion', '运转前先锁定设定控制'),
+      CRANK_RELEASED: t('crank released at home', '曲柄在原位解除锁定'),
+      CRANK_CYCLE_BEGUN: t('crank becomes active', '曲柄进入运转状态'),
+      CRANK_RETURNED_HOME: t('crank returns home', '曲柄返回原位'),
+      CRANK_LOCKED: t('crank locks at home', '曲柄在原位锁定'),
+      SETTING_RELEASED: t('setting becomes available', '设定控制恢复可用'),
+    } as const)[event.type];
+  };
+  const log = controlEvents.map((event) => `${String(event.sequence).padStart(2, '0')} · ${eventLabel(event)}`).join('\n') || t('No control transition yet.', '还没有控制状态变化。');
+  const active = controlState.phase === 'ACTIVE';
+  shell(
+    { en: 'Why is a lock part of the calculation?', zh: '锁并不表示数字，为什么仍属于计算？' },
+    { en: 'It prevents setting and operation from becoming valid at the same time.', zh: '它阻止设定与运转在同一时刻同时有效。' },
+    `${lesson({ en: 'Protect one complete arithmetic cycle from a mid-operation setting change.', zh: '保护一个完整运算周期，不让设定值在途中改变。' }, { en: 'Change the setting, begin a cycle, then try changing it while active.', zh: '先改变设定、开始周期，再在运转中尝试改变设定。' }, { en: 'Permission and phase carry algorithmic meaning even though they contain no number.', zh: '权限与阶段即使不承载数字，也具有算法意义。' })}<section><div class="structure-callout">${evidenceBadge('TEACHING', locale)} ${t('P/M generic interlock informed by Odhner patent and Curta operator evidence—not either machine’s lock geometry.', 'P/M 通用互锁模型，受 Odhner 专利和 Curta 操作资料启发——不是任何一台机器的锁具几何复原。')}</div><div class="state-grid"><div><small>${t('setting / revision', '设定值 / 修订号')}</small><strong>${controlState.settingValue} / r${controlState.settingRevision}</strong></div><div><small>${t('crank position', '曲柄位置')}</small><strong>${controlState.crankPosition}</strong><span>${controlState.crankLocked ? t('locked', '已锁定') : t('released', '已释放')}</span></div><div><small>${t('setting control', '设定控制')}</small><strong>${controlState.settingLocked ? t('LOCKED', '锁定') : t('FREE', '可用')}</strong></div><div><small>${t('phase', '阶段')}</small><strong>${controlState.phase}</strong></div><div><small>${t('completed cycles', '已完成周期')}</small><strong>${controlState.completedCycleCount}</strong><span>${t('human operations: ', '人工动作：')}${controlState.humanOperationCount}</span></div></div><div class="controls"><button id="control-setting" ${controlState.settingLocked ? 'disabled' : ''}>${t('Change setting', '改变设定值')}</button><button id="control-begin" ${controlState.phase !== 'HOME_FREE' ? 'disabled' : ''}>${t('Begin crank cycle', '开始曲柄周期')}</button><button id="control-attempt" ${!active ? 'disabled' : ''}>${t('Try setting while active', '运转中尝试改设定')}</button><button id="control-complete" ${!active ? 'disabled' : ''}>${t('Complete and return home', '完成并返回原位')}</button><button class="secondary" id="control-reset">${t('Reset', '重置')}</button></div><p class="status" aria-live="polite">${controlMessage || t('At home: crank locked, setting free.', '原位状态：曲柄锁定，设定控制可用。')}</p><details open><summary>${t('Ordered control events', '有序控制事件')}</summary><pre>${esc(log)}</pre></details><p class="model-note">${t('If both controls stayed free, one nominal cycle could transfer parts of two settings. The lock preserves the operand and cycle boundary.', '如果两套控制同时自由，一个名义周期就可能传递两个设定值的不同部分。互锁保护的是操作数与周期边界。')}</p></section>`
+  );
+  const apply = (type: 'CHANGE_SETTING' | 'BEGIN_CRANK_CYCLE' | 'COMPLETE_CRANK_CYCLE', value?: number) => {
+    try {
+      const result = transitionInterlock(controlState, type === 'CHANGE_SETTING'
+        ? { type, value: value ?? controlState.settingValue + 1, cycleId: `control-${controlCycle++}` }
+        : { type, cycleId: `control-${controlCycle++}` });
+      const offset = controlEvents.length;
+      controlEvents.push(...result.events.map((event) => ({ ...event, sequence: event.sequence + offset } as InterlockEvent)));
+      controlState = result.state;
+      controlMessage = '';
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      controlMessage = message === 'setting is locked while a crank cycle is active'
+        ? t('Blocked: the setting is locked until the crank returns home.', '已阻止：曲柄返回原位前，设定控制保持锁定。')
+        : message;
+    }
+    controls();
+  };
+  document.querySelector('#control-setting')?.addEventListener('click', () => apply('CHANGE_SETTING'));
+  document.querySelector('#control-begin')?.addEventListener('click', () => apply('BEGIN_CRANK_CYCLE'));
+  document.querySelector('#control-attempt')?.addEventListener('click', () => apply('CHANGE_SETTING'));
+  document.querySelector('#control-complete')?.addEventListener('click', () => apply('COMPLETE_CRANK_CYCLE'));
+  document.querySelector('#control-reset')?.addEventListener('click', () => { controlState = createSettingCrankInterlock(314); controlEvents = []; controlMessage = ''; controlCycle = 0; controls(); });
+}
+
 function curta() {
   shell(
     { en: 'A calculator you operate like a tiny machine tool', zh: '像操作微型机床一样使用计算器' },
@@ -256,6 +306,7 @@ function render() {
   else if (path === '/finite-difference') finiteDifference();
   else if (path === '/multiplication') multiplication();
   else if (path === '/division') division();
+  else if (path === '/controls') controls();
   else if (path === '/curta') curta();
   else if (path === '/analytical-engine') analytical();
   else if (path === '/continuous') continuous();

@@ -1,6 +1,6 @@
 # Current Status
 
-Last reconciled on 2026-09-01 after the operator-driven division and simulator-matrix slice.
+Last reconciled on 2026-09-01 after the control/interlock and Curta provenance slice.
 
 This file is the **current-state authority** for the repository. `ROADMAP.md` describes where the project should go; `IMPLEMENTATION_PLAN.md` is still useful as a dependency/design specification, but many of its checkboxes predate later implementation and must not be treated as the live task ledger.
 
@@ -13,9 +13,9 @@ This file is the **current-state authority** for the repository. `ROADMAP.md` de
 - GitHub Actions CI and a Pages deployment workflow.
 - Deterministic state/event/replay primitives under `src/core/`.
 - Golden carry fixtures under `fixtures/carry/`.
-- The latest local verification (`docs/VERIFICATION.md`, 2026-09-01 UTC+8) reports typecheck, 65 tests across 9 files, production build, diff check, and a desktop division-route browser smoke check passing.
+- The latest local verification (`docs/VERIFICATION.md`, 2026-09-01 UTC+8) reports typecheck, 78 tests across 10 files, production build, diff check, and a desktop controls-route browser smoke check passing.
 
-Remote CI for the current pull-request head still needs to complete; this status file does **not** substitute for checking that result.
+Remote CI run `33437862103` passed for the previous operator-division checkpoint `7bebcea2d187f0ed2411de4098c846963df8b32a`. This status still does **not** substitute for CI on later commits.
 
 ### Mechanism models already present
 
@@ -29,6 +29,7 @@ Remote CI for the current pull-request head still needs to complete; this status
 - direct-multiplication functional model with an inspectable encoded-multiple table, digit selection, operation cycles, carriage shifts, and replayable events;
 - generic key-driven accumulator with place-value contribution, serialized carry, key-stroke cycles, and replayable events;
 - generic operator-driven division with repeated subtraction, per-place quotient counts, overshoot, mandatory correction, carriage shift, and hardened replay;
+- generic setting–crank interlock with explicit lock/phase transitions, invalid-action rejection, and hardened replay;
 - continuous integrator;
 - shared mechanism core and trace/replay support.
 
@@ -42,6 +43,7 @@ The current browser shell contains non-empty routes or views for:
 - finite differences;
 - interactive multiplication comparison with event/cycle stepping for direct multiplication;
 - interactive operator-division procedure for `8478 ÷ 314` with visible overshoot/correction;
+- interactive setting–crank interlock lesson with a visible blocked setting attempt;
 - Curta;
 - Analytical Engine information flow;
 - continuous mechanical integration;
@@ -81,11 +83,11 @@ The most important remaining gaps are:
 - the current Pascaline / Comptometer carry note still needs more primary-source and model/revision-level anchors before source-specific geometry is drawn;
 - direct multiplication now has a tested pedagogical functional state/event model and a fourth comparison path, but no source-specific Millionaire geometry is claimed;
 - key-driven computation now has a tested generic P/M mechanism model, but simultaneous multi-column operation, correction, interlocks, and source-specific Comptometer geometry remain intentionally unmodeled;
-- `research/curta-source-map.md` remains placeholder-level and needs manual/patent/model-specific provenance;
+- `research/curta-source-map.md` now maps US 2,525,352 figures/architecture and specialist-hosted operator material, while exact manual edition/page/facsimile and production Type I/II revision mapping remain open;
 - `research/analytical-engine-information-flow.md` needs primary-source anchors and exact emulator provenance;
 - `research/differential-analyzer.md` needs a stronger source chain;
 - `research/simulator-matrix.md` now records a bounded prior-art/reuse matrix, but several third-party license, stepping, and maintenance fields remain explicitly unverified;
-- operator-driven division and generic correction now exist, while source-specific subtraction geometry, complement procedures, zeroing, interlocks, and operator-error prevention remain underdeveloped;
+- operator-driven division, generic correction, and a generic setting–crank interlock now exist, while source-specific subtraction geometry, complement procedures, zeroing, and machine-specific interlocks/operator-error prevention remain underdeveloped;
 - cross-machine representation (“where does the number live?”), output/audit trail, and human-machine arithmetic-labor comparisons are mostly future work.
 
 See `docs/RESEARCH_GAPS.md` for the full queue.
@@ -112,8 +114,8 @@ Historical/reconstruction claims then receive `E1–E4` evidence strength separa
 
 ## Current highest-priority work
 
-1. **Deepen subtraction/control provenance**: complement arithmetic, source-specific mode/counter behavior, zeroing, correction, and interlocks without generalizing across families.
-2. **Upgrade named-machine source maps** for Curta, Analytical Engine, Difference Engine, and differential analyzer with manual/patent/drawing/museum/reconstruction locations at the precision claimed.
+1. **Deepen subtraction/control provenance**: complement arithmetic, source-specific mode/counter behavior, zeroing, correction, and machine-specific interlocks without generalizing across families.
+2. **Upgrade remaining named-machine source maps** for Analytical Engine, Difference Engine, and differential analyzer with manual/patent/drawing/museum/reconstruction locations at the precision claimed.
 3. **Add cross-machine comparison layers** for representation, operator protocol, output/audit trail, and eventually reliability/torque/tolerance when evidence supports it.
 4. **Only then deepen source-specific geometry/animation.** Do not reward visual detail unsupported by source detail.
 
