@@ -2,323 +2,351 @@
 
 Issued: 2026-09-01
 Owner: local coding/research agent
-Target duration: roughly 75–105 minutes
+Target duration: roughly 75–90 minutes
 Repository authority: remote `main`
 
-Previous task is complete and archived at `tasks/archive/2026-09-01-control-interlock-curta.md`.
+Previous task is complete and archived at `tasks/archive/2026-09-01-analytical-engine-flow.md`.
 
-The previous source-heavy slice still completed in about 34 minutes (roughly 544 additions / 28 deletions across 16 files, plus research, UI, tests and verification). This task is therefore intentionally substantial. Do not compensate by weakening provenance checks, copying an emulator, or inventing Analytical Engine details.
+The last two substantial source+implementation slices each completed in roughly 32–34 minutes despite larger estimates. This assignment is intentionally broader, but it is still one coherent theme: **make the continuous-mechanical-computing line as evidence-aware and inspectable as the newer discrete-mechanism lessons**. Do not compensate for spare time by inventing geometry or starting unrelated machines.
+
+Administrator preflight since the previous agent checkpoint:
+
+- PR #3 was reviewed and merged: unknown direct-multiplication event discriminators now fail closed;
+- PR #4 was reviewed and merged: unknown setting–crank action/event discriminators now fail closed;
+- PR #5 was reviewed and merged: unknown operator-division action/event discriminators now fail closed;
+- current main after those merges is at least `be1b5c80dca1d88553997236669859460a26a067` plus the task-archive/assignment documentation commits;
+- main CI run `33449580167` passed for `be1b5c80dca1d88553997236669859460a26a067`;
+- there were no open PRs after those merges.
+
+Fetch/pull again before work; remote `main` always wins over the SHA above.
 
 ## Read before work
 
-Fetch/pull remote `main`, then read in this order:
+Read in this order:
 
 1. `STATUS.md`
 2. `TODO.md`
 3. `AGENTS.md`
 4. `docs/EVIDENCE_POLICY.md`
-5. `docs/RESEARCH_GAPS.md`, especially Priority 0.2 and the Analytical Engine source-map gap
+5. `docs/RESEARCH_GAPS.md`, especially Priority 0.2, Priority 5, and Priority 6
 6. `docs/PRIOR_ART.md`
-7. `research/analytical-engine-information-flow.md`
-8. `research/simulator-matrix.md`
-9. `src/exhibits/analytical-engine-flow/index.ts`
-10. the current `#/analytical-engine` rendering in `src/main.ts`
-11. existing deterministic transition/replay patterns and tests
-12. `docs/PUBLISHING.md` and `docs/VERIFICATION.md`
+7. `research/differential-analyzer.md`
+8. `src/mechanisms/continuous-integrator/index.ts`
+9. current `#/continuous` rendering and any imports/usages in `src/main.ts`
+10. existing replay/tamper-validation patterns in direct multiplier, operator division, setting–crank interlock, and Analytical Engine flow
+11. relevant tests and `docs/VERIFICATION.md`
+12. `docs/PUBLISHING.md` only if deployment verification is touched
 
-Do not use stale unchecked boxes in `IMPLEMENTATION_PLAN.md` as the live task source.
+Do not use stale unchecked boxes in `IMPLEMENTATION_PLAN.md` as a task source.
+
+Before changing code, run the full current test suite once. The three merged hardening PRs added regression tests after the 91-test Analytical Engine checkpoint, so record the **actual** baseline rather than assuming the old count.
 
 # Objective
 
-Replace the current one-paragraph Analytical Engine note and five-line generic flow with an **evidence-aware, deterministic information-flow lesson** that can answer:
+Turn the current one-paragraph Differential Analyzer note and minimal Euler-like helper into a source-backed, deterministic **continuous-mechanics teaching line** that answers three separate questions without conflating them:
 
-> Which claims come from nineteenth-century descriptions/drawings, which choices belong to later emulator reconstruction, and which event ordering is only this repository's teaching model?
+> What do surviving Bush Differential Analyzer components and contemporary publications actually establish?
 
-At the same time, reconcile the repository's publishing status: a GitHub Actions `Deploy Pages` run for `db3b1aafdfdfa66db6998a14073f809af1f8433d` completed successfully (`33443320058`), so the older statement that Pages is still blocked by configuration is stale. Verify the actual public site before claiming a live URL.
+> What mathematical relation does an integrator represent?
 
-This slice has four required parts and one optional early-finish part:
+> What event ordering and sampling does this repository introduce only so a browser visitor can inspect a continuous process step by step?
 
-1. harden Analytical Engine provenance using historical publications and Science Museum Babbage Papers records;
-2. replace the generic `sampleFlow` with a deterministic P/M teaching trace whose state/events expose Store, Mill, card roles and output without pretending to be a complete emulator;
-3. make `#/analytical-engine` step through that trace with explicit provenance/simplification text and focused tests;
-4. verify/reconcile Project Pages deployment state;
-5. if all required work is genuinely complete early, add a bounded representation/operator-protocol comparison document rather than starting another machine implementation.
+The result should improve `research/differential-analyzer.md`, harden the generic continuous-integrator state/replay model, and upgrade `#/continuous` into a small evidence-aware workbench. It must **not** become a full Differential Analyzer emulator or a source-specific geometric reconstruction.
+
+A final required comparison document should then connect this continuous representation/protocol to the discrete machine families already implemented.
 
 ---
 
-# Part A — replace `research/analytical-engine-information-flow.md`
+# Part A — replace the Differential Analyzer placeholder with a real provenance map
 
-The current file is a one-paragraph C/D-era placeholder. Replace it with a real source/provenance map under `docs/EVIDENCE_POLICY.md`.
-
-## A1. Contemporary / historical sources
-
-Use these as starting points. Do not merely list URLs; record what each source actually establishes and its limitations.
-
-### Menabrea + Lovelace, 1842/1843 publication
-
-Specialist-hosted transcription:
-
-<https://www.fourmilab.ch/babbage/sketch.html>
-
-Use it for concepts actually present in the text/notes, such as:
-
-- Operation and Variable cards as distinct roles;
-- Store/Variable columns and the separation of operations from subjects of operation;
-- backing/repetition of card groups;
-- the fact that the published diagrams/tables represent calculation sequences and substitutions.
-
-Provenance rule: this page is a later transcription of a contemporary publication. Treat the nineteenth-century publication as H; the web transcription is an access path, not a facsimile/page citation. If exact typography/page numbering matters, leave it open rather than inventing it.
-
-Do not copy Fourmilab's modern promotional claims (for example “first hacker”) into repository historical prose.
-
-### Charles Babbage, 1864, `Passages from the Life of a Philosopher`, Chapter VIII
-
-Specialist-hosted transcription:
-
-<https://www.fourmilab.ch/babbage/lpae.html>
-
-Use only claims supported there, including Babbage's own retrospective discussion of the Analytical Engine, Jacquard control, changing designs and intended capacities where relevant.
-
-Again, record that the web page is a transcription/access route. Do not claim an exact page number unless you actually verify an edition/facsimile.
-
-### H. P. Babbage, British Association paper, 1888
-
-<https://www.fourmilab.ch/babbage/hpb.html>
-
-This is particularly useful for a concrete information-flow example. It explicitly distinguishes Number Cards, Directive Cards and Operation Cards and walks `(ab + c)d` through Store → Mill → Store → output.
-
-Use it carefully:
-
-- H.P. Babbage is a historical published source reporting/explaining Charles Babbage's design after Charles's death;
-- it is direct evidence for what H.P. Babbage reported, not automatically an original Charles Babbage drawing/specification;
-- its card terminology/order must not be silently merged with John Walker's later emulator syntax.
-
-Record paragraph/item anchors where practical (for example the sections around items 18–20 and the Store/Mill discussion) rather than vague “Babbage says” citations.
-
-## A2. Science Museum Group — Babbage Papers drawings
-
-Use collection records as E1 evidence that particular drawings/design sheets exist. Useful anchors include:
-
-- `BAB/A/125`, *Plan of consecutive mill counting apparatus for General Plan 28*, 1843-12:
-  <https://collection.sciencemuseumgroup.org.uk/documents/aa110000267/plan-of-consecutive-mill-counting-apparatus-for-general-plan-28-plan-note>
-- `BAB/D/028`, *Mill. Sheet 28. Superseded by Sheet 25*, dated 1858-06-12:
-  <https://collection.sciencemuseumgroup.org.uk/documents/aa110000376>
-- `BAB/P/167`, *Plan of bolts for store*, second-phase drawings, 1858–1859:
-  <https://collection.sciencemuseumgroup.org.uk/documents/aa110000439>
-
-The important historical lesson is **design evolution**. A drawing identifier/date establishes that a particular design record existed; it does not prove a complete Engine was built or that every phase used one frozen architecture.
-
-Do not reproduce museum images into the repository merely because the collection page exposes them. Link/cite unless reuse is actually needed and licensing is checked separately.
-
-## A3. Emulator/reconstruction provenance
-
-Inspect John Walker/Fourmilab as a reconstruction/emulator lineage, not as a nineteenth-century primary source:
-
-- authenticity discussion: <https://www.fourmilab.ch/babbage/authentic.html>
-- programming card conventions: <https://www.fourmilab.ch/babbage/cards.html>
-- web emulator behavior/stepping: <https://www.fourmilab.ch/babbage/emulator.html>
-
-Record at least these distinctions:
+`research/differential-analyzer.md` is currently only one paragraph. Replace it with a source/provenance note following `docs/EVIDENCE_POLICY.md`:
 
 ```text
-historical publication/drawing
-vs
-later interpretation/reconstruction
-vs
-emulator-specific card syntax/execution convention
-vs
-this repository's P/M teaching trace
+Question
+Claim types
+Sources
+What each source directly establishes
+What is reconstructed/inferred
+What this repository simplifies
+Implementation consequence
+Uncertainties
+Date checked
 ```
 
-The current repository must **not** copy Walker's instruction/card syntax or source code unless license/reuse terms are independently established. Link/inspect it to avoid inventing an instruction set.
+## A1. Vannevar Bush, 1931
 
-## A4. Resolve the current ambiguity explicitly
+Primary publication to identify precisely:
 
-The existing route says, roughly:
+- Vannevar Bush, “The Differential Analyzer. A New Machine for Solving Differential Equations,” *Journal of the Franklin Institute*, vol. 212, no. 4 (October 1931), pp. 447–488.
+
+Use an accessible scan/facsimile or institutional bibliographic record if you can locate one. If the available environment only establishes publication metadata, figures, or secondary descriptions, say exactly that. Do not quote or assign figure/page claims you did not actually inspect.
+
+The paper is **H/E1** for what Bush published about the 1931 machine. It is not proof that every later Differential Analyzer shared the same construction.
+
+## A2. Smithsonian / National Museum of American History object records
+
+Use the institutional object group and individual records as strong anchors for surviving components and their catalogued functions:
+
+- Differential Analyzer Parts and Documentation:
+  <https://americanhistory.si.edu/collections/object-groups/mechanical-integrators/differential-analyzers>
+- Integrator Unit from Bush Differential Analyzer, `MA.314824`:
+  <https://www.si.edu/object/integrator-unit-bush-differential-analyzer%3Anmah_1215155>
+- Input Table Carriage, `1983.3002.01`:
+  <https://www.si.edu/object/input-table-carriage-bush-differential-analyzer%3Anmah_693232>
+- Adder / Differential Gear, `1983.3002.02`:
+  <https://www.si.edu/object/nmah_693233>
+- Output Table Carriage / Tracer, `1983.3002.03`:
+  <https://www.si.edu/object/carriage-and-tracer-output-table-bush-differential-analyzer%3Anmah_693234>
+
+Important catalogued relationships worth checking precisely rather than generalizing:
+
+- the surviving integrator unit contains two of the six original integrators associated with the MIT analyzer;
+- an input-table carriage converted a traced graph motion into shaft motion sent into the machine;
+- the catalogued differential gear combined two shaft rotations so an output represented their sum;
+- the output-table tracer converted result-shaft rotation into a drawn result.
+
+Use these records as **H/E1 for the surviving/catalogued component and the museum-described role**. Do not infer that these four specific surviving objects were always wired in one fixed chain or that their catalog prose gives complete internal geometry.
+
+Do not copy Smithsonian images merely because the records expose them. Link records unless image reuse is separately justified/licensed.
+
+## A3. Near-contemporary mathematical/engineering interpretation
+
+Useful anchor:
+
+- Claude E. Shannon, “Mathematical Theory of the Differential Analyzer,” 1941, DOI `10.1002/sapm1941201337`.
+
+Use Shannon for mathematical/system interpretation at the precision actually supported by the paper; it is not an original 1930 artifact record.
+
+Also distinguish the later MIT machine generation from the original analyzer. Bush & Caldwell’s 1945 “A New Type of Differential Analyzer” belongs to a later machine and must not be silently used as the geometry of the ca. 1930 components.
+
+## A4. Machine-generation boundary
+
+The note must explicitly separate at least:
 
 ```text
-operation card selected
-→ control dispatch
-→ one operand enters Mill
-→ result returns to Store
-→ output
+original MIT analyzer / ca. 1930 surviving components
+1931 Bush publication
+later improved MIT/Rockefeller analyzer work
+postwar GE/UCLA components in Smithsonian collections
+modern historical reconstruction/interpretation
+this repository's P/M continuous lesson
 ```
 
-That is too smooth and conflates several layers.
+Do not flatten all of these into “the Differential Analyzer.”
 
-The new research note must explicitly discuss that nineteenth-century descriptions and Walker's emulator do not necessarily expose the same card categories/order at the same abstraction level. Do not declare one emulator sequence to be “the exact historical execution order” unless the source chain justifies it.
+## A5. Required project decision
 
-End the note with the exact **software abstraction decision** used in Part B.
+End the note by stating exactly what the browser model will claim:
+
+- shaft/continuous quantity, addition relation, integration relation, and plotted output are taught as **functional relationships**;
+- any discrete event order / sample interval exists only so the browser can inspect and replay the relation and is **P/M**, not historical machine timing;
+- no cams, disk/wheel geometry, torque amplifier geometry, shaft layout, backlash, scale factor, or physical dimensions are claimed unless separately sourced;
+- the current lesson is a mechanism-level teaching model, not an emulator of Bush's complete analyzer.
 
 ---
 
-# Part B — deterministic Analytical Engine information-flow trace
+# Part B — harden `continuous-integrator` into a deterministic inspectable model
 
-Refactor `src/exhibits/analytical-engine-flow/index.ts` from a static five-item label list into a small deterministic state/action/event/replay model or an equivalently testable immutable trace builder.
-
-This is a P/M explanatory model **informed by historical card roles**, not a new Analytical Engine emulator.
-
-## Default teaching calculation
-
-Use the historically documented formula shape `(ab + c)d` from H. P. Babbage's 1888 explanation, with small concrete values so state is inspectable, for example:
+The current module is essentially:
 
 ```text
-a = 2
-b = 3
-c = 4
-d = 5
-
-p = a*b = 6
-q = p+c = 10
-result = q*d = 50
+state = { time, input, output, step }
+output += input * step
 ```
 
-The numeric values are this repository's P/M teaching fixture. Do not imply H. P. Babbage used those values.
+That is useful mathematically but too thin for the repository's current state/event/replay standard and can accidentally look like “this is how the historical machine ticks.”
 
-## Minimum inspectable state
+Refactor conservatively under `src/mechanisms/continuous-integrator/`.
 
-Represent at least:
+## B1. Preserve the correct abstraction boundary
 
-- Store columns/locations used by the teaching fixture;
-- the currently selected/active arithmetic operation or operation role;
-- Mill ingress/operand state sufficient to show two operands becoming available;
-- Mill result/egress state;
-- current card **role** (`NUMBER`, `DIRECTIVE/TRANSFER`, `OPERATION`, or an explicitly simplified repository vocabulary);
-- output/printed-result state;
-- event/card index and deterministic sequence identity.
+The model should express a generic relation equivalent to:
 
-Do not pretend that modern JavaScript map/object layout is historical Store geometry.
+```text
+independent quantity advances
+input rate / shaft quantity is observed for the teaching interval
+integrated output advances by the represented relation
+```
 
-## Event/trace requirements
+The browser may discretize observation into steps, but the code/UI must label the sample/step as a **P/M inspection device**, not as a historical crank, gear tooth, clock tick, or claim about physical Differential Analyzer timing.
 
-The trace must make visible, in ordered state/events:
+Keep existing public imports working through wrappers if that is cleaner, or migrate all current usages/tests coherently. Do not leave two contradictory integrator semantics.
 
-1. given values become associated with Store locations;
-2. operands are transferred from Store toward the Mill;
-3. an arithmetic operation is selected/performed;
-4. intermediate result `p=6` is stored;
-5. `p` and `c` flow back into the next operation;
-6. intermediate result `q=10` is stored;
-7. `q` and `d` flow into the final multiplication;
-8. result `50` is stored and then sent to an output role.
+## B2. Minimum state
 
-You may group micro-events if the grouping is explicit and deterministic. Do not invent cams, axes, card hole patterns, timing, or an exact historical instruction encoding.
+Use finite, validated numeric state and explicit naming. Include at least:
 
-A teaching event may carry `sourceRole` / `claimType` metadata if that improves inspection, but keep the core reasonably small.
+- independent variable / teaching coordinate;
+- current input rate or represented input quantity;
+- integrated output quantity;
+- sample/inspection interval;
+- cycle/sample count;
+- ordered sequence identity;
+- claim/model metadata only if it genuinely aids inspection.
 
-## Replay/invariants
+Do not call the independent variable “time” unless the fixture specifically models time; Differential Analyzers could represent more general independent variables.
 
-Use existing repository replay discipline:
+## B3. Actions/events/replay
 
-- same initial state + ordered events produces the same final state;
-- derived arithmetic and Store/Mill transitions are validated rather than trusted from arbitrary serialized event fields;
-- invalid Store locations, missing operands, impossible operation order, sequence tampering, or final-state tampering are rejected where applicable;
-- use safe integers / explicit validation for fixture values.
+Use deterministic actions/events or an immutable trace builder consistent with current repository patterns. The visitor/test must be able to inspect a cycle equivalent to:
 
-Do not over-engineer a general-purpose card interpreter.
+```text
+INPUT_QUANTITY_OBSERVED
+INDEPENDENT_QUANTITY_ADVANCED
+INTEGRATED_QUANTITY_ADVANCED
+```
+
+Names may differ if a better vocabulary emerges.
+
+Requirements:
+
+- same state + action → identical ordered events/state;
+- replay from initial state + events reproduces final state;
+- sequence tampering fails;
+- arithmetic tampering fails;
+- unknown serialized action/event discriminators fail closed where runtime union boundaries exist;
+- NaN/Infinity/non-positive interval and impossible state are rejected;
+- do not trust arbitrary serialized `outputAfter`; recompute/validate the mathematical relation.
+
+Use floating-point tolerances intentionally in tests where necessary rather than brittle accidental equality.
 
 ---
 
-# Part C — `#/analytical-engine` teaching integration
+# Part C — upgrade `#/continuous` into an evidence-aware continuous-mechanics workbench
 
-Upgrade the existing route without a broad site redesign.
+Do not build 3D/physics. Use the existing site style and current deterministic-inspector patterns.
 
-Minimum visitor affordances:
+## C1. Default functional teaching chain
+
+Use a small P/M fixture inspired by roles directly documented in the Smithsonian records, for example:
+
+```text
+input shaft A quantity
+input shaft B quantity
+→ adder/differential relation c = a + b
+→ generic integrator relation over an inspection interval
+→ output quantity
+→ output-tracer role
+```
+
+Use simple values whose arithmetic is obvious, e.g. `a=2`, `b=1`, summed rate `3`, interval `0.5`, integrated contribution `1.5`. You may choose equally clear values.
+
+Critical boundary:
+
+- Smithsonian documents these component **roles** on surviving Bush Analyzer components;
+- the repository's exact connection of those roles into one tiny five-step example is **P/M** unless a source explicitly establishes that exact wiring;
+- the serialized order is for inspection/replay, not a claim that the physical machine operated in stop-motion phases.
+
+If the existing architecture makes a separate `continuous-flow` exhibit module cleaner than putting all logic in `main.ts`, do that. Core arithmetic/state must not live only in the DOM renderer.
+
+## C2. Minimum visitor affordances
+
+Provide:
 
 - reset;
-- step one event/card-role transition;
-- optionally step one higher-level operation if this is easy with existing patterns;
-- show Store values as named/numbered teaching locations;
-- show Mill inputs/current operation/result;
-- show current card role and ordered event log;
-- show output state;
-- bilingual text remains functional;
-- keyboard access for the main step control if consistent with current exhibit patterns;
-- no meaning only in motion/color.
+- step one event/inspection phase;
+- optional complete-one-cycle control if cheap;
+- current input A/B quantities;
+- adder output / effective integrator input;
+- independent coordinate and sample interval;
+- integrator before/after quantity;
+- current output/tracer state;
+- ordered text event log;
+- bilingual explanatory text;
+- keyboard access for the main step control if consistent with the current routes;
+- no meaning available only through color/motion.
 
-The route must visibly state:
+The route must visibly distinguish:
 
-- `(ab+c)d` is based on a documented historical explanatory formula shape, while `2,3,4,5` is a P/M fixture;
-- Store/Mill/card roles have historical sources;
-- this exact serialized event model is P/M;
-- Walker/Fourmilab is a later emulator/reconstruction and its syntax/order is not silently adopted as primary evidence;
-- modern words such as CPU/memory may be analogies, not identities.
+```text
+H/E1 museum-documented component role
+M integration/addition relation
+P/M tiny browser connection + serialized observation order
+open/unmodeled physical geometry
+```
 
-If the old five-step `sampleFlow` is removed, update imports/usages cleanly rather than keeping two contradictory flow models.
+Do not describe the current discrete helper as “a faithful Differential Analyzer simulation.”
 
-## Required tests
+## C3. Focused tests
 
-Add focused Vitest coverage for at least:
+Add tests sufficient to prove at least:
 
-1. default trace reaches `50` through `p=6` and `q=10` rather than a single hidden expression evaluation;
-2. Store locations contain the expected intermediate values at the correct stages;
-3. Mill must receive the required operands before an operation can complete;
-4. final output is not populated before the final Store/Mill/result step;
-5. same input fixture produces identical state/events;
+1. a constant input relation integrates to the expected result for the default fixture;
+2. the adder relation used by the workbench is explicit rather than hidden in UI arithmetic;
+3. integrated output is not available before the appropriate integration event;
+4. output/tracer state is not populated before the output event;
+5. repeated cycles advance the independent quantity and accumulated output deterministically;
 6. replay reproduces final state;
-7. replay/transition rejects sequence tampering;
-8. replay rejects altered transfer/result values or impossible operation ordering;
-9. invalid fixture/store references are rejected explicitly;
-10. source/claim metadata, if part of state/events, cannot be used to smuggle arbitrary arithmetic state.
+7. sequence tampering is rejected;
+8. altered input/sum/integration result fields are rejected;
+9. unknown serialized event/action types fail closed if such a boundary exists;
+10. invalid finite values / interval are rejected;
+11. the model remains a P/M sample/inspection abstraction and does not introduce source-specific geometry metadata as if it were historical state.
 
 Do not introduce a new browser-testing framework solely for this task.
 
 ---
 
-# Part D — Project Pages reconciliation
+# Part D — required bounded cross-machine comparison document
 
-Repository history previously said Pages was blocked by repository configuration. That is no longer sufficient: GitHub Actions `Deploy Pages` run `33443320058` for `db3b1aa` completed successfully.
-
-During this slice:
-
-1. inspect the current Pages workflow and repository base path;
-2. determine the expected live Project Pages URL from actual repository/deployment information, not guesswork if GitHub exposes it;
-3. attempt a direct browser/HTTP smoke check of the deployed page;
-4. if reachable, smoke at least `/mechanical-computing-playground/` plus hash routes `#/controls` and `#/analytical-engine` after the new build lands;
-5. if reachable and correct, update `docs/PUBLISHING.md`, `STATUS.md`, README if appropriate, and `docs/VERIFICATION.md` with the live URL and checks actually performed;
-6. if the deployment workflow is green but the public URL cannot be verified from the available environment, record exactly that narrower state. Do not revert to saying “Pages is not configured,” and do not invent a successful live smoke check.
-
-Do not change publishing architecture merely because verification is inconvenient.
-
----
-
-# Part E — optional early-finish work
-
-Only if Parts A–D, tests, build, deployed-site check, documentation reconciliation, commit and push are genuinely complete with substantial time remaining, create a bounded `docs/REPRESENTATION_AND_PROTOCOL.md`.
-
-Use only already-supported repository families and sources. Compare no more than these axes:
+After Parts A–C are working, create:
 
 ```text
-where input is represented
-where working numeric state lives
-what human action triggers computation
-where operation/control state lives
-what must remain invariant/locked
-where output becomes persistent/visible
-claim type + source boundary
+docs/REPRESENTATION_AND_PROTOCOL.md
 ```
 
-Good candidate rows are Pascaline, stepped-drum/pinwheel generic family, key-driven/Comptometer-informed model, direct-multiplication/Millionaire-informed model, Curta, Analytical Engine, and the existing continuous-integrator teaching line.
+This is deliberately required because the repository now has enough implemented families for the cross-machine idea to become useful, and the previous source-heavy tasks have been completing well under budget.
 
-A row may contain explicit `open/unverified` cells. Do not smooth over missing provenance.
+Keep it concise and source-aware. Compare **only** these already-supported rows:
 
-Do **not** start Differential Analyzer implementation/source-map hardening in the same slice if this optional document is completed.
+1. Pascaline / dial-and-carry case;
+2. generic stepped-drum or pinwheel set→crank family (one combined row is fine if distinctions are stated);
+3. key-driven / Comptometer-informed P/M model;
+4. direct-multiplication / Millionaire-informed P/M model;
+5. Analytical Engine information-flow lesson;
+6. continuous / Differential Analyzer-informed lesson.
+
+Use these axes:
+
+```text
+input representation
+working numeric/physical representation
+human action that advances computation
+operation/control representation
+carry/correction/interlock or equivalent constraint
+output contract
+historical source boundary
+repository P/M boundary
+open/unverified detail
+```
+
+Rules:
+
+- reuse the repository's existing source notes rather than starting six new research projects;
+- every historical cell must be supportable by the cited research note/source at the precision stated;
+- use `open / unverified` rather than smoothing over a gap;
+- do not imply that “shaft rotation = memory,” “Mill = CPU,” or other modern analogies are identities;
+- the point is to answer **where the number/control lives and what the human must do**, not to rank machines.
+
+If a row cannot be supported without new source research, leave the exact cell open and say why.
 
 ---
 
-# Documentation reconciliation
+# Documentation and verification reconciliation
 
-After implementation/research/tests are real:
+After implementation/tests are real:
 
-- archive/supersede the old one-paragraph analytical-engine claims through the new research note;
-- update `STATUS.md` to reflect the hardened Analytical Engine source map/trace and current Pages state;
-- update `TODO.md` only for genuinely completed Analytical Engine work;
-- update `research/simulator-matrix.md` if the Walker stepping/internal-state facts are now directly verified;
-- update `docs/VERIFICATION.md` with commands/results actually run and test count;
-- update README / `docs/TEACHING_PATH.md` only if the route's interaction materially changed;
-- keep ROADMAP changes minimal.
-
-## Acceptance
+- update `STATUS.md` to reflect the strengthened Differential Analyzer provenance and continuous workbench;
+- update `TODO.md` to mark `research/differential-analyzer.md` strengthened only if Part A is genuinely complete;
+- add `docs/REPRESENTATION_AND_PROTOCOL.md` to README/teaching navigation only if the link is genuinely useful; avoid README churn for its own sake;
+- update `docs/VERIFICATION.md` with:
+  - the post-PR-merge baseline if observed;
+  - all commands actually run;
+  - final test count/files;
+  - local `#/continuous` smoke results;
+  - deployment state only if actually checked;
+- keep `ROADMAP.md` changes minimal unless the new comparison materially closes/reframes a track;
+- do not rewrite `docs/RESEARCH_GAPS.md` as a status ledger.
 
 Before commit/push, run:
 
@@ -329,28 +357,60 @@ npm run build
 git diff --check
 ```
 
-Perform a bounded browser smoke check of `#/analytical-engine` locally. If the public Pages site is verifiable, also smoke the deployed route after the new commit is deployed; clearly distinguish local from deployed checks.
+Perform a bounded local browser smoke check of `#/continuous`:
 
-One coherent checkpoint is fine. A research commit followed by implementation/docs is also fine if all required work is pushed before stopping.
+- initial/reset state;
+- event stepping;
+- visible adder/integrator/output state;
+- no obvious desktop horizontal overflow;
+- bilingual text/state remains readable.
 
-After push, stop and wait for the next `CURRENT_AGENT_TASK.md` revision.
+If the final commit's Pages deployment completes while you are still working and the public route is reachable, you may record a deployed smoke check. Otherwise do not wait indefinitely and do not claim the new route live merely because an older deployment is live.
 
-Suggested commit subject:
+One coherent commit is fine; a research checkpoint followed by implementation/docs is also fine. Push all required work, then stop.
+
+Suggested final subject:
 
 ```text
-feat: ground Analytical Engine information flow
+feat: ground continuous mechanical integration
 ```
 
-# Evidence / stop conditions
+---
 
-Stop and leave a precise blocker rather than guessing if:
+# Optional early-finish work
 
-- sources disagree about card categories/order at the precision needed for a UI statement; preserve the disagreement and keep the P/M trace abstract;
-- a Science Museum drawing record establishes existence but not the mechanical relationship you want to claim;
-- exact Fourmilab code/card syntax would be needed to proceed; do not copy it without verified reuse terms;
-- implementing the lesson starts turning into a complete Analytical Engine emulator;
-- source-specific Mill/Store geometry is required for the visualization;
-- a concurrent implementation of the same Analytical Engine track lands on remote `main`;
-- shared replay changes would require a broad incompatible migration.
+Only if Parts A–D, full tests/build, browser smoke, docs reconciliation, commit and push are genuinely complete with substantial time remaining, spend at most one small additional checkpoint **scoping** the next named-machine evidence task:
 
-The intended result is not “more Babbage lore.” It is a tested exhibit where a visitor can distinguish **historical card/Store/Mill roles, later emulator interpretation, and this repository's own teaching event model** while watching a real intermediate-value flow emerge step by step.
+```text
+research/difference-engine-source-map.md
+```
+
+Do not implement new Difference Engine geometry. A useful optional checkpoint would only identify primary/museum/reconstruction sources, exact questions to resolve, and how they map to the already-existing finite-difference teaching model.
+
+If completing the optional work would delay or weaken the required continuous slice, skip it.
+
+# Evidence and stop conditions
+
+Stop and record a precise blocker rather than guessing if:
+
+- you cannot distinguish the original MIT analyzer from later improved or GE/UCLA machines at the precision needed for a claim;
+- a museum record establishes a component exists but not the connection/timing you want to draw;
+- a full Bush paper/facsimile is unavailable and an exact page/figure claim would therefore be invented;
+- modeling real disk-and-wheel geometry, torque amplification, backlash, frontlash, shaft layout, or scale factors becomes necessary;
+- the continuous model starts becoming a numerical ODE solver hidden behind historical language;
+- shared replay changes would require a broad incompatible migration;
+- a concurrent implementation of the same continuous track lands on remote `main`.
+
+The intended result is **not** “we simulated a Differential Analyzer.” It is a tested lesson where a visitor can see a continuous quantity relation, addition/integration/output flow, and the boundary between surviving historical component roles and this repository's own inspectable browser model.
+
+# Git discipline
+
+- remote `main` is authoritative;
+- fetch/pull before work and again before final push if substantial time has passed;
+- inspect current code/tests before creating parallel abstractions;
+- preserve the three newly merged discriminator-hardening fixes;
+- do not fold unrelated cleanup into this task;
+- inspect the final diff;
+- run all acceptance commands;
+- commit and push;
+- after push, stop and wait for the next `CURRENT_AGENT_TASK.md` revision.
