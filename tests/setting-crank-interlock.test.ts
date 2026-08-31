@@ -6,6 +6,7 @@ import {
   replayInterlock,
   traceInterlockActions,
   transitionInterlock,
+  type InterlockAction,
   type InterlockTrace,
 } from '../src/mechanisms/setting-crank-interlock';
 
@@ -45,6 +46,12 @@ describe('generic setting–crank interlock', () => {
     expect(() => transitionInterlock(createSettingCrankInterlock(), { type: 'COMPLETE_CRANK_CYCLE', cycleId: 'bad' })).toThrow(InvalidInterlockStateError);
   });
 
+  it('rejects an unknown serialized action instead of completing an active crank cycle', () => {
+    const active = transitionInterlock(createSettingCrankInterlock(), { type: 'BEGIN_CRANK_CYCLE', cycleId: 'begin' }).state;
+    const action = { type: 'UNKNOWN', cycleId: 'unknown' } as unknown as InterlockAction;
+    expect(() => transitionInterlock(active, action)).toThrow(/unsupported setting-crank interlock action type/);
+  });
+
   it('completion counts a cycle, returns home, locks crank, then releases setting', () => {
     const active = transitionInterlock(createSettingCrankInterlock(), { type: 'BEGIN_CRANK_CYCLE', cycleId: 'begin' }).state;
     const result = transitionInterlock(active, { type: 'COMPLETE_CRANK_CYCLE', cycleId: 'complete' });
@@ -56,6 +63,12 @@ describe('generic setting–crank interlock', () => {
     expect(fullTrace()).toEqual(fullTrace());
     const trace = fullTrace();
     expect(replayInterlock(trace)).toEqual(trace.finalState);
+  });
+
+  it('rejects an unknown serialized event instead of treating it as setting release', () => {
+    const trace = clone(fullTrace());
+    (trace.events[trace.events.length - 1] as { type: string }).type = 'UNKNOWN';
+    expect(() => replayInterlock(trace)).toThrow(/unsupported setting-crank interlock event type/);
   });
 
   it.each(['sequence', 'setting', 'lock', 'cycle', 'final'] as const)('rejects %s tampering', (kind) => {
