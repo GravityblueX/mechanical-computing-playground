@@ -1,250 +1,414 @@
 # Roadmap
 
-机械计算游乐场按“机制 → 组合 → 整机 → 比较”推进，避免一上来做巨大 3D 复刻。
+Mechanical Computing Playground advances by **mechanism → evidence → deterministic model → exhibit → comparison**.
 
-## M0 — 机制核心
+For what is already implemented, read [`STATUS.md`](STATUS.md). This roadmap is forward-looking; it is not a second status ledger.
 
-目标：建立可测试的离散机械状态模型。
+## Foundation — already established
 
-- [x] `docs/MODEL.md`：mechanism state / transition / event 定义；
-- [x] `src/mechanism-core.ts`：decimal wheel 与 carry chain 的确定性核心；
-- [x] `test/mechanism-core.test.mjs`：M0 carry / phase / replay 验收测试；
-- [x] `src/mechanism-core.ts`：已由 M0.1 harness 纳入严格 TypeScript/Vitest 测试；
-- [x] M0.1：严格 TypeScript + Vite + Vitest 浏览器 harness；
-- [x] M0.2：GitHub Actions install/typecheck/test/build workflow；
-- [ ] `mechanisms/decimal-wheel/`：面向展品的机制封装；
-- [ ] `mechanisms/carry-chain/`：面向展品的机制封装；
-- [ ] `mechanisms/carriage-shift/`；
-- [ ] `schemas/mechanism.schema.json`；
-- [ ] 统一 step / crank / phase / carry event 术语。
+The repository already has:
 
-### M0 验收
+- TypeScript / Vite / Vitest browser harness;
+- deterministic state / transition / event / replay primitives;
+- decimal wheel and carry models with canonical fixtures;
+- finite-difference, carriage, revolution-counter, stepped-drum, pinwheel, and continuous-integrator models;
+- Stage A / Stage B backprop numerical models and phase exposure;
+- browser views for the major teaching tracks;
+- CI / build workflow and a Pages deployment workflow.
 
-至少自动测试：
+The main gap is now **research depth and provenance**, not absence of scaffolding.
+
+---
+
+# Track R0 — Evidence and repository reconciliation
+
+**Status: current priority.**
+
+Goal: make it impossible for a visitor or agent to confuse a mathematical fact, a surviving-machine fact, a reconstruction, and a teaching abstraction.
+
+Work:
+
+- [x] add `STATUS.md` as the current-state authority;
+- [x] add `docs/EVIDENCE_POLICY.md` separating claim type from evidence strength;
+- [x] add `docs/RESEARCH_GAPS.md`;
+- [ ] migrate old research notes away from ambiguous “A–D for everything” wording;
+- [ ] add source location details (patent figure/claim, manual page, museum object/revision) when mechanism specificity increases;
+- [ ] add `research/simulator-matrix.md`.
+
+Rule:
+
+> More mechanical detail requires more source detail.
+
+---
+
+# Track R1 — Carry architectures
+
+**Status: abstract model implemented; historical comparison now in progress.**
+
+The repository already demonstrates visible multi-stage carry. The next step is not prettier gears; it is showing that real machines solve carry with different force and timing architectures.
+
+## R1.1 Pascaline sautoir
+
+Research:
+
+- stored-energy / gravity-triggered carry;
+- multi-place propagation implications;
+- non-reversibility and complement subtraction;
+- precise source boundary between surviving design, historical drawing, and modern reconstruction.
+
+Current note: [`research/carry-is-the-hard-part.md`](research/carry-is-the-hard-part.md).
+
+## R1.2 Key-driven carry
+
+Use the Comptometer family to investigate:
+
+- a key stroke as the compute action;
+- multi-column entry;
+- simultaneous add / receive / carry in later designs;
+- incomplete stroke / correction / interlock questions.
+
+## R1.3 Carry comparison exhibit
+
+Only after source work is strong enough, compare:
 
 ```text
-0009 + 1 -> 0010
-0099 + 1 -> 0100
-9999 + 1 -> overflow/carry-out
+abstract serial carry
+Pascaline sautoir
+key-driven multi-column carry
 ```
 
-并能输出每一级 carry event，而不是只输出最终数字。
+The UI must show functional equivalence without implying geometric identity.
 
 ---
 
-## M1 — Visible Carry
+# Track R2 — Multiplication architectures
 
-做第一个真正可玩的 demo：
+**Status: stepped-drum / pinwheel conceptual models exist; direct multiplication is missing.**
 
-`demos/visible-carry/`
+The strongest future comparison is not merely “two kinds of variable teeth.” It is **where multiplication repetition lives**.
 
-要求：
+## R2.1 Repeated addition baseline
 
-- 4 位十进制；
-- 单步推进；
-- 显示当前 active wheel；
-- 显示 carry pending / carry propagated；
-- 可以调慢动画；
-- UI 不是状态真相来源，核心逻辑有独立测试。
-
-### 研究笔记
-
-写 `studies/carry-is-the-hard-part.md`：比较“表示一个十进制数字”和“可靠传播进位”在机械复杂度上的差异。
-
----
-
-## M2 — Finite Difference Engine
-
-目标：不复刻整台 Difference Engine，也能让人真正理解它为什么只靠加法制表。
-
-- [ ] `mechanisms/difference-column/`；
-- [ ] `demos/finite-difference/`；
-- [ ] 支持一阶到至少四阶差分；
-- [ ] 每次 crank 逐列展示更新顺序；
-- [ ] 可选择 `n²`、`n³`、用户输入初始 difference table；
-- [ ] 明确区分数学抽象与 Babbage 实际机械设计。
-
-### 验收
-
-一个没有读过有限差分的人，在不看公式推导的情况下，能够通过 10 次 crank 观察出：
-
-> 恒定高阶差分如何只通过重复加法生成多项式表。
-
----
-
-## M3 — 两种乘法机械
-
-### Stepped Drum
-
-- [ ] 建概念模型；
-- [ ] 展示输入数字如何决定参与啮合的齿数/步数；
-- [ ] carriage shift；
-- [ ] repeated crank multiplication。
-
-### Pinwheel
-
-- [ ] 建可变有效齿模型；
-- [ ] 展示与 stepped drum 的结构差异；
-- [ ] 同一道乘法比较操作序列。
-
-### 验收
-
-用同一个算例，例如 `314 × 27`，输出：
-
-- crank count；
-- carriage shifts；
-- carry events；
-- state transitions；
-- 人类需要执行的操作步骤。
-
-不是比较“谁更快”，而是比较算法如何被机构表达。
-
----
-
-## M4 — Curta case study
-
-在已有模拟器基础上做机制级解释。
-
-- [ ] source map：专利/手册/机械计算资料/已有 simulator；
-- [ ] setting register；
-- [ ] result counter；
-- [ ] revolution counter；
-- [ ] carriage position；
-- [ ] addition/subtraction crank mode；
-- [ ] 从 mechanism-core 组合出教学模型。
-
-### 禁止
-
-如果工作退化成“画一个圆柱 UI + `turn()` 函数”，停止并复用已有 Curta simulator。
-
----
-
-## M5 — Analytical Engine information flow
-
-这里不追求重新写完整 emulator。
-
-重点做一个“信息流剖面”：
+Keep a machine-neutral baseline:
 
 ```text
-cards
-  ↓
-control / operation
-  ↓
-Mill ↔ Store
-  ↓
-printer / curve output
+314 × 27
+= 314 added 7 times
++ carriage shift
++ 314 added 2 times at tens place
 ```
 
-- [ ] 对照 John Walker/Fourmilab 与其他 emulator；
-- [ ] 标注历史确定性/解释性；
-- [ ] 逐步展示一小段 card program 的数据移动；
-- [ ] 比较现代 CPU 术语时必须防止简单等同。
+## R2.2 Stepped drum
+
+Source and expose:
+
+- digit setting → effective engagement count;
+- repeated crank accumulation;
+- carriage shift;
+- accumulator / carry interaction.
+
+Do not claim historical geometry from the current conceptual model.
+
+## R2.3 Pinwheel
+
+Source and expose:
+
+- digit setting → effective pins;
+- crank accumulation;
+- carriage shift;
+- family differences and shared operator algorithm.
+
+## R2.4 Direct multiplication / Millionaire
+
+**New high-priority branch.**
+
+Research Otto Steiger's patents and surviving Millionaire machines. Build a functional model showing that a multiplier digit can select a mechanically encoded multiple rather than forcing the operator to repeat a crank that many times.
+
+Current note: [`research/multiplication-mechanisms.md`](research/multiplication-mechanisms.md).
+
+### R2 acceptance
+
+For the same multiplication, expose:
+
+- input settings;
+- main-cycle count;
+- carriage shifts;
+- carry events where modeled;
+- operator actions;
+- which arithmetic knowledge is supplied by the operator;
+- which arithmetic knowledge is encoded by mechanism geometry/control.
 
 ---
 
-## M6 — 连续机械计算
+# Track R3 — Key-driven computation and human-machine protocol
 
-后期进入 differential analyzer：
+**Status: research track opened.**
 
-- mechanical integrator；
-- shaft rotation as quantity；
-- continuous vs discrete representation；
-- error accumulation；
-- feedback / coupling。
+Current note: [`research/key-driven-computation.md`](research/key-driven-computation.md).
 
-这一阶段可以单独决定是否需要 3D/physics engine。
+Goal: break the repository's crank-centric assumption.
 
----
+## R3.1 Minimal key-driven mechanism
 
-## M7 — 古法反向传播机 / Hand-Crank Backpropagation
-
-这是反事实教学展品，不是历史复原。完整定义见 [`docs/ANCIENT_BACKPROP.md`](docs/ANCIENT_BACKPROP.md)。
-
-推进顺序：
-
-- [ ] `research/backprop-prior-art.md`：核对 2024 mechanical neural network in-situ backpropagation 与其他 physical learning 工作；
-- [ ] `backprop-core/`：Stage A 单层线性模型，纯逻辑 + tests；
-- [ ] analytic gradient vs finite difference 验证；
-- [ ] 把一轮训练拆成可序列化 phase/event；
-- [ ] Stage B：2→2→1 chain rule 状态模型；
-- [ ] `demos/hand-crank-backprop/`：最后才做浏览器可交互展品；
-- [ ] 对比教学机械模型与真实 all-mechanical neural network，不混淆两者。
-
-### M7 验收
-
-用户不需要先看公式，就能通过一次次手摇观察：
+Model:
 
 ```text
-forward
-→ output
-→ error
-→ reverse/adjoint signal
-→ gradient
-→ weight update
-→ lower loss
+key press
+→ digit-specific mechanical stroke
+→ accumulator transition
+→ carry interaction
+→ key return
 ```
 
-同时点击“显示数学”后，每个机械 phase 都能对应到 reference implementation 中的具体量。
+Do not build a full Comptometer emulator first.
 
-必须额外展示一个 learning rate 过大导致 overshoot / oscillation 的实验。
+## R3.2 Human error and correction
 
----
+Research and later expose:
 
-## 展示与发布
+- partial keystrokes;
+- correction controls;
+- zeroing;
+- operator locks;
+- valid/invalid simultaneous inputs;
+- carry inhibition where historically relevant.
 
-公开 demo 不依赖个人站仓库；使用每个项目自己的 GitHub Project Pages。隐私与发布边界见 [`docs/PUBLISHING.md`](docs/PUBLISHING.md)。
+These are computation-state constraints, not UI decoration.
 
-原则：
+## R3.3 Cross-machine operator comparison
+
+Compare:
 
 ```text
-GitHub Pages = 展厅
-Git repository = 实验室
+stylus/dial
+set-lever + crank
+key-driven accumulation
+multiplier-selector + crank
+continuous coupled motion
 ```
 
-普通访客不应为了看一个进位或反向传播动画先 clone 仓库。
+This should become one of the repository's central comparative views.
 
 ---
 
-## AI 可直接领取的第一批任务
+# Track R4 — Arithmetic protocols beyond multiplication
 
-### Task A — 状态模型
+**Status: weak / mostly unwritten.**
 
-读取 README + `docs/PRIOR_ART.md`，设计 `docs/MODEL.md`：只定义 decimal wheel、carry chain、crank phase，不做前端。
+## R4.1 Subtraction
 
-### Task B — Visible Carry 最小实现
+Write `research/subtraction-and-division.md` covering at least:
 
-优先 TypeScript 或 Python 写纯逻辑 + tests；UI 可后补。确保 0099→0100 的两级 carry 可观察。
+- complement arithmetic;
+- reverse crank / direction where supported;
+- dedicated add/subtract modes;
+- carry consequences;
+- operator aids such as complementary key legends.
 
-### Task C — 有限差分教学实验
+## R4.2 Division
 
-先写 `research/finite-difference-design.md`：用数学最小模型解释需要哪些列状态，明确哪些来自数学、哪些来自 Babbage 机械设计，再实现。
+Show division as an operator + mechanism loop:
 
-### Task D — Stepped drum vs pinwheel 查重
+```text
+repeated subtraction
+→ revolution count
+→ carriage shift
+→ overshoot/correction where appropriate
+```
 
-先查已有动画/模拟器/机械资料，产出 `research/multiplication-mechanisms.md`，说明两者的可视化增量在哪里，未经查重不写 3D。
+Do not hide historical operator procedure behind a single software division function.
 
-### Task E — Existing simulator test bench
+## R4.3 Derived procedures
 
-把 Difference Engine、Analytical Engine、Curta 的现有 simulator 跑一遍，记录：输入模型、输出模型、是否逐步、是否显示内部状态、许可证、最后维护时间。输出 `research/simulator-matrix.md`。
+Square root and other procedures may be added when a historical manual makes the operator algorithm clear. Treat them as programs performed *on* a limited machine, not as magical built-in instructions.
 
-### Task F — 古法反向传播 Stage A
+---
 
-读取 `docs/ANCIENT_BACKPROP.md`。先做 prior-art review，再实现单层线性 `backprop-core` 与 gradient tests；**禁止直接开始画齿轮 UI**。
+# Track R5 — Named machine case studies
 
-## Stop conditions
+**Status: software/explanatory shells exist; source maps need deepening.**
 
-- 已有 simulator 完整覆盖目标，新增实现只有换 UI；
-- 动画先于状态模型，导致无法自动测试；
-- 把教学简化写成历史真实机械结构；
-- 为追求 3D 效果引入复杂物理引擎但没有新的机制解释；
-- 未查原始/博物馆资料就凭现代计算机类比推断机械结构；
-- 把已有 mechanical neural network / physical learning 成果改名后当成本项目原创；
-- 把普通 JavaScript backprop 套一张齿轮皮肤，就宣称“机械实现”。
+## R5.1 Curta
 
-这个仓库最终最好能做到：
+Upgrade `research/curta-source-map.md` to identify:
 
-> 输入一个算式，不只是告诉你答案，而是告诉你**这台机器为了得到这个答案，到底动了什么。**
+- exact model/revision;
+- manuals/patents;
+- setting register;
+- result counter;
+- revolution counter;
+- carriage position;
+- add/subtract mode;
+- which current abstractions are safe and which are misleading.
 
-以及：
+The target is an operation-path explanation, not another cosmetic Curta simulator.
 
-> 给它一个误差，不只是告诉你“梯度是多少”，而是让你看见**误差怎样沿着机器一级一级倒着走回去。**
+## R5.2 Difference Engine
+
+The finite-difference software model already teaches the mathematics. Future historical work should add:
+
+- exact Babbage design/reconstruction source anchors;
+- column/update sequencing claims at the precision supported;
+- printing / output ambitions where relevant;
+- a concise essay explaining why finite differences let table generation reduce to repeated addition.
+
+## R5.3 Analytical Engine
+
+The current information-flow exhibit should receive a provenance pass:
+
+- Babbage primary material;
+- Menabrea/Lovelace where relevant;
+- John Walker/Fourmilab interpretation and emulator lineage;
+- exact status of Store / Mill / card-flow claims;
+- explicit warning against simple modern CPU identity claims.
+
+Do not invent a new instruction set.
+
+---
+
+# Track R6 — Continuous mechanical computing
+
+**Status: minimal integrator exists; historical/source layer is thin.**
+
+Start from Smithsonian's mechanical integrator / differential analyzer material and distinguish:
+
+- planimeter;
+- mechanical integrator;
+- differential analyzer;
+- specialized analog machinery.
+
+Research questions:
+
+- what physical quantity represents the variable?
+- how is integration performed?
+- how are shafts/couplings composed?
+- where does error accumulate?
+- what is measured/read/recorded?
+
+Only introduce physics/Canvas/3D if a source-backed mechanism cannot be explained with simpler 2D state/geometry.
+
+---
+
+# Track X — Hand-crank backpropagation
+
+**Status: numerical Stage A/B and phase machinery exist; this remains counterfactual/pedagogical.**
+
+Keep this track explicitly separate from historical mechanical-calculator reconstruction.
+
+Goals:
+
+- expose forward quantities;
+- expose error / adjoint signals;
+- expose gradients;
+- expose learning-rate scaling;
+- expose parameter updates;
+- preserve stable and overshoot presets;
+- compare with verified physical/mechanical learning research without originality inflation.
+
+Future work should improve the **mechanical explanation** only when every displayed movement corresponds to tested state and the real-vs-counterfactual comparison remains clear.
+
+---
+
+# Track P — Public exhibit and publishing
+
+**Status: browser shell exists; Pages setting was externally blocked at the last verification checkpoint.**
+
+Requirements:
+
+- key exhibits usable without cloning;
+- hash/static routing remains robust;
+- keyboard controls for important interactions;
+- motion never the only carrier of meaning;
+- evidence/source boundary visible in every historical exhibit;
+- tests/build gate deployment;
+- update `docs/VERIFICATION.md` after meaningful code changes or publishing changes.
+
+Once Pages is enabled/configured, record the live URL and perform a real deployment smoke test.
+
+---
+
+# Cross-cutting comparison topics
+
+These should become docs/exhibits only when sourced:
+
+## Representation
+
+Where does a number live?
+
+- dial position;
+- wheel state;
+- protruding pins;
+- stepped engagement;
+- register wheels;
+- key travel;
+- control plate;
+- shaft angle.
+
+## Human-machine division of arithmetic labor
+
+Who supplies:
+
+- repetition;
+- place-value shift;
+- correction;
+- operation mode;
+- stopping condition;
+- multiplication-table knowledge?
+
+## Reliability / validity
+
+What prevents:
+
+- partial operations;
+- invalid crank direction;
+- carry corruption;
+- wrong carriage state;
+- unzeroed registers;
+- operator overrun?
+
+## Output
+
+What counts as a result?
+
+- display window;
+- result register;
+- revolution counter;
+- paper tape;
+- printed table;
+- plotted continuous output.
+
+---
+
+# Deferred / optional branches
+
+Interesting but not core until a precise explanatory increment is identified:
+
+- Antikythera mechanism;
+- astronomical clocks/geared prediction;
+- slide rules;
+- harmonic analyzers;
+- tide-predicting machines;
+- fire-control analog computation;
+- mechanical logic / control;
+- Z1 and electromechanical boundary cases;
+- automata / sequence-control mechanisms.
+
+“Old and full of gears” is not a sufficient inclusion criterion.
+
+---
+
+# Next release gate
+
+A strong next release should contain, at minimum:
+
+1. a historically grounded carry comparison;
+2. multiplication comparison including direct multiplication;
+3. a key-driven computation slice;
+4. one new arithmetic-protocol note (subtraction/division);
+5. reconciled evidence labels;
+6. current verification/build record;
+7. a working public Pages deployment if repository settings permit.
+
+The repository's quality bar is:
+
+> **For every visible motion, be able to say what state changed, what source justifies the historical claim, what was simplified, and what the operator had to do.**
