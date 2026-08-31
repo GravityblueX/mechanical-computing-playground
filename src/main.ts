@@ -3,6 +3,7 @@ import { squarePreset, cubicPreset, transitionDifference, type DifferenceState }
 import { compare314x27 } from './exhibits/multiplication-compare';
 import { createKeyDrivenAccumulator, createKeyStrokeTrace } from './mechanisms/key-driven-accumulator';
 import { reduceDirectMultiplierEvent, type DirectMultiplierEvent } from './mechanisms/direct-multiplier';
+import { quotientValue, reduceDivisionEvent, traceOperatorDivision, type DivisionEvent } from './mechanisms/operator-division';
 import { sampleFlow } from './exhibits/analytical-engine-flow';
 import { createIntegrator, integrate, type IntegratorState } from './mechanisms/continuous-integrator';
 import { evaluate, type StageAState } from './backprop/core/stage-a';
@@ -26,6 +27,8 @@ let diff: DifferenceState = squarePreset();
 let diffPreset = 'n²';
 let diffEvents: string[] = [];
 let directEventIndex = 0;
+const divisionTrace = traceOperatorDivision(8478, 314, 1);
+let divisionEventIndex = 0;
 let integrator: IntegratorState = createIntegrator(1, 0.1);
 let back: StageAState = evaluate({ x1: 2, x2: 3, w1: 0, w2: 0, target: 10, learningRate: 0.01 });
 let phaseMachine: PhaseMachineState = createPhaseMachine(back);
@@ -36,6 +39,7 @@ const routes: Array<[string, Copy]> = [
   ['/visible-carry', { en: 'Carry', zh: '进位' }],
   ['/finite-difference', { en: 'Differences', zh: '差分' }],
   ['/multiplication', { en: 'Multiplication', zh: '乘法' }],
+  ['/division', { en: 'Division', zh: '除法' }],
   ['/curta', { en: 'Curta', zh: 'Curta' }],
   ['/analytical-engine', { en: 'Analytical Engine', zh: '分析机' }],
   ['/continuous', { en: 'Integration', zh: '积分' }],
@@ -76,7 +80,7 @@ function overview() {
     { en: 'Where did the answer come from?', zh: '计算器按一下就出答案——答案从哪来？' },
     { en: 'Modern calculators hide the work. Mechanical computers let us watch a number being made.', zh: '现代计算器把过程藏起来；机械计算让我们亲眼看到一个数字是怎样被“做”出来的。' },
     `<section class="hero-explainer"><div class="comparison"><div class="machine modern"><span class="machine-label">${t('MODERN CALCULATOR', '现代计算器')}</span><div class="screen">99 + 1</div><div class="mystery">?</div><div class="screen answer">100</div><p>${t('Tap a key. The inside is hidden.', '按一下键，内部过程看不见。')}</p></div><div class="versus">→</div><div class="machine mechanical"><span class="machine-label">${t('MECHANICAL VIEW', '机械视角')}</span><div class="mini-wheels"><i>0</i><i>0</i><i>9</i><i>9</i></div><div class="motion-arrow">↻ → ⚙ → ⚙ →</div><div class="mini-wheels result"><i>0</i><i>1</i><i>0</i><i>0</i></div><p>${t('Turn, carry, turn: every movement is visible.', '转动、进位、再转动：每个动作都看得见。')}</p></div></div></section>
-    <section><h2>${t('Do not study it. Pick a familiar job.', '先别学原理。选一个你做过的实际任务。')}</h2><p class="plain">${t('Every room starts with something modern people already do. You get one mission and one button. The old machine is introduced only after the problem makes sense.', '每个展厅都从现代人做过的事情开始。你只会收到一个任务、一个该按的按钮；先明白问题，再认识老机器。')}</p><div class="journey"><a href="#/visible-carry"><b>1</b><span>🛒 ${t('Shop checkout', '超市结账')}</span><small>${t('A total rises from ¥99 to ¥100', '总价从 99 元变成 100 元')}</small></a><a href="#/finite-difference"><b>2</b><span>📦 ${t('Stacking boxes', '堆放纸箱')}</span><small>${t('Predict how many fit in a square display', '预测方阵展示需要多少箱')}</small></a><a href="#/multiplication"><b>3</b><span>🧾 ${t('Bulk order', '批量订货')}</span><small>${t('27 cartons, 314 items each', '27 箱，每箱 314 件')}</small></a><a href="#/hand-crank-backprop"><b>4</b><span>📱 ${t('Auto-brightness', '手机自动亮度')}</span><small>${t('A bad guess learns from your correction', '猜错后根据你的纠正学习')}</small></a></div></section>
+    <section><h2>${t('Do not study it. Pick a familiar job.', '先别学原理。选一个你做过的实际任务。')}</h2><p class="plain">${t('Every room starts with something modern people already do. You get one mission and one button. The old machine is introduced only after the problem makes sense.', '每个展厅都从现代人做过的事情开始。你只会收到一个任务、一个该按的按钮；先明白问题，再认识老机器。')}</p><div class="journey"><a href="#/visible-carry"><b>1</b><span>🛒 ${t('Shop checkout', '超市结账')}</span><small>${t('A total rises from ¥99 to ¥100', '总价从 99 元变成 100 元')}</small></a><a href="#/finite-difference"><b>2</b><span>📦 ${t('Stacking boxes', '堆放纸箱')}</span><small>${t('Predict how many fit in a square display', '预测方阵展示需要多少箱')}</small></a><a href="#/multiplication"><b>3</b><span>🧾 ${t('Bulk order', '批量订货')}</span><small>${t('27 cartons, 314 items each', '27 箱，每箱 314 件')}</small></a><a href="#/division"><b>4</b><span>➗ ${t('Share a stock count', '分配库存')}</span><small>${t('Build 8478 ÷ 314 by operator steps', '用操作步骤做出 8478 ÷ 314')}</small></a><a href="#/hand-crank-backprop"><b>5</b><span>📱 ${t('Auto-brightness', '手机自动亮度')}</span><small>${t('A bad guess learns from your correction', '猜错后根据你的纠正学习')}</small></a></div></section>
     <section><h2>${t('A tiny symbol guide', '先认识这些简单符号')}</h2><div class="symbol-guide"><div><b>↻</b><span>${t('turn a crank', '转动曲柄')}</span></div><div><b>⚙</b><span>${t('a part moves another part', '一个零件带动另一个')}</span></div><div><b>→</b><span>${t('value or motion travels', '数值或动作向前传递')}</span></div><div><b>Δ</b><span>${t('difference between neighbors', '相邻数字之间的差')}</span></div><div><b>∫</b><span>${t('keep accumulating small amounts', '不断累积微小的量')}</span></div><div><b>∂</b><span>${t('how sensitive a result is', '结果对某个量有多敏感')}</span></div></div></section>`
   );
 }
@@ -170,6 +174,26 @@ function multiplication() {
   });
 }
 
+function division() {
+  const events = divisionTrace.events;
+  const state = events.slice(0, divisionEventIndex).reduce(reduceDivisionEvent, structuredClone(divisionTrace.initialState));
+  const name = (event: DivisionEvent) => {
+    if (event.type === 'SUBTRACT_ONCE') return t(`Subtract ${event.contribution}: ${event.residualBefore} → ${event.residualAfter}`, `减去 ${event.contribution}：${event.residualBefore} → ${event.residualAfter}`);
+    if (event.type === 'OVERSHOOT_DETECTED') return t(`Overshoot noticed at ${event.residual}`, `发现超越零点：${event.residual}`);
+    if (event.type === 'CORRECT_ADD_BACK') return t(`Add back ${event.contribution}; undo quotient step`, `加回 ${event.contribution}；撤销一次商计数`);
+    if (event.type === 'SHIFT_CARRIAGE_DOWN') return t(`Shift decimal place ${event.offsetBefore} → ${event.offsetAfter}`, `位架数位 ${event.offsetBefore} → ${event.offsetAfter}`);
+    return t(`Complete: quotient ${event.quotient}, remainder ${event.remainder}`, `完成：商 ${event.quotient}，余数 ${event.remainder}`);
+  };
+  const log = events.slice(0, divisionEventIndex).map((event) => `${event.sequence.toString().padStart(2, '0')} · ${name(event)}`).join('\n') || t('No operator action yet.', '还没有操作动作。');
+  shell(
+    { en: 'How does an operator build a quotient?', zh: '操作者怎样一步步做出商？' },
+    { en: 'Division emerges from repeated subtraction, carriage place, overshoot, correction, and counting.', zh: '商来自重复减法、位架位置、越界判断、纠正与计数。' },
+    `${lesson({ en: 'Divide 8478 by 314 without a ÷ instruction.', zh: '不用“÷”指令计算 8478 ÷ 314。' }, { en: 'Step until the residual passes below zero, then watch the correction.', zh: '单步执行到余数越过零点，再观察纠正。' }, { en: 'The operator decides when to correct and shift; the counter records repeated operations by place.', zh: '操作者决定何时纠正和移位；计数器按数位记录重复操作。' })}<section><div class="structure-callout">${evidenceBadge('TEACHING', locale)} ${t('P/M generic operator procedure—not Thomas, Burkhardt, or Curta geometry.', 'P/M 通用操作者流程——不是 Thomas、Burkhardt 或 Curta 的几何复原。')}</div><div class="equation"><span>8478 ÷ 314</span><strong>${state.phase === 'COMPLETE' ? `= ${quotientValue(state)}` : '→ ?'}</strong></div><div class="state-grid"><div><small>${t('residual / result register', '余数 / 结果寄存器')}</small><strong>${state.residual}</strong></div><div><small>${t('divisor', '除数')}</small><strong>${state.divisor}</strong></div><div><small>${t('carriage place', '位架数位')}</small><strong>×${10 ** state.carriageOffset}</strong><span>${t('current subtraction: ', '当前减数：')}${state.currentContribution}</span></div><div><small>${t('quotient by place', '分位商计数')}</small><strong>${[...state.quotientDigits].reverse().join('')}</strong><span>${t('tens / units revolution counts', '十位 / 个位转数计数')}</span></div><div><small>${t('phase', '阶段')}</small><strong>${state.phase}</strong><span>${state.phase === 'CORRECTION_REQUIRED' ? t('operator must add back before shifting', '必须先加回纠正，才能移位') : t('human actions: ', '人工动作：') + state.humanOperationCount}</span></div></div><div class="controls"><button id="division-step" ${divisionEventIndex >= events.length ? 'disabled' : ''}>${t('Do one event', '执行一个事件')}</button><button class="secondary" id="division-reset">${t('Reset', '重置')}</button></div><div class="progress"><i style="width:${divisionEventIndex / events.length * 100}%"></i></div><p class="status" aria-live="polite">${t('Event', '事件')} ${divisionEventIndex} / ${events.length}</p><details open><summary>${t('Operator procedure log', '操作者流程记录')}</summary><pre>${esc(log)}</pre></details><p class="model-note">${t('No hidden quotient event exists. Ten subtraction attempts, one detected tens-place overshoot, one add-back correction, and a carriage shift produce 27.', '不存在隐藏的“直接得商”事件。十次减法尝试、一次十位越界、一次加回纠正和一次位架移位共同产生 27。')}</p></section>`
+  );
+  document.querySelector('#division-step')?.addEventListener('click', () => { divisionEventIndex = Math.min(divisionEventIndex + 1, events.length); division(); });
+  document.querySelector('#division-reset')?.addEventListener('click', () => { divisionEventIndex = 0; division(); });
+}
+
 function curta() {
   shell(
     { en: 'A calculator you operate like a tiny machine tool', zh: '像操作微型机床一样使用计算器' },
@@ -231,6 +255,7 @@ function render() {
   if (path === '/visible-carry') visibleCarry();
   else if (path === '/finite-difference') finiteDifference();
   else if (path === '/multiplication') multiplication();
+  else if (path === '/division') division();
   else if (path === '/curta') curta();
   else if (path === '/analytical-engine') analytical();
   else if (path === '/continuous') continuous();

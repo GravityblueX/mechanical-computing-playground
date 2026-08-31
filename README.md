@@ -73,6 +73,7 @@ Babbage Difference Engine、Analytical Engine、Curta 等已经存在不少模�
 - continuous integrator（连续积分）最小模型；
 - key-driven accumulation（按键即运算）研究线；
 - direct multiplication（直接乘法）功能状态模型与可重放交互展项；
+- operator-driven division（操作者驱动除法）：重复减法、越界、加回纠正、位架与分位商计数；
 - punched/program cards 与离散控制的后续研究空间。
 
 这些机制可以组合成机器，也可以脱离整机单独比较。
@@ -193,6 +194,10 @@ machines/<name>/
 ### Multiplication Compare
 
 仓库已有 repeated addition / stepped drum / pinwheel / direct multiplication 四路比较。直接乘法分支把 Otto Steiger / Millionaire 所代表的架构差异变成可单步、可重放的功能模型：乘法表的一部分不再由操作者通过重复曲柄提供，而由机器的选择机构承载。模型刻意不宣称复原 Millionaire 控制板的具体几何。详见 [`research/multiplication-mechanisms.md`](research/multiplication-mechanisms.md)。
+
+### Operator-Driven Division
+
+`8478 ÷ 314` 不由隐藏的 `divide()` 直接给出 27，而由按数位重复减法、显式越界、加回纠正、位架下移和商/转数计数逐步产生。它是 P/M 通用操作者流程，不声称复原 Thomas、Burkhardt 或 Curta 的内部几何。研究入口：[`research/subtraction-and-division.md`](research/subtraction-and-division.md)。
 
 ### Key-Driven Computation
 

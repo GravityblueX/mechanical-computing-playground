@@ -18,7 +18,8 @@ An arrow means “influences” by default, not “these two physical parts are 
 1. **Carry / 进位** — supermarket total `¥99 → ¥100`; observe the behavior, then distinguish the functional carry arrow from an unknown real linkage.
 2. **Finite differences / 有限差分** — predict square-display box counts; distinguish the mathematical column update from Difference Engine hardware.
 3. **Multiplication / 乘法** — decompose a warehouse order into ones, tens, turns, and shifts; do not read the lanes as a cutaway.
-4. **Curta** — follow the human operation path while treating the cylinder drawing as an operational teaching model.
-5. **Analytical Engine / 分析机** — follow cards, control, Store, Mill, and output as information-flow roles; modern terms are analogies.
-6. **Continuous integration / 连续积分** — accumulate small slices; do not infer a historical integrator's exact geometry.
-7. **Hand-crank backprop / 手摇反向传播** — follow numerical influence; the shafts and gears are counterfactual teaching elements.
+4. **Operator division / 操作者除法** — build `8478 ÷ 314 = 27` from repeated subtraction, an overshoot, add-back correction, quotient counting, and carriage shift; the P/M events are not historical machine geometry.
+5. **Curta** — follow the human operation path while treating the cylinder drawing as an operational teaching model.
+6. **Analytical Engine / 分析机** — follow cards, control, Store, Mill, and output as information-flow roles; modern terms are analogies.
+7. **Continuous integration / 连续积分** — accumulate small slices; do not infer a historical integrator's exact geometry.
+8. **Hand-crank backprop / 手摇反向传播** — follow numerical influence; the shafts and gears are counterfactual teaching elements.

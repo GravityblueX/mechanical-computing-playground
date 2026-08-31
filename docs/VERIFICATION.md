@@ -1,5 +1,23 @@
 # Verification record
 
+## 2026-09-01 — operator-driven division procedure
+
+Added the generic P/M `operator-division` mechanism, hardened event replay, `8478 ÷ 314 = 27` and `1000 ÷ 64 = 15 remainder 40` traces, source/evidence note, simulator matrix, and a public `#/division` stepping path.
+
+- `npm run typecheck` — pass
+- `npm test -- --run` — pass, 65 tests across 9 files
+- `npm run build` — pass
+- `git diff --check` — pass
+
+Desktop browser smoke check against local Vite:
+
+- `#/division` rendered in Chinese with no horizontal overflow at the available 1072px viewport;
+- stepping four events exposed residual `-942` and `CORRECTION_REQUIRED` after three tens-place subtraction attempts;
+- the event log remained readable without depending on animation or color;
+- no runtime resource error was observed by the bounded page probe.
+
+A narrow/mobile smoke check was not completed in this pass and is not claimed.
+
 ## 2026-09-01 — encoded table and key-driven accumulator
 
 The direct-multiplier now stores an inspectable immutable table for digits `0..9`, and digit selection reads that represented control state. The generic P/M key-driven accumulator exposes key-stroke begin/end, place-value contribution, digit advances, serialized carries, human-operation count, determinism, and replay. The About view compares `SET_VALUE → CRANK` with `KEY_STROKE → ACCUMULATE` without claiming source-specific Comptometer geometry or timing.
