@@ -4,37 +4,47 @@ This repository is intended to be continued by coding/research agents without re
 
 ## Mission
 
-Build a public interactive playground that makes computation visible as **mechanical state transitions, information flow, human operations, and constraints**.
+Build a public interactive playground that makes computation visible as **mechanical state transitions, information flow, human operations, constraints, and evidence boundaries**.
 
-The project is not a collection of vintage calculator skins. A result such as `0099 + 1 = 0100` is insufficient unless the model can expose which wheel moved, which carry became pending, how carry propagated, and which operation phase caused each state change.
+The project is not a collection of vintage calculator skins. A result such as `0099 + 1 = 0100` is insufficient unless the model can expose which state changed, which carry became pending, how carry propagated, which operation phase caused each change, and—when a historical machine is named—what source supports the claimed mechanism.
 
 The hand-crank backpropagation exhibit is a counterfactual pedagogical machine, not a historical reconstruction. It must make forward state, error, reverse/adjoint propagation, gradients, learning-rate scaling, and parameter updates explicit.
 
-## Read order before changing code
+## Source of truth and read order
 
-1. `README.md`
-2. `docs/PRIOR_ART.md`
-3. `docs/ANCIENT_BACKPROP.md`
-4. `docs/PUBLISHING.md`
-5. `ROADMAP.md`
-6. `IMPLEMENTATION_PLAN.md`
-7. relevant existing source/tests/research
+The repository has already accumulated implementation faster than some old planning checklists were updated. **Do not infer current work from unchecked boxes alone.**
 
-Do not invent a new project roadmap when an unfinished dependency-safe task already exists.
+Read in this order before changing code or research:
+
+1. `README.md` — project boundary and current public framing;
+2. `STATUS.md` — **authoritative current-state ledger**;
+3. `docs/EVIDENCE_POLICY.md` — claim types and evidence strength;
+4. `docs/RESEARCH_GAPS.md` — prioritized research gaps;
+5. `docs/PRIOR_ART.md` — existing simulators, museums, and historical resources;
+6. `docs/ANCIENT_BACKPROP.md` — counterfactual backprop boundary when relevant;
+7. `docs/PUBLISHING.md` — publishing/privacy boundary when relevant;
+8. `ROADMAP.md` — forward tracks, not a status ledger;
+9. `TODO.md` — next bounded tasks;
+10. relevant source, tests, fixtures, research notes, and recent commits;
+11. `IMPLEMENTATION_PLAN.md` only as a historical design/dependency specification.
+
+`IMPLEMENTATION_PLAN.md` contains stale checkboxes from an earlier construction phase. Never reimplement a task merely because that file still marks it incomplete. Inspect the tree, tests, current UI, `STATUS.md`, and recent commits first.
 
 ## Default execution behavior
 
-- Move forward by default; do not stop at analysis if implementation can proceed.
-- Choose the earliest unfinished task whose dependencies are satisfied.
-- Continue through adjacent tasks while tests/build remain healthy.
+- Move forward by default; do not stop at analysis if a bounded implementation or research slice can proceed.
+- Start from `STATUS.md` and `TODO.md`, then verify the actual code/research state before selecting work.
+- Prefer the highest-value dependency-safe gap, not the earliest unchecked line in an old plan.
+- Continue through adjacent tasks while tests/build and evidence boundaries remain healthy.
 - Verification should resolve decisions and prove mechanisms, not become an excuse for endless research.
-- If a historical/mechanical claim is uncertain, verify authoritative sources, label the evidence grade, choose a conservative model, and continue.
-- Documentation-only work is not completion of a mechanism milestone.
-- Do not ask the human to choose routine implementation details already settled here.
+- If a historical/mechanical claim is uncertain, verify authoritative sources, narrow the claim, record uncertainty, choose a conservative model, and continue.
+- Documentation-only work does not complete an implementation milestone, but source/provenance work **does** count as substantive progress when historical claims are the actual blocker.
+- Do not ask the human to choose routine implementation details already settled by repository contracts.
+- When the repository and an old planning document disagree, the implemented tree/tests plus `STATUS.md` win; update the documentation rather than duplicating work.
 
 ## Required stack and repository shape
 
-Use a browser-first TypeScript project unless an existing implementation establishes an equivalent tested stack.
+Use the established browser-first TypeScript project unless a later repository decision explicitly changes it.
 
 Preferred tools:
 
@@ -47,7 +57,7 @@ Preferred tools:
 - WebGL/3D/physics only after a written decision proves 2D state visualization insufficient
 - GitHub Actions for test/build and Project Pages deployment
 
-Expected high-level shape:
+Current high-level shape:
 
 ```text
 src/
@@ -82,33 +92,47 @@ CARRY_PROPAGATE wheel=2 0->1
 CRANK_END
 ```
 
-The exact event vocabulary may evolve, but UI must consume the core state/event stream rather than secretly recomputing results.
+The exact vocabulary may evolve, but UI must consume the core state/event stream rather than secretly recomputing results.
 
-### 2. Separate historical machine facts from pedagogical abstractions
+### 2. Separate claim type from evidence strength
 
-Use evidence grades consistently:
+Follow `docs/EVIDENCE_POLICY.md`.
 
-- A: preserved physical machine/direct measurement;
-- B: original drawing/manual plus faithful reconstruction;
-- C: historically documented but interpretation is required;
-- D: pedagogical simplification/counterfactual model.
+Claim types:
 
-Every machine/mechanism note must identify when a visualization is D rather than implying 1:1 historical construction.
+- **M** — mathematical / computational;
+- **H** — historical record;
+- **R** — engineering reconstruction / interpretation;
+- **P** — pedagogical / counterfactual model.
+
+For H/R claims, record historical evidence strength separately:
+
+- **E1** — direct / primary;
+- **E2** — authoritative reconstruction / institutional synthesis;
+- **E3** — reliable secondary;
+- **E4** — open / inference.
+
+Do not call a mathematical theorem “grade A.” Do not call a teaching abstraction “weak historical evidence.” They are different kinds of claims.
+
+Older A–D badges may remain for UI compatibility, but new research and edited claims should use the two-axis policy.
 
 ### 3. Prefer isolated mechanisms before whole-machine emulators
 
-Before implementing a complete Pascaline, Curta, Difference Engine, Analytical Engine, etc., check prior art and ask what explanatory mechanism is missing.
+Before implementing a complete Pascaline, Comptometer, Millionaire, Curta, Difference Engine, Analytical Engine, etc., check prior art and identify the explanatory increment.
 
 Prefer:
 
 ```text
-existing simulator/source
+existing artifact/source/simulator
 → mechanism study
 → isolated state model
 → explanatory exhibit
+→ cross-machine comparison
 ```
 
 over rewriting a full emulator with a different skin.
+
+Add a machine only when it introduces a new mechanism, representation, operator protocol, or evidence question.
 
 ### 4. Mechanical constraints should shape the algorithm
 
@@ -120,11 +144,31 @@ Expose where relevant:
 - latch/detent state;
 - transfer ratio;
 - sequencing/phase;
+- key-driven input;
 - human operations;
 - capacity/overflow;
-- backlash/error as a pedagogical model only when justified.
+- correction/interlocks;
+- zeroing/clearing;
+- operation direction/mode;
+- backlash/error only when historically or experimentally justified.
 
-### 5. Hand-crank backprop must not be ordinary hidden JavaScript with gear decoration
+### 5. Human operation is part of the computation
+
+Do not assume every machine follows `set value → crank`.
+
+The repository should be able to represent different protocols, for example:
+
+```text
+stylus rotates dial
+setting levers → crank
+keypress → accumulate
+multiplier selector → direct multiplication cycle
+continuous shaft coupling
+```
+
+An operator action is not “mere UI” when it determines arithmetic sequencing, repetition, place value, correction, or stopping conditions.
+
+### 6. Hand-crank backprop must not be ordinary hidden JavaScript with gear decoration
 
 The neural-network core can and should be deterministic numerical code, but it must produce explicit phases/events that the mechanical mapping consumes.
 
@@ -150,44 +194,52 @@ Every displayed gradient must correspond to a reference value in tested core sta
 
 Tests are mandatory for core logic.
 
-Mechanical core must eventually cover:
+Existing tests and fixtures already cover significant parts of carry, finite differences, carriage shifting, revolution counting, continuous integration, Stage A/B gradients, phase behavior, and learning-rate behavior. Before creating new tests, inspect what is already covered.
 
-- `0009 + 1 -> 0010` with visible carry event;
-- `0099 + 1 -> 0100` with two carry propagations;
-- `9999 + 1` overflow/carry-out behavior;
-- deterministic event replay;
-- finite-difference generation for known polynomials;
-- stepped-drum/pinwheel conceptual operation sequences where implemented;
-- carriage shift behavior;
-- serialization/replay of a complete operation cycle.
+Future mechanism work should add tests appropriate to its new explanatory claim, for example:
 
-Backprop core must cover:
-
-- forward reference values;
-- analytic gradient versus finite difference;
-- one-step weight update;
-- loss decrease under a stable learning rate for selected fixtures;
-- overshoot/oscillation fixture under an intentionally excessive learning rate;
-- Stage B chain-rule reference values;
-- phase/event order and serialization/replay.
+- direct multiplication operation traces;
+- key-driven accumulator transitions;
+- subtraction/complement protocol where modeled;
+- division operator loop where modeled;
+- correction/interlock invalid transitions;
+- source-linked named-machine behavior only at the abstraction level actually implemented.
 
 Do not validate a mechanical model solely by watching animation.
 
-Before milestone commits, run the full test suite and production build.
+Before code milestone commits, run the full test suite, type-check, and production build. Update `docs/VERIFICATION.md` after meaningful code or deployment changes.
 
 ## Research contract
 
-When an implementation depends on historical/mechanical facts, create or update a note under `research/` containing:
+When an implementation or historical explanation depends on mechanical facts, create or update a note under `research/` containing:
 
-- question;
-- primary/museum/manual/patent/source material where possible;
-- existing simulator/source code inspected;
-- evidence grade;
-- what is known versus simplified;
-- project decision;
-- date checked.
+```text
+Question
+Claim type(s)
+Sources
+What each source directly establishes
+What is reconstructed/inferred
+What this repository simplifies
+Implementation consequence
+Uncertainties
+Date checked
+```
 
-Prefer museum material, patents/manuals/original drawings, scholarly reconstruction, and established specialist references over generic summaries.
+Prefer:
+
+1. surviving artifacts / museum catalog with provenance;
+2. original patents, drawings, manuals, contemporary technical descriptions;
+3. documented reconstructions and scholarly histories using primary sources;
+4. established specialist references;
+5. generic summaries only for low-precision orientation.
+
+Precision rule:
+
+> The more specific the geometry, timing, revision, or originality claim, the more specific the source location must be.
+
+Record model/revision, patent number/figure/claim, manual edition/page, drawing identifier, or reconstruction basis when the claim needs that precision.
+
+Do not treat a patent as proof that every described feature was manufactured exactly as patented. Distinguish intended design, produced machine, surviving artifact, later reconstruction, and teaching model.
 
 For mechanical neural networks/physical learning, distinguish real physical learning research from this repository's pedagogical counterfactual machine.
 
@@ -198,14 +250,32 @@ Default to 2D/SVG because it is easier to inspect and synchronize with determini
 A good exhibit should allow:
 
 - single-step;
-- crank/drag interaction when appropriate;
+- crank/drag/key interaction when appropriate;
 - pause/replay;
 - visible active mechanism;
 - state table/event log;
 - explanation without requiring motion;
-- optional math/details rather than hiding them permanently.
+- optional math/details rather than hiding them permanently;
+- visible claim/evidence boundary when a historical machine is named.
 
 No meaning should depend only on color or animation.
+
+A visually realistic gear, lever, or linkage that lacks source support must be labeled as schematic/pedagogical or removed. Visual realism must never silently upgrade evidence strength.
+
+## Current research priorities
+
+Read `docs/RESEARCH_GAPS.md` for detail. The current highest-value lines are:
+
+1. historically grounded carry comparison (Pascaline / key-driven carry);
+2. multiplication architecture including direct multiplication / Millionaire;
+3. key-driven computation / Comptometer;
+4. subtraction, complements, division, zeroing, correction, and interlocks;
+5. simulator comparison matrix;
+6. deeper Curta / Analytical Engine / Differential Analyzer source maps;
+7. cross-machine representation and operator-protocol comparisons;
+8. reliability/torque/tolerance only when evidence supports it.
+
+Do not displace these with a new famous-machine page unless it adds a distinct mechanism lesson.
 
 ## Commit discipline
 
@@ -213,15 +283,14 @@ Commit coherent checkpoints.
 
 Examples:
 
-- `build: bootstrap mechanical playground harness`
-- `feat: add decimal wheel transition core`
-- `feat: model multi-stage carry propagation`
-- `feat: add visible carry exhibit`
-- `research: document stepped drum and pinwheel differences`
-- `feat: add finite difference crank model`
-- `feat: add stage-a backprop core`
-- `test: verify analytic gradients against finite difference`
-- `feat: map backprop phases to hand-crank events`
+- `research: ground carry model in Pascaline sources`
+- `research: add direct multiplication architecture`
+- `feat: model direct multiplication control`
+- `research: map key-driven Comptometer operation`
+- `feat: add key-driven accumulator transitions`
+- `research: document subtraction and division protocols`
+- `docs: reconcile current implementation status`
+- `test: verify direct multiplication operation trace`
 
 Do not commit generated planning churn as if it were product progress.
 
@@ -233,13 +302,23 @@ Stop or redirect if the work becomes:
 - a whole-machine rewrite already covered by mature simulators with no explanatory increment;
 - a 3D physics project before deterministic mechanism logic exists;
 - a historical claim inferred only from modern computer terminology;
+- a historical geometry/timing claim with no source chain;
 - an animation that cannot be reproduced from state/events;
+- an operator action hidden even though it is part of the arithmetic algorithm;
 - a claim that the counterfactual hand-crank backprop machine historically existed;
 - a claim that mechanical neural-network backpropagation is original to this repository;
-- ordinary backpropagation with decorative gears and no explicit reverse-phase state.
+- ordinary backpropagation with decorative gears and no explicit reverse-phase state;
+- duplicate work caused by trusting a stale planning checkbox over the actual repository.
 
 ## Definition of done
 
-The repository is substantially complete when required milestones in `IMPLEMENTATION_PLAN.md` are implemented, tested, documented, and deployed to Project Pages; the key exhibits work without cloning; historical versus pedagogical claims are labeled; and the user can answer not merely “what result did the machine produce?” but “what moved, in what order, and why?”
+The repository is substantially mature when:
 
-Until then, continue implementing the next dependency-safe unfinished task.
+- key mechanisms are deterministic, tested, replayable, and understandable without animation;
+- historical claims are source-backed at the precision displayed;
+- reconstruction and teaching abstractions are explicit;
+- cross-machine exhibits explain not just results but representation, operation sequence, and human-machine division of arithmetic labor;
+- key exhibits work publicly without cloning;
+- `STATUS.md`, tests, verification, and public documentation agree about what exists.
+
+Until then, continue the highest-value dependency-safe task from the current status/research queue—not the oldest unchecked item in a historical plan.
