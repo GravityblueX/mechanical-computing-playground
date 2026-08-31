@@ -1,13 +1,15 @@
 # Current Agent Task
 
 Issued: 2026-09-01
-Owner: local coding agent
-Target duration: about one hour
+Owner: local coding/research agent
+Target duration: roughly 45–75 minutes
 Repository authority: remote `main`
 
-Previous task is complete and archived at `tasks/archive/2026-09-01-direct-multiplication.md`.
+Previous task is complete and archived at `tasks/archive/2026-09-01-key-driven-accumulator.md`.
 
-## Read before coding
+Two recent local-agent implementation slices each completed in about eleven minutes, so this slice is intentionally several times larger. Do not interpret the larger scope as permission to skip evidence work or verification.
+
+## Read before work
 
 Fetch/pull remote `main`, then read in this order:
 
@@ -15,134 +17,280 @@ Fetch/pull remote `main`, then read in this order:
 2. `TODO.md`
 3. `AGENTS.md`
 4. `docs/EVIDENCE_POLICY.md`
-5. `docs/RESEARCH_GAPS.md`
+5. `docs/RESEARCH_GAPS.md`, especially Priority 3 and Priority 4
 6. `research/key-driven-computation.md`
 7. `research/multiplication-mechanisms.md`
-8. `src/mechanisms/direct-multiplier/index.ts`
-9. existing decimal-wheel / carry / core event infrastructure and relevant tests
+8. existing `src/mechanisms/carriage-shift/`, `revolution-counter/`, decimal/carry core, event/replay helpers, and tests
+9. `docs/VERIFICATION.md`
+
+Also note that PR #2 has already been merged into `main`; inspect the current direct-multiplier implementation rather than recreating its replay hardening/workbench.
 
 Do not use stale unchecked boxes in `IMPLEMENTATION_PLAN.md` as the live task source.
 
-## Objective
+# Objective
 
-Complete two dependency-safe pieces in one bounded slice:
+Build the repository's first source-grounded **subtraction/division operator-procedure track**.
 
-1. make the direct-multiplication model actually expose an inspectable **encoded-multiple table/control state**, rather than calculating the selected multiple through a hidden repeated-addition loop at selection time;
-2. implement the repository's first **generic key-driven accumulator** so `keypress → accumulate` becomes a first-class operation protocol distinct from `set → crank`.
+The central teaching question is:
 
-The key-driven model is informed by the Comptometer research, but it is a **P/M pedagogical mechanism model**, not a source-specific reconstruction of a particular Felt & Tarrant model.
+> When a mechanical calculator has no single `divide(a, b)` instruction, which parts of division are represented by machine state and which parts remain an operator decision loop?
 
-## Part A — direct-multiplier semantic cleanup
+This slice has four parts:
 
-The accepted direct-multiplier slice is arithmetically correct, but `selectEncodedMultiple()` currently derives a selected multiple with an internal loop of repeated additions. That weakens the exhibit's central distinction because the multiplication-table work is still being performed at selection time, merely out of sight.
+1. write a source-backed cross-machine research note on subtraction/division/control;
+2. implement a deterministic generic **operator-driven division** mechanism with explicit repeated subtraction, carriage place, quotient/revolution counting, overshoot, correction, and replay;
+3. add a compact interactive/text-state teaching path for `8478 ÷ 314 = 27` without pretending to reproduce a particular machine;
+4. create the long-planned simulator/prior-art matrix if the first three parts remain healthy.
 
-Refactor conservatively so the machine/control representation is explicit and inspectable.
+The software mechanism is claim type **P/M**. Historical claims about actual machines must remain separately sourced and must not leak into generic mechanism geometry.
 
-Required behavior:
+---
 
-- create or expose an immutable encoded-multiple table for digits `0..9` associated with the multiplicand;
-- the table must be visible in state or in a clearly typed machine/control object that is included in traces/inspection paths;
-- multiplier-digit selection must select the corresponding table entry rather than execute a repeated-addition loop;
-- an event or inspected state must make the lookup relationship visible: digit → encoded multiple;
-- preserve deterministic replay and existing public behavior;
-- do not invent historical Millionaire geometry or timing.
+# Part A — `research/subtraction-and-division.md`
 
-It is fine for software initialization to calculate the ten mathematical values. The important modeling requirement is that **selection is a lookup from represented machine/control state**, not an invisible repeated-addition operation performed during the selection transition.
+Create the note before or alongside implementation. It must distinguish at least these historical/operator strategies:
 
-Add/update tests proving that selection reads the encoded table and that the `314 × 27` trace still reaches `8478` in two operation cycles.
+## A1. stepped-drum / arithmometer family
 
-Keep this cleanup small; do not redesign the whole multiplication module.
+Use Smithsonian material to establish only what the records actually support:
 
-## Part B — generic key-driven accumulator mechanism
+- Thomas-style machines have a setting/input mechanism, operating crank, movable carriage, revolution register/result register, and an addition/multiplication versus subtraction/division control;
+- some documented arithmometers have revolution-counter direction associated with subtraction/division;
+- a documented Burkhardt example has a bell that sounds when subtraction passes through zero and is described as especially intended for division.
 
-Create a small module under `src/mechanisms/` using repository naming conventions, for example `key-driven-accumulator/`.
+Strong starting sources:
 
-### Scope
+- Smithsonian stepped-drum group: <https://americanhistory.si.edu/it/collections/object-groups/calculating-machines/stepped-drum-calculating-machines>
+- Thomas Arithmometer object: <https://americanhistory.si.edu/collections/object/nmah_690684>
+- Burkhardt Arithmometer object: <https://www.americanhistory.si.edu/collections/object/nmah_690681>
+- 1868 Thomas operating-instructions pamphlet record: <https://www.americanhistory.si.edu/collections/object/nmah_904757>
 
-Model functional behavior needed to explain:
+Do not infer internal gear geometry from the catalog prose.
+
+## A2. Curta operator procedure
+
+Use the original-manual material/transcription available through the specialist Curta archive as an operator-procedure source, while identifying the hosting/provenance precisely:
+
+- <https://curta.org/wiki/CurtaManuals>
+- <https://curta.org/wiki/DivisionAlgorithm>
+
+Relevant documented procedure includes carriage position, divisor in the setting register, result/turns registers, overshooting and undoing a turn, and subtractive division via the reversing control. Do not turn these operating instructions into claims that every stepped-drum/pinwheel machine behaves identically.
+
+## A3. complement subtraction
+
+The repository already mentions Pascaline/complement subtraction. Re-check the actual source currently cited in the repository before strengthening that section. If the available source does not support the exact mechanism/procedure claim, state the uncertainty instead of filling the gap from memory.
+
+## A4. control is computation
+
+Explain why these are not mere UI details:
+
+- mode/reversing control;
+- carriage position;
+- revolution/quotient register;
+- zeroing;
+- overshoot indication;
+- correction/add-back;
+- locks/interlocks that restrict invalid transitions.
+
+For every historical paragraph, use `docs/EVIDENCE_POLICY.md`: claim type first, historical evidence strength separately. A patent/manual/object description is not permission to generalize to all calculator families.
+
+The note should end with an explicit **software abstraction decision** describing what the new generic model will represent and what it will refuse to claim.
+
+---
+
+# Part B — deterministic generic operator-driven division mechanism
+
+Create a module under `src/mechanisms/`, preferably `operator-division/` unless existing conventions suggest a better name.
+
+Do not implement a hidden `Math.floor(dividend / divisor)` and then manufacture an animation. The arithmetic result must emerge from the same explicit operations the visitor can inspect.
+
+## Minimum state
+
+Represent at least:
+
+- divisor;
+- signed residual/result register value;
+- carriage/decimal offset;
+- per-place quotient/revolution counts, or an equivalently inspectable quotient-register state;
+- operation/revolution count;
+- human-operation count;
+- phase such as ready vs overshoot/correction-required;
+- current contribution `divisor × 10^offset` when relevant;
+- enough identity/cycle information for deterministic event replay.
+
+Reuse/adapt existing carriage/revolution concepts where useful, but do not force a bad abstraction merely to import a helper. If the generic revolution counter is insufficient for per-place quotient digits, compose or extend conservatively rather than silently duplicating contradictory semantics.
+
+## Required operator actions
+
+Use clear P/M event/action vocabulary equivalent to:
 
 ```text
-press key
-→ the keypress itself is the compute/energy-control action
-→ place-value contribution enters accumulator
-→ carry becomes observable
-→ key returns / cycle completes
+SUBTRACT_ONCE
+OVERSHOOT_DETECTED
+CORRECT_ADD_BACK
+SHIFT_CARRIAGE_DOWN
+DIVISION_COMPLETE / TRACE_COMPLETE
 ```
 
-Do **not** build a full Comptometer emulator, keyboard artwork, historical correction mechanism, duplex timing model, or source-specific key geometry in this slice.
+A subtraction cycle at offset `k` subtracts `divisor × 10^k` from the residual and changes the quotient/revolution state at that decimal place.
 
-### Minimum state
+### Overshoot/correction semantics
 
-Use the current core conventions where practical. State should make at least these concepts inspectable:
+Model overshoot explicitly rather than silently predicting the quotient digit in advance.
 
-- register width / accumulator digits or equivalent deterministic decimal register state;
-- active key column / decimal place;
-- pressed digit `1..9` (allow `0` only if the model has a clear reason; a no-op helper is acceptable but do not invent a historical zero key);
-- accumulator before/after;
-- key-stroke count / human-operation count;
-- cycle phase or explicit ordered events;
-- carry events or a clear bridge to the existing carry-chain semantics.
+A useful generic procedure is:
 
-Do not silently reduce every stroke to `accumulator += digit * 10**column` and expose only the final integer. The trace must show the place-value contribution and any carry propagation that changes higher columns.
+1. operator subtracts once;
+2. if residual crosses below zero, state enters `CORRECTION_REQUIRED`;
+3. no further subtraction or carriage shift is allowed until correction;
+4. correction adds the last place-value contribution back and reverses the just-counted quotient/revolution step;
+5. operator may then shift to the next lower decimal position.
 
-### Required actions/events
+This is a **pedagogical operator-procedure model**, not a claim that every real calculator used signed arithmetic internally or the same physical correction path.
 
-Choose names consistent with repository vocabulary, but the observable sequence should be equivalent to:
+Use safe-integer checks and explicit invalid-state errors. Division by zero must be rejected.
+
+## Default worked trace
+
+The canonical exhibit/test is:
 
 ```text
-KEY_STROKE_BEGIN column=... digit=...
-PLACE_VALUE_CONTRIBUTION ...
-DIGIT_ADVANCE / CARRY_PENDING / CARRY_PROPAGATED ... as needed
-KEY_STROKE_END
+8478 ÷ 314 = 27 remainder 0
 ```
 
-The exact event vocabulary is pedagogical and must be labeled P/M rather than claimed as historical Comptometer terminology.
+Start with carriage offset 1, and make the state/event path visible:
 
-### Required cases/tests
+```text
+8478
+- 3140 => 5338   quotient tens 1
+- 3140 => 2198   quotient tens 2
+- 3140 => -942   overshoot
++ 3140 => 2198   correction, quotient tens back to 2
+shift offset 1 -> 0
+- 314 repeated seven times
+=> residual 0, quotient 27
+```
+
+The point is not that this exact event vocabulary is historical. The point is that the quotient emerges from repeated machine operations + carriage position + operator decisions.
+
+Also support a non-exact example such as:
+
+```text
+1000 ÷ 64 = 15 remainder 40
+```
+
+without calling a built-in division operator to choose quotient digits.
+
+## Replay integrity
+
+Given the repository's newly hardened direct-multiplier replay, do not regress to trusting arbitrary serialized derived fields.
+
+At minimum validate during replay:
+
+- contiguous event sequence;
+- contribution matches divisor and carriage offset;
+- residual before/after arithmetic;
+- quotient/revolution counter before/after;
+- correction exactly reverses the immediately pending overshoot step;
+- carriage shift only occurs in a valid phase and follows the recorded offset;
+- recorded final state matches replayed state.
+
+Do not over-generalize this into a repository-wide event framework migration in this slice.
+
+---
+
+# Part C — tests and teaching integration
+
+## Required tests
 
 Add focused Vitest coverage for at least:
 
-1. units-column `7` on zero accumulator produces `7` in one key-stroke cycle and requires no separate crank event;
-2. pressing units `7` then units `4` produces `11` and exposes the carry into tens;
-3. pressing tens-column `3` contributes `30` deterministically;
-4. a place-value example such as tens `3` + units `4` produces `34` with two key-stroke cycles;
-5. a multi-digit carry case such as accumulator `99` + units-key `7` reaches `106` with the carry path observable;
-6. identical state + action yields identical event sequence / result;
-7. replay reproduces final state if the existing infrastructure supports a natural reducer/replay path;
-8. invalid column/digit/state is rejected explicitly rather than coerced.
+1. one subtraction cycle at a known carriage offset changes residual and quotient/revolution state correctly;
+2. `8478 ÷ 314` reaches quotient `27`, remainder `0` through visible repeated subtraction and one overshoot/correction at the tens place;
+3. the trace does not contain a single hidden `DIVIDE_RESULT` shortcut event that jumps directly to `27`;
+4. `1000 ÷ 64` reaches quotient `15`, remainder `40` with explicit operator cycles;
+5. overshoot enters a correction-required state;
+6. subtract/shift while correction is required is rejected;
+7. correction restores the prior non-overshot residual and reverses the just-counted quotient step;
+8. division by zero and invalid offsets/state are rejected;
+9. deterministic same state + action yields identical events/state;
+10. replay reproduces the final state and rejects at least several tampering cases (sequence, residual arithmetic, quotient count, correction payload, or final state).
 
-Do not model simultaneous multi-column/duplex operation yet. The research note explicitly says that timing and model/revision differences require stronger historical sourcing.
+## Public teaching path
 
-## Part C — minimal comparison / teaching integration
+Add a compact browser path, preferably a dedicated hash route such as `#/division` if routing remains small. If a new route causes disproportionate churn, integrate a clearly separated section into an existing arithmetic/mechanism view.
 
-Add a compact comparison to the existing public shell or an appropriate exhibit path so a visitor can inspect the protocol difference between at least:
+Minimum visitor affordances:
+
+- default `8478 ÷ 314` scenario;
+- one-event step or one-operator-action step;
+- reset;
+- visible residual/result register;
+- visible divisor and carriage place;
+- visible quotient/revolution count by place;
+- visible `CORRECTION_REQUIRED` state after overshoot;
+- plain-language event log;
+- evidence/model note saying **P/M generic operator procedure**, not Thomas/Curta geometry;
+- text remains understandable without animation/color.
+
+The visitor should be able to answer:
+
+> Why is `27` not stored as a magically computed quotient, and what did the operator have to notice/do to obtain its tens and units digits?
+
+Update README/teaching navigation only if the new path actually exists.
+
+---
+
+# Part D — `research/simulator-matrix.md`
+
+The previous two local slices finished far below the one-hour target, so complete the long-planned simulator/prior-art matrix in the same checkpoint after Parts A–C are working.
+
+Inspect the strong prior-art links already collected in `docs/PRIOR_ART.md` and record a compact matrix for at least:
+
+- a Difference Engine simulator/reconstruction resource;
+- John Walker/Fourmilab Analytical Engine emulator lineage;
+- one Curta simulator/reference implementation;
+- at least one stepped-drum/pinwheel calculator resource;
+- this repository's own corresponding explanatory increment.
+
+Columns/fields should include where knowable:
 
 ```text
-lever/crank style: SET_VALUE → CRANK
-key-driven style:  KEY_STROKE → ACCUMULATE
+resource
+machine/family
+source/emulator/reconstruction
+input model
+can single-step?
+internal state visible?
+event/operation trace visible?
+license / reuse status
+last-maintained signal (if responsibly verifiable)
+what this repository should reuse/link instead of rewrite
+what explanatory gap remains
+checked date
 ```
 
-Reuse existing UI components where possible. No large redesign.
+Do not guess licenses or maintenance dates. If outbound web access is unavailable, record that as a bounded blocker and complete Parts A–C; do not invent matrix values.
 
-The comparison must state explicitly:
+This matrix is research/provenance work, not a request to copy code from third parties.
 
-- key-driven is a generic pedagogical model informed by Comptometer history;
-- it is not a reconstruction of a particular Comptometer model;
-- the important difference is that the human keypress is itself the arithmetic operation cycle rather than merely setting a value for a later crank.
+---
 
-If adding a new route is much larger than this slice, integrate the comparison into the existing about/mechanism teaching area instead of creating routing churn.
+# Documentation reconciliation
 
-## Documentation
+After implementation/tests exist and verification passes:
 
-After code/tests exist:
+- update `STATUS.md` so its verification paragraph reflects current code reality rather than old 32-test language;
+- update `TODO.md` only for genuinely completed items;
+- update `docs/VERIFICATION.md` with commands/results actually run and the resulting test count;
+- update `docs/TEACHING_PATH.md` if a new division route becomes part of the public visitor sequence;
+- keep `ROADMAP.md` changes minimal and status-oriented only where its current wording is now false.
 
-- update `STATUS.md` to mark the key-driven functional model present;
-- update `TODO.md` accordingly;
-- update `docs/VERIFICATION.md` with the new test count and commands actually run;
-- add at most a short software-model clarification to `research/key-driven-computation.md` if needed;
-- do not broaden this into the future subtraction/correction/interlock research pass.
+Do not broadly rewrite unrelated historical notes.
 
-## Acceptance
+---
+
+# Acceptance
 
 Before commit/push, run:
 
@@ -153,47 +301,28 @@ npm run build
 git diff --check
 ```
 
-All must pass.
+If practical in the existing environment, perform a browser smoke test of the new division path at desktop and narrow/mobile width and record only checks actually performed.
 
-The finished slice must make these two questions answerable from state/events rather than prose alone:
+One coherent checkpoint may include Parts A–D. If the work naturally separates into a research commit and an implementation commit, that is also acceptable, but both must be pushed before stopping unless a genuine blocker occurs.
 
-> In the direct-multiplier model, where does the selected multiplication-table entry live before an operation cycle?
+After push, stop and wait for the next `CURRENT_AGENT_TASK.md` revision. Do not autonomously start source-specific interlocks, Pascaline geometry, automatic division mechanisms, or Curta internals.
 
-> In the key-driven model, why is pressing `7` an arithmetic operation rather than merely setting an input for a later crank?
-
-## Evidence boundaries
-
-- Direct-multiplier encoded table: claim type **P/M**, informed by Steiger/Millionaire historical research; no source-specific geometry.
-- Generic key-driven accumulator: claim type **P/M**.
-- Historical statements about actual Comptometers: only repeat what `research/key-driven-computation.md` supports and keep model/revision uncertainty visible.
-- Do not claim simultaneous multi-column behavior for the generic model merely because Model A documentation exists.
-- Do not invent partial-stroke correction, interlocks, subtraction controls, or key-travel geometry.
-
-## Stop conditions
-
-Stop and record a blocker rather than guessing if:
-
-- integrating carries requires changing shared carry semantics in a way that could break existing exhibits;
-- the current core cannot represent key-stroke/carry events without a broader event-vocabulary migration;
-- a conflicting key-driven implementation already landed on remote `main`;
-- source-specific Comptometer mechanism detail becomes necessary to proceed.
-
-If Part A + Part B + minimal integration are complete substantially before the target duration, spend remaining time improving focused tests/replay/accessibility/text-state visibility. **Do not start subtraction/division or interlock research in this slice.**
-
-## Git discipline
-
-- remote `main` is authoritative;
-- pull/fetch before work;
-- inspect existing code before creating parallel abstractions;
-- one coherent implementation checkpoint;
-- run all acceptance commands;
-- inspect diff for unrelated changes;
-- update status/verification only after tests pass;
-- commit and push;
-- after push, stop and wait for the next `CURRENT_AGENT_TASK.md` revision.
-
-Suggested commit subject:
+Suggested final commit subject if using one commit:
 
 ```text
-feat: add key-driven accumulator mechanism
+feat: add operator-driven division procedure
 ```
+
+---
+
+# Evidence / stop conditions
+
+Stop and leave a precise blocker rather than guessing if:
+
+- historical operator procedure cannot be supported by the cited source at the precision needed;
+- implementing generic division requires assuming source-specific gear/carry geometry;
+- shared carry/revolution semantics would need a broad incompatible migration;
+- a concurrent implementation of the same division track lands on remote `main`;
+- outbound web is unavailable for Part D (in that case finish A–C from available sources/repository evidence and note Part D blocked rather than fabricating metadata).
+
+Do not ask the human for routine implementation decisions already settled above.
