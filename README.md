@@ -1,6 +1,6 @@
 # Mechanical Computing Playground · 机械计算游乐场
 
-> 目标不是做“复古计算器皮肤”，而是让人看见：**一个数学操作究竟怎样被齿轮、拨轮、棘轮、进位机构、曲柄和纸带做出来。**
+> 目标不是做“复古计算器皮肤”，而是让人看见：**一个数学操作究竟怎样被齿轮、拨轮、棘轮、进位机构、曲柄、按键、位架和连续机械量做出来。**
 
 ## 项目目标
 
@@ -16,13 +16,34 @@
 
 ```text
 输入 27
-→ 曲柄旋转
-→ 个位/十位机构移动
-→ 累加
-→ 进位
-→ 计数器变化
+→ 人执行一次或多次机械操作
+→ 数值状态进入机构
+→ 累加 / 进位 / 移位
+→ 计数器或结果寄存器变化
 → 得到 108
 ```
+
+更进一步，我们还会问：
+
+- 数字到底存在于哪里：轮的位置、有效齿数、伸出的拨针、按键行程、轴角，还是控制板？
+- 哪一部分“算法”由操作者记住，哪一部分被写进机器结构？
+- 为什么同一个算术操作，在不同机械架构上会变成完全不同的人机操作协议？
+
+## 当前状态
+
+仓库已经越过“第一批脚手架”阶段：TypeScript/Vite/Vitest、确定性 state/event/replay 核心、carry fixtures、finite difference、carriage shift、revolution counter、stepped drum、pinwheel、continuous integrator、Stage A/B backprop，以及主要浏览器展项都已经存在。
+
+当前最大缺口不再是“没有代码”，而是：**历史研究、来源定位和机制证据还没有跟上实现速度。**
+
+请以这些文件为准：
+
+- [`STATUS.md`](STATUS.md)：当前仓库做到了什么、还缺什么；
+- [`docs/EVIDENCE_POLICY.md`](docs/EVIDENCE_POLICY.md)：区分数学事实、历史记录、工程复原和教学抽象；
+- [`docs/RESEARCH_GAPS.md`](docs/RESEARCH_GAPS.md)：接下来最值得写的研究口子；
+- [`ROADMAP.md`](ROADMAP.md)：前向路线，不再承担“现状账本”；
+- [`TODO.md`](TODO.md)：下一批 bounded tasks。
+
+`IMPLEMENTATION_PLAN.md` 仍然保留为设计/依赖规格，但其中很多旧 checkbox 早于后续实现，**不能再当作当前状态真相**。
 
 ## 明确不重复造轮子
 
@@ -30,48 +51,58 @@ Babbage Difference Engine、Analytical Engine、Curta 等已经存在不少模�
 
 本仓库更强调：
 
-- **机制可视化**：为什么这一齿会带动下一齿；
+- **机制可视化**：为什么这一状态会带动下一状态；
 - **信息流**：数值在哪个机械部件中“存在”；
 - **操作成本**：一次加法、乘法、进位到底需要多少机械动作；
-- **错误与限制**：卡齿、进位链、位数、回差、人工操作顺序；
-- **跨机器比较**：同一个计算，在不同机械架构上如何实现。
+- **人机协议**：是拨盘、设数后摇曲柄、直接按键累加，还是连续轴耦合；
+- **错误与限制**：卡位、进位链、位数、回差、无效状态、人工操作顺序；
+- **跨机器比较**：同一个计算，在不同机械架构上如何实现；
+- **证据边界**：哪些来自实物/专利/手册，哪些来自复原，哪些只是教学模型。
 
-## 第一批机制，而不是第一批“整机”
+## 机制优先，而不是整机优先
 
-先做可复用机制：
+仓库已经具备或正在研究的机制包括：
 
-1. 十进制数字轮；
-2. 单级与连续进位；
-3. Leibniz stepped drum（阶梯鼓轮）概念模型；
-4. pinwheel（可变齿拨轮）概念模型；
-5. carriage shift（移位架）；
-6. revolution counter（转数计数器）；
-7. finite differences（有限差分）列联动；
-8. punched card / program card 的离散控制模型。
+- 十进制数字轮；
+- 单级与连续进位；
+- carriage shift（位架移位）；
+- revolution counter（转数计数器）；
+- Leibniz/Thomas 系 stepped drum 概念模型；
+- Odhner 系 pinwheel 概念模型；
+- finite differences（有限差分）列联动；
+- continuous integrator（连续积分）最小模型；
+- key-driven accumulation（按键即运算）研究线；
+- direct multiplication（直接乘法）研究线；
+- punched/program cards 与离散控制的后续研究空间。
 
-这些机制能组合成不同机器。
+这些机制可以组合成机器，也可以脱离整机单独比较。
 
-## 第一批机器
+## 机器与案例
 
 按“机制差异”而不是名气排序：
 
-- Pascaline：十进制加法与进位；
-- Leibniz / Arithmometer 系：阶梯鼓轮与乘除；
-- Odhner 系：pinwheel；
-- Comptometer：键驱动并行输入；
-- Curta：高度压缩的手摇十进制机械计算；
+- Pascaline：十进制加法、sautoir carry、补数减法；
+- Leibniz / Thomas Arithmometer 系：阶梯鼓轮与重复曲柄乘除；
+- Odhner / Brunsviga 系：pinwheel；
+- Comptometer：key-driven full keyboard，按键本身就是累加操作；
+- Millionaire：把乘法表的一部分写进直接乘法控制机构；
+- Curta：高度压缩的手摇十进制机械算法机器；
 - Difference Engine：有限差分与自动制表；
-- Analytical Engine：Store / Mill / cards；
-- Differential Analyzer：连续量与机械积分（后期）。
+- Analytical Engine：Store / Mill / cards / information flow；
+- Differential Analyzer / mechanical integrators：连续量与机械积分。
 
-## 建议架构
+其中并不是每一个都要变成完整 emulator。
 
-先不要上复杂 3D 物理引擎。
+## 架构原则
+
+不要为了“像机器”就先上复杂 3D 物理引擎。
 
 ```text
 Mechanism state model
         ↓
-Deterministic transition engine
+Deterministic transition / event engine
+        ↓
+Evidence-aware interpretation layer
         ↓
 2D/3D visualization adapter
         ↓
@@ -90,56 +121,86 @@ Interactive controls
 }
 ```
 
-这样“机械逻辑”和“动画”不会绑死。
+这样“机械逻辑”和“动画”不会绑死，也不会因为动画画了一根连杆就反过来把它当成历史事实。
 
-## 每个机制/机器至少要有
+## 证据规则
+
+旧版仓库曾用 A–D 同时表达“史料强弱”和“是不是教学抽象”，这会混淆不同问题。
+
+新规则见 [`docs/EVIDENCE_POLICY.md`](docs/EVIDENCE_POLICY.md)：
+
+```text
+M = mathematical / computational
+H = historical record
+R = reconstruction / engineering interpretation
+P = pedagogical / counterfactual model
+```
+
+历史/复原 claim 再单独标：
+
+```text
+E1 = direct / primary
+E2 = authoritative reconstruction / institutional synthesis
+E3 = reliable secondary
+E4 = open / inference
+```
+
+例如“有限差分的数学性质”是 M，不是“历史证据 A”；“网站上的 generic carry arrow”是 P，不是“历史证据很差”。
+
+## 每个重要机器/机制至少要说明
+
+```text
+question
+claim type
+sources
+what the source directly establishes
+what is reconstructed/inferred
+state model
+operations
+limitations
+what this project simplifies
+open uncertainties
+```
+
+命名历史机器仍建议维护：
 
 ```text
 machines/<name>/
-├── README.md       # 历史与用途
-├── mechanism.md    # 机械结构抽象
-├── state-model.md  # 软件状态模型
-├── operations.md   # 怎样做 + - × ÷ / 制表等
-├── limitations.md  # 位数、速度、人工步骤、误差
-├── sources.md      # 原始资料和已有模拟器
-└── demo/           # 可交互实现
+├── README.md
+├── mechanism.md
+├── state-model.md
+├── operations.md
+├── limitations.md
+└── sources.md
 ```
 
-## 第一阶段实验
+但不要为了满足目录形状制造空文档。
 
-### Demo 1：看得见的进位
+## 已有核心实验
 
-做一个 4 位十进制轮：
+### Visible Carry
 
-```text
-0099 + 1
-```
+用 `0099 + 1` 看见多级 carry，而不是数字瞬间变成 `0100`。
 
-用户应能逐步看到两次进位，而不是数字瞬间变成 0100。
+现在的重点已经从“能不能显示 carry”转向：**不同历史机器究竟怎样实现 carry**。研究入口：[`research/carry-is-the-hard-part.md`](research/carry-is-the-hard-part.md)。
 
-### Demo 2：用有限差分“只靠加法”生成平方数
+### Finite Difference
 
-展示：
+通过平方数/立方数 preset 展示恒定高阶差分如何把多项式制表变成重复加法。
 
-```text
-n²:       0  1  4  9  16 ...
-Δ1:       1  3  5  7  ...
-Δ2:       2  2  2  ...
-```
+数学模型与 Babbage 具体机械时序必须分开描述。
 
-并让用户手摇一次推进一行。
+### Multiplication Compare
 
-### Demo 3：同一道乘法的三种机械实现
+仓库已有 repeated addition / stepped drum / pinwheel 的概念比较。
 
-比较：
+下一步必须加入 **direct multiplication**：Otto Steiger / Millionaire 提供了一个更强的架构对比——乘法表的一部分不再由操作者通过重复曲柄提供，而被编码进机器控制机构。详见 [`research/multiplication-mechanisms.md`](research/multiplication-mechanisms.md)。
 
-- repeated addition；
-- stepped drum；
-- pinwheel + carriage shift。
+### Key-Driven Computation
 
-目标不是速度竞赛，而是理解“乘法如何被机构分解”。
+新研究线：Comptometer 说明“输入”和“执行”不一定是两步。按键本身就可以是计算循环。详见 [`research/key-driven-computation.md`](research/key-driven-computation.md)。
 
-### Demo 4：古法反向传播机
+### Hand-Crank Backpropagation
 
 这是一个**反事实教学机械**，不是历史复原。
 
@@ -155,69 +216,60 @@ forward
 
 全部变成可手摇、可单步、可查看内部状态的机械过程。
 
-用户不是看到一句“backpropagation happened”，而是亲手摇反向曲柄，看误差信号怎样一级一级回到权重。
-
-完整设计：[`docs/ANCIENT_BACKPROP.md`](docs/ANCIENT_BACKPROP.md)。
-
-已有真正的机械神经网络与 in-situ backpropagation 研究已经列入该文档；本项目不得把“机械反向传播”本身当作原创概念。
+完整边界：[`docs/ANCIENT_BACKPROP.md`](docs/ANCIENT_BACKPROP.md)。已有真正的机械神经网络与 physical learning 研究必须与本项目的教学翻译严格区分。
 
 ## 展示方式
 
 普通访客不应该为了看一个机械展品先 clone 仓库。
-
-本仓建议使用自己的 **GitHub Project Pages** 发布纯前端展品：
 
 ```text
 GitHub Pages = 展厅
 Git repository = 实验室
 ```
 
-个人站 `tmzncty.github.io` 不作为本项目的依赖，也不承担统一 Labs 门户；这样个人站以后私有化、停用或迁移，不影响本仓展示。
+Pages workflow 已存在；最近一次验证记录显示仓库设置仍曾阻挡真正部署。最新发布状态见 [`STATUS.md`](STATUS.md) 与 [`docs/VERIFICATION.md`](docs/VERIFICATION.md)。
 
-详见 [`docs/PUBLISHING.md`](docs/PUBLISHING.md)。
+## 现在最值得写的内容
 
-## 研究问题
+优先级见 [`docs/RESEARCH_GAPS.md`](docs/RESEARCH_GAPS.md)。最重要的几条是：
 
-- “数字”在机械计算机中究竟是什么：位置、角度、齿数还是状态？
-- 进位为什么是机械计算最关键、也最容易复杂化的问题之一？
-- 为什么有限差分特别适合机械制表？
-- 为什么机械计算机很早就出现了 input / store / operation / output 的分层？
-- 机械限制如何塑造算法，而不是算法单向决定机器？
-- 如果梯度也必须通过机构显式传播，反向传播还会不会显得像一句抽象咒语？
-
-## 第一阶段
-
-- [x] `docs/PRIOR_ART.md`：已有模拟器、博物馆和历史资料地图；
-- [x] `docs/MODEL.md`：M0 机制状态、phase 与 carry event 模型；
-- [x] `src/mechanism-core.ts`：无依赖的确定性十进制轮 / 进位链核心；
-- [x] `test/mechanism-core.test.mjs`：本地可执行验收测试；
-- [ ] `mechanisms/decimal-wheel`；
-- [ ] `mechanisms/carry-chain`；
-- [ ] `demos/visible-carry`；
-- [ ] `demos/finite-difference`；
-- [ ] `backprop-core` Stage A；
-- [ ] `demos/hand-crank-backprop`；
-- [ ] 一篇“为什么 Difference Engine 不需要通用乘法器”；
-- [ ] 一篇“Curta 为什么不是一个长得奇怪的电子计算器前身，而是一种机械算法机器”。
+1. Pascaline / Comptometer 等真实 carry 架构；
+2. stepped drum / pinwheel / Millionaire 的乘法算法分工比较；
+3. Comptometer 式 key-driven computation；
+4. subtraction / complement / division / zeroing / correction / interlock；
+5. Curta、Analytical Engine、Differential Analyzer 的页码/图号/专利级来源地图；
+6. “数字在哪里存在”的跨机器 representation comparison；
+7. human-machine division of arithmetic labor；
+8. printing / paper tape / output audit trail；
+9. reliability / torque / tolerance / wear，但必须有史料或工程实验再做。
 
 ## AI 施工入口
 
-后续工作已经整理成可以让 coding/research agent 连续执行的施工契约：
+后续 coding/research agent 的读序应是：
 
-- [`AGENTS.md`](AGENTS.md)：架构、研究、测试、提交、历史真实性与停止条件；
-- [`IMPLEMENTATION_PLAN.md`](IMPLEMENTATION_PLAN.md)：从十进制轮、进位、有限差分、乘法机构、Curta、Analytical Engine，到 Stage A/Stage B 古法反向传播、Pages 发布和最终验证的完整顺序；
-- [`PROMPT.md`](PROMPT.md)：可直接复制给有仓库写权限 AI 的一段总指令；
-- [`ROADMAP.md`](ROADMAP.md)：项目级里程碑；
-- [`docs/PRIOR_ART.md`](docs/PRIOR_ART.md)：已有模拟器与历史资料地图；
-- [`docs/ANCIENT_BACKPROP.md`](docs/ANCIENT_BACKPROP.md)：古法反向传播展项边界；
-- [`docs/PUBLISHING.md`](docs/PUBLISHING.md)：独立 Project Pages 发布边界。
+1. [`README.md`](README.md)
+2. [`STATUS.md`](STATUS.md)
+3. [`docs/EVIDENCE_POLICY.md`](docs/EVIDENCE_POLICY.md)
+4. [`docs/RESEARCH_GAPS.md`](docs/RESEARCH_GAPS.md)
+5. [`docs/PRIOR_ART.md`](docs/PRIOR_ART.md)
+6. [`ROADMAP.md`](ROADMAP.md)
+7. [`TODO.md`](TODO.md)
+8. 相关源码 / tests / research
 
-默认施工原则：**读完这些文件后直接实现最早的未完成依赖安全任务，验证、测试、构建、提交，然后继续；不要再生成一份新的宏观规划来代替施工。**
+历史的 [`IMPLEMENTATION_PLAN.md`](IMPLEMENTATION_PLAN.md) 继续作为设计规格参考，但不要按过期 checkbox 重做已经存在的代码。
 
 ## 项目原则
 
-**先把机械逻辑讲明白，再追求漂亮的齿轮动画。**
+**先把机械逻辑和证据边界讲明白，再追求漂亮的齿轮动画。**
 
 如果一个 demo 把所有齿轮隐藏掉但仍能清楚展示状态转换，它比一个视觉很酷却解释不了进位的 3D 模型更接近本项目目标。
 
-同样，如果“古法反向传播”只是普通 JavaScript backprop 外面套一张齿轮皮肤，它也不算完成；必须能解释每个 reverse phase 到底对应什么状态与梯度。
+如果一个齿轮动画看起来很真实，却说不出它对应哪份实物、专利、图纸、手册或复原依据，它就应该退回教学抽象。
+
+这个仓库最终最好能回答的不只是：
+
+> 这台机器算出了什么？
+
+而是：
+
+> **数字在哪里？谁提供了算法步骤？什么部件动了？为什么按这个顺序动？哪些是史实，哪些是我们为了理解而画出的模型？**
