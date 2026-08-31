@@ -2,12 +2,12 @@
 
 Issued: 2026-09-01
 Owner: local coding/research agent
-Target duration: roughly 60–90 minutes
+Target duration: roughly 75–105 minutes
 Repository authority: remote `main`
 
-Previous task is complete and archived at `tasks/archive/2026-09-01-operator-division.md`.
+Previous task is complete and archived at `tasks/archive/2026-09-01-control-interlock-curta.md`.
 
-The previous enlarged slice still completed in about 30 minutes (roughly 459 additions / 17 deletions across 10 files, plus research, UI, tests and verification), and remote CI for `7bebcea2d187f0ed2411de4098c846963df8b32a` passed. This slice is therefore intentionally larger and more source-heavy. Do not compensate by weakening evidence checks or inventing historical geometry.
+The previous source-heavy slice still completed in about 34 minutes (roughly 544 additions / 28 deletions across 16 files, plus research, UI, tests and verification). This task is therefore intentionally substantial. Do not compensate by weakening provenance checks, copying an emulator, or inventing Analytical Engine details.
 
 ## Read before work
 
@@ -17,321 +17,292 @@ Fetch/pull remote `main`, then read in this order:
 2. `TODO.md`
 3. `AGENTS.md`
 4. `docs/EVIDENCE_POLICY.md`
-5. `docs/RESEARCH_GAPS.md`, especially Priority 0.2, Priority 4, and the Curta source-map item
-6. `research/subtraction-and-division.md`
-7. `research/curta-source-map.md`
+5. `docs/RESEARCH_GAPS.md`, especially Priority 0.2 and the Analytical Engine source-map gap
+6. `docs/PRIOR_ART.md`
+7. `research/analytical-engine-information-flow.md`
 8. `research/simulator-matrix.md`
-9. `src/machines/curta/` documentation
-10. existing transition/event/replay patterns in direct multiplier, key-driven accumulator, and operator division
-11. relevant tests and `docs/VERIFICATION.md`
+9. `src/exhibits/analytical-engine-flow/index.ts`
+10. the current `#/analytical-engine` rendering in `src/main.ts`
+11. existing deterministic transition/replay patterns and tests
+12. `docs/PUBLISHING.md` and `docs/VERIFICATION.md`
 
 Do not use stale unchecked boxes in `IMPLEMENTATION_PLAN.md` as the live task source.
 
 # Objective
 
-Build the repository's first explicit **control/interlock mechanism lesson**, and at the same time turn the Curta source map from a one-paragraph placeholder into a real provenance document.
+Replace the current one-paragraph Analytical Engine note and five-line generic flow with an **evidence-aware, deterministic information-flow lesson** that can answer:
 
-The teaching question is:
+> Which claims come from nineteenth-century descriptions/drawings, which choices belong to later emulator reconstruction, and which event ordering is only this repository's teaching model?
 
-> A lock does not represent a number. Why can it still be part of the computation?
+At the same time, reconcile the repository's publishing status: a GitHub Actions `Deploy Pages` run for `db3b1aafdfdfa66db6998a14073f809af1f8433d` completed successfully (`33443320058`), so the older statement that Pages is still blocked by configuration is stale. Verify the actual public site before claiming a live URL.
 
-This slice has three required parts and one optional early-finish part:
+This slice has four required parts and one optional early-finish part:
 
-1. source-backed research on crank/setting interlocks and operator-control invariants;
-2. a deterministic generic P/M setting–crank interlock state machine plus compact teaching integration;
-3. a source-map hardening pass for Curta using patent/manual/operator-procedure evidence at the precision actually supported;
-4. if the required work is complete substantially early, add a bounded cross-machine operator-protocol comparison rather than starting another machine implementation.
-
-The generic interlock software is **P/M**. Historical Odhner/Curta statements are **H** or **H/R** with evidence strength separately stated. Do not label the generic software as an Odhner or Curta reconstruction.
+1. harden Analytical Engine provenance using historical publications and Science Museum Babbage Papers records;
+2. replace the generic `sampleFlow` with a deterministic P/M teaching trace whose state/events expose Store, Mill, card roles and output without pretending to be a complete emulator;
+3. make `#/analytical-engine` step through that trace with explicit provenance/simplification text and focused tests;
+4. verify/reconcile Project Pages deployment state;
+5. if all required work is genuinely complete early, add a bounded representation/operator-protocol comparison document rather than starting another machine implementation.
 
 ---
 
-# Part A — `research/control-and-interlocks.md`
+# Part A — replace `research/analytical-engine-information-flow.md`
 
-Create a focused research note before or alongside implementation.
+The current file is a one-paragraph C/D-era placeholder. Replace it with a real source/provenance map under `docs/EVIDENCE_POLICY.md`.
 
-## A1. Odhner crank/setting mutual exclusion
+## A1. Contemporary / historical sources
 
-Use Valentin Jakob Odhner, US 1,510,100 (1924):
+Use these as starting points. Do not merely list URLs; record what each source actually establishes and its limitations.
 
-<https://patents.google.com/patent/US1510100A/en>
+### Menabrea + Lovelace, 1842/1843 publication
 
-The patent is useful because it explicitly discusses:
+Specialist-hosted transcription:
 
-- a locking device that locks the crank in its zero position;
-- a guiding arrangement that keeps the crank-locking device inactive during crank rotation except at zero;
-- in the illustrated arrangement, a second lock relationship involving the calculating/cam discs, so setting-related elements and crank motion are not simply free at the same time.
+<https://www.fourmilab.ch/babbage/sketch.html>
 
-Read the actual description/claims and state exactly what you use. The intended repository lesson is **mutual exclusion between setting and operating phases**, but the software must remain a P/M abstraction.
+Use it for concepts actually present in the text/notes, such as:
 
-Important evidence rule:
+- Operation and Variable cards as distinct roles;
+- Store/Variable columns and the separation of operations from subjects of operation;
+- backing/repetition of card groups;
+- the fact that the published diagrams/tables represent calculation sequences and substitutions.
 
-- a patent is E1 evidence for what was claimed/designed in that patent;
-- it is not by itself proof that every Odhner-family production machine used exactly that embodiment;
-- do not generalize the depicted roll/notch/sector/cam geometry into a universal pinwheel-machine mechanism.
+Provenance rule: this page is a later transcription of a contemporary publication. Treat the nineteenth-century publication as H; the web transcription is an access path, not a facsimile/page citation. If exact typography/page numbering matters, leave it open rather than inventing it.
 
-Record figure/claim references where practical. If the Google Patents transcription is ambiguous, narrow the prose rather than inferring missing geometry.
+Do not copy Fourmilab's modern promotional claims (for example “first hacker”) into repository historical prose.
 
-## A2. Curta operating-handle control
+### Charles Babbage, 1864, `Passages from the Life of a Philosopher`, Chapter VIII
 
-Use the Curta specialist manual archive/transcription already referenced by the repository:
+Specialist-hosted transcription:
 
-<https://curta.org/wiki/CurtaManuals>
+<https://www.fourmilab.ch/babbage/lpae.html>
 
-The operator material states, among other things, that the operating handle is turned clockwise, that the handle mechanism is locked against backward turns, and that a full turn completes when the handle returns to its home detent. Treat this as operator-procedure evidence hosted by a specialist archive; do not silently promote it to a production drawing.
+Use only claims supported there, including Babbage's own retrospective discussion of the Analytical Engine, Jacquard control, changing designs and intended capacities where relevant.
 
-Also re-use the division/operator material where relevant:
+Again, record that the web page is a transcription/access route. Do not claim an exact page number unless you actually verify an edition/facsimile.
 
-<https://curta.org/wiki/DivisionAlgorithm>
+### H. P. Babbage, British Association paper, 1888
 
-The point is to distinguish several kinds of control invariant:
+<https://www.fourmilab.ch/babbage/hpb.html>
+
+This is particularly useful for a concrete information-flow example. It explicitly distinguishes Number Cards, Directive Cards and Operation Cards and walks `(ab + c)d` through Store → Mill → Store → output.
+
+Use it carefully:
+
+- H.P. Babbage is a historical published source reporting/explaining Charles Babbage's design after Charles's death;
+- it is direct evidence for what H.P. Babbage reported, not automatically an original Charles Babbage drawing/specification;
+- its card terminology/order must not be silently merged with John Walker's later emulator syntax.
+
+Record paragraph/item anchors where practical (for example the sections around items 18–20 and the Store/Mill discussion) rather than vague “Babbage says” citations.
+
+## A2. Science Museum Group — Babbage Papers drawings
+
+Use collection records as E1 evidence that particular drawings/design sheets exist. Useful anchors include:
+
+- `BAB/A/125`, *Plan of consecutive mill counting apparatus for General Plan 28*, 1843-12:
+  <https://collection.sciencemuseumgroup.org.uk/documents/aa110000267/plan-of-consecutive-mill-counting-apparatus-for-general-plan-28-plan-note>
+- `BAB/D/028`, *Mill. Sheet 28. Superseded by Sheet 25*, dated 1858-06-12:
+  <https://collection.sciencemuseumgroup.org.uk/documents/aa110000376>
+- `BAB/P/167`, *Plan of bolts for store*, second-phase drawings, 1858–1859:
+  <https://collection.sciencemuseumgroup.org.uk/documents/aa110000439>
+
+The important historical lesson is **design evolution**. A drawing identifier/date establishes that a particular design record existed; it does not prove a complete Engine was built or that every phase used one frozen architecture.
+
+Do not reproduce museum images into the repository merely because the collection page exposes them. Link/cite unless reuse is actually needed and licensing is checked separately.
+
+## A3. Emulator/reconstruction provenance
+
+Inspect John Walker/Fourmilab as a reconstruction/emulator lineage, not as a nineteenth-century primary source:
+
+- authenticity discussion: <https://www.fourmilab.ch/babbage/authentic.html>
+- programming card conventions: <https://www.fourmilab.ch/babbage/cards.html>
+- web emulator behavior/stepping: <https://www.fourmilab.ch/babbage/emulator.html>
+
+Record at least these distinctions:
 
 ```text
-home / zero position
-allowed direction
-setting permitted vs operation active
-correction/undo procedure
-carriage position / counter state
+historical publication/drawing
+vs
+later interpretation/reconstruction
+vs
+emulator-specific card syntax/execution convention
+vs
+this repository's P/M teaching trace
 ```
 
-Do not claim these are implemented by the same mechanism across Curta and Odhner families.
+The current repository must **not** copy Walker's instruction/card syntax or source code unless license/reuse terms are independently established. Link/inspect it to avoid inventing an instruction set.
 
-## A3. Control is computation
+## A4. Resolve the current ambiguity explicitly
 
-Explain, with claim types separated, why a mechanical interlock can carry algorithmic meaning even when it carries no numerical magnitude:
+The existing route says, roughly:
 
-- it prevents a setting change during an operation;
-- it prevents an operation before a setting is valid;
-- it defines when one crank cycle is complete;
-- it constrains legal direction/mode changes;
-- it can force correction before the operator proceeds;
-- it preserves invariants that arithmetic state assumes.
+```text
+operation card selected
+→ control dispatch
+→ one operand enters Mill
+→ result returns to Store
+→ output
+```
 
-End the note with a **software abstraction decision** for Part B: what the generic model represents and what it refuses to claim.
+That is too smooth and conflates several layers.
+
+The new research note must explicitly discuss that nineteenth-century descriptions and Walker's emulator do not necessarily expose the same card categories/order at the same abstraction level. Do not declare one emulator sequence to be “the exact historical execution order” unless the source chain justifies it.
+
+End the note with the exact **software abstraction decision** used in Part B.
 
 ---
 
-# Part B — generic setting–crank interlock mechanism
+# Part B — deterministic Analytical Engine information-flow trace
 
-Create a small module under `src/mechanisms/`, preferably `setting-crank-interlock/` unless current naming conventions suggest a clearer name.
+Refactor `src/exhibits/analytical-engine-flow/index.ts` from a static five-item label list into a small deterministic state/action/event/replay model or an equivalently testable immutable trace builder.
 
-This mechanism is not required to perform addition/multiplication itself. Its job is to make legal/illegal state transitions inspectable and replayable.
+This is a P/M explanatory model **informed by historical card roles**, not a new Analytical Engine emulator.
 
-## Minimum state
+## Default teaching calculation
+
+Use the historically documented formula shape `(ab + c)d` from H. P. Babbage's 1888 explanation, with small concrete values so state is inspectable, for example:
+
+```text
+a = 2
+b = 3
+c = 4
+d = 5
+
+p = a*b = 6
+q = p+c = 10
+result = q*d = 50
+```
+
+The numeric values are this repository's P/M teaching fixture. Do not imply H. P. Babbage used those values.
+
+## Minimum inspectable state
 
 Represent at least:
 
-- a generic setting value or setting revision/version sufficient to demonstrate that settings can change only in the permitted phase;
-- crank position/phase, at minimum `HOME` versus `ACTIVE` (more phases only if they add a tested explanatory value);
-- crank lock state;
-- setting/control lock state;
-- completed crank-cycle count;
-- human-operation count;
-- enough cycle/sequence identity for deterministic replay;
-- mechanism id and explicit invariant validation.
+- Store columns/locations used by the teaching fixture;
+- the currently selected/active arithmetic operation or operation role;
+- Mill ingress/operand state sufficient to show two operands becoming available;
+- Mill result/egress state;
+- current card **role** (`NUMBER`, `DIRECTIVE/TRANSFER`, `OPERATION`, or an explicitly simplified repository vocabulary);
+- output/printed-result state;
+- event/card index and deterministic sequence identity.
 
-A clean initial invariant is acceptable, for example:
+Do not pretend that modern JavaScript map/object layout is historical Store geometry.
 
-```text
-crank at HOME
-crank locked against operation until explicitly released/begun
-setting control FREE
-```
+## Event/trace requirements
 
-During an active operation the generic model should invert the relevant permissions:
+The trace must make visible, in ordered state/events:
 
-```text
-setting LOCKED
-crank ACTIVE / permitted to complete cycle
-```
+1. given values become associated with Store locations;
+2. operands are transferred from Store toward the Mill;
+3. an arithmetic operation is selected/performed;
+4. intermediate result `p=6` is stored;
+5. `p` and `c` flow back into the next operation;
+6. intermediate result `q=10` is stored;
+7. `q` and `d` flow into the final multiplication;
+8. result `50` is stored and then sent to an output role.
 
-When the cycle returns home, restore the home invariant.
+You may group micro-events if the grouping is explicit and deterministic. Do not invent cams, axes, card hole patterns, timing, or an exact historical instruction encoding.
 
-Do not encode Odhner's literal roller/notch/cam geometry into the generic state.
+A teaching event may carry `sourceRole` / `claimType` metadata if that improves inspection, but keep the core reasonably small.
 
-## Actions/events
+## Replay/invariants
 
-Choose names consistent with repository patterns. Observable semantics should cover actions equivalent to:
+Use existing repository replay discipline:
 
-```text
-CHANGE_SETTING
-BEGIN_CRANK_CYCLE
-COMPLETE_CRANK_CYCLE
-```
+- same initial state + ordered events produces the same final state;
+- derived arithmetic and Store/Mill transitions are validated rather than trusted from arbitrary serialized event fields;
+- invalid Store locations, missing operands, impossible operation order, sequence tampering, or final-state tampering are rejected where applicable;
+- use safe integers / explicit validation for fixture values.
 
-and events equivalent to:
-
-```text
-SETTING_CHANGED
-SETTING_LOCKED
-CRANK_RELEASED / CYCLE_BEGUN
-CRANK_CYCLE_COMPLETED
-CRANK_RETURNED_HOME
-CRANK_LOCKED
-SETTING_RELEASED
-```
-
-It is fine for one action to emit several ordered events if that makes the invariant transition visible.
-
-Do not add a decorative timer/animation state to core logic. No DOM or frame timing in the mechanism.
-
-## Required invariant behavior
-
-At minimum:
-
-1. setting changes are allowed in the home/setting-free state;
-2. beginning a crank cycle makes the setting unavailable before the active phase is exposed;
-3. changing the setting while the crank is active is rejected explicitly;
-4. beginning another crank cycle while already active is rejected;
-5. completing a crank cycle while no cycle is active is rejected;
-6. completion returns the crank to home and makes setting available again;
-7. the transition result is deterministic;
-8. reducer/replay validates derived lock/phase changes instead of trusting arbitrary serialized fields;
-9. replay rejects tampering in sequence, lock transition, setting value/revision, cycle count, or final state.
-
-Use safe-integer or otherwise explicit validation for any numeric setting/count fields.
-
-## Direction policy
-
-Do **not** bake a universal `clockwise-only` rule into the generic interlock merely because Curta documentation has one. If you want to represent direction at all, make it an explicit configurable policy with tests and label it P/M. It is also acceptable to leave direction out of the generic core and explain Curta's direction restriction only in research/UI provenance text.
-
-Prefer the simpler model unless direction materially improves the lesson.
+Do not over-engineer a general-purpose card interpreter.
 
 ---
 
-# Part C — teaching integration and Curta provenance hardening
+# Part C — `#/analytical-engine` teaching integration
 
-## C1. Compact public control/interlock teaching path
-
-Add a small public path, preferably `#/controls` if routing remains simple. Reuse existing shell/state/event components rather than redesigning the site.
+Upgrade the existing route without a broad site redesign.
 
 Minimum visitor affordances:
 
-- show the current setting value/revision;
-- show crank position and both lock/permission states;
-- allow a valid setting change at home;
-- allow beginning a crank cycle;
-- while active, make an attempted setting change visibly rejected/blocked with plain-language explanation;
-- allow completing the crank cycle and show the return to home;
-- show ordered events/state text, not animation-only meaning;
 - reset;
-- evidence note: **P/M generic interlock**, informed by historical lock/control evidence but not an Odhner/Curta geometry reconstruction.
+- step one event/card-role transition;
+- optionally step one higher-level operation if this is easy with existing patterns;
+- show Store values as named/numbered teaching locations;
+- show Mill inputs/current operation/result;
+- show current card role and ordered event log;
+- show output state;
+- bilingual text remains functional;
+- keyboard access for the main step control if consistent with current exhibit patterns;
+- no meaning only in motion/color.
 
-The visitor should be able to answer:
+The route must visibly state:
 
-> What arithmetic error or invalid state becomes possible if setting and operation are both free at the same time?
+- `(ab+c)d` is based on a documented historical explanatory formula shape, while `2,3,4,5` is a P/M fixture;
+- Store/Mill/card roles have historical sources;
+- this exact serialized event model is P/M;
+- Walker/Fourmilab is a later emulator/reconstruction and its syntax/order is not silently adopted as primary evidence;
+- modern words such as CPU/memory may be analogies, not identities.
 
-Do not needlessly create a full machine skin.
+If the old five-step `sampleFlow` is removed, update imports/usages cleanly rather than keeping two contradictory flow models.
 
-## C2. Replace placeholder `research/curta-source-map.md`
+## Required tests
 
-The current file is only one paragraph and still uses the old C/D grading vocabulary. Replace it with a real source map under `docs/EVIDENCE_POLICY.md`.
+Add focused Vitest coverage for at least:
 
-At minimum inspect and map:
+1. default trace reaches `50` through `p=6` and `q=10` rather than a single hidden expression evaluation;
+2. Store locations contain the expected intermediate values at the correct stages;
+3. Mill must receive the required operands before an operation can complete;
+4. final output is not populated before the final Store/Mill/result step;
+5. same input fixture produces identical state/events;
+6. replay reproduces final state;
+7. replay/transition rejects sequence tampering;
+8. replay rejects altered transfer/result values or impossible operation ordering;
+9. invalid fixture/store references are rejected explicitly;
+10. source/claim metadata, if part of state/events, cannot be used to smuggle arbitrary arithmetic state.
 
-### Curt Herzstark patent
-
-US 2,525,352, published 1950:
-
-<https://patents.google.com/patent/US2525352A/en>
-
-Use it only for claims it actually supports. The patent describes a miniature four-operation calculating machine and discusses the result-counting and revolution-counting mechanisms arranged around a common driving member in the compact circular architecture. Record claim/figure/description anchors where useful.
-
-Do **not** equate patent intent automatically with every production Curta Type I/II detail.
-
-### Curta operator manuals
-
-<https://curta.org/wiki/CurtaManuals>
-
-Map operator-facing concepts such as:
-
-- setting register;
-- result/product dial/register;
-- revolution/turns counter;
-- carriage positions;
-- operating-handle home detent / allowed direction;
-- clearing controls;
-- addition/subtraction and division operator procedures where supported by the hosted manual/transcription.
-
-Identify the provenance limitation: Curta.org lists/transcribes multiple manual versions/languages and is a specialist archive, not itself the original manufacturer. Where exact edition/page/facsimile mapping is unavailable, say so.
-
-### Existing simulator/reference landscape
-
-Use `research/simulator-matrix.md` and existing Curta links to distinguish:
-
-```text
-historical source
-specialist transcription/reference
-whole-machine simulator
-this repository's teaching abstraction
-```
-
-The source map should explicitly state what future Curta code/UI may claim safely and what still requires model/revision/page-level evidence.
-
-## C3. Reconcile existing Curta docs
-
-Inspect the small files under `src/machines/curta/` (`README.md`, `mechanism.md`, `state-model.md`, `operations.md`, `limitations.md`, `sources.md`). They currently contain placeholder-level prose and old C/D evidence language.
-
-Update them enough to:
-
-- point to the hardened source map;
-- use M/H/R/P + E1–E4 terminology instead of extending the old C/D scale;
-- distinguish operator-procedure facts from the repository's teaching model;
-- avoid claiming source-specific internal geometry that is not yet mapped.
-
-Do not implement a new full Curta emulator in this slice.
+Do not introduce a new browser-testing framework solely for this task.
 
 ---
 
-# Part D — optional early-finish work: operator-protocol comparison
+# Part D — Project Pages reconciliation
 
-Only if Parts A–C, tests, browser integration, documentation reconciliation, and verification are fully complete with substantial time remaining, create a bounded `docs/OPERATOR_PROTOCOLS.md`.
+Repository history previously said Pages was blocked by repository configuration. That is no longer sufficient: GitHub Actions `Deploy Pages` run `33443320058` for `db3b1aa` completed successfully.
 
-Compare only families already supported by repository research, for example:
+During this slice:
 
-```text
-Pascaline: stylus/dial operation
-Thomas/Odhner-style: setting → crank → carriage/revolution procedure
-Comptometer: keypress → accumulate
-Millionaire/direct multiplication: selector/table control → operation cycle
-Curta: setting + carriage + controlled crank procedure
-Differential Analyzer: coupled continuous shaft operation (only at the existing evidence precision)
-```
+1. inspect the current Pages workflow and repository base path;
+2. determine the expected live Project Pages URL from actual repository/deployment information, not guesswork if GitHub exposes it;
+3. attempt a direct browser/HTTP smoke check of the deployed page;
+4. if reachable, smoke at least `/mechanical-computing-playground/` plus hash routes `#/controls` and `#/analytical-engine` after the new build lands;
+5. if reachable and correct, update `docs/PUBLISHING.md`, `STATUS.md`, README if appropriate, and `docs/VERIFICATION.md` with the live URL and checks actually performed;
+6. if the deployment workflow is green but the public URL cannot be verified from the available environment, record exactly that narrower state. Do not revert to saying “Pages is not configured,” and do not invent a successful live smoke check.
 
-Suggested columns:
-
-```text
-human action
-what action selects
-what action supplies energy/control
-where place value lives
-what must be locked/invariant during operation
-what the operator must notice/correct
-claim type + evidence source
-```
-
-Every row must be source-bounded. If a row would require guessing, leave it open rather than writing a smooth but unsupported comparison.
-
-Do not start Analytical Engine source-map hardening in the same slice if this optional document is done.
+Do not change publishing architecture merely because verification is inconvenient.
 
 ---
 
-# Required tests
+# Part E — optional early-finish work
 
-Add focused Vitest coverage for the new generic interlock including at least:
+Only if Parts A–D, tests, build, deployed-site check, documentation reconciliation, commit and push are genuinely complete with substantial time remaining, create a bounded `docs/REPRESENTATION_AND_PROTOCOL.md`.
 
-1. initial home state has internally consistent lock/permission invariants;
-2. setting change at home succeeds and produces inspectable event/state;
-3. begin-cycle transitions lock setting before/while crank is active;
-4. setting change while active is rejected;
-5. begin while active is rejected;
-6. complete while home/inactive is rejected;
-7. valid completion increments cycle/human-operation state and restores home permissions;
-8. same state + action is deterministic;
-9. replay reproduces final state;
-10. replay rejects several tampering cases (sequence, setting transition, lock/phase transition, cycle count, final state).
+Use only already-supported repository families and sources. Compare no more than these axes:
 
-If UI helpers have pure state logic worth testing, add narrowly scoped tests; do not introduce a browser-testing framework solely for this task.
+```text
+where input is represented
+where working numeric state lives
+what human action triggers computation
+where operation/control state lives
+what must remain invariant/locked
+where output becomes persistent/visible
+claim type + source boundary
+```
+
+Good candidate rows are Pascaline, stepped-drum/pinwheel generic family, key-driven/Comptometer-informed model, direct-multiplication/Millionaire-informed model, Curta, Analytical Engine, and the existing continuous-integrator teaching line.
+
+A row may contain explicit `open/unverified` cells. Do not smooth over missing provenance.
+
+Do **not** start Differential Analyzer implementation/source-map hardening in the same slice if this optional document is completed.
 
 ---
 
@@ -339,17 +310,15 @@ If UI helpers have pure state logic worth testing, add narrowly scoped tests; do
 
 After implementation/research/tests are real:
 
-- update `STATUS.md` and remove the now-stale statement that remote CI for the previous PR head still needs to complete; remote CI run `33437862103` for `7bebcea...` succeeded;
-- update `TODO.md` only for genuinely completed control/Curta source-map work;
-- update `docs/VERIFICATION.md` with commands/results actually run and the resulting test count;
-- update README / `docs/TEACHING_PATH.md` only if the control path actually exists;
-- keep `ROADMAP.md` changes minimal and only correct statements that become false.
+- archive/supersede the old one-paragraph analytical-engine claims through the new research note;
+- update `STATUS.md` to reflect the hardened Analytical Engine source map/trace and current Pages state;
+- update `TODO.md` only for genuinely completed Analytical Engine work;
+- update `research/simulator-matrix.md` if the Walker stepping/internal-state facts are now directly verified;
+- update `docs/VERIFICATION.md` with commands/results actually run and test count;
+- update README / `docs/TEACHING_PATH.md` only if the route's interaction materially changed;
+- keep ROADMAP changes minimal.
 
-Do not broadly rewrite unrelated research.
-
----
-
-# Acceptance
+## Acceptance
 
 Before commit/push, run:
 
@@ -360,28 +329,28 @@ npm run build
 git diff --check
 ```
 
-Perform a bounded browser smoke check of `#/controls` if that route exists. Test at desktop width and, if practical, one narrow/mobile width; record only checks actually performed.
+Perform a bounded browser smoke check of `#/analytical-engine` locally. If the public Pages site is verifiable, also smoke the deployed route after the new commit is deployed; clearly distinguish local from deployed checks.
 
-One coherent checkpoint is fine. A research commit followed by implementation/docs is also fine if both are pushed before stopping.
+One coherent checkpoint is fine. A research commit followed by implementation/docs is also fine if all required work is pushed before stopping.
 
-After push, stop and wait for the next `CURRENT_AGENT_TASK.md` revision. Do not autonomously start Analytical Engine, Difference Engine, differential-analyzer source-map hardening, or source-specific Odhner/Curta geometry.
+After push, stop and wait for the next `CURRENT_AGENT_TASK.md` revision.
 
 Suggested commit subject:
 
 ```text
-feat: add control interlock mechanism lesson
+feat: ground Analytical Engine information flow
 ```
-
----
 
 # Evidence / stop conditions
 
 Stop and leave a precise blocker rather than guessing if:
 
-- the Odhner patent text does not support a claimed lock relationship at the precision you want to write;
-- Curta manual/version provenance is too weak for a source-specific claim; narrow the claim instead of inventing edition details;
-- implementing the generic interlock requires source-specific gear/linkage geometry;
-- a concurrent implementation of the same control/interlock track lands on remote `main`;
-- shared event/replay changes would require a broad incompatible migration.
+- sources disagree about card categories/order at the precision needed for a UI statement; preserve the disagreement and keep the P/M trace abstract;
+- a Science Museum drawing record establishes existence but not the mechanical relationship you want to claim;
+- exact Fourmilab code/card syntax would be needed to proceed; do not copy it without verified reuse terms;
+- implementing the lesson starts turning into a complete Analytical Engine emulator;
+- source-specific Mill/Store geometry is required for the visualization;
+- a concurrent implementation of the same Analytical Engine track lands on remote `main`;
+- shared replay changes would require a broad incompatible migration.
 
-The intended result is not “a lock animation.” It is a tested demonstration that **legal state transitions are part of mechanical computation**, plus a Curta evidence map strong enough that future work stops treating a one-paragraph placeholder as provenance.
+The intended result is not “more Babbage lore.” It is a tested exhibit where a visitor can distinguish **historical card/Store/Mill roles, later emulator interpretation, and this repository's own teaching event model** while watching a real intermediate-value flow emerge step by step.
