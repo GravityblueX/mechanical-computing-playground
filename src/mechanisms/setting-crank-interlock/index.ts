@@ -118,7 +118,7 @@ export function transitionInterlock(
       { ...base(1), type: 'CRANK_RELEASED', crankLockedBefore: true, crankLockedAfter: false },
       { ...base(2), type: 'CRANK_CYCLE_BEGUN', positionBefore: 'HOME', positionAfter: 'ACTIVE', humanBefore: state.humanOperationCount, humanAfter: increment(state.humanOperationCount, 'human operation count') },
     ];
-  } else {
+  } else if (action.type === 'COMPLETE_CRANK_CYCLE') {
     if (state.phase !== 'ACTIVE') throw new InvalidInterlockStateError('no active crank cycle to complete');
     events = [
       { ...base(0), type: 'CRANK_CYCLE_COMPLETED', cycleCountBefore: state.completedCycleCount, cycleCountAfter: increment(state.completedCycleCount, 'completed cycle count'), humanBefore: state.humanOperationCount, humanAfter: increment(state.humanOperationCount, 'human operation count') },
@@ -126,6 +126,8 @@ export function transitionInterlock(
       { ...base(2), type: 'CRANK_LOCKED', crankLockedBefore: false, crankLockedAfter: true },
       { ...base(3), type: 'SETTING_RELEASED', settingLockedBefore: true, settingLockedAfter: false },
     ];
+  } else {
+    throw new InvalidInterlockStateError('unsupported setting-crank interlock action type');
   }
   return { state: events.reduce(reduceInterlockEvent, structuredClone(state)), events };
 }
@@ -159,9 +161,11 @@ export function reduceInterlockEvent(
   } else if (event.type === 'CRANK_LOCKED') {
     if (state.phase !== 'RETURNED_HOME' || state.crankLocked !== event.crankLockedBefore || event.crankLockedBefore !== false || event.crankLockedAfter !== true) throw new Error('invalid crank-lock event');
     next = { ...state, crankLocked: true, phase: 'RETURN_CRANK_LOCKED' };
-  } else {
+  } else if (event.type === 'SETTING_RELEASED') {
     if (state.phase !== 'RETURN_CRANK_LOCKED' || state.settingLocked !== event.settingLockedBefore || event.settingLockedAfter !== false) throw new Error('invalid setting-release event');
     next = { ...state, settingLocked: false, phase: 'HOME_FREE' };
+  } else {
+    throw new Error('unsupported setting-crank interlock event type');
   }
   assertInterlockInvariant(next);
   return next;
