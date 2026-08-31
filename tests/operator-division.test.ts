@@ -6,6 +6,7 @@ import {
   replayOperatorDivision,
   traceOperatorDivision,
   transitionOperatorDivision,
+  type DivisionAction,
   type OperatorDivisionTrace,
 } from '../src/mechanisms/operator-division';
 
@@ -56,10 +57,21 @@ describe('generic operator-driven division', () => {
     expect(() => transitionOperatorDivision(state, { type: 'DIVISION_COMPLETE', cycleId: 'bad' })).toThrow(InvalidDivisionStateError);
   });
 
+  it('rejects an unknown serialized action instead of completing the division', () => {
+    const action = { type: 'UNKNOWN', cycleId: 'unknown' } as unknown as DivisionAction;
+    expect(() => transitionOperatorDivision(createOperatorDivision(0, 3, 0), action)).toThrow(/unsupported operator-division action type/);
+  });
+
   it('is deterministic and replayable', () => {
     expect(traceOperatorDivision(8478, 314, 1)).toEqual(traceOperatorDivision(8478, 314, 1));
     const trace = traceOperatorDivision(1000, 64, 1);
     expect(replayOperatorDivision(trace)).toEqual(trace.finalState);
+  });
+
+  it('rejects an unknown serialized event instead of treating it as division completion', () => {
+    const trace = clone(traceOperatorDivision(0, 3, 0));
+    (trace.events[0] as { type: string }).type = 'UNKNOWN';
+    expect(() => replayOperatorDivision(trace)).toThrow(/unsupported operator-division event type/);
   });
 
   it.each(['sequence', 'arithmetic', 'quotient', 'correction', 'final'] as const)('rejects %s tampering', (kind) => {
