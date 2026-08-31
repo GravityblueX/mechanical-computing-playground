@@ -2,12 +2,12 @@
 
 Issued: 2026-09-01
 Owner: local coding/research agent
-Target duration: roughly 45–75 minutes
+Target duration: roughly 60–90 minutes
 Repository authority: remote `main`
 
-Previous task is complete and archived at `tasks/archive/2026-09-01-key-driven-accumulator.md`.
+Previous task is complete and archived at `tasks/archive/2026-09-01-operator-division.md`.
 
-Two recent local-agent implementation slices each completed in about eleven minutes, so this slice is intentionally several times larger. Do not interpret the larger scope as permission to skip evidence work or verification.
+The previous enlarged slice still completed in about 30 minutes (roughly 459 additions / 17 deletions across 10 files, plus research, UI, tests and verification), and remote CI for `7bebcea2d187f0ed2411de4098c846963df8b32a` passed. This slice is therefore intentionally larger and more source-heavy. Do not compensate by weakening evidence checks or inventing historical geometry.
 
 ## Read before work
 
@@ -17,276 +17,335 @@ Fetch/pull remote `main`, then read in this order:
 2. `TODO.md`
 3. `AGENTS.md`
 4. `docs/EVIDENCE_POLICY.md`
-5. `docs/RESEARCH_GAPS.md`, especially Priority 3 and Priority 4
-6. `research/key-driven-computation.md`
-7. `research/multiplication-mechanisms.md`
-8. existing `src/mechanisms/carriage-shift/`, `revolution-counter/`, decimal/carry core, event/replay helpers, and tests
-9. `docs/VERIFICATION.md`
-
-Also note that PR #2 has already been merged into `main`; inspect the current direct-multiplier implementation rather than recreating its replay hardening/workbench.
+5. `docs/RESEARCH_GAPS.md`, especially Priority 0.2, Priority 4, and the Curta source-map item
+6. `research/subtraction-and-division.md`
+7. `research/curta-source-map.md`
+8. `research/simulator-matrix.md`
+9. `src/machines/curta/` documentation
+10. existing transition/event/replay patterns in direct multiplier, key-driven accumulator, and operator division
+11. relevant tests and `docs/VERIFICATION.md`
 
 Do not use stale unchecked boxes in `IMPLEMENTATION_PLAN.md` as the live task source.
 
 # Objective
 
-Build the repository's first source-grounded **subtraction/division operator-procedure track**.
+Build the repository's first explicit **control/interlock mechanism lesson**, and at the same time turn the Curta source map from a one-paragraph placeholder into a real provenance document.
 
-The central teaching question is:
+The teaching question is:
 
-> When a mechanical calculator has no single `divide(a, b)` instruction, which parts of division are represented by machine state and which parts remain an operator decision loop?
+> A lock does not represent a number. Why can it still be part of the computation?
 
-This slice has four parts:
+This slice has three required parts and one optional early-finish part:
 
-1. write a source-backed cross-machine research note on subtraction/division/control;
-2. implement a deterministic generic **operator-driven division** mechanism with explicit repeated subtraction, carriage place, quotient/revolution counting, overshoot, correction, and replay;
-3. add a compact interactive/text-state teaching path for `8478 ÷ 314 = 27` without pretending to reproduce a particular machine;
-4. create the long-planned simulator/prior-art matrix if the first three parts remain healthy.
+1. source-backed research on crank/setting interlocks and operator-control invariants;
+2. a deterministic generic P/M setting–crank interlock state machine plus compact teaching integration;
+3. a source-map hardening pass for Curta using patent/manual/operator-procedure evidence at the precision actually supported;
+4. if the required work is complete substantially early, add a bounded cross-machine operator-protocol comparison rather than starting another machine implementation.
 
-The software mechanism is claim type **P/M**. Historical claims about actual machines must remain separately sourced and must not leak into generic mechanism geometry.
-
----
-
-# Part A — `research/subtraction-and-division.md`
-
-Create the note before or alongside implementation. It must distinguish at least these historical/operator strategies:
-
-## A1. stepped-drum / arithmometer family
-
-Use Smithsonian material to establish only what the records actually support:
-
-- Thomas-style machines have a setting/input mechanism, operating crank, movable carriage, revolution register/result register, and an addition/multiplication versus subtraction/division control;
-- some documented arithmometers have revolution-counter direction associated with subtraction/division;
-- a documented Burkhardt example has a bell that sounds when subtraction passes through zero and is described as especially intended for division.
-
-Strong starting sources:
-
-- Smithsonian stepped-drum group: <https://americanhistory.si.edu/it/collections/object-groups/calculating-machines/stepped-drum-calculating-machines>
-- Thomas Arithmometer object: <https://americanhistory.si.edu/collections/object/nmah_690684>
-- Burkhardt Arithmometer object: <https://www.americanhistory.si.edu/collections/object/nmah_690681>
-- 1868 Thomas operating-instructions pamphlet record: <https://www.americanhistory.si.edu/collections/object/nmah_904757>
-
-Do not infer internal gear geometry from the catalog prose.
-
-## A2. Curta operator procedure
-
-Use the original-manual material/transcription available through the specialist Curta archive as an operator-procedure source, while identifying the hosting/provenance precisely:
-
-- <https://curta.org/wiki/CurtaManuals>
-- <https://curta.org/wiki/DivisionAlgorithm>
-
-Relevant documented procedure includes carriage position, divisor in the setting register, result/turns registers, overshooting and undoing a turn, and subtractive division via the reversing control. Do not turn these operating instructions into claims that every stepped-drum/pinwheel machine behaves identically.
-
-## A3. complement subtraction
-
-The repository already mentions Pascaline/complement subtraction. Re-check the actual source currently cited in the repository before strengthening that section. If the available source does not support the exact mechanism/procedure claim, state the uncertainty instead of filling the gap from memory.
-
-## A4. control is computation
-
-Explain why these are not mere UI details:
-
-- mode/reversing control;
-- carriage position;
-- revolution/quotient register;
-- zeroing;
-- overshoot indication;
-- correction/add-back;
-- locks/interlocks that restrict invalid transitions.
-
-For every historical paragraph, use `docs/EVIDENCE_POLICY.md`: claim type first, historical evidence strength separately. A patent/manual/object description is not permission to generalize to all calculator families.
-
-The note should end with an explicit **software abstraction decision** describing what the new generic model will represent and what it will refuse to claim.
+The generic interlock software is **P/M**. Historical Odhner/Curta statements are **H** or **H/R** with evidence strength separately stated. Do not label the generic software as an Odhner or Curta reconstruction.
 
 ---
 
-# Part B — deterministic generic operator-driven division mechanism
+# Part A — `research/control-and-interlocks.md`
 
-Create a module under `src/mechanisms/`, preferably `operator-division/` unless existing conventions suggest a better name.
+Create a focused research note before or alongside implementation.
 
-Do not implement a hidden `Math.floor(dividend / divisor)` and then manufacture an animation. The arithmetic result must emerge from the same explicit operations the visitor can inspect.
+## A1. Odhner crank/setting mutual exclusion
+
+Use Valentin Jakob Odhner, US 1,510,100 (1924):
+
+<https://patents.google.com/patent/US1510100A/en>
+
+The patent is useful because it explicitly discusses:
+
+- a locking device that locks the crank in its zero position;
+- a guiding arrangement that keeps the crank-locking device inactive during crank rotation except at zero;
+- in the illustrated arrangement, a second lock relationship involving the calculating/cam discs, so setting-related elements and crank motion are not simply free at the same time.
+
+Read the actual description/claims and state exactly what you use. The intended repository lesson is **mutual exclusion between setting and operating phases**, but the software must remain a P/M abstraction.
+
+Important evidence rule:
+
+- a patent is E1 evidence for what was claimed/designed in that patent;
+- it is not by itself proof that every Odhner-family production machine used exactly that embodiment;
+- do not generalize the depicted roll/notch/sector/cam geometry into a universal pinwheel-machine mechanism.
+
+Record figure/claim references where practical. If the Google Patents transcription is ambiguous, narrow the prose rather than inferring missing geometry.
+
+## A2. Curta operating-handle control
+
+Use the Curta specialist manual archive/transcription already referenced by the repository:
+
+<https://curta.org/wiki/CurtaManuals>
+
+The operator material states, among other things, that the operating handle is turned clockwise, that the handle mechanism is locked against backward turns, and that a full turn completes when the handle returns to its home detent. Treat this as operator-procedure evidence hosted by a specialist archive; do not silently promote it to a production drawing.
+
+Also re-use the division/operator material where relevant:
+
+<https://curta.org/wiki/DivisionAlgorithm>
+
+The point is to distinguish several kinds of control invariant:
+
+```text
+home / zero position
+allowed direction
+setting permitted vs operation active
+correction/undo procedure
+carriage position / counter state
+```
+
+Do not claim these are implemented by the same mechanism across Curta and Odhner families.
+
+## A3. Control is computation
+
+Explain, with claim types separated, why a mechanical interlock can carry algorithmic meaning even when it carries no numerical magnitude:
+
+- it prevents a setting change during an operation;
+- it prevents an operation before a setting is valid;
+- it defines when one crank cycle is complete;
+- it constrains legal direction/mode changes;
+- it can force correction before the operator proceeds;
+- it preserves invariants that arithmetic state assumes.
+
+End the note with a **software abstraction decision** for Part B: what the generic model represents and what it refuses to claim.
+
+---
+
+# Part B — generic setting–crank interlock mechanism
+
+Create a small module under `src/mechanisms/`, preferably `setting-crank-interlock/` unless current naming conventions suggest a clearer name.
+
+This mechanism is not required to perform addition/multiplication itself. Its job is to make legal/illegal state transitions inspectable and replayable.
 
 ## Minimum state
 
 Represent at least:
 
-- divisor;
-- signed residual/result register value;
-- carriage/decimal offset;
-- per-place quotient/revolution counts, or an equivalently inspectable quotient-register state;
-- operation/revolution count;
+- a generic setting value or setting revision/version sufficient to demonstrate that settings can change only in the permitted phase;
+- crank position/phase, at minimum `HOME` versus `ACTIVE` (more phases only if they add a tested explanatory value);
+- crank lock state;
+- setting/control lock state;
+- completed crank-cycle count;
 - human-operation count;
-- phase such as ready vs overshoot/correction-required;
-- current contribution `divisor × 10^offset` when relevant;
-- enough identity/cycle information for deterministic event replay.
+- enough cycle/sequence identity for deterministic replay;
+- mechanism id and explicit invariant validation.
 
-Reuse/adapt existing carriage/revolution concepts where useful, but do not force a bad abstraction merely to import a helper. If the generic revolution counter is insufficient for per-place quotient digits, compose or extend conservatively rather than silently duplicating contradictory semantics.
-
-## Required operator actions
-
-Use clear P/M event/action vocabulary equivalent to:
+A clean initial invariant is acceptable, for example:
 
 ```text
-SUBTRACT_ONCE
-OVERSHOOT_DETECTED
-CORRECT_ADD_BACK
-SHIFT_CARRIAGE_DOWN
-DIVISION_COMPLETE / TRACE_COMPLETE
+crank at HOME
+crank locked against operation until explicitly released/begun
+setting control FREE
 ```
 
-A subtraction cycle at offset `k` subtracts `divisor × 10^k` from the residual and changes the quotient/revolution state at that decimal place.
-
-### Overshoot/correction semantics
-
-Model overshoot explicitly rather than silently predicting the quotient digit in advance.
-
-A useful generic procedure is:
-
-1. operator subtracts once;
-2. if residual crosses below zero, state enters `CORRECTION_REQUIRED`;
-3. no further subtraction or carriage shift is allowed until correction;
-4. correction adds the last place-value contribution back and reverses the just-counted quotient/revolution step;
-5. operator may then shift to the next lower decimal position.
-
-This is a **pedagogical operator-procedure model**, not a claim that every real calculator used signed arithmetic internally or the same physical correction path.
-
-Use safe-integer checks and explicit invalid-state errors. Division by zero must be rejected.
-
-## Default worked trace
-
-The canonical exhibit/test is:
+During an active operation the generic model should invert the relevant permissions:
 
 ```text
-8478 ÷ 314 = 27 remainder 0
+setting LOCKED
+crank ACTIVE / permitted to complete cycle
 ```
 
-Start with carriage offset 1, and make the state/event path visible:
+When the cycle returns home, restore the home invariant.
+
+Do not encode Odhner's literal roller/notch/cam geometry into the generic state.
+
+## Actions/events
+
+Choose names consistent with repository patterns. Observable semantics should cover actions equivalent to:
 
 ```text
-8478
-- 3140 => 5338   quotient tens 1
-- 3140 => 2198   quotient tens 2
-- 3140 => -942   overshoot
-+ 3140 => 2198   correction, quotient tens back to 2
-shift offset 1 -> 0
-- 314 repeated seven times
-=> residual 0, quotient 27
+CHANGE_SETTING
+BEGIN_CRANK_CYCLE
+COMPLETE_CRANK_CYCLE
 ```
 
-The point is not that this exact event vocabulary is historical. The point is that the quotient emerges from repeated machine operations + carriage position + operator decisions.
-
-Also support a non-exact example such as:
+and events equivalent to:
 
 ```text
-1000 ÷ 64 = 15 remainder 40
+SETTING_CHANGED
+SETTING_LOCKED
+CRANK_RELEASED / CYCLE_BEGUN
+CRANK_CYCLE_COMPLETED
+CRANK_RETURNED_HOME
+CRANK_LOCKED
+SETTING_RELEASED
 ```
 
-without calling a built-in division operator to choose quotient digits.
+It is fine for one action to emit several ordered events if that makes the invariant transition visible.
 
-## Replay integrity
+Do not add a decorative timer/animation state to core logic. No DOM or frame timing in the mechanism.
 
-Given the repository's newly hardened direct-multiplier replay, do not regress to trusting arbitrary serialized derived fields.
+## Required invariant behavior
 
-At minimum validate during replay:
+At minimum:
 
-- contiguous event sequence;
-- contribution matches divisor and carriage offset;
-- residual before/after arithmetic;
-- quotient/revolution counter before/after;
-- correction exactly reverses the immediately pending overshoot step;
-- carriage shift only occurs in a valid phase and follows the recorded offset;
-- recorded final state matches replayed state.
+1. setting changes are allowed in the home/setting-free state;
+2. beginning a crank cycle makes the setting unavailable before the active phase is exposed;
+3. changing the setting while the crank is active is rejected explicitly;
+4. beginning another crank cycle while already active is rejected;
+5. completing a crank cycle while no cycle is active is rejected;
+6. completion returns the crank to home and makes setting available again;
+7. the transition result is deterministic;
+8. reducer/replay validates derived lock/phase changes instead of trusting arbitrary serialized fields;
+9. replay rejects tampering in sequence, lock transition, setting value/revision, cycle count, or final state.
 
-Do not over-generalize this into a repository-wide event framework migration in this slice.
+Use safe-integer or otherwise explicit validation for any numeric setting/count fields.
+
+## Direction policy
+
+Do **not** bake a universal `clockwise-only` rule into the generic interlock merely because Curta documentation has one. If you want to represent direction at all, make it an explicit configurable policy with tests and label it P/M. It is also acceptable to leave direction out of the generic core and explain Curta's direction restriction only in research/UI provenance text.
+
+Prefer the simpler model unless direction materially improves the lesson.
 
 ---
 
-# Part C — tests and teaching integration
+# Part C — teaching integration and Curta provenance hardening
 
-## Required tests
+## C1. Compact public control/interlock teaching path
 
-Add focused Vitest coverage for at least:
-
-1. one subtraction cycle at a known carriage offset changes residual and quotient/revolution state correctly;
-2. `8478 ÷ 314` reaches quotient `27`, remainder `0` through visible repeated subtraction and one overshoot/correction at the tens place;
-3. the trace does not contain a single hidden `DIVIDE_RESULT` shortcut event that jumps directly to `27`;
-4. `1000 ÷ 64` reaches quotient `15`, remainder `40` with explicit operator cycles;
-5. overshoot enters a correction-required state;
-6. subtract/shift while correction is required is rejected;
-7. correction restores the prior non-overshot residual and reverses the just-counted quotient step;
-8. division by zero and invalid offsets/state are rejected;
-9. deterministic same state + action yields identical events/state;
-10. replay reproduces the final state and rejects at least several tampering cases (sequence, residual arithmetic, quotient count, correction payload, or final state).
-
-## Public teaching path
-
-Add a compact browser path, preferably a dedicated hash route such as `#/division` if routing remains small. If a new route causes disproportionate churn, integrate a clearly separated section into an existing arithmetic/mechanism view.
+Add a small public path, preferably `#/controls` if routing remains simple. Reuse existing shell/state/event components rather than redesigning the site.
 
 Minimum visitor affordances:
 
-- default `8478 ÷ 314` scenario;
-- one-event step or one-operator-action step;
+- show the current setting value/revision;
+- show crank position and both lock/permission states;
+- allow a valid setting change at home;
+- allow beginning a crank cycle;
+- while active, make an attempted setting change visibly rejected/blocked with plain-language explanation;
+- allow completing the crank cycle and show the return to home;
+- show ordered events/state text, not animation-only meaning;
 - reset;
-- visible residual/result register;
-- visible divisor and carriage place;
-- visible quotient/revolution count by place;
-- visible `CORRECTION_REQUIRED` state after overshoot;
-- plain-language event log;
-- evidence/model note saying **P/M generic operator procedure**, not Thomas/Curta geometry;
-- text remains understandable without animation/color.
+- evidence note: **P/M generic interlock**, informed by historical lock/control evidence but not an Odhner/Curta geometry reconstruction.
 
 The visitor should be able to answer:
 
-> Why is `27` not stored as a magically computed quotient, and what did the operator have to notice/do to obtain its tens and units digits?
+> What arithmetic error or invalid state becomes possible if setting and operation are both free at the same time?
 
-Update README/teaching navigation only if the new path actually exists.
+Do not needlessly create a full machine skin.
+
+## C2. Replace placeholder `research/curta-source-map.md`
+
+The current file is only one paragraph and still uses the old C/D grading vocabulary. Replace it with a real source map under `docs/EVIDENCE_POLICY.md`.
+
+At minimum inspect and map:
+
+### Curt Herzstark patent
+
+US 2,525,352, published 1950:
+
+<https://patents.google.com/patent/US2525352A/en>
+
+Use it only for claims it actually supports. The patent describes a miniature four-operation calculating machine and discusses the result-counting and revolution-counting mechanisms arranged around a common driving member in the compact circular architecture. Record claim/figure/description anchors where useful.
+
+Do **not** equate patent intent automatically with every production Curta Type I/II detail.
+
+### Curta operator manuals
+
+<https://curta.org/wiki/CurtaManuals>
+
+Map operator-facing concepts such as:
+
+- setting register;
+- result/product dial/register;
+- revolution/turns counter;
+- carriage positions;
+- operating-handle home detent / allowed direction;
+- clearing controls;
+- addition/subtraction and division operator procedures where supported by the hosted manual/transcription.
+
+Identify the provenance limitation: Curta.org lists/transcribes multiple manual versions/languages and is a specialist archive, not itself the original manufacturer. Where exact edition/page/facsimile mapping is unavailable, say so.
+
+### Existing simulator/reference landscape
+
+Use `research/simulator-matrix.md` and existing Curta links to distinguish:
+
+```text
+historical source
+specialist transcription/reference
+whole-machine simulator
+this repository's teaching abstraction
+```
+
+The source map should explicitly state what future Curta code/UI may claim safely and what still requires model/revision/page-level evidence.
+
+## C3. Reconcile existing Curta docs
+
+Inspect the small files under `src/machines/curta/` (`README.md`, `mechanism.md`, `state-model.md`, `operations.md`, `limitations.md`, `sources.md`). They currently contain placeholder-level prose and old C/D evidence language.
+
+Update them enough to:
+
+- point to the hardened source map;
+- use M/H/R/P + E1–E4 terminology instead of extending the old C/D scale;
+- distinguish operator-procedure facts from the repository's teaching model;
+- avoid claiming source-specific internal geometry that is not yet mapped.
+
+Do not implement a new full Curta emulator in this slice.
 
 ---
 
-# Part D — `research/simulator-matrix.md`
+# Part D — optional early-finish work: operator-protocol comparison
 
-The previous two local slices finished far below the one-hour target, so complete the long-planned simulator/prior-art matrix in the same checkpoint after Parts A–C are working.
+Only if Parts A–C, tests, browser integration, documentation reconciliation, and verification are fully complete with substantial time remaining, create a bounded `docs/OPERATOR_PROTOCOLS.md`.
 
-Inspect the strong prior-art links already collected in `docs/PRIOR_ART.md` and record a compact matrix for at least:
-
-- a Difference Engine simulator/reconstruction resource;
-- John Walker/Fourmilab Analytical Engine emulator lineage;
-- one Curta simulator/reference implementation;
-- at least one stepped-drum/pinwheel calculator resource;
-- this repository's own corresponding explanatory increment.
-
-Columns/fields should include where knowable:
+Compare only families already supported by repository research, for example:
 
 ```text
-resource
-machine/family
-source/emulator/reconstruction
-input model
-can single-step?
-internal state visible?
-event/operation trace visible?
-license / reuse status
-last-maintained signal (if responsibly verifiable)
-what this repository should reuse/link instead of rewrite
-what explanatory gap remains
-checked date
+Pascaline: stylus/dial operation
+Thomas/Odhner-style: setting → crank → carriage/revolution procedure
+Comptometer: keypress → accumulate
+Millionaire/direct multiplication: selector/table control → operation cycle
+Curta: setting + carriage + controlled crank procedure
+Differential Analyzer: coupled continuous shaft operation (only at the existing evidence precision)
 ```
 
-Do not guess licenses or maintenance dates. If outbound web access is unavailable, record that as a bounded blocker and complete Parts A–C; do not invent matrix values.
+Suggested columns:
 
-This matrix is research/provenance work, not a request to copy code from third parties.
+```text
+human action
+what action selects
+what action supplies energy/control
+where place value lives
+what must be locked/invariant during operation
+what the operator must notice/correct
+claim type + evidence source
+```
+
+Every row must be source-bounded. If a row would require guessing, leave it open rather than writing a smooth but unsupported comparison.
+
+Do not start Analytical Engine source-map hardening in the same slice if this optional document is done.
+
+---
+
+# Required tests
+
+Add focused Vitest coverage for the new generic interlock including at least:
+
+1. initial home state has internally consistent lock/permission invariants;
+2. setting change at home succeeds and produces inspectable event/state;
+3. begin-cycle transitions lock setting before/while crank is active;
+4. setting change while active is rejected;
+5. begin while active is rejected;
+6. complete while home/inactive is rejected;
+7. valid completion increments cycle/human-operation state and restores home permissions;
+8. same state + action is deterministic;
+9. replay reproduces final state;
+10. replay rejects several tampering cases (sequence, setting transition, lock/phase transition, cycle count, final state).
+
+If UI helpers have pure state logic worth testing, add narrowly scoped tests; do not introduce a browser-testing framework solely for this task.
 
 ---
 
 # Documentation reconciliation
 
-After implementation/tests exist and verification passes:
+After implementation/research/tests are real:
 
-- update `STATUS.md` so its verification paragraph reflects current code reality rather than old 32-test language;
-- update `TODO.md` only for genuinely completed items;
+- update `STATUS.md` and remove the now-stale statement that remote CI for the previous PR head still needs to complete; remote CI run `33437862103` for `7bebcea...` succeeded;
+- update `TODO.md` only for genuinely completed control/Curta source-map work;
 - update `docs/VERIFICATION.md` with commands/results actually run and the resulting test count;
-- update `docs/TEACHING_PATH.md` if a new division route becomes part of the public visitor sequence;
-- keep `ROADMAP.md` changes minimal and status-oriented only where its current wording is now false.
+- update README / `docs/TEACHING_PATH.md` only if the control path actually exists;
+- keep `ROADMAP.md` changes minimal and only correct statements that become false.
 
-Do not broadly rewrite unrelated historical notes.
+Do not broadly rewrite unrelated research.
 
 ---
 
@@ -301,16 +360,16 @@ npm run build
 git diff --check
 ```
 
-If practical in the existing environment, perform a browser smoke test of the new division path at desktop and narrow/mobile width and record only checks actually performed.
+Perform a bounded browser smoke check of `#/controls` if that route exists. Test at desktop width and, if practical, one narrow/mobile width; record only checks actually performed.
 
-One coherent checkpoint may include Parts A–D. If the work naturally separates into a research commit and an implementation commit, that is also acceptable, but both must be pushed before stopping unless a genuine blocker occurs.
+One coherent checkpoint is fine. A research commit followed by implementation/docs is also fine if both are pushed before stopping.
 
-After push, stop and wait for the next `CURRENT_AGENT_TASK.md` revision. Do not autonomously start source-specific interlocks, Pascaline geometry, automatic division mechanisms, or Curta internals.
+After push, stop and wait for the next `CURRENT_AGENT_TASK.md` revision. Do not autonomously start Analytical Engine, Difference Engine, differential-analyzer source-map hardening, or source-specific Odhner/Curta geometry.
 
-Suggested final commit subject if using one commit:
+Suggested commit subject:
 
 ```text
-feat: add operator-driven division procedure
+feat: add control interlock mechanism lesson
 ```
 
 ---
@@ -319,10 +378,10 @@ feat: add operator-driven division procedure
 
 Stop and leave a precise blocker rather than guessing if:
 
-- historical operator procedure cannot be supported by the cited source at the precision needed;
-- implementing generic division requires assuming source-specific gear/carry geometry;
-- shared carry/revolution semantics would need a broad incompatible migration;
-- a concurrent implementation of the same division track lands on remote `main`;
-- outbound web is unavailable for Part D (in that case finish A–C from available sources/repository evidence and note Part D blocked rather than fabricating metadata).
+- the Odhner patent text does not support a claimed lock relationship at the precision you want to write;
+- Curta manual/version provenance is too weak for a source-specific claim; narrow the claim instead of inventing edition details;
+- implementing the generic interlock requires source-specific gear/linkage geometry;
+- a concurrent implementation of the same control/interlock track lands on remote `main`;
+- shared event/replay changes would require a broad incompatible migration.
 
-Do not ask the human for routine implementation decisions already settled above.
+The intended result is not “a lock animation.” It is a tested demonstration that **legal state transitions are part of mechanical computation**, plus a Curta evidence map strong enough that future work stops treating a one-paragraph placeholder as provenance.
