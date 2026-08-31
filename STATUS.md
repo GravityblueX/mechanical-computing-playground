@@ -1,6 +1,6 @@
 # Current Status
 
-Last reconciled on 2026-09-01 after PR #1 (`ccc39d8e0b8a5c8cb83fa9bcf4d82672e30aa0f6`).
+Last reconciled on 2026-09-01 after the direct-multiplication functional-model slice.
 
 This file is the **current-state authority** for the repository. `ROADMAP.md` describes where the project should go; `IMPLEMENTATION_PLAN.md` is still useful as a dependency/design specification, but many of its checkboxes predate later implementation and must not be treated as the live task ledger.
 
@@ -26,6 +26,7 @@ Changes since that verification checkpoint have been license/documentation/resea
 - revolution counter;
 - stepped-drum conceptual model;
 - pinwheel conceptual model;
+- direct-multiplication functional model with digit selection, operation cycles, carriage shifts, and replayable events;
 - continuous integrator;
 - shared mechanism core and trace/replay support.
 
@@ -75,7 +76,7 @@ The main weakness is no longer “there is no code.” It is that **historical/m
 The most important remaining gaps are:
 
 - the current Pascaline / Comptometer carry note still needs more primary-source and model/revision-level anchors before source-specific geometry is drawn;
-- direct multiplication is now researched, but there is no direct-multiplication functional state model or exhibit path yet;
+- direct multiplication now has a tested pedagogical functional state/event model and a fourth comparison path, but no source-specific Millionaire geometry is claimed;
 - key-driven computation is now researched, but there is no key-driven mechanism model yet;
 - `research/curta-source-map.md` remains placeholder-level and needs manual/patent/model-specific provenance;
 - `research/analytical-engine-information-flow.md` needs primary-source anchors and exact emulator provenance;
@@ -108,13 +109,12 @@ Historical/reconstruction claims then receive `E1–E4` evidence strength separa
 
 ## Current highest-priority work
 
-1. **Implement direct multiplication as a functional model**, using the Steiger/Millionaire research to compare machine-encoded multiplication-table selection with operator-supplied repeated cranking.
-2. **Implement a minimal key-driven accumulator model**, so `keypress → accumulate` becomes a first-class operation protocol without attempting a full Comptometer emulator.
-3. **Write subtraction / division / control mechanisms**: complement arithmetic, crank direction/mode, carriage shifting, revolution counting, zeroing, correction, and interlocks.
-4. **Create `research/simulator-matrix.md`** so prior-art inspection becomes explicit rather than scattered links.
-5. **Upgrade named-machine source maps** for Curta, Analytical Engine, Difference Engine, and differential analyzer with manual/patent/drawing/museum/reconstruction locations at the precision claimed.
-6. **Add cross-machine comparison layers** for representation, operator protocol, output/audit trail, and eventually reliability/torque/tolerance when evidence supports it.
-7. **Only then deepen source-specific geometry/animation.** Do not reward visual detail unsupported by source detail.
+1. **Implement a minimal key-driven accumulator model**, so `keypress → accumulate` becomes a first-class operation protocol without attempting a full Comptometer emulator.
+2. **Write subtraction / division / control mechanisms**: complement arithmetic, crank direction/mode, carriage shifting, revolution counting, zeroing, correction, and interlocks.
+3. **Create `research/simulator-matrix.md`** so prior-art inspection becomes explicit rather than scattered links.
+4. **Upgrade named-machine source maps** for Curta, Analytical Engine, Difference Engine, and differential analyzer with manual/patent/drawing/museum/reconstruction locations at the precision claimed.
+5. **Add cross-machine comparison layers** for representation, operator protocol, output/audit trail, and eventually reliability/torque/tolerance when evidence supports it.
+6. **Only then deepen source-specific geometry/animation.** Do not reward visual detail unsupported by source detail.
 
 ## External publishing state
 

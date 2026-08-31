@@ -1,5 +1,16 @@
 # Verification record
 
+## 2026-09-01 — direct multiplication functional model
+
+The direct-multiplication slice added deterministic digit-selection, operation-cycle, carriage-shift, accumulator, and replay events; connected a fourth path to the `314 × 27` comparison; and added focused tests.
+
+- `npm run typecheck` — pass
+- `npm test -- --run` — pass, 40 tests
+- `npm run build` — pass
+- `git diff --check` — pass
+
+The implementation is explicitly a claim-type P functional model informed by Steiger/Millionaire research. It does not claim source-specific cams, gears, control-plate geometry, timing, or dimensions.
+
 ## 2026-09-01 — documentation/research reconciliation
 
 PR #1 (`docs: reconcile status and deepen mechanism research map`) changed documentation/research only; no TypeScript/runtime/test files were modified.
