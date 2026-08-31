@@ -111,9 +111,11 @@ export function transitionOperatorDivision(state: Readonly<OperatorDivisionState
   } else if (action.type === 'SHIFT_CARRIAGE_DOWN') {
     if (state.phase !== 'READY' || !state.placeExhausted || state.carriageOffset === 0) throw new InvalidDivisionStateError('carriage can shift down only after completing the current place');
     events = [{ ...base(0), type: 'SHIFT_CARRIAGE_DOWN', offsetBefore: state.carriageOffset, offsetAfter: state.carriageOffset - 1, contributionBefore: state.currentContribution, contributionAfter: contribution(state.divisor, state.carriageOffset - 1), humanBefore: state.humanOperationCount, humanAfter: state.humanOperationCount + 1 }];
-  } else {
+  } else if (action.type === 'DIVISION_COMPLETE') {
     if (state.phase !== 'READY' || state.carriageOffset !== 0 || (!state.placeExhausted && state.residual !== 0) || state.residual >= state.divisor) throw new InvalidDivisionStateError('division is not ready to complete');
     events = [{ ...base(0), type: 'DIVISION_COMPLETE', quotient: quotientValue(state), remainder: state.residual, humanOperations: state.humanOperationCount, operations: state.operationCount }];
+  } else {
+    throw new InvalidDivisionStateError('unsupported operator-division action type');
   }
   return { state: events.reduce(reduceDivisionEvent, structuredClone(state)), events };
 }
@@ -143,8 +145,11 @@ export function reduceDivisionEvent(state: Readonly<OperatorDivisionState>, even
     if (state.phase !== 'READY' || !state.placeExhausted || event.offsetBefore !== state.carriageOffset || event.offsetAfter !== state.carriageOffset - 1 || event.contributionBefore !== state.currentContribution || event.contributionAfter !== contribution(state.divisor, event.offsetAfter) || event.humanBefore !== state.humanOperationCount || event.humanAfter !== state.humanOperationCount + 1) throw new Error('invalid carriage-shift event');
     return { ...state, carriageOffset: event.offsetAfter, currentContribution: event.contributionAfter, humanOperationCount: event.humanAfter, placeExhausted: false };
   }
-  if (state.phase !== 'READY' || state.carriageOffset !== 0 || (!state.placeExhausted && state.residual !== 0) || state.residual >= state.divisor || event.quotient !== quotientValue(state) || event.remainder !== state.residual || event.humanOperations !== state.humanOperationCount || event.operations !== state.operationCount) throw new Error('invalid completion event');
-  return { ...state, phase: 'COMPLETE' };
+  if (event.type === 'DIVISION_COMPLETE') {
+    if (state.phase !== 'READY' || state.carriageOffset !== 0 || (!state.placeExhausted && state.residual !== 0) || state.residual >= state.divisor || event.quotient !== quotientValue(state) || event.remainder !== state.residual || event.humanOperations !== state.humanOperationCount || event.operations !== state.operationCount) throw new Error('invalid completion event');
+    return { ...state, phase: 'COMPLETE' };
+  }
+  throw new Error('unsupported operator-division event type');
 }
 
 export function replayOperatorDivision(trace: Readonly<OperatorDivisionTrace>): OperatorDivisionState {
