@@ -1,6 +1,6 @@
 # Current Status
 
-Last reconciled against `main` at commit `71a143920c4600395a3542b2e3a14df88d1b40c9` on 2026-09-01.
+Last reconciled on 2026-09-01 after PR #1 (`ccc39d8e0b8a5c8cb83fa9bcf4d82672e30aa0f6`).
 
 This file is the **current-state authority** for the repository. `ROADMAP.md` describes where the project should go; `IMPLEMENTATION_PLAN.md` is still useful as a dependency/design specification, but many of its checkboxes predate later implementation and must not be treated as the live task ledger.
 
@@ -15,7 +15,7 @@ This file is the **current-state authority** for the repository. `ROADMAP.md` de
 - Golden carry fixtures under `fixtures/carry/`.
 - The last recorded local verification (`docs/VERIFICATION.md`, 2026-08-29 UTC+8) reports typecheck, 32 tests, build, and `git diff --check` passing.
 
-The commits after that verification checkpoint are license/documentation-only. This status file does **not** substitute for running a fresh build when code changes again.
+Changes since that verification checkpoint have been license/documentation/research-only. This status file does **not** substitute for running a fresh build after the next code change.
 
 ### Mechanism models already present
 
@@ -58,43 +58,63 @@ Some of these are substantially more complete as pedagogical software than as hi
 
 This remains a **counterfactual pedagogical machine**, not a historical reconstruction.
 
+## Research/evidence work completed in the 2026-09-01 reconciliation
+
+- `docs/EVIDENCE_POLICY.md` now separates claim type (`M/H/R/P`) from historical evidence strength (`E1–E4`).
+- `docs/RESEARCH_GAPS.md` provides a prioritized mechanism/research queue.
+- `research/carry-is-the-hard-part.md` now uses Pascaline sautoir and Comptometer/key-driven carry as concrete comparison cases.
+- `research/multiplication-mechanisms.md` now covers repeated addition, stepped drum, pinwheel, and Otto Steiger / Millionaire direct multiplication.
+- `research/key-driven-computation.md` opens the Comptometer-style `keypress → accumulate` track.
+- `research/finite-difference-design.md` now separates mathematical facts from Babbage-specific historical claims.
+- `docs/PRIOR_ART.md`, `docs/STRUCTURE_EVIDENCE.md`, README, ROADMAP, TODO, and AGENTS have been reconciled with the current implementation and evidence policy.
+
 ## Where the repository is currently weak
 
-The main weakness is no longer “there is no code.” It is that **historical and mechanism research is much thinner than the implementation**.
+The main weakness is no longer “there is no code.” It is that **historical/mechanism provenance is still thinner than the implementation**.
 
-Several files under `research/` are still short design notes rather than source maps. In particular:
+The most important remaining gaps are:
 
-- `research/carry-is-the-hard-part.md` needs concrete historical carry architectures;
-- `research/multiplication-mechanisms.md` needs primary/museum evidence and currently misses direct multiplication;
-- `research/curta-source-map.md` is only a placeholder-level source map;
+- the current Pascaline / Comptometer carry note still needs more primary-source and model/revision-level anchors before source-specific geometry is drawn;
+- direct multiplication is now researched, but there is no direct-multiplication functional state model or exhibit path yet;
+- key-driven computation is now researched, but there is no key-driven mechanism model yet;
+- `research/curta-source-map.md` remains placeholder-level and needs manual/patent/model-specific provenance;
 - `research/analytical-engine-information-flow.md` needs primary-source anchors and exact emulator provenance;
 - `research/differential-analyzer.md` needs a stronger source chain;
-- a simulator comparison matrix described in older plans has not been created;
-- the repository lacks a focused treatment of key-driven adding machines such as the Comptometer;
-- subtraction, complement arithmetic, division, zeroing, correction, interlocks, and operator-error prevention are underdeveloped.
+- the simulator comparison matrix described in earlier planning still has not been created;
+- subtraction, complement arithmetic, division, zeroing, correction, interlocks, and operator-error prevention remain underdeveloped;
+- cross-machine representation (“where does the number live?”), output/audit trail, and human-machine arithmetic-labor comparisons are mostly future work.
 
-See `docs/RESEARCH_GAPS.md` for the prioritized research queue.
+See `docs/RESEARCH_GAPS.md` for the full queue.
 
-## Evidence-policy problem being corrected
+## Evidence-policy state
 
-The original A–D labels mixed together several different things:
+The older A–D labels mixed together:
 
 - direct artifact evidence;
 - historical interpretation;
 - mathematical facts;
 - pedagogical abstractions.
 
-Those are not one scale. `docs/EVIDENCE_POLICY.md` now separates **claim type** from **historical evidence strength**. Existing A–D badges may remain in the UI for compatibility, but new research notes should follow the two-axis policy and avoid calling a mathematical theorem “grade A” merely because it is well established.
+Those are not one scale. New and edited research should follow `docs/EVIDENCE_POLICY.md`:
+
+```text
+M = mathematical / computational
+H = historical record
+R = reconstruction / engineering interpretation
+P = pedagogical / counterfactual
+```
+
+Historical/reconstruction claims then receive `E1–E4` evidence strength separately. Existing A–D badges may remain temporarily in UI code for compatibility, but should not guide new research writing.
 
 ## Current highest-priority work
 
-1. **Reconcile documentation with implementation.** Stop using stale plan checkboxes as the current task source.
-2. **Strengthen carry research.** Use the Pascaline sautoir and later key-driven carry designs as concrete cases instead of treating carry only as an abstract event chain.
-3. **Expand multiplication architecture.** Compare repeated-addition stepped-drum and pinwheel machines with true direct-multiplication machines such as Otto Steiger's Millionaire.
-4. **Add key-driven computation.** The Comptometer changes the human-machine protocol: pressing a key both selects and enters a digit, rather than separating number setting from a later crank.
-5. **Write subtraction / division / control mechanisms.** Complement arithmetic, crank direction, carriage shifting, zeroing, correction, and interlocks are computation, not UI trivia.
-6. **Upgrade named-machine source maps.** Curta, Analytical Engine, Difference Engine, and differential analyzer claims should cite manuals, patents, drawings, museum records, or scholarly reconstructions at the precision claimed.
-7. **Only then deepen geometry/animation.** Do not reward visual detail unsupported by source detail.
+1. **Implement direct multiplication as a functional model**, using the Steiger/Millionaire research to compare machine-encoded multiplication-table selection with operator-supplied repeated cranking.
+2. **Implement a minimal key-driven accumulator model**, so `keypress → accumulate` becomes a first-class operation protocol without attempting a full Comptometer emulator.
+3. **Write subtraction / division / control mechanisms**: complement arithmetic, crank direction/mode, carriage shifting, revolution counting, zeroing, correction, and interlocks.
+4. **Create `research/simulator-matrix.md`** so prior-art inspection becomes explicit rather than scattered links.
+5. **Upgrade named-machine source maps** for Curta, Analytical Engine, Difference Engine, and differential analyzer with manual/patent/drawing/museum/reconstruction locations at the precision claimed.
+6. **Add cross-machine comparison layers** for representation, operator protocol, output/audit trail, and eventually reliability/torque/tolerance when evidence supports it.
+7. **Only then deepen source-specific geometry/animation.** Do not reward visual detail unsupported by source detail.
 
 ## External publishing state
 
@@ -102,11 +122,11 @@ Those are not one scale. `docs/EVIDENCE_POLICY.md` now separates **claim type** 
 
 ## Definition of the next good release
 
-A useful next release is not “more routes.” It should make three existing strengths academically trustworthy:
+A useful next release is not “more routes.” It should connect three research findings to tested mechanism models:
 
-- one historically grounded carry comparison;
-- one historically grounded multiplication comparison including direct multiplication;
-- one key-driven / human-operation comparison.
+- historically grounded carry comparison;
+- multiplication comparison including direct multiplication;
+- key-driven / human-operation comparison.
 
 Each should connect:
 
