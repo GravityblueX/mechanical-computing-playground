@@ -6,7 +6,7 @@ import { reduceDirectMultiplierEvent, type DirectMultiplierEvent } from './mecha
 import { quotientValue, reduceDivisionEvent, traceOperatorDivision, type DivisionEvent } from './mechanisms/operator-division';
 import { createSettingCrankInterlock, transitionInterlock, type InterlockEvent, type SettingCrankInterlockState } from './mechanisms/setting-crank-interlock';
 import { createAnalyticalFlowTrace, stateAtAnalyticalEvent, type AnalyticalFlowEvent } from './exhibits/analytical-engine-flow';
-import { createIntegrator, integrate, type IntegratorState } from './mechanisms/continuous-integrator';
+import { createContinuousFlowTrace, stateAtContinuousEvent, type ContinuousFlowEvent } from './exhibits/continuous-flow';
 import { evaluate, type StageAState } from './backprop/core/stage-a';
 import { createPhaseMachine, runPhaseCycle, stepPhase, STAGE_A_PHASES, type PhaseMachineState } from './backprop/core/phase-machine';
 import { mapStageA } from './backprop/mechanical-mapping';
@@ -37,7 +37,9 @@ let controlCycle = 0;
 const analyticalTrace = createAnalyticalFlowTrace();
 let analyticalEventIndex = 0;
 let analyticalKeyboardBound = false;
-let integrator: IntegratorState = createIntegrator(1, 0.1);
+let continuousTrace = createContinuousFlowTrace();
+let continuousEventIndex = 0;
+let continuousKeyboardBound = false;
 let back: StageAState = evaluate({ x1: 2, x2: 3, w1: 0, w2: 0, target: 10, learningRate: 0.01 });
 let phaseMachine: PhaseMachineState = createPhaseMachine(back);
 let backPreset = 'stable';
@@ -286,14 +288,28 @@ function analytical() {
 }
 
 function continuous() {
-  const points = Array.from({ length: 11 }, (_, index) => `${index * 34},${110 - index * integrator.input * 8}`).join(' ');
+  const state = stateAtContinuousEvent(continuousTrace, continuousEventIndex);
+  const label = (event: ContinuousFlowEvent) => {
+    if (event.type === 'INPUTS_OBSERVED') return t(`observe input quantities A=${event.inputA}, B=${event.inputB}`, `观察输入量 A=${event.inputA}、B=${event.inputB}`);
+    if (event.type === 'ADDER_RELATION_APPLIED') return t(`adder relation: ${event.inputA} + ${event.inputB} = ${event.sum}`, `加法关系：${event.inputA} + ${event.inputB} = ${event.sum}`);
+    if (event.type === 'INTEGRATOR_EVENT') {
+      const inner = event.integratorEvent;
+      if (inner.type === 'INPUT_QUANTITY_OBSERVED') return t(`integrator observes rate ${inner.inputObserved}`, `积分器观察到输入率 ${inner.inputObserved}`);
+      if (inner.type === 'INDEPENDENT_QUANTITY_ADVANCED') return t(`inspection coordinate ${inner.independentBefore} → ${inner.independentAfter}`, `检查坐标 ${inner.independentBefore} → ${inner.independentAfter}`);
+      return t(`integrated quantity +${inner.contribution} → ${inner.integratedAfter}`, `积分量 +${inner.contribution} → ${inner.integratedAfter}`);
+    }
+    return t(`tracer exposes output ${event.integratedQuantity}`, `描迹输出呈现 ${event.integratedQuantity}`);
+  };
+  const log = continuousTrace.events.slice(0, continuousEventIndex).map((event) => `${String(event.sequence).padStart(2, '0')} · ${label(event)}`).join('\n') || t('No inspection event yet.', '还没有检查事件。');
   shell(
-    { en: 'What if a number is an angle, not a row of digits?', zh: '如果“数字”不是一排数码，而是一根轴的转角呢？' },
-    { en: 'A differential analyzer computes with continuously rotating shafts and mechanical integration.', zh: '微分分析机用连续转动的轴表示数值，并通过机械积分进行计算。' },
-    `${lesson({ en: 'Not all computers count discrete steps; some represent changing quantities continuously.', zh: '并非所有计算机都按离散步骤计数；有些机器用连续变化的物理量表示数字。' }, { en: 'Each click adds one small rectangle: input × time step.', zh: '每点一次，就累加一个小矩形：输入量 × 时间步长。' }, { en: 'Integration means accumulating many tiny contributions over time.', zh: '积分可以直观理解为：把许多微小贡献随时间不断累加。' })}<section><div class="integrator-layout"><div class="shaft"><span>↻</span><b>${t('input shaft', '输入轴')}</b><small>${t('speed/angle represents', '转速/角度表示')} ${integrator.input}</small></div><div class="integral-sign">∫</div><div class="shaft output"><span>${integrator.output.toFixed(2)}</span><b>${t('accumulated output', '累计输出')}</b><small>${t('after time', '经过时间')} ${integrator.time.toFixed(1)}</small></div></div><svg class="integral-chart" viewBox="0 0 340 120" role="img" aria-label="${t('Accumulation graph', '累积曲线图')}"><line x1="0" y1="110" x2="340" y2="110"/><line x1="0" y1="0" x2="0" y2="110"/><polyline points="${points}"/><text x="260" y="104">${t('time →', '时间 →')}</text></svg><div class="controls"><button id="integrate">+ ${t('Add one small time slice', '累加一个小时间片')}</button><button class="secondary" id="integrate-reset">${t('Start again', '重新开始')}</button></div><p class="plain">${t(`Current calculation: ${integrator.output.toFixed(2)} + ${integrator.input} × ${integrator.step} = ${(integrator.output + integrator.input * integrator.step).toFixed(2)}`, `当前计算：${integrator.output.toFixed(2)} + ${integrator.input} × ${integrator.step} = ${(integrator.output + integrator.input * integrator.step).toFixed(2)}`)}</p><p class="model-note">${t('Grade-D Euler teaching model. A real differential analyzer uses coupled mechanical integrators.', '这是 D 级 Euler 教学模型；真实微分分析机使用相互耦合的机械积分器。')}</p></section>`
+    { en: 'How can a continuously represented quantity be added, integrated, and traced?', zh: '连续表示的量怎样被相加、积分并描迹输出？' },
+    { en: 'Museum-documented component roles inform a tiny P/M chain; the stop-motion order is only for inspection.', zh: '博物馆记录的部件角色启发了一个微型 P/M 链；停格式顺序只用于检查。' },
+    `${lesson({ en: 'Follow two shaft quantities through addition, integration, and visible output.', zh: '跟随两个轴量经过相加、积分与可见输出。' }, { en: 'Step one inspection event, or complete one six-event teaching cycle.', zh: '每次推进一个检查事件，或完成一个六事件教学周期。' }, { en: 'Continuous physical coupling is not a sequence of historical browser clicks.', zh: '连续物理耦合并不是一串历史上的浏览器点击。' })}<section><div class="structure-callout">${t('H/E1 role anchors:', 'H/E1 角色锚点：')} ${t('Smithsonian records describe surviving input-table, adder/differential, integrator, and output-tracer components.', 'Smithsonian 记录描述了留存的输入台、加法/差动、积分器与输出描迹部件。')}<br>${t('M relation:', 'M 数学关系：')} c=a+b; Δy=c·Δx.<br>${t('P/M boundary:', 'P/M 边界：')} ${t('this exact wiring, values, interval, and serialized observation order.', '此处的确切连接、数值、间隔与序列化观察顺序。')}</div><div class="state-grid"><div><small>${t('input quantities A / B', '输入量 A / B')}</small><strong>${state.inputA} / ${state.inputB}</strong></div><div><small>${t('adder output / integrator input', '加法输出 / 积分器输入')}</small><strong>${state.adderOutput ?? '—'}</strong></div><div><small>${t('independent coordinate / interval', '独立坐标 / 检查间隔')}</small><strong>${state.integrator.independentQuantity} / ${state.integrator.inspectionInterval}</strong></div><div><small>${t('integrated quantity', '积分量')}</small><strong>${state.integrator.integratedQuantity}</strong><span>${t('samples: ', '样本数：')}${state.integrator.sampleCount}</span></div><div><small>${t('tracer output', '描迹输出')}</small><strong>${state.tracerOutput ?? '—'}</strong></div><div><small>${t('inspection phase', '检查阶段')}</small><strong>${state.phase}</strong></div></div><div class="controls"><button id="continuous-step" ${continuousEventIndex >= continuousTrace.events.length ? 'disabled' : ''}>${t('Step one event', '推进一个事件')}</button><button id="continuous-cycle" ${continuousEventIndex >= continuousTrace.events.length ? 'disabled' : ''}>${t('Complete cycle', '完成本周期')}</button><button class="secondary" id="continuous-reset">${t('Reset', '重置')}</button></div><p class="status">${t('Event', '事件')} ${continuousEventIndex} / ${continuousTrace.events.length}</p><details open><summary>${t('Ordered P/M inspection log', '有序 P/M 检查日志')}</summary><pre>${esc(log)}</pre></details><p class="model-note">${t('Open/unmodeled: disk-and-wheel geometry, torque amplifiers, shaft layout, backlash, scale factors, dimensions, and real timing. This is not a faithful Differential Analyzer simulation.', '开放/未建模：盘轮几何、扭矩放大器、轴布局、回差、比例因子、尺寸与真实时序。这不是“忠实的微分分析机模拟”。')}</p></section>`
   );
-  document.querySelector('#integrate')?.addEventListener('click', () => { integrator = integrate(integrator); continuous(); });
-  document.querySelector('#integrate-reset')?.addEventListener('click', () => { integrator = createIntegrator(1, 0.1); continuous(); });
+  document.querySelector('#continuous-step')?.addEventListener('click', () => { continuousEventIndex = Math.min(continuousEventIndex + 1, continuousTrace.events.length); continuous(); });
+  document.querySelector('#continuous-cycle')?.addEventListener('click', () => { continuousEventIndex = continuousTrace.events.length; continuous(); });
+  document.querySelector('#continuous-reset')?.addEventListener('click', () => { continuousTrace = createContinuousFlowTrace(); continuousEventIndex = 0; continuous(); });
+  if (!continuousKeyboardBound) { continuousKeyboardBound = true; window.addEventListener('keydown', (event) => { if (location.hash === '#/continuous' && event.key === 'ArrowRight' && continuousEventIndex < continuousTrace.events.length) { event.preventDefault(); continuousEventIndex += 1; continuous(); } }); }
 }
 
 function backprop() {

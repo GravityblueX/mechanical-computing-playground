@@ -206,6 +206,12 @@ machines/<name>/
 
 `#/controls` 展示一个不承担数值运算、却保护运算正确性的 P/M 机制：原位允许设定；开始曲柄周期时先锁住设定，再释放曲柄；运转中修改设定会被拒绝；完成后曲柄回到原位并重新开放设定。研究入口：[`research/control-and-interlocks.md`](research/control-and-interlocks.md)。
 
+### Continuous Mechanical Integration
+
+`#/continuous` 把两个输入量的加法关系、独立坐标推进、积分贡献与描迹输出做成可单步、可重放的 P/M 检查链。Smithsonian 组件记录只支持历史部件角色；本仓的连接、数值和停格式顺序不是 Bush Differential Analyzer 的几何或真实时序。研究入口：[`research/differential-analyzer.md`](research/differential-analyzer.md)。
+
+跨机器查看“数字和控制在哪里、由什么动作推进”：[`docs/REPRESENTATION_AND_PROTOCOL.md`](docs/REPRESENTATION_AND_PROTOCOL.md)。
+
 ### Key-Driven Computation
 
 新研究线：Comptometer 说明“输入”和“执行”不一定是两步。按键本身就可以是计算循环。详见 [`research/key-driven-computation.md`](research/key-driven-computation.md)。

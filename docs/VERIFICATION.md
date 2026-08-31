@@ -1,5 +1,24 @@
 # Verification record
 
+## 2026-09-01 — continuous mechanics provenance and replay
+
+The post-hardening-PR baseline was 96 tests across 11 files. This slice replaced the minimal Euler helper with a validated P/M independent/input/integrated-quantity model, ordered observation/coordinate/integration events, fail-closed action/event boundaries, and hardened replay. It added an explicit A+B→integrator→tracer teaching flow, a source/generation map for Differential Analyzer evidence, and the required six-family representation/protocol comparison.
+
+- `npm run typecheck` — pass
+- `npm test -- --run` — pass, 108 tests across 12 files
+- `npm run build` — pass
+- `git diff --check` — pass
+
+Local browser smoke against Vite:
+
+- `#/continuous` rendered in Chinese with no desktop horizontal overflow;
+- initial/reset state showed A=2, B=1, no adder or tracer output, coordinate/integral 0, and event 0/6;
+- stepping exposed input observation, explicit `2+1=3`, integrator observation, coordinate `0→0.5`, integral `0→1.5`, then tracer output `1.5`;
+- the ordered log and H/E1 vs M vs P/M vs open boundary remained readable without motion/color;
+- reset restored the initial empty derived state.
+
+No deployment check was performed for this not-yet-pushed commit; no claim that this upgraded route is already live is made.
+
 ## 2026-09-01 — Analytical Engine flow and Pages reconciliation
 
 Replaced the five-label static flow with a deterministic P/M `(ab+c)d` trace: given values enter named Store locations, two operands enter the Mill, validated operations produce `p=6`, `q=10`, and `result=50`, intermediate results return to Store, and output remains empty until the final output event. Replay validates sequence, role metadata, Store references/transfers, operand readiness, arithmetic, operation order and final state. The route now supports event stepping, reset, ArrowRight stepping, bilingual Store/Mill/card/output state, and an ordered text log.

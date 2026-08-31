@@ -22,5 +22,5 @@ An arrow means “influences” by default, not “these two physical parts are 
 5. **Controls and interlocks / 控制与互锁** — change a setting, begin a crank cycle, observe setting lockout, attempt an invalid change, and return home; the P/M lock state is not Odhner or Curta geometry.
 6. **Curta** — follow the human operation path while treating the cylinder drawing as an operational teaching model.
 7. **Analytical Engine / 分析机** — step a tested `(ab+c)d` teaching trace through Number/Directive/Operation roles, Store, Mill, intermediate `p/q`, and output; historical roles, Walker's later emulator choices, and the repository's P/M order are shown as separate layers.
-8. **Continuous integration / 连续积分** — accumulate small slices; do not infer a historical integrator's exact geometry.
+8. **Continuous integration / 连续积分** — step a P/M inspection chain from two input quantities through explicit addition, coordinate advance, integration, and tracer output; Smithsonian component roles are H/E1 anchors, while this wiring/order is not historical timing.
 9. **Hand-crank backprop / 手摇反向传播** — follow numerical influence; the shafts and gears are counterfactual teaching elements.

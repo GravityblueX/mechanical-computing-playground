@@ -12,9 +12,10 @@
 - [x] Write `research/simulator-matrix.md` for Difference Engine, Analytical Engine, Curta, stepped-drum/pinwheel calculators, and strong online reconstructions.
 - [x] Expand `research/curta-source-map.md` from a pointer list into model/revision + manual/patent/page-level provenance.
 - [x] Expand `research/analytical-engine-information-flow.md` with historical publication/drawing anchors, explicit Walker emulator provenance, and a tested P/M Store/Mill trace.
-- [ ] Strengthen `research/differential-analyzer.md` using Smithsonian / primary technical sources and decide whether the existing continuous-integrator abstraction adds enough explanatory value.
+- [x] Strengthen `research/differential-analyzer.md`, harden the continuous integrator/flow replay model, and add the evidence-aware workbench.
 - [x] Add a tested generic setting–crank interlock lesson and harden Curta provenance.
 - [x] Re-run typecheck/tests/build for the control/interlock code change and update `docs/VERIFICATION.md`.
+- [x] Add `docs/REPRESENTATION_AND_PROTOCOL.md` across the six currently supported machine/lesson families.
 
 ## Repository maintenance
 
