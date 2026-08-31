@@ -58,6 +58,12 @@ export interface DirectMultiplicationTrace {
   finalState: DirectMultiplierState;
 }
 
+const DIRECT_MULTIPLIER_EVENT_TYPES = new Set<string>([
+  'MULTIPLIER_DIGIT_SELECTED',
+  'OPERATION_CYCLE',
+  'CARRIAGE_SHIFTED',
+]);
+
 function assertNonNegativeInteger(value: number, name: string): void {
   if (!Number.isSafeInteger(value) || value < 0) {
     throw new Error(`${name} must be a non-negative safe integer`);
@@ -251,6 +257,9 @@ export function reduceDirectMultiplierEvent(
 ): DirectMultiplierState {
   assertState(state);
   assertNonNegativeInteger(event.sequence, 'event sequence');
+  if (!DIRECT_MULTIPLIER_EVENT_TYPES.has(event.type)) {
+    throw new Error('unsupported direct multiplication event type');
+  }
   if (event.type === 'MULTIPLIER_DIGIT_SELECTED') {
     assertDigit(event.digit);
     assertDigit(event.tableEntryDigit);

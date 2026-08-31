@@ -76,6 +76,12 @@ describe('direct multiplication functional model', () => {
     expect(() => replayDirectMultiplication(trace)).toThrow(/recorded final state/);
   });
 
+  it('rejects an unknown serialized event type instead of treating it as a carriage shift', () => {
+    const trace = structuredClone(traceDirectMultiplication(314, 27));
+    (trace.events[2] as { type: string }).type = 'UNKNOWN';
+    expect(() => replayDirectMultiplication(trace)).toThrow(/unsupported direct multiplication event type/);
+  });
+
   it('rejects unsafe table selection before an invalid number enters state', () => {
     expect(() => createEncodedMultipleTable(Number.MAX_SAFE_INTEGER)).toThrow(/safe integer range/);
     expect(() => traceDirectMultiplication(Number.MAX_SAFE_INTEGER, 2)).toThrow(/safe integer range/);
