@@ -1,0 +1,46 @@
+.mechanism-lanes {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.mechanism-lanes > :last-child {
+  border-color: #6f9c5c;
+  border-top: 4px solid var(--green);
+}
+
+.direct-workbench {
+  margin-top: 22px;
+  padding: 20px;
+  border: 1px solid #6f9c5c;
+  border-radius: 12px;
+  background: #17130f;
+}
+
+.direct-workbench h3 {
+  color: var(--green);
+}
+
+.direct-workbench .state-grid > div {
+  border: 1px solid #4f6f45;
+}
+
+.direct-workbench button:disabled {
+  cursor: not-allowed;
+  filter: grayscale(0.8);
+  opacity: 0.55;
+}
+
+@media (max-width: 800px) {
+  .mechanism-lanes {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .mechanism-lanes {
+    grid-template-columns: 1fr;
+  }
+
+  .direct-workbench {
+    padding: 14px;
+  }
+}

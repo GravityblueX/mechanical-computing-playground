@@ -70,6 +70,68 @@ function assertDigit(digit: number): void {
   }
 }
 
+function checkedIncrement(value: number, name: string): number {
+  assertNonNegativeInteger(value, name);
+  if (value === Number.MAX_SAFE_INTEGER) {
+    throw new Error(`${name} exceeds safe integer range`);
+  }
+  return value + 1;
+}
+
+function checkedSum(left: number, right: number, name: string): number {
+  const sum = left + right;
+  if (!Number.isSafeInteger(sum)) throw new Error(`${name} exceeds safe integer range`);
+  return sum;
+}
+
+function placeFactor(offset: number): number {
+  assertNonNegativeInteger(offset, 'carriage offset');
+  const factor = 10 ** offset;
+  if (!Number.isSafeInteger(factor)) throw new Error('carriage place factor exceeds safe integer range');
+  return factor;
+}
+
+function assertState(state: Readonly<DirectMultiplierState>): void {
+  assertNonNegativeInteger(state.multiplicand, 'multiplicand');
+  assertEncodedMultipleTable(state.encodedMultipleTable);
+  if (state.encodedMultipleTable.multiplicand !== state.multiplicand) {
+    throw new Error('encoded multiple table does not match the multiplicand');
+  }
+  assertNonNegativeInteger(state.carriageOffset, 'carriage offset');
+  assertNonNegativeInteger(state.selectedMultiple, 'selected multiple');
+  assertNonNegativeInteger(state.accumulator, 'accumulator');
+  assertNonNegativeInteger(state.operationCycleCount, 'operation cycle count');
+  assertNonNegativeInteger(state.humanOperationCount, 'human operation count');
+  assertNonNegativeInteger(state.shiftCount, 'shift count');
+  if (state.selectedMultiplierDigit === null) {
+    if (state.selectedMultiple !== 0) throw new Error('an unset multiplier digit cannot have a selected multiple');
+    return;
+  }
+  assertDigit(state.selectedMultiplierDigit);
+  if (state.selectedMultiple !== selectEncodedMultiple(state.encodedMultipleTable, state.selectedMultiplierDigit)) {
+    throw new Error('selected multiple does not match the multiplier digit');
+  }
+}
+
+function statesMatch(
+  left: Readonly<DirectMultiplierState>,
+  right: Readonly<DirectMultiplierState>,
+): boolean {
+  return left.multiplicand === right.multiplicand
+    && left.selectedMultiplierDigit === right.selectedMultiplierDigit
+    && left.carriageOffset === right.carriageOffset
+    && left.selectedMultiple === right.selectedMultiple
+    && left.accumulator === right.accumulator
+    && left.operationCycleCount === right.operationCycleCount
+    && left.humanOperationCount === right.humanOperationCount
+    && left.shiftCount === right.shiftCount
+    && left.encodedMultipleTable.multiplicand === right.encodedMultipleTable.multiplicand
+    && left.encodedMultipleTable.entries.length === right.encodedMultipleTable.entries.length
+    && left.encodedMultipleTable.entries.every(
+      (entry, index) => entry === right.encodedMultipleTable.entries[index],
+    );
+}
+
 /** P/M control representation: inspectable arithmetic entries, not historical geometry. */
 export function createEncodedMultipleTable(multiplicand: number): EncodedMultipleTable {
   assertNonNegativeInteger(multiplicand, 'multiplicand');
@@ -80,11 +142,22 @@ export function createEncodedMultipleTable(multiplicand: number): EncodedMultipl
   return Object.freeze({ multiplicand, entries });
 }
 
-export function selectEncodedMultiple(table: Readonly<EncodedMultipleTable>, digit: number): number {
-  assertDigit(digit);
-  if (table.multiplicand < 0 || table.entries.length !== 10 || table.entries[digit] === undefined) {
+function assertEncodedMultipleTable(table: Readonly<EncodedMultipleTable>): void {
+  assertNonNegativeInteger(table.multiplicand, 'encoded table multiplicand');
+  if (!Array.isArray(table.entries) || table.entries.length !== 10) {
     throw new Error('encoded multiple table must contain digits 0..9');
   }
+  for (let digit = 0; digit <= 9; digit += 1) {
+    const expected = table.multiplicand * digit;
+    if (!Number.isSafeInteger(expected) || table.entries[digit] !== expected) {
+      throw new Error('encoded multiple table contains an invalid entry');
+    }
+  }
+}
+
+export function selectEncodedMultiple(table: Readonly<EncodedMultipleTable>, digit: number): number {
+  assertDigit(digit);
+  assertEncodedMultipleTable(table);
   return table.entries[digit];
 }
 
@@ -108,6 +181,8 @@ export function selectMultiplierDigit(
   digit: number,
   sequence = 0,
 ): { state: DirectMultiplierState; event: DirectMultiplierEvent } {
+  assertState(state);
+  assertNonNegativeInteger(sequence, 'event sequence');
   const selectedMultiple = selectEncodedMultiple(state.encodedMultipleTable, digit);
   const event: DirectMultiplierEvent = {
     type: 'MULTIPLIER_DIGIT_SELECTED',
@@ -117,7 +192,7 @@ export function selectMultiplierDigit(
     tableEntryDigit: digit,
     selectedMultiple,
     humanOperationBefore: state.humanOperationCount,
-    humanOperationAfter: state.humanOperationCount + 1,
+    humanOperationAfter: checkedIncrement(state.humanOperationCount, 'human operation count'),
   };
   return { state: reduceDirectMultiplierEvent(state, event), event };
 }
@@ -126,11 +201,14 @@ export function runOperationCycle(
   state: Readonly<DirectMultiplierState>,
   sequence = 0,
 ): { state: DirectMultiplierState; event: DirectMultiplierEvent } {
+  assertState(state);
+  assertNonNegativeInteger(sequence, 'event sequence');
   if (state.selectedMultiplierDigit === null) throw new Error('select a multiplier digit before an operation cycle');
-  const contribution = state.selectedMultiple * 10 ** state.carriageOffset;
-  if (!Number.isSafeInteger(contribution) || !Number.isSafeInteger(state.accumulator + contribution)) {
+  const contribution = state.selectedMultiple * placeFactor(state.carriageOffset);
+  if (!Number.isSafeInteger(contribution)) {
     throw new Error('direct multiplication exceeds safe integer range');
   }
+  const accumulatorAfter = checkedSum(state.accumulator, contribution, 'direct multiplication');
   const event: DirectMultiplierEvent = {
     type: 'OPERATION_CYCLE',
     sequence,
@@ -139,11 +217,11 @@ export function runOperationCycle(
     selectedMultiple: state.selectedMultiple,
     contribution,
     accumulatorBefore: state.accumulator,
-    accumulatorAfter: state.accumulator + contribution,
+    accumulatorAfter,
     operationCycleBefore: state.operationCycleCount,
-    operationCycleAfter: state.operationCycleCount + 1,
+    operationCycleAfter: checkedIncrement(state.operationCycleCount, 'operation cycle count'),
     humanOperationBefore: state.humanOperationCount,
-    humanOperationAfter: state.humanOperationCount + 1,
+    humanOperationAfter: checkedIncrement(state.humanOperationCount, 'human operation count'),
   };
   return { state: reduceDirectMultiplierEvent(state, event), event };
 }
@@ -152,15 +230,17 @@ export function shiftDirectMultiplierCarriage(
   state: Readonly<DirectMultiplierState>,
   sequence = 0,
 ): { state: DirectMultiplierState; event: DirectMultiplierEvent } {
+  assertState(state);
+  assertNonNegativeInteger(sequence, 'event sequence');
   const event: DirectMultiplierEvent = {
     type: 'CARRIAGE_SHIFTED',
     sequence,
     offsetBefore: state.carriageOffset,
-    offsetAfter: state.carriageOffset + 1,
+    offsetAfter: checkedIncrement(state.carriageOffset, 'carriage offset'),
     humanOperationBefore: state.humanOperationCount,
-    humanOperationAfter: state.humanOperationCount + 1,
+    humanOperationAfter: checkedIncrement(state.humanOperationCount, 'human operation count'),
     shiftCountBefore: state.shiftCount,
-    shiftCountAfter: state.shiftCount + 1,
+    shiftCountAfter: checkedIncrement(state.shiftCount, 'shift count'),
   };
   return { state: reduceDirectMultiplierEvent(state, event), event };
 }
@@ -169,12 +249,18 @@ export function reduceDirectMultiplierEvent(
   state: Readonly<DirectMultiplierState>,
   event: Readonly<DirectMultiplierEvent>,
 ): DirectMultiplierState {
+  assertState(state);
+  assertNonNegativeInteger(event.sequence, 'event sequence');
   if (event.type === 'MULTIPLIER_DIGIT_SELECTED') {
+    assertDigit(event.digit);
+    assertDigit(event.tableEntryDigit);
+    const expectedMultiple = selectEncodedMultiple(state.encodedMultipleTable, event.digit);
     if (
       state.multiplicand !== event.multiplicand
       || event.tableEntryDigit !== event.digit
-      || state.encodedMultipleTable.entries[event.tableEntryDigit] !== event.selectedMultiple
+      || event.selectedMultiple !== expectedMultiple
       || state.humanOperationCount !== event.humanOperationBefore
+      || event.humanOperationAfter !== checkedIncrement(event.humanOperationBefore, 'human operation count')
     ) {
       throw new Error('digit-selection event precondition failed');
     }
@@ -186,6 +272,9 @@ export function reduceDirectMultiplierEvent(
     };
   }
   if (event.type === 'OPERATION_CYCLE') {
+    assertDigit(event.digit);
+    const expectedContribution = event.selectedMultiple * placeFactor(event.carriageOffset);
+    if (!Number.isSafeInteger(expectedContribution)) throw new Error('operation-cycle event exceeds safe integer range');
     if (
       state.selectedMultiplierDigit !== event.digit
       || state.selectedMultiple !== event.selectedMultiple
@@ -193,6 +282,10 @@ export function reduceDirectMultiplierEvent(
       || state.accumulator !== event.accumulatorBefore
       || state.operationCycleCount !== event.operationCycleBefore
       || state.humanOperationCount !== event.humanOperationBefore
+      || event.contribution !== expectedContribution
+      || event.accumulatorAfter !== checkedSum(event.accumulatorBefore, event.contribution, 'accumulator')
+      || event.operationCycleAfter !== checkedIncrement(event.operationCycleBefore, 'operation cycle count')
+      || event.humanOperationAfter !== checkedIncrement(event.humanOperationBefore, 'human operation count')
     ) throw new Error('operation-cycle event precondition failed');
     return {
       ...state,
@@ -205,6 +298,9 @@ export function reduceDirectMultiplierEvent(
     state.carriageOffset !== event.offsetBefore
     || state.humanOperationCount !== event.humanOperationBefore
     || state.shiftCount !== event.shiftCountBefore
+    || event.offsetAfter !== checkedIncrement(event.offsetBefore, 'carriage offset')
+    || event.humanOperationAfter !== checkedIncrement(event.humanOperationBefore, 'human operation count')
+    || event.shiftCountAfter !== checkedIncrement(event.shiftCountBefore, 'shift count')
   ) throw new Error('carriage-shift event precondition failed');
   return {
     ...state,
@@ -215,10 +311,18 @@ export function reduceDirectMultiplierEvent(
 }
 
 export function replayDirectMultiplication(trace: Readonly<DirectMultiplicationTrace>): DirectMultiplierState {
-  return trace.events.reduce<DirectMultiplierState>(
-    (state, event) => reduceDirectMultiplierEvent(state, event),
+  const replayed = trace.events.reduce<DirectMultiplierState>(
+    (state, event, index) => {
+      if (event.sequence !== index) throw new Error('direct multiplication event sequence is not contiguous');
+      return reduceDirectMultiplierEvent(state, event);
+    },
     structuredClone(trace.initialState),
   );
+  assertState(trace.finalState);
+  if (!statesMatch(replayed, trace.finalState)) {
+    throw new Error('direct multiplication replay did not produce the recorded final state');
+  }
+  return replayed;
 }
 
 export function traceDirectMultiplication(multiplicand: number, multiplier: number): DirectMultiplicationTrace {

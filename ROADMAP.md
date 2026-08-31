@@ -83,7 +83,7 @@ The UI must show functional equivalence without implying geometric identity.
 
 # Track R2 — Multiplication architectures
 
-**Status: stepped-drum / pinwheel conceptual models exist; direct multiplication is missing.**
+**Status: stepped-drum / pinwheel conceptual models and a replayable direct-multiplication functional model exist; source-specific Millionaire geometry remains deliberately unmodeled.**
 
 The strongest future comparison is not merely “two kinds of variable teeth.” It is **where multiplication repetition lives**.
 

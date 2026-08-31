@@ -4,6 +4,7 @@ import {
   createEncodedMultipleTable,
   replayDirectMultiplication,
   runOperationCycle,
+  selectEncodedMultiple,
   selectMultiplierDigit,
   shiftDirectMultiplierCarriage,
   traceDirectMultiplication,
@@ -17,6 +18,7 @@ describe('direct multiplication functional model', () => {
     expect(table.entries).toEqual([0, 314, 628, 942, 1256, 1570, 1884, 2198, 2512, 2826]);
     expect(state.encodedMultipleTable).toEqual(table);
     expect(Object.isFrozen(state.encodedMultipleTable.entries)).toBe(true);
+    expect(selectEncodedMultiple(table, 7)).toBe(2198);
     const selected = selectMultiplierDigit(state, 7);
     expect(selected.event).toMatchObject({ tableEntryDigit: 7, selectedMultiple: state.encodedMultipleTable.entries[7] });
   });
@@ -66,6 +68,51 @@ describe('direct multiplication functional model', () => {
     const trace = traceDirectMultiplication(314, 27);
     expect(traceDirectMultiplication(314, 27)).toEqual(trace);
     expect(replayDirectMultiplication(trace)).toEqual(trace.finalState);
+  });
+
+  it('rejects a recorded final state that does not match replayed events', () => {
+    const trace = structuredClone(traceDirectMultiplication(314, 27));
+    trace.finalState.accumulator += 1;
+    expect(() => replayDirectMultiplication(trace)).toThrow(/recorded final state/);
+  });
+
+  it('rejects unsafe table selection before an invalid number enters state', () => {
+    expect(() => createEncodedMultipleTable(Number.MAX_SAFE_INTEGER)).toThrow(/safe integer range/);
+    expect(() => traceDirectMultiplication(Number.MAX_SAFE_INTEGER, 2)).toThrow(/safe integer range/);
+  });
+
+  it('rejects tampered derived values and non-contiguous replay events', () => {
+    const selected = structuredClone(traceDirectMultiplication(314, 27));
+    const selectedEvent = selected.events.find((event) => event.type === 'MULTIPLIER_DIGIT_SELECTED');
+    if (!selectedEvent || selectedEvent.type !== 'MULTIPLIER_DIGIT_SELECTED') throw new Error('missing selection event');
+    selectedEvent.selectedMultiple += 1;
+    expect(() => replayDirectMultiplication(selected)).toThrow(/digit-selection event/);
+
+    const wrongTableEntry = structuredClone(traceDirectMultiplication(314, 27));
+    const tableEvent = wrongTableEntry.events.find((event) => event.type === 'MULTIPLIER_DIGIT_SELECTED');
+    if (!tableEvent || tableEvent.type !== 'MULTIPLIER_DIGIT_SELECTED') throw new Error('missing selection event');
+    tableEvent.tableEntryDigit = 6;
+    expect(() => replayDirectMultiplication(wrongTableEntry)).toThrow(/digit-selection event/);
+
+    const corruptedTable = structuredClone(traceDirectMultiplication(314, 27));
+    (corruptedTable.initialState.encodedMultipleTable.entries as number[])[7] += 1;
+    expect(() => replayDirectMultiplication(corruptedTable)).toThrow(/invalid entry/);
+
+    const operated = structuredClone(traceDirectMultiplication(314, 27));
+    const operationEvent = operated.events.find((event) => event.type === 'OPERATION_CYCLE');
+    if (!operationEvent || operationEvent.type !== 'OPERATION_CYCLE') throw new Error('missing operation event');
+    operationEvent.accumulatorAfter += 1;
+    expect(() => replayDirectMultiplication(operated)).toThrow(/operation-cycle event/);
+
+    const shifted = structuredClone(traceDirectMultiplication(314, 27));
+    const shiftEvent = shifted.events.find((event) => event.type === 'CARRIAGE_SHIFTED');
+    if (!shiftEvent || shiftEvent.type !== 'CARRIAGE_SHIFTED') throw new Error('missing carriage event');
+    shiftEvent.offsetAfter += 1;
+    expect(() => replayDirectMultiplication(shifted)).toThrow(/carriage-shift event/);
+
+    const reordered = structuredClone(traceDirectMultiplication(314, 27));
+    reordered.events[1].sequence = 7;
+    expect(() => replayDirectMultiplication(reordered)).toThrow(/sequence is not contiguous/);
   });
 
   it('connects a fourth path to the multiplication comparison', () => {
