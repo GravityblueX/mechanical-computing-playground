@@ -2,6 +2,7 @@ import { createCrankTrace, digitsToString, createDecimalRegister, reduceDecimalR
 import { squarePreset, cubicPreset, transitionDifference, type DifferenceState } from './mechanisms/difference-column';
 import { compare314x27 } from './exhibits/multiplication-compare';
 import { createKeyDrivenAccumulator, createKeyStrokeTrace } from './mechanisms/key-driven-accumulator';
+import { reduceDirectMultiplierEvent, type DirectMultiplierEvent } from './mechanisms/direct-multiplier';
 import { sampleFlow } from './exhibits/analytical-engine-flow';
 import { createIntegrator, integrate, type IntegratorState } from './mechanisms/continuous-integrator';
 import { evaluate, type StageAState } from './backprop/core/stage-a';
@@ -9,6 +10,7 @@ import { createPhaseMachine, runPhaseCycle, stepPhase, STAGE_A_PHASES, type Phas
 import { mapStageA } from './backprop/mechanical-mapping';
 import { evidenceBadge, evidencePanel } from './ui/evidence';
 import './style.css';
+import './direct-multiplier.css';
 
 type Locale = 'en' | 'zh';
 type Copy = { en: string; zh: string };
@@ -23,6 +25,7 @@ let carryIndex = 0;
 let diff: DifferenceState = squarePreset();
 let diffPreset = 'n²';
 let diffEvents: string[] = [];
+let directEventIndex = 0;
 let integrator: IntegratorState = createIntegrator(1, 0.1);
 let back: StageAState = evaluate({ x1: 2, x2: 3, w1: 0, w2: 0, target: 10, learningRate: 0.01 });
 let phaseMachine: PhaseMachineState = createPhaseMachine(back);
@@ -110,11 +113,61 @@ function finiteDifference() {
 
 function multiplication() {
   const result = compare314x27();
+  const directTrace = result.directMultiplication.trace;
+  const directEvents = directTrace.events;
+  const directCycleBoundaries = directEvents
+    .map((event, index) => event.type === 'OPERATION_CYCLE' ? index + 1 : null)
+    .filter((boundary): boundary is number => boundary !== null);
+  directEventIndex = Math.min(directEventIndex, directEvents.length);
+  const directState = directEvents
+    .slice(0, directEventIndex)
+    .reduce(reduceDirectMultiplierEvent, directTrace.initialState);
+  const directEventText = (event: DirectMultiplierEvent): string => {
+    if (event.type === 'MULTIPLIER_DIGIT_SELECTED') {
+      return t(
+        'Select digit ' + event.digit + ': encoded multiple ' + event.multiplicand + ' × ' + event.digit + ' = ' + event.selectedMultiple,
+        '选择乘数位 ' + event.digit + '：编码倍数 ' + event.multiplicand + ' × ' + event.digit + ' = ' + event.selectedMultiple,
+      );
+    }
+    if (event.type === 'CARRIAGE_SHIFTED') {
+      return t(
+        'Shift the carriage from ×' + 10 ** event.offsetBefore + ' to ×' + 10 ** event.offsetAfter,
+        '把位架从 ×' + 10 ** event.offsetBefore + ' 移到 ×' + 10 ** event.offsetAfter,
+      );
+    }
+    return t(
+      'Transfer ' + event.contribution + ': accumulator ' + event.accumulatorBefore + ' → ' + event.accumulatorAfter,
+      '传入 ' + event.contribution + '：累加器 ' + event.accumulatorBefore + ' → ' + event.accumulatorAfter,
+    );
+  };
+  const directLog = directEvents
+    .slice(0, directEventIndex)
+    .map((event) => String(event.sequence + 1).padStart(2, '0') + ' · ' + directEventText(event))
+    .join('\n') || t('No mechanism event yet.', '机构还没有动作。');
   shell(
     { en: 'What does “× 27” mean to a machine?', zh: '对一台机械来说，“× 27”到底意味着什么？' },
     { en: 'Multiplication becomes additions, crank turns, and a shift to the tens place.', zh: '乘法会被拆成加法、曲柄转动，以及向十位的移位。' },
     `${evidencePanel(locale)}${scene('🧾', { en: 'A warehouse receives a bulk order', zh: '仓库收到一张批量订单' }, { en: 'There are 27 cartons with 314 screws in each. Your phone says 8,478 immediately.', zh: '一共 27 箱，每箱 314 颗螺丝。手机立刻给出 8,478。' }, { en: 'A clerk uses a hand-cranked calculator', zh: '过去的职员使用手摇计算机' }, { en: 'The clerk cannot press ×. They perform 7 turns in the ones place, shift the carriage, then 2 turns in the tens place.', zh: '职员没有乘号可按：先在个位转 7 次，移动位架，再在十位转 2 次。' })}${lesson({ en: 'Check the warehouse total: 27 cartons × 314 screws.', zh: '核对订单总数：27 箱 × 每箱 314 颗。' }, { en: 'First read only the line “27 = 7×1 + 2×10”.', zh: '先只看“27 = 7×1 + 2×10”这一行。' }, { en: 'A multi-digit multiplication is two smaller jobs: handle 7 ones, then handle 2 tens after shifting place value.', zh: '多位数乘法其实是两个小任务：先处理 7 个一，再移位处理 2 个十。' })}<section><div class="structure-callout">${evidenceBadge('TEACHING', locale)} ${t('These lanes compare operation recipes. They are not cross-sections of stepped drums or pinwheels.', '这些轨道比较的是操作步骤，不是阶梯鼓轮或拨轮的内部剖面。')}</div><div class="equation"><span>314 × 27</span><strong>= ${result.value}</strong></div><div class="place-decomposition"><div>27</div><span>=</span><b>7 × 1</b><span>+</span><b>2 × 10</b></div><div class="mechanism-lanes"><div><h3>${t('Repeated addition', '重复加法')}</h3><div class="motion">${Array.from({ length: 7 }, () => '<i>+</i>').join('')}<em>… ×27</em></div><p>${t('Add 314 twenty-seven times.', '把 314 连加 27 次。')}</p></div><div><h3>${t('Stepped drum', '阶梯鼓轮')}</h3><div class="drum" aria-label="stepped drum">▂▄▆█ <b>↻</b></div><p>${t('A selected depth exposes a chosen number of steps.', '用选择的深度决定有多少级台阶参与啮合。')}</p></div><div><h3>${t('Pinwheel', '拨轮')}</h3><div class="pinwheel" aria-label="pinwheel">${Array.from({ length: 10 }, (_, i) => `<i class="${i < 7 ? 'on' : ''}">•</i>`).join('')}</div><p>${t('Expose 7 pins, then shift the carriage for 2 tens.', '先露出 7 根销齿，再移动位架处理 2 个十。')}</p></div><div><h3>${t('Direct multiplication', '直接乘法')}</h3><div class="motion"><b>7 → 2198</b><em>1 cycle</em></div><p>${t('Select the pre-encoded 7× multiple in one cycle; shift, then select 2× in one cycle.', '一个周期选择预编码的 7 倍数；移位后，再用一个周期选择 2 倍数。')}</p></div></div><div class="shift-demo"><span>314 × 7 = 2198</span><b>+</b><span class="shifted">314 × 2 × <mark>10</mark> = 6280</span><b>= 8478</b></div><p class="model-note">${t(`Direct path: ${result.directMultiplication.operationCycles} selection/operation cycles, ${result.directMultiplication.carriageShifts} carriage shift. The multiplier digit selects a multiple in the machine/control model instead of asking the operator for 27 repeated additions. Claim P: Steiger/Millionaire-informed functional model, not historical geometry.`, `直接乘法路径：${result.directMultiplication.operationCycles} 个选择/运算周期，${result.directMultiplication.carriageShifts} 次位架移位。乘数位在机器/控制模型中选择相应倍数，而不是让操作者重复加 27 次。声明类型 P：受 Steiger/Millionaire 研究启发的功能模型，不是历史几何复原。`)}</p><details><summary>${t('Direct-multiplication state/events', '直接乘法状态/事件')}</summary><pre>${result.directMultiplication.trace.events.map((event) => JSON.stringify(event)).join('\n')}</pre></details></section>`
   );
+
+  const rawEventDetails = document.querySelector('section details:last-of-type');
+  const workbench = document.createElement('div');
+  workbench.className = 'direct-workbench';
+  workbench.innerHTML = `<h3>${t('Step through the direct-multiplication path', '单步观察直接乘法路径')}</h3><div class='state-grid'><div><small>${t('multiplier selector', '乘数选择器')}</small><strong>${directState.selectedMultiplierDigit ?? '—'}</strong><span>${t('one selection per decimal digit', '每个十进制位选择一次')}</span></div><div><small>${t('selected table multiple', '乘法表选出的倍数')}</small><strong>${directState.selectedMultiplierDigit === null ? '—' : directState.selectedMultiple}</strong><span>${directState.selectedMultiplierDigit === null ? '314 × —' : '314 × ' + directState.selectedMultiplierDigit}</span></div><div><small>${t('carriage place', '位架数位')}</small><strong>×${10 ** directState.carriageOffset}</strong><span>${t('place value remains an explicit operation', '位值移位仍是显式操作')}</span></div><div><small>${t('accumulator', '累加器')}</small><strong>${directState.accumulator}</strong><span>${t('target: 8478', '目标：8478')}</span></div><div><small>${t('completed cycles', '已完成周期')}</small><strong>${directState.operationCycleCount} / ${result.directMultiplication.operationCycles}</strong><span>${t('human actions: ', '人工动作：')}${directState.humanOperationCount}</span></div></div><div class='controls'><button id='direct-step' ${directEventIndex >= directEvents.length ? 'disabled' : ''}>${t('Do one mechanism event', '执行一个机构动作')}</button><button id='direct-cycle' ${directEventIndex >= directEvents.length ? 'disabled' : ''}>${t('Complete one operating cycle', '完成一个操作周期')}</button><button class='secondary' id='direct-reset'>${t('Start again', '重新开始')}</button></div><div class='progress'><i style='width:${directEvents.length === 0 ? 100 : directEventIndex / directEvents.length * 100}%'></i></div><p class='status' aria-live='polite'>${t('Mechanism event', '机构动作')} ${directEventIndex} / ${directEvents.length}</p><details open><summary>${t('Replayable mechanism event log', '可重放的机构动作记录')}</summary><pre>${esc(directLog)}</pre></details>`;
+  rawEventDetails?.replaceWith(workbench);
+
+  document.querySelector('#direct-step')?.addEventListener('click', () => {
+    directEventIndex = Math.min(directEventIndex + 1, directEvents.length);
+    multiplication();
+  });
+  document.querySelector('#direct-cycle')?.addEventListener('click', () => {
+    directEventIndex = directCycleBoundaries.find((boundary) => boundary > directEventIndex) ?? directEvents.length;
+    multiplication();
+  });
+  document.querySelector('#direct-reset')?.addEventListener('click', () => {
+    directEventIndex = 0;
+    multiplication();
+  });
 }
 
 function curta() {

@@ -9,14 +9,23 @@ The direct-multiplier now stores an inspectable immutable table for digits `0..9
 - `npm run build` — pass
 - `git diff --check` — pass
 
-## 2026-09-01 — direct multiplication functional model
+## 2026-09-01 — direct multiplication functional model (rebased integration)
 
-The direct-multiplication slice added deterministic digit-selection, operation-cycle, carriage-shift, accumulator, and replay events; connected a fourth path to the `314 × 27` comparison; and added focused tests.
+After integration with the encoded-table and key-driven-accumulator work, the direct-multiplication slice provides deterministic digit-selection, operation-cycle, carriage-shift, accumulator, and replay events; a fourth path in the `314 × 27` comparison; full table/derived-value/order validation for replay; and an event/cycle-steppable bilingual workbench.
 
 - `npm run typecheck` — pass
-- `npm test -- --run` — pass, 40 tests
+- `npm test` — pass, 54 tests across 8 files
 - `npm run build` — pass
 - `git diff --check` — pass
+
+Browser smoke checks against the local Vite server and headless Chrome 151:
+
+- desktop `1280 × 900` and mobile `390 × 844` layouts have no horizontal document overflow;
+- single-event stepping exposes selector `7` and selected multiple `2198` without changing the accumulator;
+- completing cycle one reaches accumulator `2198` at event `2 / 5`;
+- completing cycle two reaches accumulator `8478` at event `5 / 5` and disables further step/cycle controls;
+- English/Chinese switching preserves replay state; reset restores event `0 / 5` and accumulator `0`;
+- no page/runtime JavaScript errors were observed (the existing absent favicon request is ignored).
 
 The implementation is explicitly a claim-type P functional model informed by Steiger/Millionaire research. It does not claim source-specific cams, gears, control-plate geometry, timing, or dimensions.
 

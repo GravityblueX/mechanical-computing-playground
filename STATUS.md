@@ -13,9 +13,9 @@ This file is the **current-state authority** for the repository. `ROADMAP.md` de
 - GitHub Actions CI and a Pages deployment workflow.
 - Deterministic state/event/replay primitives under `src/core/`.
 - Golden carry fixtures under `fixtures/carry/`.
-- The last recorded local verification (`docs/VERIFICATION.md`, 2026-08-29 UTC+8) reports typecheck, 32 tests, build, and `git diff --check` passing.
+- The latest local verification (`docs/VERIFICATION.md`, 2026-09-01 UTC+8) reports typecheck, 54 tests across 8 files, production build, diff check, and desktop/mobile browser interaction smoke checks passing.
 
-Changes since that verification checkpoint have been license/documentation/research-only. This status file does **not** substitute for running a fresh build after the next code change.
+Remote CI for the current pull-request head still needs to complete; this status file does **not** substitute for checking that result.
 
 ### Mechanism models already present
 
@@ -39,7 +39,7 @@ The current browser shell contains non-empty routes or views for:
 
 - visible carry;
 - finite differences;
-- multiplication comparison;
+- interactive multiplication comparison with event/cycle stepping for direct multiplication;
 - Curta;
 - Analytical Engine information flow;
 - continuous mechanical integration;

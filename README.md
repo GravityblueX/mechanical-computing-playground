@@ -72,7 +72,7 @@ Babbage Difference Engine、Analytical Engine、Curta 等已经存在不少模�
 - finite differences（有限差分）列联动；
 - continuous integrator（连续积分）最小模型；
 - key-driven accumulation（按键即运算）研究线；
-- direct multiplication（直接乘法）研究线；
+- direct multiplication（直接乘法）功能状态模型与可重放交互展项；
 - punched/program cards 与离散控制的后续研究空间。
 
 这些机制可以组合成机器，也可以脱离整机单独比较。
@@ -192,9 +192,7 @@ machines/<name>/
 
 ### Multiplication Compare
 
-仓库已有 repeated addition / stepped drum / pinwheel 的概念比较。
-
-下一步必须加入 **direct multiplication**：Otto Steiger / Millionaire 提供了一个更强的架构对比——乘法表的一部分不再由操作者通过重复曲柄提供，而被编码进机器控制机构。详见 [`research/multiplication-mechanisms.md`](research/multiplication-mechanisms.md)。
+仓库已有 repeated addition / stepped drum / pinwheel / direct multiplication 四路比较。直接乘法分支把 Otto Steiger / Millionaire 所代表的架构差异变成可单步、可重放的功能模型：乘法表的一部分不再由操作者通过重复曲柄提供，而由机器的选择机构承载。模型刻意不宣称复原 Millionaire 控制板的具体几何。详见 [`research/multiplication-mechanisms.md`](research/multiplication-mechanisms.md)。
 
 ### Key-Driven Computation
 

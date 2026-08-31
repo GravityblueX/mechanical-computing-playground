@@ -169,9 +169,9 @@ Some of the multiplication table has moved from **operator procedure** into **ma
 
 That is exactly the kind of “where does the algorithm live?” question this repository is built to expose.
 
-## 6. Recommended four-way exhibit
+## 6. Four-way exhibit
 
-Keep the current comparison, but make the conceptual axes explicit:
+The browser comparison now makes the conceptual axes explicit:
 
 ```text
 314 × 27
@@ -193,7 +193,7 @@ Purpose: show the same digit encoded by a variable number of effective pins.
 
 Purpose: show a multiplier digit selecting a pre-encoded multiple rather than determining the number of repeated operating cranks.
 
-The D track should initially be a functional model, not a geometric Millionaire reconstruction.
+The D track is implemented as a functional model, not a geometric Millionaire reconstruction.
 
 ## 7. Comparison dimensions
 
@@ -226,15 +226,13 @@ The current repository does not yet justify claims about:
 
 Those require model-specific primary sources and, for performance claims, engineering evidence.
 
-## 9. Next implementation/research slice
+## 9. Implementation status
 
-Before adding new animation:
+As of 2026-09-01, `src/mechanisms/direct-multiplier/` implements a bounded functional model with explicit digit selection, operation cycles, carriage shifts, accumulator state, human-operation counts, and deterministic replay. The multiplication exhibit exposes the `314 × 27` trace one event or one operating cycle at a time.
 
-1. preserve the existing stepped-drum and pinwheel conceptual tests;
-2. add a small direct-multiplication functional state model whose source note explicitly points to Steiger/Smithsonian;
-3. compare operation traces for the same problem;
-4. expose where repetition lives: operator vs mechanism;
-5. only later decide whether a sourced Millionaire control-plate visualization adds value.
+Replay validates event order and derived arithmetic rather than trusting serialized event fields. Tests cover zero digits, decimal positioning, unsafe arithmetic, deterministic replay, and tampered event data.
+
+The next research decision is whether a control-plate visualization would add explanatory value. It must not be drawn as Millionaire geometry until exact patent figures, object revision, and reconstruction choices are mapped.
 
 ## Project decision
 
