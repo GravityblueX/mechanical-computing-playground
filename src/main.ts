@@ -5,7 +5,7 @@ import { createKeyDrivenAccumulator, createKeyStrokeTrace } from './mechanisms/k
 import { reduceDirectMultiplierEvent, type DirectMultiplierEvent } from './mechanisms/direct-multiplier';
 import { quotientValue, reduceDivisionEvent, traceOperatorDivision, type DivisionEvent } from './mechanisms/operator-division';
 import { createSettingCrankInterlock, transitionInterlock, type InterlockEvent, type SettingCrankInterlockState } from './mechanisms/setting-crank-interlock';
-import { sampleFlow } from './exhibits/analytical-engine-flow';
+import { createAnalyticalFlowTrace, stateAtAnalyticalEvent, type AnalyticalFlowEvent } from './exhibits/analytical-engine-flow';
 import { createIntegrator, integrate, type IntegratorState } from './mechanisms/continuous-integrator';
 import { evaluate, type StageAState } from './backprop/core/stage-a';
 import { createPhaseMachine, runPhaseCycle, stepPhase, STAGE_A_PHASES, type PhaseMachineState } from './backprop/core/phase-machine';
@@ -34,6 +34,9 @@ let controlState: SettingCrankInterlockState = createSettingCrankInterlock(314);
 let controlEvents: InterlockEvent[] = [];
 let controlMessage = '';
 let controlCycle = 0;
+const analyticalTrace = createAnalyticalFlowTrace();
+let analyticalEventIndex = 0;
+let analyticalKeyboardBound = false;
 let integrator: IntegratorState = createIntegrator(1, 0.1);
 let back: StageAState = evaluate({ x1: 2, x2: 3, w1: 0, w2: 0, target: 10, learningRate: 0.01 });
 let phaseMachine: PhaseMachineState = createPhaseMachine(back);
@@ -253,14 +256,33 @@ function curta() {
 }
 
 function analytical() {
-  const labels: Record<string, Copy> = {
-    CARD_READ: { en: 'Read a punched card', zh: '读取打孔卡' }, CONTROL_DISPATCH: { en: 'Choose the operation', zh: '决定执行什么操作' }, STORE_TO_MILL: { en: 'Move a number to the Mill', zh: '把数字送入运算部件' }, MILL_TO_STORE: { en: 'Return the result to the Store', zh: '把结果送回存储部件' }, OUTPUT: { en: 'Print the answer', zh: '打印答案' },
+  const state = stateAtAnalyticalEvent(analyticalTrace, analyticalEventIndex);
+  const current = analyticalEventIndex > 0 ? analyticalTrace.events[analyticalEventIndex - 1] : null;
+  const eventLabel = (event: AnalyticalFlowEvent) => {
+    if (event.type === 'NUMBER_ASSOCIATED') return t(`associate ${event.symbol}=${event.value} with ${event.location}`, `把 ${event.symbol}=${event.value} 放入 ${event.location}`);
+    if (event.type === 'STORE_TO_MILL') return t(`transfer ${event.source}=${event.value} to Mill input ${event.inputIndex + 1}`, `把 ${event.source}=${event.value} 送入 Mill 输入 ${event.inputIndex + 1}`);
+    if (event.type === 'OPERATION_SELECTED') return t(`select ${event.operation}`, `选择 ${event.operation} 运算`);
+    if (event.type === 'MILL_OPERATION_COMPLETED') return t(`Mill: ${event.left} ${event.operation === 'ADD' ? '+' : '×'} ${event.right} = ${event.result}`, `Mill：${event.left} ${event.operation === 'ADD' ? '+' : '×'} ${event.right} = ${event.result}`);
+    if (event.type === 'MILL_TO_STORE') return t(`store ${event.symbol}=${event.value} in ${event.target}`, `把 ${event.symbol}=${event.value} 存入 ${event.target}`);
+    return t(`send ${event.value} from ${event.source} to output`, `把 ${event.source} 中的 ${event.value} 送往输出`);
   };
+  const store = (['V1', 'V2', 'V3', 'V4', 'V5', 'V6', 'V7'] as const).map((location) => `<div><small>${location}</small><strong>${state.store[location] ?? '—'}</strong></div>`).join('');
+  const log = analyticalTrace.events.slice(0, analyticalEventIndex).map((event) => `${String(event.sequence).padStart(2, '0')} · [${event.cardRole}] ${eventLabel(event)}`).join('\n') || t('No card-role transition yet.', '还没有卡片角色状态变化。');
   shell(
-    { en: 'How can cards control a general-purpose machine?', zh: '打孔卡怎样控制一台通用计算机器？' },
-    { en: 'The Analytical Engine separates instructions, stored numbers, arithmetic, and output.', zh: '分析机把指令、存储的数字、算术运算和输出分成不同部分。' },
-    `${lesson({ en: 'This is an early, striking example of information moving through specialized machine parts.', zh: '这是“信息在不同专用部件之间流动”的早期代表性构想。' }, { en: 'Follow one card from left to right; watch numbers travel Store ↔ Mill.', zh: '从左到右跟随一张卡片，并观察数字怎样在 Store 与 Mill 之间往返。' }, { en: 'Program, memory, arithmetic, and output can be physically separated—though modern CPU terms are only analogies.', zh: '程序、存储、运算和输出可以在物理上分开；但现代 CPU 术语在这里仅是类比。' })}<section><div class="flow-diagram"><div>▤<b>${t('Cards', '打孔卡')}</b><small>${t('instructions', '指令')}</small></div><span>→</span><div>⚙<b>${t('Control', '控制')}</b><small>${t('what next?', '下一步做什么？')}</small></div><span>→</span><div class="double"><i>▦<b>Store</b><small>${t('holds numbers', '保存数字')}</small></i><strong>↔</strong><i>⚙<b>Mill</b><small>${t('does arithmetic', '执行算术')}</small></i></div><span>→</span><div>▧<b>${t('Output', '输出')}</b><small>${t('print', '打印')}</small></div></div><ol class="timeline">${sampleFlow.map((event, index) => `<li><b>${index + 1}</b><span><strong>${copy(labels[event.phase])}</strong><small>${t(event.detail, { 'operation card selected': '选中操作卡', 'control directs the operation': '控制机构安排操作', 'operand enters Mill': '操作数进入 Mill', 'result returns to Store': '结果返回 Store', 'printer/output channel receives value': '打印/输出机构接收结果' }[event.detail] ?? event.detail)}</small></span></li>`).join('')}</ol><p class="model-note">${t('“CPU” and “memory” are helpful modern analogies, not historical identity.', '“CPU”和“内存”是帮助理解的现代类比，不代表二者在历史结构上完全相同。')}</p></section>`
+    { en: 'How do values move through Store, Mill, cards, and output?', zh: '数值怎样在 Store、Mill、卡片与输出之间流动？' },
+    { en: 'Step through (ab+c)d without confusing a teaching trace with a finished historical machine.', zh: '逐步执行 (ab+c)d，同时不把教学事件流冒充为建成的历史机器。' },
+    `${lesson({ en: 'Watch intermediate values p and q emerge before the final result.', zh: '观察中间值 p 和 q 如何先于最终结果出现。' }, { en: 'Advance one card-role event; inspect Store and Mill after each step.', zh: '每次推进一个卡片角色事件，再检查 Store 与 Mill。' }, { en: 'Historical roles, later emulator choices, and this P/M ordering are three different evidence layers.', zh: '历史角色、后世模拟器选择与本 P/M 排序属于三个不同证据层。' })}<section><div class="structure-callout">${evidenceBadge('TEACHING', locale)} ${t('(ab+c)d is documented in H. P. Babbage’s 1888 explanation. Values 2,3,4,5 and this serialized order are this repository’s P/M fixture.', '(ab+c)d 见于 H. P. Babbage 1888 年的说明；数值 2、3、4、5 与此序列化顺序是本仓库的 P/M 教学设定。')}</div><div class="equation"><span>(2×3+4)×5</span><strong>= ${state.output ?? '?'}</strong></div><h2>Store</h2><div class="state-grid">${store}</div><h2>Mill</h2><div class="state-grid"><div><small>${t('inputs', '输入')}</small><strong>${state.mill.inputs.length ? state.mill.inputs.join(', ') : '—'}</strong></div><div><small>${t('operation', '运算')}</small><strong>${state.mill.operation ?? '—'}</strong></div><div><small>${t('result', '结果')}</small><strong>${state.mill.result ?? '—'}</strong></div><div><small>${t('current card role', '当前卡片角色')}</small><strong>${current?.cardRole ?? '—'}</strong></div><div><small>${t('output', '输出')}</small><strong>${state.output ?? '—'}</strong></div></div><div class="controls"><button id="analytical-step" ${analyticalEventIndex >= analyticalTrace.events.length ? 'disabled' : ''}>${t('Step one event', '推进一个事件')}</button><button class="secondary" id="analytical-reset">${t('Reset', '重置')}</button></div><p class="status">${t('Event', '事件')} ${analyticalEventIndex} / ${analyticalTrace.events.length}</p><details open><summary>${t('Ordered teaching trace', '有序教学事件流')}</summary><pre>${esc(log)}</pre></details><p class="model-note">${t('Store/Mill and card roles are historically described; Science Museum drawing records prove evolving design sheets exist. Walker/Fourmilab is a later reconstruction/emulator whose unified syntax is not treated as primary evidence here. CPU/memory remain analogies, not identities.', 'Store/Mill 与卡片角色有历史文献依据；Science Museum 图纸记录证明设计稿曾持续演变。Walker/Fourmilab 是后世复原/模拟器，其统一语法不在此被当作一手史料。“CPU/内存”仍只是类比，不是历史结构身份。')}</p></section>`
   );
+  document.querySelector('#analytical-step')?.addEventListener('click', () => { analyticalEventIndex = Math.min(analyticalEventIndex + 1, analyticalTrace.events.length); analytical(); });
+  document.querySelector('#analytical-reset')?.addEventListener('click', () => { analyticalEventIndex = 0; analytical(); });
+  if (!analyticalKeyboardBound) {
+    analyticalKeyboardBound = true;
+    window.addEventListener('keydown', (event) => {
+      if (location.hash === '#/analytical-engine' && event.key === 'ArrowRight' && analyticalEventIndex < analyticalTrace.events.length) {
+        event.preventDefault(); analyticalEventIndex += 1; analytical();
+      }
+    });
+  }
 }
 
 function continuous() {

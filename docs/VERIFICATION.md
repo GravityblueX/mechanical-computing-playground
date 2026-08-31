@@ -1,5 +1,27 @@
 # Verification record
 
+## 2026-09-01 — Analytical Engine flow and Pages reconciliation
+
+Replaced the five-label static flow with a deterministic P/M `(ab+c)d` trace: given values enter named Store locations, two operands enter the Mill, validated operations produce `p=6`, `q=10`, and `result=50`, intermediate results return to Store, and output remains empty until the final output event. Replay validates sequence, role metadata, Store references/transfers, operand readiness, arithmetic, operation order and final state. The route now supports event stepping, reset, ArrowRight stepping, bilingual Store/Mill/card/output state, and an ordered text log.
+
+- `npm run typecheck` — pass
+- `npm test -- --run` — pass, 91 tests across 11 files
+- `npm run build` — pass
+- `git diff --check` — pass
+
+Local browser smoke against Vite:
+
+- `#/analytical-engine` rendered without horizontal overflow at the available desktop viewport;
+- stepping populated `V1..V4`, exposed Mill inputs/operation/result, then stored `p=6`, `q=10`, and final `V7=50` before output;
+- reset restored an empty Store/Mill/output and event `0`;
+- the event log exposed NUMBER/DIRECTIVE/OPERATION/OUTPUT roles without relying on animation or color.
+
+Publishing reconciliation:
+
+- GitHub Actions `Deploy Pages` run `33443320058` succeeded for `db3b1aafdfdfa66db6998a14073f809af1f8433d`;
+- <https://tmzncty.github.io/mechanical-computing-playground/> was directly reachable and returned Mechanical Computing Playground content before this commit;
+- deployment of this new Analytical Engine commit must complete before its upgraded hash route is claimed live.
+
 ## 2026-09-01 — control interlock and Curta provenance
 
 Added the generic P/M setting–crank interlock with explicit setting lock, crank release, active cycle, home return, crank relock and setting release events; invalid active-phase actions; invariant validation; and hardened replay. Added `#/controls`, source-backed Odhner/Curta control research, a patent/manual-based Curta source map, and reconciled the Curta machine notes.

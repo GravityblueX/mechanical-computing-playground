@@ -136,7 +136,15 @@ export default defineConfig({
 - [ ] clone 才需要的实验不会被假装成浏览器可运行；
 - [ ] 教学抽象与历史事实有明显标识。
 
-## 8. 结论
+## 8. 当前已验证部署
+
+截至 2026-09-01，GitHub Actions `Deploy Pages` run `33443320058` 已成功发布提交 `db3b1aafdfdfa66db6998a14073f809af1f8433d`。公开 Project Pages URL 已通过直接 HTTP 读取验证：
+
+<https://tmzncty.github.io/mechanical-computing-playground/>
+
+返回页面标题/内容为 Mechanical Computing Playground，说明此前“Pages 尚未配置”的记录已经过时。静态站使用仓库 base path 与 hash routes；每次新提交仍需等待对应部署完成后，才能声称该提交已上线。
+
+## 9. 结论
 
 本仓采用：
 

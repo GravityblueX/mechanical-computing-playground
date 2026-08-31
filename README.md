@@ -1,4 +1,6 @@
-# Mechanical Computing Playground · 机械计算游乐场
+# Mechanical Computing Playground
+
+**Live exhibit:** <https://tmzncty.github.io/mechanical-computing-playground/> · 机械计算游乐场
 
 > 目标不是做“复古计算器皮肤”，而是让人看见：**一个数学操作究竟怎样被齿轮、拨轮、棘轮、进位机构、曲柄、按键、位架和连续机械量做出来。**
 

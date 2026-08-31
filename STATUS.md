@@ -1,6 +1,6 @@
 # Current Status
 
-Last reconciled on 2026-09-01 after the control/interlock and Curta provenance slice.
+Last reconciled on 2026-09-01 after the Analytical Engine information-flow and Pages reconciliation slice.
 
 This file is the **current-state authority** for the repository. `ROADMAP.md` describes where the project should go; `IMPLEMENTATION_PLAN.md` is still useful as a dependency/design specification, but many of its checkboxes predate later implementation and must not be treated as the live task ledger.
 
@@ -13,7 +13,7 @@ This file is the **current-state authority** for the repository. `ROADMAP.md` de
 - GitHub Actions CI and a Pages deployment workflow.
 - Deterministic state/event/replay primitives under `src/core/`.
 - Golden carry fixtures under `fixtures/carry/`.
-- The latest local verification (`docs/VERIFICATION.md`, 2026-09-01 UTC+8) reports typecheck, 78 tests across 10 files, production build, diff check, and a desktop controls-route browser smoke check passing.
+- The latest local verification (`docs/VERIFICATION.md`, 2026-09-01 UTC+8) reports typecheck, 91 tests across 11 files, production build, diff check, and a local Analytical Engine route smoke check passing.
 
 Remote CI run `33437862103` passed for the previous operator-division checkpoint `7bebcea2d187f0ed2411de4098c846963df8b32a`. This status still does **not** substitute for CI on later commits.
 
@@ -45,7 +45,7 @@ The current browser shell contains non-empty routes or views for:
 - interactive operator-division procedure for `8478 ÷ 314` with visible overshoot/correction;
 - interactive setting–crank interlock lesson with a visible blocked setting attempt;
 - Curta;
-- Analytical Engine information flow;
+- interactive Analytical Engine P/M information flow for `(ab+c)d`, with Store/Mill/card roles, intermediate `p/q`, output, stepping, and hardened replay;
 - continuous mechanical integration;
 - hand-crank backpropagation;
 - about / evidence explanation.
@@ -84,7 +84,7 @@ The most important remaining gaps are:
 - direct multiplication now has a tested pedagogical functional state/event model and a fourth comparison path, but no source-specific Millionaire geometry is claimed;
 - key-driven computation now has a tested generic P/M mechanism model, but simultaneous multi-column operation, correction, interlocks, and source-specific Comptometer geometry remain intentionally unmodeled;
 - `research/curta-source-map.md` now maps US 2,525,352 figures/architecture and specialist-hosted operator material, while exact manual edition/page/facsimile and production Type I/II revision mapping remain open;
-- `research/analytical-engine-information-flow.md` needs primary-source anchors and exact emulator provenance;
+- `research/analytical-engine-information-flow.md` now maps Menabrea/Lovelace, Charles and H. P. Babbage publications, catalogued Babbage Papers drawings, Walker reconstruction choices, and the repository's P/M boundary; exact facsimile/page mapping and source-specific geometry remain open;
 - `research/differential-analyzer.md` needs a stronger source chain;
 - `research/simulator-matrix.md` now records a bounded prior-art/reuse matrix, but several third-party license, stepping, and maintenance fields remain explicitly unverified;
 - operator-driven division, generic correction, and a generic setting–crank interlock now exist, while source-specific subtraction geometry, complement procedures, zeroing, and machine-specific interlocks/operator-error prevention remain underdeveloped;
@@ -115,13 +115,13 @@ Historical/reconstruction claims then receive `E1–E4` evidence strength separa
 ## Current highest-priority work
 
 1. **Deepen subtraction/control provenance**: complement arithmetic, source-specific mode/counter behavior, zeroing, correction, and machine-specific interlocks without generalizing across families.
-2. **Upgrade remaining named-machine source maps** for Analytical Engine, Difference Engine, and differential analyzer with manual/patent/drawing/museum/reconstruction locations at the precision claimed.
+2. **Upgrade remaining named-machine source maps** for Difference Engine and differential analyzer with manual/patent/drawing/museum/reconstruction locations at the precision claimed.
 3. **Add cross-machine comparison layers** for representation, operator protocol, output/audit trail, and eventually reliability/torque/tolerance when evidence supports it.
 4. **Only then deepen source-specific geometry/animation.** Do not reward visual detail unsupported by source detail.
 
 ## External publishing state
 
-`docs/VERIFICATION.md` records that the Pages workflow built far enough to reach GitHub's Pages configuration boundary, but Pages was not enabled/configured for the repository at that checkpoint. Treat publishing as an external repository-setting task unless a later run proves that it has been enabled.
+GitHub Actions `Deploy Pages` run `33443320058` succeeded for `db3b1aa`, and <https://tmzncty.github.io/mechanical-computing-playground/> was directly reachable on 2026-09-01. Each newer commit still requires its own completed deployment before its routes are claimed live.
 
 ## Definition of the next good release
 
