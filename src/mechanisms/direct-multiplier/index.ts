@@ -1,5 +1,12 @@
+export interface EncodedMultipleTable {
+  multiplicand: number;
+  /** Entry index is the represented multiplier digit 0..9. */
+  entries: readonly number[];
+}
+
 export interface DirectMultiplierState {
   multiplicand: number;
+  encodedMultipleTable: EncodedMultipleTable;
   selectedMultiplierDigit: number | null;
   carriageOffset: number;
   selectedMultiple: number;
@@ -15,6 +22,7 @@ export type DirectMultiplierEvent =
       sequence: number;
       digit: number;
       multiplicand: number;
+      tableEntryDigit: number;
       selectedMultiple: number;
       humanOperationBefore: number;
       humanOperationAfter: number;
@@ -62,22 +70,29 @@ function assertDigit(digit: number): void {
   }
 }
 
-/**
- * Select a decimal multiple by repeated accumulation inside the abstract table.
- * This represents table lookup behavior, not a claim about Millionaire geometry.
- */
-export function selectEncodedMultiple(multiplicand: number, digit: number): number {
+/** P/M control representation: inspectable arithmetic entries, not historical geometry. */
+export function createEncodedMultipleTable(multiplicand: number): EncodedMultipleTable {
   assertNonNegativeInteger(multiplicand, 'multiplicand');
+  const entries = Object.freeze(Array.from({ length: 10 }, (_, digit) => multiplicand * digit));
+  if (entries.some((entry) => !Number.isSafeInteger(entry))) {
+    throw new Error('encoded multiple table exceeds safe integer range');
+  }
+  return Object.freeze({ multiplicand, entries });
+}
+
+export function selectEncodedMultiple(table: Readonly<EncodedMultipleTable>, digit: number): number {
   assertDigit(digit);
-  let selectedMultiple = 0;
-  for (let index = 0; index < digit; index += 1) selectedMultiple += multiplicand;
-  return selectedMultiple;
+  if (table.multiplicand < 0 || table.entries.length !== 10 || table.entries[digit] === undefined) {
+    throw new Error('encoded multiple table must contain digits 0..9');
+  }
+  return table.entries[digit];
 }
 
 export function createDirectMultiplier(multiplicand: number): DirectMultiplierState {
   assertNonNegativeInteger(multiplicand, 'multiplicand');
   return {
     multiplicand,
+    encodedMultipleTable: createEncodedMultipleTable(multiplicand),
     selectedMultiplierDigit: null,
     carriageOffset: 0,
     selectedMultiple: 0,
@@ -93,12 +108,13 @@ export function selectMultiplierDigit(
   digit: number,
   sequence = 0,
 ): { state: DirectMultiplierState; event: DirectMultiplierEvent } {
-  const selectedMultiple = selectEncodedMultiple(state.multiplicand, digit);
+  const selectedMultiple = selectEncodedMultiple(state.encodedMultipleTable, digit);
   const event: DirectMultiplierEvent = {
     type: 'MULTIPLIER_DIGIT_SELECTED',
     sequence,
     digit,
     multiplicand: state.multiplicand,
+    tableEntryDigit: digit,
     selectedMultiple,
     humanOperationBefore: state.humanOperationCount,
     humanOperationAfter: state.humanOperationCount + 1,
@@ -154,7 +170,12 @@ export function reduceDirectMultiplierEvent(
   event: Readonly<DirectMultiplierEvent>,
 ): DirectMultiplierState {
   if (event.type === 'MULTIPLIER_DIGIT_SELECTED') {
-    if (state.multiplicand !== event.multiplicand || state.humanOperationCount !== event.humanOperationBefore) {
+    if (
+      state.multiplicand !== event.multiplicand
+      || event.tableEntryDigit !== event.digit
+      || state.encodedMultipleTable.entries[event.tableEntryDigit] !== event.selectedMultiple
+      || state.humanOperationCount !== event.humanOperationBefore
+    ) {
       throw new Error('digit-selection event precondition failed');
     }
     return {

@@ -7,13 +7,13 @@
 - [ ] Migrate new/edited research notes to the two-axis policy in `docs/EVIDENCE_POLICY.md`; do not extend the old A–D scale into new domains.
 - [x] Add a direct-multiplication functional model based on the Steiger / Millionaire source map in `research/multiplication-mechanisms.md`.
 - [x] Extend the multiplication comparison so it contrasts **operator-supplied repetition** with **mechanically encoded multiplication-table selection**.
-- [ ] Add a minimal key-driven computation model after `research/key-driven-computation.md`, without attempting a full Comptometer emulator.
+- [x] Add a minimal key-driven computation model after `research/key-driven-computation.md`, without attempting a full Comptometer emulator.
 - [ ] Write `research/subtraction-and-division.md`: complements, reverse crank/mode changes, repeated subtraction, carriage/revolution-counter workflow, and machine-specific uncertainty.
 - [ ] Write `research/simulator-matrix.md` for Difference Engine, Analytical Engine, Curta, stepped-drum/pinwheel calculators, and strong online reconstructions.
 - [ ] Expand `research/curta-source-map.md` from a pointer list into model/revision + manual/patent/page-level provenance.
 - [ ] Expand `research/analytical-engine-information-flow.md` with primary-source anchors and exact emulator provenance before increasing historical detail in the UI.
 - [ ] Strengthen `research/differential-analyzer.md` using Smithsonian / primary technical sources and decide whether the existing continuous-integrator abstraction adds enough explanatory value.
-- [x] Re-run typecheck/tests/build for the direct-multiplication code change and update `docs/VERIFICATION.md`.
+- [x] Re-run typecheck/tests/build for the key-driven accumulator code change and update `docs/VERIFICATION.md`.
 
 ## Repository maintenance
 

@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   createDirectMultiplier,
+  createEncodedMultipleTable,
   replayDirectMultiplication,
   runOperationCycle,
   selectMultiplierDigit,
@@ -10,6 +11,16 @@ import {
 import { compare314x27 } from '../src/exhibits/multiplication-compare';
 
 describe('direct multiplication functional model', () => {
+  it('stores an inspectable immutable table and selects its represented entry', () => {
+    const table = createEncodedMultipleTable(314);
+    const state = createDirectMultiplier(314);
+    expect(table.entries).toEqual([0, 314, 628, 942, 1256, 1570, 1884, 2198, 2512, 2826]);
+    expect(state.encodedMultipleTable).toEqual(table);
+    expect(Object.isFrozen(state.encodedMultipleTable.entries)).toBe(true);
+    const selected = selectMultiplierDigit(state, 7);
+    expect(selected.event).toMatchObject({ tableEntryDigit: 7, selectedMultiple: state.encodedMultipleTable.entries[7] });
+  });
+
   it.each([
     [0, 0],
     [1, 314],

@@ -1,5 +1,14 @@
 # Verification record
 
+## 2026-09-01 — encoded table and key-driven accumulator
+
+The direct-multiplier now stores an inspectable immutable table for digits `0..9`, and digit selection reads that represented control state. The generic P/M key-driven accumulator exposes key-stroke begin/end, place-value contribution, digit advances, serialized carries, human-operation count, determinism, and replay. The About view compares `SET_VALUE → CRANK` with `KEY_STROKE → ACCUMULATE` without claiming source-specific Comptometer geometry or timing.
+
+- `npm run typecheck` — pass
+- `npm test -- --run` — pass, 51 tests
+- `npm run build` — pass
+- `git diff --check` — pass
+
 ## 2026-09-01 — direct multiplication functional model
 
 The direct-multiplication slice added deterministic digit-selection, operation-cycle, carriage-shift, accumulator, and replay events; connected a fourth path to the `314 × 27` comparison; and added focused tests.

@@ -1,6 +1,6 @@
 # Current Status
 
-Last reconciled on 2026-09-01 after the direct-multiplication functional-model slice.
+Last reconciled on 2026-09-01 after the encoded-table cleanup and key-driven accumulator slice.
 
 This file is the **current-state authority** for the repository. `ROADMAP.md` describes where the project should go; `IMPLEMENTATION_PLAN.md` is still useful as a dependency/design specification, but many of its checkboxes predate later implementation and must not be treated as the live task ledger.
 
@@ -26,7 +26,8 @@ Changes since that verification checkpoint have been license/documentation/resea
 - revolution counter;
 - stepped-drum conceptual model;
 - pinwheel conceptual model;
-- direct-multiplication functional model with digit selection, operation cycles, carriage shifts, and replayable events;
+- direct-multiplication functional model with an inspectable encoded-multiple table, digit selection, operation cycles, carriage shifts, and replayable events;
+- generic key-driven accumulator with place-value contribution, serialized carry, key-stroke cycles, and replayable events;
 - continuous integrator;
 - shared mechanism core and trace/replay support.
 
@@ -77,7 +78,7 @@ The most important remaining gaps are:
 
 - the current Pascaline / Comptometer carry note still needs more primary-source and model/revision-level anchors before source-specific geometry is drawn;
 - direct multiplication now has a tested pedagogical functional state/event model and a fourth comparison path, but no source-specific Millionaire geometry is claimed;
-- key-driven computation is now researched, but there is no key-driven mechanism model yet;
+- key-driven computation now has a tested generic P/M mechanism model, but simultaneous multi-column operation, correction, interlocks, and source-specific Comptometer geometry remain intentionally unmodeled;
 - `research/curta-source-map.md` remains placeholder-level and needs manual/patent/model-specific provenance;
 - `research/analytical-engine-information-flow.md` needs primary-source anchors and exact emulator provenance;
 - `research/differential-analyzer.md` needs a stronger source chain;
@@ -109,12 +110,11 @@ Historical/reconstruction claims then receive `E1–E4` evidence strength separa
 
 ## Current highest-priority work
 
-1. **Implement a minimal key-driven accumulator model**, so `keypress → accumulate` becomes a first-class operation protocol without attempting a full Comptometer emulator.
-2. **Write subtraction / division / control mechanisms**: complement arithmetic, crank direction/mode, carriage shifting, revolution counting, zeroing, correction, and interlocks.
-3. **Create `research/simulator-matrix.md`** so prior-art inspection becomes explicit rather than scattered links.
-4. **Upgrade named-machine source maps** for Curta, Analytical Engine, Difference Engine, and differential analyzer with manual/patent/drawing/museum/reconstruction locations at the precision claimed.
-5. **Add cross-machine comparison layers** for representation, operator protocol, output/audit trail, and eventually reliability/torque/tolerance when evidence supports it.
-6. **Only then deepen source-specific geometry/animation.** Do not reward visual detail unsupported by source detail.
+1. **Write subtraction / division / control mechanisms**: complement arithmetic, crank direction/mode, carriage shifting, revolution counting, zeroing, correction, and interlocks.
+2. **Create `research/simulator-matrix.md`** so prior-art inspection becomes explicit rather than scattered links.
+3. **Upgrade named-machine source maps** for Curta, Analytical Engine, Difference Engine, and differential analyzer with manual/patent/drawing/museum/reconstruction locations at the precision claimed.
+4. **Add cross-machine comparison layers** for representation, operator protocol, output/audit trail, and eventually reliability/torque/tolerance when evidence supports it.
+5. **Only then deepen source-specific geometry/animation.** Do not reward visual detail unsupported by source detail.
 
 ## External publishing state
 
