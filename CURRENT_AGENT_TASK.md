@@ -5,11 +5,11 @@ Owner: local coding/research agent
 Target duration: about one useful hour at the agent's observed throughput
 Repository authority: remote `main`
 
-Previous task is complete and archived at `tasks/archive/2026-09-01-control-provenance.md`.
+Previous task is complete and archived at `tasks/archive/2026-09-01-output-contracts.md`.
 
-The subtraction/control assignment landed as `36c7775f6d2b933bfaa2f273e13b8b3a87587688` about 33 minutes after its task-file assignment. It changed 11 files, added the family-separated control source map, typed provenance profiles, browser comparison, and five new tests; GitHub `verify`, Pages build, and Pages deploy checks all completed successfully. The two preceding substantial slices also finished in roughly 30–33 minutes. This task is therefore intentionally about twice the old bounded size, but it remains one coherent question:
+The output-contract slice landed as `2ad181408d7a3c6d816d3c090604538636919f61` about 42 minutes after assignment, changing 11 files with roughly 345 additions and raising the recorded suite to 150 tests. CI and Pages both passed. The preceding substantial slices were generally closer to 30–33 minutes. This task is therefore slightly broader again, but it remains one coherent question:
 
-> What changes when a calculating machine's output stops being only a transient/result register and becomes a persistent record that can list inputs, distinguish subtotal from total, preserve an audit trail, or even prepare a master for reproduction?
+> How do different mechanical architectures preserve a carry when another operation is happening, and how can the repository expose that difference without turning its generic carry events into fake historical geometry?
 
 Fetch/pull remote `main` before starting. Remote state always wins.
 
@@ -21,14 +21,15 @@ Read in this order:
 2. `TODO.md`
 3. `AGENTS.md`
 4. `docs/EVIDENCE_POLICY.md`
-5. `docs/RESEARCH_GAPS.md`, especially Priority 7
-6. `docs/REPRESENTATION_AND_PROTOCOL.md`
-7. `research/difference-engine-source-map.md`
-8. `src/exhibits/difference-output-flow/index.ts` and its tests
-9. current key-driven / accumulator code and teaching text where a register-only comparison is useful
-10. `src/main.ts`, route/navigation conventions, `docs/TEACHING_PATH.md`, and `docs/VERIFICATION.md`
+5. `docs/RESEARCH_GAPS.md`, especially Priority 0 carry and Priority 8 reliability
+6. `research/carry-is-the-hard-part.md`
+7. `research/key-driven-computation.md`
+8. `research/control-and-zeroing-source-map.md`
+9. `src/mechanisms/key-driven-accumulator/index.ts` and `tests/key-driven-accumulator.test.ts`
+10. current visible-carry mechanism/UI/tests and `src/main.ts`
+11. `docs/REPRESENTATION_AND_PROTOCOL.md`, `docs/TEACHING_PATH.md`, and `docs/VERIFICATION.md`
 
-Do not use stale `IMPLEMENTATION_PLAN.md` checkboxes as the task source.
+Do not use stale `IMPLEMENTATION_PLAN.md` checkboxes as task authority.
 
 Before editing, run the current full test suite once and record the actual baseline.
 
@@ -36,368 +37,247 @@ Before editing, run the current full test suite once and record the actual basel
 
 Complete four connected parts:
 
-1. write a **source-backed output/audit-trail study** separating non-printing result registers, printing/listing adding machines, and Difference Engine persistent-output ambitions;
-2. implement a deterministic generic **printing-ledger P/M model** where printed lines persist independently of accumulator state and where subtotal versus total have observably different state semantics;
-3. add typed source/evidence profiles and a bilingual public comparison, preferably a compact `#/output-contracts` route, that shows how output contracts differ without pretending the generic ledger is a Burroughs reconstruction;
-4. add tests/replay/verification and reconcile the current status ledger.
+1. deepen carry research from museum-level summary into a **source-separated carry architecture map**, anchored by Felt primary patents and a bounded Pascaline source chain;
+2. harden the existing key-driven accumulator so its carry events are part of the **validated replay contract**, not payload-bearing no-ops that can be tampered with silently;
+3. add typed carry-provenance profiles and a bilingual comparison on the existing visible-carry lesson, showing functional differences among the generic P/M chain, Pascaline sautoir, early Felt key-driven carry, and Felt's later Duplex/delayed-carry design;
+4. update tests/status/verification without inventing source-specific geometry or pretending that one state machine reproduces all of these mechanisms.
 
-The explanatory increment is not printer animation. It is to make **persistence, accumulator clearing/retention, and auditability explicit as computation/output state**.
-
-Do not build type-bar geometry, paper-feed mechanics, ribbon transport, a full Burroughs emulator, or Difference Engine printer geometry in this slice.
+Do **not** build a Pascaline emulator, a Comptometer emulator, a new gear animation, or a source-specific carry linkage in this slice.
 
 ---
 
-# Part A — create `research/output-and-audit-trail.md`
+# Part A — carry architecture source map
 
-Use the current two-axis evidence policy. Organize the note around distinct output contracts rather than a chronology of famous brands.
-
-Suggested structure:
+Prefer creating a focused new file:
 
 ```text
-Question
-Claim types
-Why output is part of the computation contract
-Case 1: register-only/non-printing result
-Case 2: printing/listing adding machine
-Case 3: subtotal vs total state semantics
-Case 4: Difference Engine check copy / stereotype-master ambition
-Cross-machine comparison
-Repository P/M boundary
-Open questions
-Implementation consequences
-Date checked
+research/carry-architecture-source-map.md
 ```
 
-## A1. Non-printing result-register comparator
+Then keep `research/carry-is-the-hard-part.md` as the explanatory essay and link it to the source map. If the repository's current research conventions strongly favor expanding the existing note instead, that is acceptable, but the final structure must make exact source/model boundaries easy to inspect.
 
-Use a precise institutional object record rather than writing generically about all adding machines.
+Use the two-axis evidence policy.
 
-Strong starting source:
+## A1. Pascaline boundary
 
-- Smithsonian/NMAH, Burroughs Calculator `nmah_690197`:
-  <https://americanhistory.si.edu/collections/object/nmah_690197>
+Required source roles:
 
-At the museum-record precision, this is a full-keyboard key-driven **non-printing** adding machine with result wheels/windows. Use it only to establish a register-only output contrast for that identified object/family context.
+- Musée des Arts et Métiers / Cnam object page for the preserved arithmetic machine and institutional description of automatic carry by the `sautoir`:
+  <https://www.arts-et-metiers.net/musee/machine-arithmetique-de-pascal-chiffres-plus-sous-et-deniers-0>
+- Pascal, *Avis nécessaire à ceux qui auront curiosité de voir la Machine d'Arithmétique et de s'en servir*; a public edited text is available via Wikisource from the Brunschvicg/Boutroux 1923 edition:
+  <https://fr.wikisource.org/wiki/%C5%92uvres_de_Blaise_Pascal/Lettre_D%C3%A9dicatoire_de_la_Machine_Arithm%C3%A9tique_et_Avis_n%C3%A9cessaire/Avis>
+- existing CMU reconstruction material already cited in `research/carry-is-the-hard-part.md` may remain as **R/E2** reconstruction evidence.
 
-You may also reference the already sourced Comptometer material in `research/key-driven-computation.md` when useful, but do not collapse Comptometer and Burroughs Calculator revisions into one machine.
+Use Pascal's own text only for what it actually establishes: the machine automatically relieves the operator from mental carrying/borrowing and that mechanical complexity was accepted to make operation simple/reliable. Do **not** claim that Pascal's `Avis` itself gives the sautoir geometry if it does not.
 
-Key conceptual boundary:
+Keep the institutional object/reconstruction evidence separate from Pascal's own operational claims.
+
+## A2. Felt 1887 early key-driven carry — primary source
+
+Required primary patent:
+
+- Dorr E. Felt, US 366,945, *Adding Machine* (1887):
+  <https://patents.google.com/patent/US366945A/en>
+
+Inspect the patent itself. Record only source-supported roles such as:
+
+- key-driven numeral wheels / column actuation;
+- carry from a lower numeral wheel to the next denomination;
+- the patent's actual cam/pawl/spring or stop-motion relationships only at the figure/text precision you inspected;
+- why this is an early Felt design and **not yet equivalent to the later Duplex carry scheduling problem**.
+
+Do not generalize this one patent to every Comptometer revision.
+
+## A3. Felt 1904 delayed carry / Duplex problem — primary source
+
+Required primary patent:
+
+- Dorr E. Felt, US 762,520, *Calculating Machine* (1904):
+  <https://patents.google.com/patent/US762520A/en>
+
+This is the key source for the slice. Inspect the text and relevant figures directly.
+
+Capture at source-supported precision:
+
+- the machine is direct-key operated;
+- the carrying mechanism stores power for carry;
+- the specification explicitly addresses the problem that a carry may be lost/“swallowed” if it overlaps the larger movement produced by a key in the higher denomination;
+- the described solution delays/controls the carry until the higher-order key/actuator movement is completed;
+- relevant figure numbers / part numbers for the delayed-carry relationship if the patent text makes them clear (for example the carrying spring and delaying latch relationships), without turning them into a new geometric reconstruction.
+
+The historical claim is about the patented intended mechanism. Label it **H/E1**, not “every Model A production machine was exactly this drawing.”
+
+## A4. Production/artifact corroboration
+
+Required institutional source:
+
+- Smithsonian/NMAH, Comptometer Model A `nmah_690484`:
+  <https://www.si.edu/object/comptometer-model%3Anmah_690484>
+
+Use it to establish the model/date context and the catalog statement that the Model A was the first “duplex” machine, with more than one column able to add and each column able to add, receive, and carry simultaneously.
+
+Do not infer the exact US762520 linkage from the museum record alone. Keep:
 
 ```text
-result register changes
+patented intended mechanism
 !=
-a persistent external record is automatically created
+artifact/catalog production statement
 ```
 
-Do not claim that register-only machines had no possible bookkeeping workflow; the narrow claim is only about the machine's documented output hardware/contract.
+If you use Felt US960528A to connect later Felt text back to the 1904 Duplex patents, label that source separately and do not use it as a substitute for the 1904 patent itself.
 
-## A2. Printing/listing adding-machine objects
+## A5. Required conclusion
 
-Use identified Smithsonian objects and preserve model/date distinctions.
+End the source map with a compact table along these lines:
 
-Required starting records:
-
-- Smithsonian/NMAH, Burroughs Class 3 Adding Machine `nmah_690654`:
-  <https://americanhistory.si.edu/collections/object/nmah_690654>
-- Smithsonian/NMAH, Burroughs Style 9 Adding Machine `nmah_690660`:
-  <https://americanhistory.si.edu/collections/object/nmah_690660>
-
-For the Class 3 record, inspect and record only what the object description actually supports, including the documented presence of a printing mechanism/paper tape and the identified non-add, total, subtotal, and repeat controls. The record also describes the tape as visible to the operator on that example.
-
-For Style 9, record the specific output arrangement actually described: a wide carriage/printing mechanism, use of paper tape or sheets, and the fact that its printing is not visible to the operator in that object's documented arrangement.
-
-Do not infer one universal Burroughs paper path or control geometry from these objects.
-
-## A3. Primary patent anchor for listing / total / subtotal semantics
-
-Required primary source:
-
-- William E. Swalm, US 885,202, *Adding and Listing Machine* (1908):
-  <https://patents.google.com/patent/US885202A/en>
-
-Inspect the patent text directly. It explicitly situates the invention in machines that list/print individual items while accumulating them and print totals, and it discusses the distinction between totals and subtotals.
-
-At the source-supported level, capture the key state distinction:
-
-- taking a **total** returns/leaves the accumulating wheels at the initial/zero position in the described class of machine;
-- taking a **subtotal** leaves the accumulated amount in the wheels so later items continue from it;
-- printed/listed items and printed totals therefore have an output-state relationship that differs from merely displaying the live accumulator.
-
-This is H/E1 for the intended patented design/context, not proof that every Burroughs production revision behaved identically.
-
-Additional primary source if it materially helps and is actually inspected:
-
-- Jesse G. Vincent, US 983,009, *Adding-Machine* (1911):
-  <https://patents.google.com/patent/US983009A/en>
-
-It explicitly describes the class of machines adapted to print/list and add individual items and print a total at the operator's will. Add it only for a precise claim; do not create a patent catalog.
-
-### Optional later control-semantics anchor
-
-If useful for a clean `non-add` comparison, inspect:
-
-- US 2,583,810, *Accumulator State Control* (1952):
-  <https://patents.google.com/patent/US2583810A/en>
-
-This later patent explicitly distinguishes a non-add operation that prints a keyed amount without entering it in the accumulator, a total that prints and clears the accumulator, and a subtotal that prints while retaining the accumulator. If used, label its later date/design context explicitly and do not project those exact controls backward onto early Class 3/Style 9 machines.
-
-## A4. Difference Engine persistent-output contrast
-
-Reuse and cite the existing repository source work rather than reopening broad Babbage research:
-
-- `research/difference-engine-source-map.md`
-- `src/exhibits/difference-output-flow/index.ts`
-
-The current repository already separates:
-
-```text
-calculated table value
-→ check/persistent copy role
-→ master/stereotype output role
-```
-
-The new note should explain why this is a different output/audit problem from office adding-machine paper tape:
-
-- office listing machine: persistent transaction/item record and totals in operational bookkeeping context;
-- Difference Engine / Scheutz line: table values and printing/stereotyping intended to reduce transcription/re-copying in mathematical table production.
-
-Keep the historical source boundaries already established. Do not add printer geometry or imply identical technology/workflow.
-
-## A5. Required comparison conclusion
-
-End the note with a source-labelled table whose rows are at least:
-
-| Output contract | Identified source/example | What persists | What happens to working accumulator/state | What human verification/re-copying problem changes | What remains unmodeled |
+| Case | Source/model | Human operation | How carry work is stored/scheduled | Source strength | Not established |
 |---|---|---|---|---|---|
-| register-only | identified non-printing Burroughs Calculator / sourced key-driven comparator | machine register only | live state remains in machine until changed/cleared | no automatic paper listing from the documented object | office procedure, copying practice, exact clearing sequence |
-| printing/listing | identified Burroughs printing object(s) + primary patent | item/total lines on paper | source-dependent | creates a persistent list/footing | exact print mechanism/paper path |
-| subtotal | US885202A context | subtotal line | accumulator retained | inspect intermediate footing without ending accumulation | production revision geometry |
-| total | US885202A context | total line | accumulator cleared in the described class | closes a series and leaves a printed footing | production revision geometry |
-| Difference Engine persistent output | existing Babbage/Scheutz source map | check/master or printed table role | separate table-generation state | reduces transcription/re-copying in table production | printer/stereotype geometry/timing |
+| repository generic carry | P/M | abstract increment/key action | serialized event chain | tested P/M | historical geometry/timing |
+| Pascaline | identified Pascaline / institutional + reconstruction sources | dial/stylus operation | sautoir/stored-energy automatic carry at supported level | H/R separated | exact universal geometry across surviving revisions |
+| Felt 1887 | US366945A | direct key actuation | source-specific early carry mechanism | H/E1 | later Duplex behavior |
+| Felt 1904 Duplex design | US762520A | overlapping multi-column key operation problem | delayed/controlled carry after higher actuator stroke in described design | H/E1 | every production revision geometry |
+| Model A | Smithsonian object/catalog | multi-column duplex operation | catalog says add/receive/carry simultaneously | H/E2 | exact patent-to-object linkage/timing |
 
-Do not overclaim “audit trail” as a period term unless a source uses it. It is acceptable to use **audit-trail** as a modern analytical label if the note clearly says so.
-
----
-
-# Part B — implement a generic deterministic printing-ledger P/M model
-
-Create a mechanism or exhibit-core module under the established tree, for example:
-
-```text
-src/mechanisms/printing-ledger/
-```
-
-or another location that matches current architecture after inspecting existing code.
-
-This is a **P/M teaching model**, not a Burroughs simulator.
-
-## B1. State must separate working arithmetic from persistent output
-
-A reasonable state shape should make these concepts explicit:
-
-- accumulator value;
-- printed lines / persistent record;
-- operation/event index;
-- count of added items / cycles as useful;
-- batch/open state only if needed to make total/reset semantics explicit.
-
-Printed lines should be structured objects, not only a concatenated display string. Suggested line kinds:
-
-```text
-ITEM
-SUBTOTAL
-TOTAL
-NON_ADD   // only if Part A's inspected source boundary justifies including it
-```
-
-Use safe integers / finite validation consistent with repository conventions. Do not add subtraction in this slice unless it is truly necessary; a positive-item ledger is sufficient to expose the output contract.
-
-## B2. Required operations/events
-
-Choose names that fit the repository, but the behavior should include:
-
-### Add and record an item
-
-```text
-ADD_ITEM amount=12
-accumulator 0 -> 12
-persistent record appends ITEM 12
-```
-
-### Print subtotal
-
-```text
-PRINT_SUBTOTAL
-persistent record appends SUBTOTAL currentAccumulator
-accumulator remains unchanged
-```
-
-### Print total and close/clear the arithmetic series
-
-```text
-PRINT_TOTAL
-persistent record appends TOTAL currentAccumulator
-accumulator becomes 0
-```
-
-If `NON_ADD` is included from inspected primary-source semantics:
-
-```text
-PRINT_NON_ADD amount=...
-persistent record appends line
-accumulator unchanged
-```
-
-No animation timing in core logic.
-
-## B3. Replay and tamper rejection
-
-Follow the repository's recent hardened reducer pattern.
-
-Required:
-
-- deterministic same-state + same-action behavior;
-- ordered sequence/event identity;
-- replay reconstructs final state;
-- reducer rejects wrong sequence, mismatched accumulator-before/after, altered printed value/kind, or invalid total/subtotal prerequisites where applicable;
-- printed record cannot be silently recomputed only from final accumulator, because persistence is precisely what this model teaches.
-
-## B4. Required tests
-
-Add focused Vitest coverage for at least:
-
-1. `12`, then `8` produces accumulator `20` and two persistent ITEM lines;
-2. subtotal at `20` appends `SUBTOTAL 20` and leaves accumulator at `20`;
-3. after that, add `5`, then total appends `TOTAL 25` and clears accumulator to `0`;
-4. the full printed record survives the total/clear and remains inspectable after accumulator is zero;
-5. a new item after total starts accumulating from zero while the old printed record remains persistent unless the model explicitly opens a new record object;
-6. if non-add is modeled, it creates a persistent line without changing accumulator;
-7. replay equals final state;
-8. tampered event sequence/value/accumulator transition fails closed;
-9. invalid unsafe/non-integer amount or invalid action is rejected explicitly.
-
-Do not test a historical key sequence unless you actually modeled/source it; these are P/M output-contract tests.
+Also record what remains open: source-specific force values, spring constants, tolerances, wear, maximum safe rate, and exact production-revision mapping.
 
 ---
 
-# Part C — typed output-contract provenance + public comparison
+# Part B — harden key-driven carry replay semantics
 
-Create a typed dataset under `src/exhibits/`, for example:
+The current `src/mechanisms/key-driven-accumulator/index.ts` exposes useful carry events, but review found a concrete integrity weakness:
+
+- `CARRY_PENDING` and `CARRY_PROPAGATED` currently reduce as no-ops;
+- `replayKeyStroke()` simply reduces the stored event array;
+- therefore a stored carry event's payload/order can be altered or removed in some cases without the same fail-closed action/event verification used by newer mechanism modules.
+
+Fix this conservatively. Do not redesign the whole key-driven mechanism.
+
+## B1. Required replay contract
+
+At minimum, make replay validate the stored trace against the deterministic event stream derived from:
 
 ```text
-src/exhibits/output-contracts/
+initial state + action
 ```
 
-Use a shape comparable to the existing control-provenance dataset so historical claims remain structured and testable.
+before accepting it.
 
-A profile should expose at least:
+Required rejection cases:
+
+- changed event sequence number;
+- changed `cycleId`;
+- changed `fromColumn` / `toColumn` on `CARRY_PENDING` or `CARRY_PROPAGATED`;
+- omitted carry event;
+- inserted extra carry event;
+- changed digit-advance payload;
+- altered final state;
+- unknown runtime event type rather than silently ignoring it.
+
+The implementation may follow the printing-ledger pattern: derive expected events from the action, compare them, then reduce and verify final state.
+
+If the cleanest implementation also adds explicit transient `pendingCarry` state so individual carry reducers validate sequencing, that is acceptable, but do not expand state merely for visual effect. The minimum requirement is **fail-closed trace replay**.
+
+## B2. State validation
+
+Add or strengthen a state assertion if necessary so replay/transition reject malformed runtime state, including invalid digits, non-idle public action start, invalid counts, and impossible active-key/phase combinations.
+
+Preserve existing public examples (`7 + 4 = 11`, `99 + 7 = 106`) and deterministic behavior.
+
+## B3. Tests
+
+Add focused tests proving:
+
+1. valid `99 + 7 -> 106` still exposes the two-column carry path and replays;
+2. tampering `CARRY_PENDING.fromColumn` fails;
+3. tampering `CARRY_PROPAGATED.toColumn` fails;
+4. removing one carry event fails;
+5. changing event sequence/cycle identity fails;
+6. changing final state fails;
+7. an unknown runtime event fails instead of becoming a no-op;
+8. malformed input state is rejected explicitly.
+
+Do not claim this serialized P/M order is historical Comptometer timing.
+
+---
+
+# Part C — typed carry provenance + visible-carry comparison
+
+Create a typed source dataset under an appropriate path such as:
+
+```text
+src/exhibits/carry-provenance/
+```
+
+Follow the shape conventions already used by `control-provenance` and `output-contracts` rather than inventing a wholly new evidence framework.
+
+Each profile should expose at least:
 
 - stable id;
-- family / identified object or patent;
-- date/model context;
-- claim type (`H`, `R`, `H/R` as appropriate);
-- E1–E4 strength;
+- identified family/source/model context;
+- claim type;
+- E1–E4 strength where applicable;
 - source label + URL;
-- output medium/contract;
-- documented behaviors;
-- `notEstablished` / open boundary.
+- documented carry role/relationship;
+- operator-protocol implication;
+- explicit `notEstablished` boundary.
 
-Minimum profiles:
+Minimum source-separated profiles:
 
-1. non-printing Burroughs Calculator `nmah_690197`;
-2. Burroughs Class 3 `nmah_690654`;
-3. Burroughs Style 9 `nmah_690660`;
-4. US885202A total/subtotal/listing semantics;
-5. existing Difference Engine/Scheutz persistent-output source profile drawn from repository research rather than a new unsupported summary.
+1. Pascaline institutional/surviving-machine carry case;
+2. US366945A early Felt carry case;
+3. US762520A delayed/controlled Duplex carry design;
+4. Smithsonian Model A production/catalog case.
 
-If a patent profile and a museum object are different evidence types, keep them as different profiles; do not merge them into “the Burroughs machine.”
+Do not merge the two Felt patents and the Smithsonian object into one profile called “the Comptometer.”
 
-## C1. Provenance integrity tests
+## C1. Provenance tests
 
 At minimum test:
 
-- profile IDs unique;
-- every H/R profile has non-empty source label/URL and current two-axis labels;
-- every profile has a non-empty `notEstablished` boundary;
+- IDs unique;
+- every H/R profile has source URL, claim type, strength, and non-empty `notEstablished`;
 - required source profiles exist;
-- no profile labels the generic printing-ledger event sequence as historical Burroughs behavior;
-- Difference Engine profile points to the already established source boundary rather than claiming the P/M check-copy event sequence is historical timing.
+- US366945A and US762520A remain separate contexts;
+- Model A profile does not claim the exact 762520 linkage;
+- Pascal's historical text and modern/institutional mechanism evidence are not mislabelled as the same kind of source.
 
-## C2. Public UI
+## C2. Public integration
 
-Prefer a focused new hash route:
+Prefer extending the existing `#/visible-carry` lesson instead of creating another route.
 
-```text
-#/output-contracts
-```
-
-because this is now a cross-machine concept substantial enough to stand on its own. If current routing makes a new route disproportionately invasive, a clearly discoverable section on an existing comparison/about route is acceptable, but do not hide the work.
-
-The page should have two visibly separate layers:
-
-### Interactive P/M ledger
-
-Let the visitor step a small preset such as:
+The existing generic event chain must remain visibly **P/M**. Add a compact bilingual historical comparison beneath or beside it that answers:
 
 ```text
-+12
-+8
-SUBTOTAL
-+5
-TOTAL
+same functional problem: a lower denomination crossed its boundary
+but what stores/schedules the carry, and what can overlap with it?
 ```
 
-The visible lesson must make this obvious:
+Required visible distinctions:
 
-```text
-working accumulator: 0 -> 12 -> 20 -> 20 -> 25 -> 0
-persistent paper record: keeps 12, 8, subtotal 20, 5, total 25
-```
+- generic repository chain = serialized P/M teaching events;
+- Pascaline = sautoir / stored-energy carry at the supported institutional/reconstruction level;
+- Felt 1887 = early direct-key carry design from US366945A;
+- Felt 1904 = delayed/controlled carry designed to avoid carry loss during overlapping higher-denomination key movement;
+- Model A = catalogued duplex production context, not proof that the browser is reproducing patent geometry.
 
-Required controls:
+Show source/model/date, claim type/evidence strength, `documented`, and `not established` in text. No meaning only by color.
 
-- step next event/action;
-- reset;
-- state/record visible without relying on animation;
-- keyboard-accessible buttons consistent with current site conventions where practical.
-
-### Historical/source comparison
-
-Below/beside the P/M model, render typed source cards/table for:
-
-```text
-register-only
-printing/listing
-subtotal/total semantics
-Difference Engine persistent-output role
-```
-
-Required presentation:
-
-- bilingual English/Chinese;
-- source/model/date visible;
-- claim type + evidence strength visible;
-- `documented` and `not established` both visible;
-- explicit sentence that the interactive ledger is **not a Burroughs reconstruction** and does not model type bars, carriage, ribbon, or paper-feed geometry;
-- explicit sentence that “audit trail” is a modern comparison label unless a cited source uses that wording;
-- no meaning conveyed only by color;
-- no decorative gear/printer animation unrelated to state.
-
-Add navigation/home/teaching-path discoverability without large site redesign.
+Do not draw a latch, spring, cam, pawl, or gear as if geometrically faithful unless the page explicitly says it is a non-geometric schematic. Prefer state/responsibility diagrams and source cards.
 
 ---
 
-# Part D — reconcile cross-machine docs and verification
+# Part D — docs and verification
 
 After Parts A–C are real:
 
-- update `STATUS.md` to record the printing-ledger P/M model and source-backed output-contract comparison;
-- check the `TODO.md` output/audit-trail item only if the broader comparison genuinely landed;
-- extend `docs/REPRESENTATION_AND_PROTOCOL.md` with the new output-contract distinction where it materially improves the existing table rather than duplicating the new note;
-- update `docs/TEACHING_PATH.md` so output contracts appear after finite differences or controls where the conceptual sequence makes sense;
-- update README only enough to expose the new route/research note;
-- update `docs/VERIFICATION.md` with actual baseline/final test counts and commands run;
-- leave `docs/RESEARCH_GAPS.md` as a research queue rather than rewriting it into a status ledger.
+- update `STATUS.md` to record the carry source map, typed provenance comparison, and hardened key-driven replay;
+- update `TODO.md` only if a carry/evidence item genuinely belongs in the short current queue;
+- update the carry row in `docs/REPRESENTATION_AND_PROTOCOL.md` if the new sources materially improve it;
+- update `docs/TEACHING_PATH.md` so the visible-carry lesson points to the architecture comparison;
+- update `research/carry-is-the-hard-part.md` to point to the source map and remove any wording made too broad by the new primary-source inspection;
+- update `docs/RESEARCH_GAPS.md` only in the carry section, marking what is now sourced and what remains open; do not turn the research queue into a status dump;
+- update `docs/VERIFICATION.md` with the actual baseline/final test counts and commands run;
+- update README only if needed to make the carry comparison discoverable.
 
 Before commit/push, run:
 
@@ -408,71 +288,55 @@ npm run build
 git diff --check
 ```
 
-Perform a bounded local browser smoke of the new/updated output page:
+Perform a local browser smoke check for `#/visible-carry` in both English and Chinese if the established tooling makes that practical. Record exactly what was checked; do not claim a browser run you did not perform.
 
-- preset steps in the correct order;
-- subtotal visibly preserves accumulator;
-- total visibly clears accumulator;
-- persistent printed lines remain after total clears working state;
-- reset restores initial lesson state;
-- historical source cards render source/model/date + evidence labels + open boundaries;
-- English and Chinese are readable;
-- no obvious desktop horizontal overflow;
-- existing finite-difference output lesson still renders after shared navigation/style changes.
+# Acceptance
 
-Check GitHub push CI and Pages deployment if they complete promptly. Record live deployment only if actually observed.
+The finished slice must let a visitor/test answer all of these without relying on unsourced gear drawings:
 
-One coherent implementation commit is preferred after this administrator task-file commit. Push required work, then stop.
-
-Suggested final subject:
-
-```text
-feat: add persistent output contract comparison
-```
-
----
-
-# Optional early-finish work
-
-Only if the entire main slice, tests/build, browser smoke, documentation reconciliation, commit, and push are complete with substantial time remaining:
-
-1. inspect US2583810A and add the `NON_ADD` P/M action only if its source distinction is accurately documented and doing so stays small;
-2. add one additional identified printing adding-machine object only when it exposes a genuinely different output contract (for example operator-visible versus non-visible tape), not just another model name;
-3. verify the completed commit's Pages deployment and record it if live.
-
-Do **not** start reliability/torque/tolerance modeling, source-specific printer geometry, cash-register/accounting-machine business logic, or a new machine family in this slice.
+1. Why is `0099 + 1 -> 0100` more than a final arithmetic result?
+2. What is the difference between the repository's serialized P/M carry chain and Pascaline/Felt historical carry evidence?
+3. Why did overlapping key movement create a special carry-scheduling problem in Felt's later key-driven design?
+4. Which source supports that claim, and what does it **not** prove about production geometry?
+5. Can a tampered key-driven carry trace now fail closed instead of silently replaying?
 
 # Evidence boundaries
 
-- Generic printing-ledger state/event model: **P/M**.
-- Smithsonian identified-object descriptions: **H**, normally E2 institutional/catalog evidence unless the object itself is being directly measured.
-- US885202A / other inspected patents: **H/E1** for the disclosed intended design, not proof of exact production implementation across all revisions.
-- Existing Difference Engine source map retains its existing H/R boundaries; do not upgrade P/M event order to historical timing.
-- “Audit trail” is an analytical comparison label unless a source explicitly uses the term.
-- Do not generalize one Burroughs object's paper visibility, controls, carriage, or zeroing behavior to all Burroughs machines.
+- mathematical decimal carry relation: **M**;
+- repository carry/key-driven event order: **P/M**;
+- Pascal's own `Avis`: **H/E1** for his stated operational aims/claims, not for geometry absent from the text;
+- Cnam/Musée des Arts et Métiers and CMU reconstruction: institutional **H/E2** and reconstruction **R/E2** roles must remain distinct;
+- US366945A and US762520A: **H/E1** for the patented intended mechanisms described there;
+- Smithsonian Model A catalog: **H/E2** for identified object/model context and catalogued duplex behavior;
+- patent drawing != proof every production machine was manufactured exactly that way;
+- do not infer spring force, maximum speed, wear, tolerance, or exact timing without source evidence.
 
 # Stop conditions
 
-Stop and record a blocker rather than guessing if:
+Stop and leave a precise blocker rather than guessing if:
 
-- a required source cannot be inspected and the claimed total/subtotal/output behavior depends on it;
-- the current Difference Engine source map conflicts with the new comparison and exact source resolution is needed;
-- implementing persistent output requires mutating existing arithmetic core semantics rather than adding a clean independent model;
-- the route would require a broad router/site rewrite unrelated to output contracts;
-- a conflicting output-contract implementation already landed on remote `main`.
+- a source cannot actually be inspected and the requested historical claim depends on it;
+- making the visible comparison requires source-specific geometry not supported by inspected material;
+- hardening key-driven carry replay requires a breaking rewrite across unrelated mechanism APIs;
+- a conflicting carry-provenance implementation has already landed on remote `main`;
+- the current carry model has a deeper arithmetic bug that must be fixed before provenance/UI work.
 
-Narrow the source claim or UI scope instead of filling missing historical detail with inference.
+If all required work finishes substantially before the target duration, use remaining time only for the same question: strengthen carry tamper tests, source figure/section anchors, bilingual accessibility/text-state visibility, or a very small P/M delayed-carry scheduling experiment clearly labelled as engineering pedagogy. **Do not start a new reliability/torque simulation, another machine family, or source-specific geometry in this slice.**
 
 # Git discipline
 
 - remote `main` is authoritative;
 - fetch/pull before work;
-- inspect current code/tests before adding parallel abstractions;
-- run baseline tests first;
-- keep historical profiles distinct by object/patent/model context;
-- keep P/M reducer/event logic deterministic and replayable;
+- inspect existing modules/tests before creating parallel abstractions;
+- one coherent implementation checkpoint;
 - run all acceptance commands;
-- inspect final diff for unrelated changes;
-- update status/verification only after implementation/tests are real;
-- commit and push one coherent checkpoint;
+- inspect diff for unrelated changes;
+- update status/verification only after tests pass;
+- commit and push to remote `main` according to the established workflow;
 - after push, stop and wait for the next `CURRENT_AGENT_TASK.md` revision.
+
+Suggested commit subject:
+
+```text
+feat: ground carry architecture provenance
+```
