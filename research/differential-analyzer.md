@@ -1,6 +1,6 @@
 # Differential Analyzer provenance and continuous-mechanics boundary
 
-**Checked: 2026-09-01**
+**Checked: 2026-09-02**
 
 ## Question
 
@@ -23,7 +23,7 @@ Vannevar Bush, “The Differential Analyzer. A New Machine for Solving Different
 - Claim type: **H**.
 - Evidence: **E1 for what Bush published**.
 
-This pass rechecked the DOI and attempted the ScienceDirect PII route. The latter presented a human-verification challenge, and no stable, lawfully accessible full facsimile or institutional scan was directly inspectable. Access therefore remains **bibliographic-only**: no page quotation, figure number, or figure-specific geometry claim is used. The paper identifies a 1931 publication about Bush's then-new machine; it does not establish that every later Differential Analyzer generation used one unchanged construction.
+The 2026-09-02 retry rechecked the DOI and canonical ScienceDirect PII route. ScienceDirect presented a human-verification challenge rather than article pages. Wikimedia Commons exact-title search returned no facsimile, Internet Archive metadata search failed at the TLS boundary, and OpenAlex reported the work closed with no repository full text. No stable, lawfully accessible full facsimile or institutional scan was directly inspectable. Access therefore remains **bibliographic-only**: no page quotation, figure number, construction role, torque/error number, or figure-specific geometry claim is used. The bibliographic record identifies a 1931 publication about Bush's then-new machine; it does not establish that every later Differential Analyzer generation used one unchanged construction.
 
 ## 2. Smithsonian/National Museum of American History records
 
@@ -83,7 +83,7 @@ This is **H/E1 evidence for an actual 1931 application, its stated checking meth
 
 Claude E. Shannon, “Mathematical Theory of the Differential Analyzer,” *Journal of Mathematics and Physics* 20 (April 1941), pp. 337–354, DOI <https://doi.org/10.1002/sapm1941201337>.
 
-The publisher landing page and Crossref/OpenAlex metadata were directly inspected. They confirm author, title, date, volume/issue and page range, but the publisher PDF returned an access challenge/403 and OpenAlex/Semantic Scholar report no open full text. Therefore this remains **bibliographic-only H/R**: no Shannon equation, figure or page claim is made, and no atlas facsimile anchor is created.
+The 2026-09-02 retry directly inspected the canonical Wiley landing page and OpenAlex metadata. They confirm author, title, April 1941 date, volume 20 issue 1–4 and printed pp. 337–354. The canonical PDF still returned HTTP 403; the rendered landing page exposed metadata/references but no article body, Wikimedia Commons exact-title search found no facsimile, and OpenAlex reported a closed work with no repository full text. Therefore this remains **bibliographic-only H/R**: no Shannon theorem, equation, machine-element relation, figure or content-page claim is made, and the theory paper is not used as a geometry, wiring or browser-phase source.
 
 ## 4. Machine-generation boundary
 
@@ -94,7 +94,7 @@ Do not flatten these into one timeless “Differential Analyzer”:
 | original MIT analyzer / ca. 1930 surviving components | catalogued Bush-associated input, adder/differential, integrator, and tracer components survive |
 | Bush 1931 construction publication | contemporary description of the new Differential Analyzer; exact uninspected page/figure claims remain open here |
 | Bush & Caldwell 1931 application paper | directly inspected five-page application/checking account with problem-specific Figures 1–3; not a construction manual |
-| Shannon 1941 | near-contemporary mathematical/system paper; bibliographic-only in this environment, so no page/figure claim |
+| Shannon 1941 mathematical theory | near-contemporary theory publication; bibliographic-only in this environment, so no theorem/equation/system-element/page/figure claim and no physical-geometry use |
 | later improved MIT/Rockefeller work | later generation; not the default geometry for ca. 1930 objects |
 | Bush & Caldwell, 1945, *A New Type of Differential Analyzer* | later machine publication; not silently merged into the original analyzer |
 | postwar GE/UCLA Smithsonian material | different provenance/generation; not used to fill gaps in original MIT geometry |
@@ -111,7 +111,7 @@ Do not flatten these into one timeless “Differential Analyzer”:
 | output tracing | `1983.3002.03` / `nmah_693234` supplies the catalogued tracer role; browser output values/wiring are P/M |
 | torque amplification | separate responsibility; no authoritative/primary construction claim was newly inspected here |
 
-Frontlash compensation is not silently equated with torque amplification. The frontlash record establishes no numerical backlash, residual error, tolerance, efficiency, response time, or exact full-machine placement.
+Frontlash compensation is not silently equated with torque amplification. Neither inaccessible Bush/Shannon full text is used to bridge that gap. The frontlash record establishes no numerical backlash, residual error, tolerance, efficiency, response time, or exact full-machine placement.
 
 ## 6. What is inferred and what remains open
 

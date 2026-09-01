@@ -1,5 +1,27 @@
 # Verification record
 
+## 2026-09-02 — Bush 1931 and Shannon 1941 bounded full-text retry
+
+The current-main pre-edit baseline passed typecheck and 292 tests across 21 files. Canonical full-text access was retried before changing evidence metadata. Bush's DOI resolved to ScienceDirect, whose article route presented human verification rather than pages; Commons exact-title search found no facsimile, the Internet Archive metadata route failed at TLS, and OpenAlex reported a closed work with no repository full text. Wiley's Shannon PDF returned HTTP 403; its rendered landing page exposed bibliographic metadata/references but no article body, Commons found no exact-title facsimile, and OpenAlex likewise reported no repository full text.
+
+Both works therefore remain bibliographic-only. The typed atlas now exposes Bush 1931 as a construction-publication role and Shannon 1941 as a separate mathematical-theory publication role, each with `fullFacsimileInspected: false`, empty page/figure anchors, and explicit prohibitions on content-page, equation, geometry, wiring, timing, torque/error and repository P/M claims. The directly inspected Bush–Caldwell application and Smithsonian component/generation records remain separate. No runtime mechanism or public continuous/error-control wording required correction.
+
+- `npm run typecheck` — pass
+- `npm test -- --run` — pass, 292 tests across 21 files
+- `npm run build` — pass
+- `git diff --check` — pass
+- focused source-atlas test — 16 tests passed
+
+Local bilingual browser smoke:
+
+- `#/source-atlas` rendered separate Bush construction and Shannon theory bibliographic-only cards in English and Chinese, with no false full-text status;
+- `#/continuous` retained its P/M continuous-flow boundary;
+- `#/mechanical-error-control` retained distinct frontlash and torque responsibilities;
+- `#/about` retained the evidence-policy boundary;
+- checked routes had no desktop horizontal overflow.
+
+No deployment check was performed for this not-yet-pushed completion commit.
+
 ## 2026-09-02 — Scheutz patent identity and Royal Society examination
 
 The current-main pre-edit baseline passed typecheck and 292 tests across 21 files. A directly inspected public-domain scan of *Journal of the Society of Arts*, vol. III no. 126, 20 April 1855, printed p. 393 lists patent 2216 for George and Edward Scheutz under patents sealed 13 April, with the calculating-and-printing-results title and adjacent entries 2208/2304. This independently agrees with the No. 2216 header in Merzbach Appendix I. Smithsonian drawing catalog No. 2214 remains recorded as a discrepancy; it is not silently rewritten or declared a typo.

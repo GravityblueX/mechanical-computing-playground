@@ -85,10 +85,22 @@ describe('named-machine source anchor atlas', () => {
     for (const id of roles) expect(getNamedMachineSourceAnchor(id).notEstablished.map(item => item.en).join(' ')).toMatch(/repository A\+B/);
   });
 
-  it('allows no Bush construction-paper page claim without a directly inspected facsimile', () => {
+  it('keeps inaccessible construction and mathematical-theory publications distinct from application, objects, and P/M flow', () => {
     const bush = getNamedMachineSourceAnchor('bush-1931-paper');
-    expect(bush).toMatchObject({ accessKind: 'bibliographic-only', fullFacsimileInspected: false, pageFigureAnchors: [] });
-    if (!bush.fullFacsimileInspected) expect(bush.pageFigureAnchors).toHaveLength(0);
+    const shannon = getNamedMachineSourceAnchor('shannon-1941-theory');
+    const application = getNamedMachineSourceAnchor('bush-caldwell-thomas-fermi-1931');
+    for (const anchor of [bush, shannon]) {
+      expect(anchor).toMatchObject({ accessKind: 'bibliographic-only', fullFacsimileInspected: false, pageFigureAnchors: [] });
+      expect(anchor.notEstablished.map(item => item.en).join(' ')).toMatch(/timing.*torque\/error numbers.*repository P\/M/);
+    }
+    expect(bush.generation.en).toMatch(/construction publication/);
+    expect(bush.supports.map(item => item.en).join(' ')).toMatch(/construction-publication role only/);
+    expect(bush.notEstablished.map(item => item.en).join(' ')).toMatch(/construction responsibilities.*geometry.*shaft routing.*later Differential Analyzer construction/);
+    expect(shannon.generation.en).toMatch(/mathematical-theory publication/);
+    expect(shannon.supports.map(item => item.en).join(' ')).toMatch(/mathematical-theory publication role only/);
+    expect(shannon.notEstablished.map(item => item.en).join(' ')).toMatch(/theorem.*equation.*machine-element relation.*physical geometry.*component wiring/);
+    expect(application).toMatchObject({ accessKind: 'direct primary facsimile', fullFacsimileInspected: true });
+    expect(getNamedMachineSourceAnchor('smithsonian-da-group').supports.map(item => item.en).join(' ')).toMatch(/improved.*postwar/);
   });
 
   it('keeps the directly inspected 1931 application paper at application/schematic precision', () => {
