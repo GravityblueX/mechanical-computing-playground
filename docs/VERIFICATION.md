@@ -20,6 +20,25 @@ Local browser smoke against Vite:
 
 No deployment check was performed for this not-yet-pushed commit; no claim that the four-track atlas is already live is made.
 
+## 2026-09-01 — operator-division causal overshoot and exact-zero completion
+
+The rebased remote-main baseline was 221 tests across 19 files. This bounded correction lets a quotient digit at nine make the necessary tenth subtraction attempt only when that attempt overshoots, represents the resulting negative residual as `OVERSHOOT_PENDING` until the explicit detection event, and shifts through implied lower zero places before completing an exact division. Replay now rejects omitted or duplicated overshoot-detection events instead of treating detection as a removable no-op, re-derives every action/event group, requires unique non-empty cycle identities, and verifies canonical initial plus complete final state.
+
+- `npm run typecheck` — pass
+- `npm test` — pass, 236 tests across 19 files
+- `npm run build` — pass
+- `git diff --check` — pass
+- bounded arithmetic sweep over dividends `0..500`, divisors `1..50`, and offsets `0..2` — 61,845 fitting configurations completed with the expected quotient/remainder; 13,305 undersized configurations rejected; no mismatch
+
+Local browser smoke against Vite with headless Chrome 151:
+
+- at `1280 × 900`, event 3 on `#/division` showed residual `-942`, phase `OVERSHOOT_PENDING`, and no overshoot-detection log entry;
+- event 4 changed the phase to `CORRECTION_REQUIRED`, added the explicit detection entry, and only then instructed the operator to add back;
+- finishing all 14 events produced quotient `27`, remainder `0`, and disabled further stepping;
+- the completed view had no horizontal overflow at either `1280 × 900` or `390 × 844`, and no runtime JavaScript error was observed.
+
+No deployment check was performed for this not-yet-pushed commit; no claim that the fix is already live is made.
+
 ## 2026-09-01 — named-machine source-anchor atlas
 
 The pre-edit remote-main baseline was 208 tests across 18 files. This slice directly inspected Babbage Papers archive/index, calculation-drive, printing/stereotype, motion-notation and 1991/2002 reconstruction records; directly inspected the Smithsonian Differential Analyzer group plus five component records; retained Bush 1931 as bibliographic-only after a bounded facsimile attempt; and added typed supports/not-established anchors with a bilingual public atlas.
