@@ -50,6 +50,7 @@ describe('named-machine source anchor atlas', () => {
     const built = getNamedMachineSourceAnchor('scheutz-1853-smithsonian');
     const drawings = getNamedMachineSourceAnchor('scheutz-1857-drawings-smithsonian');
     const patent = getNamedMachineSourceAnchor('scheutz-patent-list-1855');
+    const unrelated2214 = getNamedMachineSourceAnchor('british-patent-2214-pump-1855');
     const committee = getNamedMachineSourceAnchor('scheutz-royal-society-1855');
     const study = getNamedMachineSourceAnchor('scheutz-merzbach-1977');
     expect(built).toMatchObject({ claimType: 'H', evidenceStrength: 'E1', accessKind: 'direct catalog', recordIdentifier: expect.stringMatching(/MA\.323659.*1853/) });
@@ -57,10 +58,15 @@ describe('named-machine source anchor atlas', () => {
     expect(built.notEstablished.map(item => item.en).join(' ')).toMatch(/internal geometry.*printer timing.*Babbage-printer identity.*repository P\/M/);
     expect(drawings).toMatchObject({ claimType: 'H', evidenceStrength: 'E1', documentRole: 'archive drawing', recordIdentifier: expect.stringMatching(/14 figures.*2214/) });
     expect(drawings.supports.map(item => item.en).join(' ')).toMatch(/similar to but not identical.*numbered differently/);
-    expect(drawings.notEstablished.map(item => item.en).join(' ')).toMatch(/letter content.*equivalence with patent figures.*2214.*2216.*Babbage-printer/);
+    expect(drawings.supports.map(item => item.en).join(' ')).toMatch(/IIIF sheet.*Fig\. 1–14.*similar.*not identical.*No\. 2214/);
+    expect(drawings.notEstablished.map(item => item.en).join(' ')).toMatch(/letter content.*patent-figure crosswalk.*2214.*unrelated pump patent.*2216.*Babbage-printer/);
     expect(patent).toMatchObject({ claimType: 'H', evidenceStrength: 'E1', accessKind: 'direct primary facsimile', fullFacsimileInspected: true, recordIdentifier: expect.stringMatching(/p\. 393.*No\. 2216/) });
     expect(patent.supports.map(item => item.en).join(' ')).toMatch(/independent contemporary.*No\. 2216.*No\. 2214.*separately visible/);
-    expect(patent.notEstablished.map(item => item.en).join(' ')).toMatch(/No\. 2214.*typo.*patent geometry.*as-built.*repository P\/M/);
+    expect(patent.notEstablished.map(item => item.en).join(' ')).toMatch(/Smithsonian.*No\. 2214.*typo.*patent geometry.*as-built.*repository P\/M/);
+    expect(unrelated2214).toMatchObject({ claimType: 'H', evidenceStrength: 'E1', accessKind: 'direct primary facsimile', documentRole: 'historical publication' });
+    expect(unrelated2214.pageFigureAnchors).toEqual(expect.arrayContaining([expect.stringMatching(/p\. 167.*2214.*pump/), expect.stringMatching(/p\. 426.*2214.*2216/)]));
+    expect(unrelated2214.supports.map(item => item.en).join(' ')).toMatch(/No\. 2214.*Wetherell and Hoffstaedt.*pump.*16 October 1854.*Scheutz.*No\. 2216.*17 October 1854/);
+    expect(unrelated2214.notEstablished.map(item => item.en).join(' ')).toMatch(/why or when Smithsonian.*institutional typo.*relationship between the pump and Scheutz drawings.*repository P\/M/);
     expect(committee).toMatchObject({ claimType: 'H', evidenceStrength: 'E1', accessKind: 'direct primary facsimile', fullFacsimileInspected: true, recordIdentifier: expect.stringMatching(/pp\. 499–509/) });
     expect(committee.supports.map(item => item.en).join(' ')).toMatch(/committee-reported examination.*four difference orders.*eight printed.*limitations/);
     expect(committee.notEstablished.map(item => item.en).join(' ')).toMatch(/surviving-object geometry.*controlled speed\/reliability\/error benchmarks.*universal lifetime performance.*repository P\/M/);

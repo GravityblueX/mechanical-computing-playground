@@ -180,7 +180,7 @@ Directly inspected NMAH record and IIIF metadata:
 - catalog says they are similar to, but not identical with, final specifications for British Patent A.D. 1854, No. **2214**, with somewhat different numbering.
 
 - Claim type: **H**; evidence **E1 at drawing-object/catalog precision**.
-- The related letter itself was not exposed and its contents were not inspected. The single IIIF canvas was used for record identity only. The catalog's **No. 2214** wording is preserved as a documented source discrepancy; independent contemporary evidence below identifies the Scheutz patent as **No. 2216**, but this repository does not call the catalog value a typo or silently rewrite it.
+- The related letter itself was not exposed in the catalog, its one-canvas IIIF manifest, linked records, or Merzbach appendices; its contents were not inspected. The single 3000×1970 IIIF canvas visibly confirms labels Fig. 1 through Fig. 14 but was not used for geometry comparison. The catalog's **No. 2214** wording is preserved as a documented source conflict. Independent period evidence below identifies 2214 as a different pump patent and 2216 as Scheutz, but no inspected source explains how the museum wording arose; this repository therefore does not silently rewrite the catalog or invent a correction history.
 
 ### Contemporary patent identity: No. 2216
 
@@ -194,6 +194,28 @@ Directly inspected period scan:
 <https://commons.wikimedia.org/wiki/File:Journal_of_the_Society_of_Arts,_Vol._3,_no._126_(IA_jstor-41323556).pdf>
 
 This is **H/E1 contemporary-publication evidence for patent identity and stated title only**. It independently agrees with the reproduced specification header in Merzbach Appendix I, **British Patent A.D. 1854, No. 2216** (printed pp. 43–55). It establishes neither patent geometry nor identity between the specification, the as-built Smithsonian machine, and the ca. 1857 14-figure instruction sheet.
+
+### What No. 2214 directly identifies
+
+A second directly inspected period source resolves the number itself without resolving the catalog's editorial history:
+
+- *The Mechanics' Magazine*, 1855 volume, printed p. 167, “Notices of Intention to Proceed,” from the *London Gazette* of 13 February 1855, lists **2210** Etienne Bernot, then **2214 Lionel John Wetherell and Augustus Johann Hoffstaedt — “An improved construction of pump,”** then **2225** William Eassie;
+- printed p. 426 gives the fuller digest: Wetherell of Compton Street and Hoffstaedt of Albion Place, patent dated **16 October 1854**, No. **2214**; the improvement uses a lazy-tongs lever arrangement to transmit pump-handle reciprocation to the piston rod;
+- the immediately preceding entry is Wain's screw propeller No. 2213; the next visible entry is George and Edward Scheutz's calculating-and-printing patent dated **17 October 1854**, No. **2216**.
+
+Direct page images: <https://books.google.com/books?id=fIp8wWI5T-cC&pg=PA167> and <https://books.google.com/books?id=fIp8wWI5T-cC&pg=PA426>.
+
+This is **H/E1 period-publication evidence** that 2214 and 2216 are distinct patents, not two stages or numbers for the same Scheutz grant. It materially sharpens the conflict with the Smithsonian drawing-record wording, but it does **not** establish whether that wording is a transcription mistake, an older catalog inheritance, or another undocumented editorial event.
+
+### Patent-number source audit
+
+| Source | Date/layer | Printed number | Directly establishes | Conflict/boundary |
+|---|---|---:|---|---|
+| *Mechanics' Magazine* pp. 167, 426 | 1855 period publication | 2214 | Wetherell and Hoffstaedt pump patent, dated 16 October 1854 | unrelated to Scheutz; does not explain Smithsonian catalog history |
+| *Journal of the Society of Arts* p. 393 | 20 April 1855 period publication | 2216 | George and Edward Scheutz calculating-and-printing patent; sealed 13 April 1855 | identity/title only; no drawing equivalence |
+| Merzbach Appendix I, pp. 43–55 | 1977 Smithsonian reproduction/editorial layer reproducing nineteenth-century specification | 2216 | appendix header; provisional filed 17 October 1854; final signed 9 March 1855; reproduced figure sheets and specification | R/E2 access/editorial layer, not an original 1854 artifact or proof of as-built identity |
+| Merzbach narrative pp. 19–20, 26–27 | 1977 institutional synthesis | 2216; no 2214 comparison located | patent chronology; Albany arrival; drawings plus Edvard letter as only explanation | does not state that the 14-figure sheet corresponds to No. 2214 or explain the catalog number |
+| NMAH `1988.0798.01` catalog/IIIF | current catalog for ca.1857 object | 2214 | catalog wording; one sheet visibly labeled Fig. 1–14; drawings-plus-letter instruction provenance | conflicts with period patent identities; “similar but not identical” remains catalog description, not a verified figure crosswalk |
 
 ### Royal Society committee examination, 1855
 
@@ -228,7 +250,7 @@ Bounded exact printed-page anchors:
 - p. 21: machine installed at the Paris Exposition in August 1855;
 - pp. 26–27: arrival in Albany in April 1857; drawings and Edvard Scheutz letter were the only explanation; Mars computations were stereotyped;
 - pp. 27–29: machine-produced Mars/refraction work and the bounded U.S. government-contract trial;
-- Appendix I, pp. 43–55: clearly identified reproduction/transcription of British Patent A.D. 1854 No. 2216, including provisional and final specification figures.
+- Appendix I, pp. 43–55: header `BRITISH PATENT A.D. 1854, NO. 2216`; provisional specification explicitly marked filed 17 October 1854; final specification closes with George and Edward Scheutz's names and 9 March 1855 signatures/seals; reproduced provisional sheets and final-specification Figures 30–34 are visible.
 
 Merzbach's narrative is **H/E2 institutional synthesis**. Appendix I is a directly inspected, identified reproduced primary patent layer at its transcription/reproduction precision; it is not evidence that the Smithsonian 14-figure sheet equals the patent figures. The abstract's “patented in Great Britain in 1834” is retained as an apparent printed inconsistency rather than used against the detailed 1854 chronology.
 
@@ -264,4 +286,4 @@ Open before any source-specific mechanical visualization:
 - formatting controls at drawing/mechanism level;
 - stereotype materials and production process details;
 - tolerances, force, backlash and reconstruction manufacturing decisions;
-- exact Scheutz printer synchronization/internal geometry, modern measured reliability/error/throughput, related-letter text, why the Smithsonian catalog currently says `2214` despite independent contemporary/patent `2216` evidence, and as-built versus patent/drawing revision mapping.
+- exact Scheutz printer synchronization/internal geometry, modern measured reliability/error/throughput, related-letter text, the undocumented editorial cause of the Smithsonian catalog's `2214` wording (period evidence now identifies 2214 as an unrelated pump patent and Scheutz as 2216), and as-built versus patent/drawing revision mapping.

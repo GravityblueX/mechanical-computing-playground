@@ -1,5 +1,21 @@
 # Verification record
 
+## 2026-09-02 — Scheutz British-patent 2214/2216 identity audit
+
+The current-main baseline at `0ecd9f9f6671f687c525cba0d9146e29eea99922` passed typecheck and 320 tests across 21 files. Direct page-image inspection of *The Mechanics' Magazine* printed pp. 167 and 426 establishes No. 2214 as Lionel John Wetherell and Augustus Johann Hoffstaedt's improved pump patent, dated 16 October 1854; the p. 426 sequence places Wain No. 2213 immediately before it and George/Edward Scheutz's calculating-and-printing No. 2216, dated 17 October, immediately after. This independently agrees with the already inspected *Journal of the Society of Arts* p. 393 Scheutz 2216 entry.
+
+Merzbach Appendix I was rechecked at printed pp. 43–55: its header says British Patent A.D. 1854 No. 2216, the provisional specification says filed 17 October 1854, and the final specification closes with the Scheutz names and 9 March 1855 signatures/seals. Merzbach's pp. 26–27 narrative mentions the drawings plus Edvard letter as the only Albany explanation but does not connect that set to 2214. The current Smithsonian API/IIIF metadata still displays 2214, and the one drawing canvas visibly has Fig. 1–14. The related letter remains unexposed. Therefore the patent identities are resolved—2214 pump, 2216 Scheutz—while the editorial cause/history of the Smithsonian catalog conflict remains unknown rather than being labelled a typo.
+
+- `npm run typecheck` — pass
+- `npm test -- --run` — pass, 320 tests across 21 files
+- `npm run build` — pass
+- `git diff --check` — pass
+- focused source-atlas tests — 17 tests passed
+
+Source-atlas data changed, but the browser extension remained disconnected; no successful bilingual browser smoke is claimed. Build and typed atlas tests passed.
+
+No deployment check was performed for this not-yet-pushed completion commit.
+
 ## 2026-09-02 — Curta Type II systematic service-leaf census
 
 The current-main baseline at `ace1e804e33b8143c899f73f96765aecbfec0059` passed typecheck and 320 tests across 21 files. The actual Type II service targets were resolved from the existing index hrefs rather than visible collector labels: two 43-page green image-only variants and a separate 55-page German image-only scan. Every page of the English-green and German-1967 scans was rendered and visually inspected; the German-green cover/front matter was inspected for the corresponding German notice, and its remaining pages are not claimed as fully inspected. Uncertain marks remain unreadable in the new leaf index.

@@ -21,7 +21,7 @@ Do not add random failure or source-specific linkage animation before those sour
 
 ### 0.2 Named-machine source anchors
 
-Current state: the four-track typed atlas separates directly inspected Difference Engine, Bush Differential Analyzer, Curta, and Analytical Engine records from reconstruction/transcription and repository P/M flows. The Difference Engine track now separates Smithsonian's built 1853 Scheutz machine, ca.1857 operational drawing object, Merzbach 1977 synthesis/reproduced patent, Babbage designs, and the modern DE2 reconstruction.
+Current state: the four-track typed atlas separates directly inspected Difference Engine, Bush Differential Analyzer, Curta, and Analytical Engine records from reconstruction/transcription and repository P/M flows. The Difference Engine track now separates Smithsonian's built 1853 Scheutz machine, ca.1857 operational drawing object, period patent identities (2214 unrelated pump versus 2216 Scheutz), Merzbach 1977 synthesis/reproduced patent, Babbage designs, and the modern DE2 reconstruction.
 
 Remaining gaps:
 
@@ -150,7 +150,7 @@ Only files with real remaining evidence work are listed:
 1. `research/curta-source-map.md` + `research/curta-type-ii-service-leaf-index.md` — readable per-leaf revision dates and complete chronology for undated green assemblies, plus production revision/linkage mapping; a separate autumn-1967 German issue and capacity are now primary-document anchored;
 2. `research/analytical-engine-information-flow.md` — content-page images for items 10–20 inside known 1889 chapter pp. 331–338, a defensible printed-catalogue/BAB-code cross-walk, and drawing-level reader/Store/Mill coordination evidence;
 3. `research/differential-analyzer.md` — accessible Bush 1931 and Shannon 1941 full texts, plus component interconnection/error evidence; current canonical publisher routes remain blocked/closed;
-4. `research/difference-engine-source-map.md` — Scheutz/Babbage drawing interpretation, printer timing, modern measured performance, unexposed Scheutz letter, why the catalog retains 2214 despite independently confirmed patent 2216, as-built/specification revision mapping, and manufacturing evidence beyond catalog titles;
+4. `research/difference-engine-source-map.md` — Scheutz/Babbage drawing interpretation, printer timing, modern measured performance, unexposed Scheutz letter, undocumented cause/history of the catalog's 2214 wording despite period evidence that 2214 is an unrelated pump and 2216 is Scheutz, as-built/specification revision mapping, and manufacturing evidence beyond catalog titles;
 5. `research/control-and-zeroing-source-map.md` — Thomas instructions, partial-stroke correction and production mapping;
 6. carry source maps — production mapping and measured physical envelopes;
 7. `research/output-and-audit-trail.md` — period office procedure and source-specific printing mechanics.
