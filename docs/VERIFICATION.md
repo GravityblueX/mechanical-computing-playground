@@ -44,6 +44,22 @@ Local bilingual browser smoke:
 
 No deployment check was performed for this not-yet-pushed completion commit.
 
+## 2026-09-02 — Analytical Engine fixture-derived replay provenance
+
+The exact parent baseline was `846c912a6140a672e09ed6ecbcb51ac2af7dbafa`. Its Analytical Engine replay reduced the recorded events and compared the recorded final state, but did not bind either to `trace.fixture`: a default-fixture trace still replayed successfully after its events and final state were replaced wholesale by the canonical trace for `{ a: 3, b: 4, c: 5, d: 6 }`. Open PR #10 exact head `b986e72354d58ff81932ac617219a9e1712f5171` was reviewed as synthesis background and was not modified.
+
+Replay and event stepping now derive the canonical initial state, ordered events and final state from a normalized safe-integer fixture. They reject fixture-only changes, alternate-fixture event/final substitution, non-canonical initial state, extra fixture/event fields, and event-array reordering. Recursive canonicalization keeps object-member insertion order semantically irrelevant without weakening ordered arrays. The adjacent continuous-flow and Difference Engine output paths were audited for scope only and were not changed.
+
+- `npm run typecheck` under Node 22 — pass
+- `npm test -- --run` under Node 22 — pass, 301 tests across 21 files
+- `npm run build` under Node 22 — pass
+- `actionlint 1.7.12` — pass
+- `git diff --check` — pass
+- focused Analytical Engine regression — 21 tests passed
+- external fixture-provenance adversarial harness — 8 checks passed
+
+No browser smoke was performed because the generated fixture, displayed trace, route and rendering output are unchanged. No deployment check was performed for this not-yet-pushed candidate commit.
+
 ## 2026-09-02 — Smithsonian Scheutz built-engine and operational-drawing evidence
 
 The current-main pre-edit baseline passed typecheck and 291 tests across 21 files. NMAH object records and their IIIF manifests were directly inspected for the surviving 1853 Scheutz engine `MA.323659` / `nmah_997042` and ca.1857 drawing set `1988.0798.01` / `nmah_1005138`. The object record establishes maker/date/place/material/dimensions plus Paris/Dudley/government-contract catalog context; the drawing record establishes 14 figures and the drawings-plus-unexposed-letter instruction provenance. It explicitly says the figures are similar to but not identical with final patent specifications.

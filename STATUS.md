@@ -1,6 +1,6 @@
 # Current Status
 
-Last reconciled on 2026-09-02 after the bounded Bush 1931 / Shannon 1941 full-text access retry.
+Last reconciled on 2026-09-02 after the bounded Bush 1931 / Shannon 1941 full-text access retry and the Analytical Engine fixture-derived replay-provenance pass.
 
 This file is the **current-state authority** for the repository. `ROADMAP.md` describes where the project should go; `IMPLEMENTATION_PLAN.md` is still useful as a dependency/design specification, but many of its checkboxes predate later implementation and must not be treated as the live task ledger.
 
@@ -13,7 +13,7 @@ This file is the **current-state authority** for the repository. `ROADMAP.md` de
 - GitHub Actions CI and a Pages deployment workflow.
 - Deterministic state/event/replay primitives under `src/core/`.
 - Golden carry fixtures under `fixtures/carry/`.
-- The latest local verification (`docs/VERIFICATION.md`, 2026-09-02 UTC+8) reports typecheck, 292 tests across 21 files, production build, diff check, and bilingual browser smoke passing.
+- The latest local verification (`docs/VERIFICATION.md`, 2026-09-02 UTC+8) reports typecheck, 301 tests across 21 files, focused and external adversarial replay checks, production build, actionlint, and diff check passing.
 
 Remote CI run `33437862103` passed for the previous operator-division checkpoint `7bebcea2d187f0ed2411de4098c846963df8b32a`. This status still does **not** substitute for CI on later commits.
 
@@ -43,6 +43,7 @@ Remote CI run `33437862103` passed for the previous operator-division checkpoint
 - typed output-contract profiles separating identified register-only/printing objects, primary total/subtotal patent semantics, and Difference Engine persistent-output roles;
 - generic continuous integrator with independent/input/integrated quantities, P/M inspection interval, ordered observation/advance events, safe numeric validation, and action-derived replay binding actions, cycle ownership, ordered events and final state;
 - continuous-flow teaching chain with explicit adder relation and tracer-output boundary;
+- Analytical Engine P/M information-flow trace with fixture-derived initial/event/final provenance, semantic object-key handling, strict event-array order, and the same validation in full replay and event stepping;
 - shared mechanism core and trace/replay support.
 
 These are not all historical geometric reconstructions. Several intentionally model functional behavior only.
@@ -58,7 +59,7 @@ The current browser shell contains non-empty routes or views for:
 - interactive controls area with setting–crank interlock, incomplete-key-stroke integrity, and independently stepped result/revolution-register lifecycle scenarios, each preserving source/P/M boundaries;
 - interactive output-contract lesson exposing `+12, +8, SUBTOTAL, +5, TOTAL`, persistent record versus accumulator state, and source-separated register/listing/Difference Engine comparisons;
 - Curta;
-- interactive Analytical Engine P/M information flow for `(ab+c)d`, with Store/Mill/card roles, intermediate `p/q`, output, stepping, and hardened replay;
+- interactive Analytical Engine P/M information flow for `(ab+c)d`, with Store/Mill/card roles, intermediate `p/q`, output, stepping, and fixture-derived hardened replay;
 - interactive continuous mechanical integration workbench with A/B inputs, explicit sum, coordinate/integral phases, tracer output, stepping, reset, and a link to the documented frontlash responsibility;
 - bilingual mechanical-error-control comparison preserving distinct Thomas, Odhner/Talamini, and Bush source/problem/control boundaries;
 - bilingual arithmetic-work comparison showing what operators choose/repeat/shift/correct/request versus what mechanisms represent/execute/retain across four existing scenarios;
