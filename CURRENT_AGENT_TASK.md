@@ -2,14 +2,14 @@
 
 Issued: 2026-09-01
 Owner: local coding/research agent
-Target duration: roughly 2 hours by old estimates; recent throughput suggests this should occupy about one useful hour
+Target duration: about one useful hour at the agent's observed throughput
 Repository authority: remote `main`
 
-Previous task is complete and archived at `tasks/archive/2026-09-01-difference-engine-output.md`.
+Previous task is complete and archived at `tasks/archive/2026-09-01-control-provenance.md`.
 
-The Difference Engine assignment landed as `774059118dc0835314643a2b610ab159d13ea66c`; push CI run `33456003716` passed. It raised the suite from 108 to 128 tests across 12 files, hardened replay, added a source map and output-contract model, upgraded the browser lesson, and still completed in roughly 30 minutes. This task is therefore deliberately broader, but it remains one coherent question:
+The subtraction/control assignment landed as `36c7775f6d2b933bfaa2f273e13b8b3a87587688` about 33 minutes after its task-file assignment. It changed 11 files, added the family-separated control source map, typed provenance profiles, browser comparison, and five new tests; GitHub `verify`, Pages build, and Pages deploy checks all completed successfully. The two preceding substantial slices also finished in roughly 30–33 minutes. This task is therefore intentionally about twice the old bounded size, but it remains one coherent question:
 
-> Mechanical arithmetic depends on controls that do not themselves “contain the answer”: mode selectors, zeroing/canceling mechanisms, crank-home locks, correction paths, and the distinction between a key that merely sets state and a key that immediately performs arithmetic. Which of those relationships are actually documented for specific machine families, and which should remain generic P/M teaching abstractions?
+> What changes when a calculating machine's output stops being only a transient/result register and becomes a persistent record that can list inputs, distinguish subtotal from total, preserve an audit trail, or even prepare a master for reproduction?
 
 Fetch/pull remote `main` before starting. Remote state always wins.
 
@@ -21,276 +21,383 @@ Read in this order:
 2. `TODO.md`
 3. `AGENTS.md`
 4. `docs/EVIDENCE_POLICY.md`
-5. `docs/RESEARCH_GAPS.md`, especially Priority 3 and Priority 4
-6. `research/subtraction-and-division.md`
-7. `research/key-driven-computation.md`
-8. `research/carry-is-the-hard-part.md`
-9. `research/curta-source-map.md`
-10. `src/mechanisms/setting-crank-interlock/index.ts`
-11. `src/mechanisms/operator-division/index.ts`
-12. the current `#/controls`, `#/operator-division`, and key-driven teaching text in `src/main.ts`
-13. relevant tests for interlock/division/key-driven mechanisms
-14. `docs/REPRESENTATION_AND_PROTOCOL.md`
-15. `docs/VERIFICATION.md`
+5. `docs/RESEARCH_GAPS.md`, especially Priority 7
+6. `docs/REPRESENTATION_AND_PROTOCOL.md`
+7. `research/difference-engine-source-map.md`
+8. `src/exhibits/difference-output-flow/index.ts` and its tests
+9. current key-driven / accumulator code and teaching text where a register-only comparison is useful
+10. `src/main.ts`, route/navigation conventions, `docs/TEACHING_PATH.md`, and `docs/VERIFICATION.md`
 
-Do not use stale unchecked boxes in `IMPLEMENTATION_PLAN.md` as a task source.
+Do not use stale `IMPLEMENTATION_PLAN.md` checkboxes as the task source.
 
-Before editing, run the full current test suite once and record the actual baseline.
+Before editing, run the current full test suite once and record the actual baseline.
 
 # Objective
 
-Complete four connected pieces:
+Complete four connected parts:
 
-1. create a **source-specific control/zeroing/correction provenance map** that keeps Thomas arithmometer, Odhner-family crank locking, Felt/Tarrant key-driven/canceling machinery, and Pascaline complement subtraction separate rather than inventing a universal calculator control mechanism;
-2. tighten `research/subtraction-and-division.md` so source-specific mode/counter/zeroing claims are anchored to precise objects/patents and generic P/M procedure claims remain visibly generic;
-3. add a small typed **control-provenance teaching dataset/module** and use it to upgrade `#/controls` (and only minimally `#/operator-division` if useful) so visitors can compare the tested generic interlock with documented historical control roles without mistaking the P/M event sequence for any patent drawing;
-4. add focused tests/verification so historical claim metadata cannot silently lose its source/evidence boundary.
+1. write a **source-backed output/audit-trail study** separating non-printing result registers, printing/listing adding machines, and Difference Engine persistent-output ambitions;
+2. implement a deterministic generic **printing-ledger P/M model** where printed lines persist independently of accumulator state and where subtotal versus total have observably different state semantics;
+3. add typed source/evidence profiles and a bilingual public comparison, preferably a compact `#/output-contracts` route, that shows how output contracts differ without pretending the generic ledger is a Burroughs reconstruction;
+4. add tests/replay/verification and reconcile the current status ledger.
 
-Do **not** build historical gear geometry, a full Thomas/Odhner/Comptometer emulator, a new generic zeroing mechanism, or a partial-stroke correction simulation in this slice.
+The explanatory increment is not printer animation. It is to make **persistence, accumulator clearing/retention, and auditability explicit as computation/output state**.
+
+Do not build type-bar geometry, paper-feed mechanics, ribbon transport, a full Burroughs emulator, or Difference Engine printer geometry in this slice.
 
 ---
 
-# Part A — create `research/control-and-zeroing-source-map.md`
+# Part A — create `research/output-and-audit-trail.md`
 
-Use the two-axis evidence policy. Organize the note approximately as:
+Use the current two-axis evidence policy. Organize the note around distinct output contracts rather than a chronology of famous brands.
+
+Suggested structure:
 
 ```text
 Question
 Claim types
-Why controls are computational state
-Source-specific cases
-What each source directly establishes
-What must not be generalized
+Why output is part of the computation contract
+Case 1: register-only/non-printing result
+Case 2: printing/listing adding machine
+Case 3: subtotal vs total state semantics
+Case 4: Difference Engine check copy / stereotype-master ambition
+Cross-machine comparison
 Repository P/M boundary
-Open questions before mechanism-specific modeling
+Open questions
 Implementation consequences
 Date checked
 ```
 
-The key rule is **one family/model/source at a time**. A mode lever on a Thomas machine is not proof of an Odhner control path; an Odhner crank lock is not a Comptometer correction mechanism.
+## A1. Non-printing result-register comparator
 
-## A1. Thomas arithmometer: mode, revolution counter, and zeroing
+Use a precise institutional object record rather than writing generically about all adding machines.
 
-Start with these institutional sources:
+Strong starting source:
 
-- Smithsonian/NMAH, Thomas Arithmometer `nmah_690683`:
-  <https://americanhistory.si.edu/collections/object/nmah_690683>
-- Smithsonian/NMAH stepped-drum group:
-  <https://americanhistory.si.edu/it/collections/object-groups/calculating-machines/stepped-drum-calculating-machines>
-- Smithsonian/NMAH, *Instructions pour se Servir de l'Arithmomètre*, 1868, `nmah_904757`:
-  <https://www.americanhistory.si.edu/collections/object/nmah_904757>
+- Smithsonian/NMAH, Burroughs Calculator `nmah_690197`:
+  <https://americanhistory.si.edu/collections/object/nmah_690197>
 
-At the precision currently visible in the museum records, record separately:
+At the museum-record precision, this is a full-keyboard key-driven **non-printing** adding machine with result wheels/windows. Use it only to establish a register-only output contrast for that identified object/family context.
 
-- a lever selects addition/multiplication versus subtraction/division on identified Thomas examples;
-- the 1867 object record describes the revolution register turning in opposite directions for the two mode groups;
-- identified later Thomas examples have dedicated controls/knobs for zeroing revolution and result registers;
-- the Smithsonian catalog proves the existence/date/provenance of the 1868 operating-instruction pamphlet, but **the catalog metadata alone does not prove the contents of uninspected pages**.
+You may also reference the already sourced Comptometer material in `research/key-driven-computation.md` when useful, but do not collapse Comptometer and Burroughs Calculator revisions into one machine.
 
-If the IIIF/Mirador material for the 1868 pamphlet can be inspected legibly, record exact page/image anchors for operator procedure. If not, explicitly mark the pamphlet contents as not yet inspected rather than inventing instructions.
+Key conceptual boundary:
 
-Do not merge several Thomas dates/models into one imaginary canonical geometry. Record model/date/object IDs next to each claim.
+```text
+result register changes
+!=
+a persistent external record is automatically created
+```
 
-## A2. Odhner: crank-home locking as a documented control relation
+Do not claim that register-only machines had no possible bookkeeping workflow; the narrow claim is only about the machine's documented output hardware/contract.
 
-Primary patent anchor:
+## A2. Printing/listing adding-machine objects
 
-- Valentin Jakob Odhner, US 1,510,100, *Calculating Machine* (1924):
-  <https://patents.google.com/patent/US1510100A/en>
+Use identified Smithsonian objects and preserve model/date distinctions.
 
-Inspect the patent text and figures enough to record the narrow relationship it actually claims:
+Required starting records:
 
-- the operating crank/calculating discs are associated with a locking device;
-- the crank has a defined zero/home position;
-- the guide/notch/locking relation is arranged so the lock state differs during crank rotation versus zero position;
-- the patent also describes a relation between the crank lock and locking/liberating cam/disc-setting parts.
+- Smithsonian/NMAH, Burroughs Class 3 Adding Machine `nmah_690654`:
+  <https://americanhistory.si.edu/collections/object/nmah_690654>
+- Smithsonian/NMAH, Burroughs Style 9 Adding Machine `nmah_690660`:
+  <https://americanhistory.si.edu/collections/object/nmah_690660>
 
-Record figure numbers only where actually inspected. Patent disclosure is **H/E1 for the documented intended design**, not proof that every Odhner-family production machine used exactly the illustrated embodiment.
+For the Class 3 record, inspect and record only what the object description actually supports, including the documented presence of a printing mechanism/paper tape and the identified non-add, total, subtotal, and repeat controls. The record also describes the tape as visible to the operator on that example.
 
-The repository's `setting-crank-interlock` remains **P/M**. It may be historically motivated by this class of control problem, but its `SETTING_LOCKED → CRANK_RELEASED → ...` event order must not be relabeled as an Odhner simulation.
+For Style 9, record the specific output arrangement actually described: a wide carriage/printing mechanism, use of paper tape or sheets, and the fact that its printing is not visible to the operator in that object's documented arrangement.
 
-## A3. Felt/Tarrant: immediate key actuation, canceling, and carry-strain recovery are distinct claims
+Do not infer one universal Burroughs paper path or control geometry from these objects.
 
-Use primary patents rather than broad “the Comptometer did X” prose.
+## A3. Primary patent anchor for listing / total / subtotal semantics
 
-Required anchors:
+Required primary source:
 
-- Dorr E. Felt, US 960,528, *Calculating-Machine* (1910):
-  <https://patents.google.com/patent/US960528A/en>
-- Joseph A. Turck, US 1,154,897, *Calculating-Machine* (1915), assigned to Felt & Tarrant:
-  <https://patents.google.com/patent/US1154897A/en>
+- William E. Swalm, US 885,202, *Adding and Listing Machine* (1908):
+  <https://patents.google.com/patent/US885202A/en>
 
-For US 960,528, record only source-supported claims such as:
+Inspect the patent text directly. It explicitly situates the invention in machines that list/print individual items while accumulating them and print totals, and it discusses the distinction between totals and subtotals.
 
-- the patent is directed to a canceling mechanism in the Duplex Comptometer context;
-- it explicitly discusses releasing carry mechanism strain/jamming associated with improper manipulation/held keys or numeral wheels;
-- canceling/zeroing is therefore not merely “set the displayed number to zero” in that documented design context.
+At the source-supported level, capture the key state distinction:
 
-Do **not** infer a generic partial-stroke correction mechanism unless another inspected source establishes it.
+- taking a **total** returns/leaves the accumulating wheels at the initial/zero position in the described class of machine;
+- taking a **subtotal** leaves the accumulated amount in the wheels so later items continue from it;
+- printed/listed items and printed totals therefore have an output-state relationship that differs from merely displaying the live accumulator.
 
-For US 1,154,897, record the explicit architectural distinction:
+This is H/E1 for the intended patented design/context, not proof that every Burroughs production revision behaved identically.
 
-- the register operates in immediate response to manipulation of the value key, without an intervening power/control key or lever;
-- the patent is about prime-actuating/key-driven mechanism and high-speed key operation.
+Additional primary source if it materially helps and is actually inspected:
 
-This source can strengthen the repository's `keypress → accumulate` historical motivation, but it does not prove that every Comptometer revision had the same actuator/carry/canceling geometry.
+- Jesse G. Vincent, US 983,009, *Adding-Machine* (1911):
+  <https://patents.google.com/patent/US983009A/en>
 
-If a better Felt patent among the earlier patents cited by Turck is inspected during the task, add it only when it contributes a precise control/carry claim. Do not expand into a patent catalog for its own sake.
+It explicitly describes the class of machines adapted to print/list and add individual items and print a total at the operator's will. Add it only for a precise claim; do not create a patent catalog.
 
-## A4. Pascaline: complement subtraction boundary
+### Optional later control-semantics anchor
 
-Keep this deliberately narrower because current repository evidence is museum/reconstruction-level rather than a newly inspected seventeenth-century primary text.
+If useful for a clean `non-add` comparison, inspect:
 
-Use the existing anchors already in the repository:
+- US 2,583,810, *Accumulator State Control* (1952):
+  <https://patents.google.com/patent/US2583810A/en>
 
-- ACONIT/Inria Pascaline exhibit;
-- CMU Pascaline reconstruction.
+This later patent explicitly distinguishes a non-add operation that prints a keyed amount without entering it in the accumulator, a total that prints and clears the accumulator, and a subtotal that prints while retaining the accumulator. If used, label its later date/design context explicitly and do not project those exact controls backward onto early Class 3/Style 9 machines.
 
-Record the high-level contrast only:
+## A4. Difference Engine persistent-output contrast
 
-- the documented/reconstructed carry architecture is directional;
-- subtraction is explained through complementary representation/operator procedure rather than simply reversing a generic carry chain.
+Reuse and cite the existing repository source work rather than reopening broad Babbage research:
 
-Label museum synthesis as **H** and reconstruction behavior as **R**. Do not add source-specific subtraction geometry or digit conventions unless primary/facsimile evidence is actually inspected.
+- `research/difference-engine-source-map.md`
+- `src/exhibits/difference-output-flow/index.ts`
+
+The current repository already separates:
+
+```text
+calculated table value
+→ check/persistent copy role
+→ master/stereotype output role
+```
+
+The new note should explain why this is a different output/audit problem from office adding-machine paper tape:
+
+- office listing machine: persistent transaction/item record and totals in operational bookkeeping context;
+- Difference Engine / Scheutz line: table values and printing/stereotyping intended to reduce transcription/re-copying in mathematical table production.
+
+Keep the historical source boundaries already established. Do not add printer geometry or imply identical technology/workflow.
 
 ## A5. Required comparison conclusion
 
-The source map must end with a compact comparison like:
+End the note with a source-labelled table whose rows are at least:
 
-| Case | Documented control responsibility | What the repository may teach | What remains unmodeled |
-|---|---|---|---|
-| Thomas identified object(s) | arithmetic mode, counter direction, identified zeroing controls | mode/counter/initial-state responsibilities | exact internal linkage/timing across revisions |
-| Odhner US1510100A | crank-home/disc locking relation | why legal actions depend on mechanism phase | production-family generalization and exact geometry |
-| Felt US960528 | canceling plus carry-strain/jam recovery in specified Duplex context | zeroing/canceling can restore valid control state | generic correction/partial-stroke model |
-| Turck US1154897 | key manipulation directly actuates register | keypress can itself be a compute cycle | universal Comptometer actuator geometry |
-| Pascaline museum/reconstruction | complement-oriented subtraction boundary | representation can replace reverse mechanical motion | source-specific subtraction train |
+| Output contract | Identified source/example | What persists | What happens to working accumulator/state | What human verification/re-copying problem changes | What remains unmodeled |
+|---|---|---|---|---|---|
+| register-only | identified non-printing Burroughs Calculator / sourced key-driven comparator | machine register only | live state remains in machine until changed/cleared | no automatic paper listing from the documented object | office procedure, copying practice, exact clearing sequence |
+| printing/listing | identified Burroughs printing object(s) + primary patent | item/total lines on paper | source-dependent | creates a persistent list/footing | exact print mechanism/paper path |
+| subtotal | US885202A context | subtotal line | accumulator retained | inspect intermediate footing without ending accumulation | production revision geometry |
+| total | US885202A context | total line | accumulator cleared in the described class | closes a series and leaves a printed footing | production revision geometry |
+| Difference Engine persistent output | existing Babbage/Scheutz source map | check/master or printed table role | separate table-generation state | reduces transcription/re-copying in table production | printer/stereotype geometry/timing |
 
-Use precise source IDs and claim/evidence labels.
-
----
-
-# Part B — deepen `research/subtraction-and-division.md`
-
-Do not rewrite the note from scratch. Reconcile it with Part A.
-
-Required improvements:
-
-- replace broad Thomas/arithmometer statements with explicit object/date anchors where possible;
-- separate **mode selection**, **revolution-register direction/counting**, **zeroing**, **overshoot indication**, and **operator correction** instead of treating them as one control bundle;
-- keep Curta procedure claims tied to the current Curta manual/source boundary;
-- keep Pascaline complement claims at H/R precision;
-- link to `research/control-and-zeroing-source-map.md` for the detailed control provenance;
-- explicitly state which parts of `src/mechanisms/operator-division/` are P/M operator-procedure abstractions rather than Thomas/Burkhardt/Curta behavior.
-
-Do not claim that the generic overshoot/correction trace reproduces a particular historical bell, crank direction, counter sign convention, or add-back linkage.
+Do not overclaim “audit trail” as a period term unless a source uses it. It is acceptable to use **audit-trail** as a modern analytical label if the note clearly says so.
 
 ---
 
-# Part C — add a typed control-provenance teaching layer
+# Part B — implement a generic deterministic printing-ledger P/M model
 
-Create a small module under `src/exhibits/`, for example:
+Create a mechanism or exhibit-core module under the established tree, for example:
 
 ```text
-src/exhibits/control-provenance/
+src/mechanisms/printing-ledger/
 ```
 
-This is **not a mechanical simulator**. It is structured evidence data that keeps source-specific claims out of an undifferentiated prose blob.
+or another location that matches current architecture after inspecting existing code.
 
-A reasonable shape is:
+This is a **P/M teaching model**, not a Burroughs simulator.
 
-```ts
-interface ControlEvidenceProfile {
-  id: string;
-  family: string;
-  dateOrModel: string;
-  claimType: 'H' | 'R' | 'H/R';
-  evidenceStrength: 'E1' | 'E2' | 'E3' | 'E4';
-  sourceLabel: string;
-  sourceUrl: string;
-  documentedRoles: readonly string[];
-  notEstablished: readonly string[];
-}
+## B1. State must separate working arithmetic from persistent output
+
+A reasonable state shape should make these concepts explicit:
+
+- accumulator value;
+- printed lines / persistent record;
+- operation/event index;
+- count of added items / cycles as useful;
+- batch/open state only if needed to make total/reset semantics explicit.
+
+Printed lines should be structured objects, not only a concatenated display string. Suggested line kinds:
+
+```text
+ITEM
+SUBTOTAL
+TOTAL
+NON_ADD   // only if Part A's inspected source boundary justifies including it
 ```
 
-Use a shape that fits existing conventions; do not force these exact names.
+Use safe integers / finite validation consistent with repository conventions. Do not add subtraction in this slice unless it is truly necessary; a positive-item ledger is sufficient to expose the output contract.
+
+## B2. Required operations/events
+
+Choose names that fit the repository, but the behavior should include:
+
+### Add and record an item
+
+```text
+ADD_ITEM amount=12
+accumulator 0 -> 12
+persistent record appends ITEM 12
+```
+
+### Print subtotal
+
+```text
+PRINT_SUBTOTAL
+persistent record appends SUBTOTAL currentAccumulator
+accumulator remains unchanged
+```
+
+### Print total and close/clear the arithmetic series
+
+```text
+PRINT_TOTAL
+persistent record appends TOTAL currentAccumulator
+accumulator becomes 0
+```
+
+If `NON_ADD` is included from inspected primary-source semantics:
+
+```text
+PRINT_NON_ADD amount=...
+persistent record appends line
+accumulator unchanged
+```
+
+No animation timing in core logic.
+
+## B3. Replay and tamper rejection
+
+Follow the repository's recent hardened reducer pattern.
+
+Required:
+
+- deterministic same-state + same-action behavior;
+- ordered sequence/event identity;
+- replay reconstructs final state;
+- reducer rejects wrong sequence, mismatched accumulator-before/after, altered printed value/kind, or invalid total/subtotal prerequisites where applicable;
+- printed record cannot be silently recomputed only from final accumulator, because persistence is precisely what this model teaches.
+
+## B4. Required tests
+
+Add focused Vitest coverage for at least:
+
+1. `12`, then `8` produces accumulator `20` and two persistent ITEM lines;
+2. subtotal at `20` appends `SUBTOTAL 20` and leaves accumulator at `20`;
+3. after that, add `5`, then total appends `TOTAL 25` and clears accumulator to `0`;
+4. the full printed record survives the total/clear and remains inspectable after accumulator is zero;
+5. a new item after total starts accumulating from zero while the old printed record remains persistent unless the model explicitly opens a new record object;
+6. if non-add is modeled, it creates a persistent line without changing accumulator;
+7. replay equals final state;
+8. tampered event sequence/value/accumulator transition fails closed;
+9. invalid unsafe/non-integer amount or invalid action is rejected explicitly.
+
+Do not test a historical key sequence unless you actually modeled/source it; these are P/M output-contract tests.
+
+---
+
+# Part C — typed output-contract provenance + public comparison
+
+Create a typed dataset under `src/exhibits/`, for example:
+
+```text
+src/exhibits/output-contracts/
+```
+
+Use a shape comparable to the existing control-provenance dataset so historical claims remain structured and testable.
+
+A profile should expose at least:
+
+- stable id;
+- family / identified object or patent;
+- date/model context;
+- claim type (`H`, `R`, `H/R` as appropriate);
+- E1–E4 strength;
+- source label + URL;
+- output medium/contract;
+- documented behaviors;
+- `notEstablished` / open boundary.
 
 Minimum profiles:
 
-1. identified Thomas arithmometer object with mode/counter/zeroing claims at the precision actually supported;
-2. Odhner US1510100A crank-home locking relation;
-3. Felt US960528 canceling/carry-strain context;
-4. Turck US1154897 immediate key-driven actuation;
-5. Pascaline museum/reconstruction complement boundary may be included as a paired H/R entry if it remains clear that it is not primary-patent evidence.
+1. non-printing Burroughs Calculator `nmah_690197`;
+2. Burroughs Class 3 `nmah_690654`;
+3. Burroughs Style 9 `nmah_690660`;
+4. US885202A total/subtotal/listing semantics;
+5. existing Difference Engine/Scheutz persistent-output source profile drawn from repository research rather than a new unsupported summary.
 
-## C1. Data integrity tests
+If a patent profile and a museum object are different evidence types, keep them as different profiles; do not merge them into “the Burroughs machine.”
 
-Add focused tests for the evidence dataset. At minimum:
+## C1. Provenance integrity tests
 
-- IDs are unique;
-- every historical/reconstruction profile has a non-empty source URL and source label;
-- evidence/claim labels use the repository's current two-axis vocabulary rather than legacy A–D grades;
-- every profile explicitly states at least one `notEstablished`/open boundary;
-- required source profiles are present;
-- no profile silently labels the repository P/M interlock event sequence as historical evidence.
+At minimum test:
 
-These tests are not “proof history is true”; they are guardrails that prevent future UI edits from dropping provenance/boundary metadata.
+- profile IDs unique;
+- every H/R profile has non-empty source label/URL and current two-axis labels;
+- every profile has a non-empty `notEstablished` boundary;
+- required source profiles exist;
+- no profile labels the generic printing-ledger event sequence as historical Burroughs behavior;
+- Difference Engine profile points to the already established source boundary rather than claiming the P/M check-copy event sequence is historical timing.
 
----
+## C2. Public UI
 
-# Part D — upgrade `#/controls`
-
-Preserve the current tested interactive `setting-crank-interlock` P/M lesson. Do not rewrite its mechanism unless a real bug is found.
-
-Add a compact source-comparison layer driven from Part C.
-
-The page should let a visitor see two clearly separated things:
+Prefer a focused new hash route:
 
 ```text
-TOP: repository P/M interlock trace
-     setting free → crank cycle → setting locked → return home
+#/output-contracts
+```
 
-BELOW: documented historical control responsibilities
-       Thomas mode/counter/zeroing
-       Odhner crank-home locking relation
-       Felt canceling/carry-strain recovery
-       Turck immediate key-driven actuation
+because this is now a cross-machine concept substantial enough to stand on its own. If current routing makes a new route disproportionately invasive, a clearly discoverable section on an existing comparison/about route is acceptable, but do not hide the work.
+
+The page should have two visibly separate layers:
+
+### Interactive P/M ledger
+
+Let the visitor step a small preset such as:
+
+```text
++12
++8
+SUBTOTAL
++5
+TOTAL
+```
+
+The visible lesson must make this obvious:
+
+```text
+working accumulator: 0 -> 12 -> 20 -> 20 -> 25 -> 0
+persistent paper record: keeps 12, 8, subtotal 20, 5, total 25
+```
+
+Required controls:
+
+- step next event/action;
+- reset;
+- state/record visible without relying on animation;
+- keyboard-accessible buttons consistent with current site conventions where practical.
+
+### Historical/source comparison
+
+Below/beside the P/M model, render typed source cards/table for:
+
+```text
+register-only
+printing/listing
+subtotal/total semantics
+Difference Engine persistent-output role
 ```
 
 Required presentation:
 
-- bilingual labels;
-- source/model/date visible for each historical profile;
-- claim type/evidence strength visible;
-- `documentedRoles` and `notEstablished` both visible;
-- explicit sentence that the P/M event sequence above is **not** reconstructed from any one of these machines;
-- no source-specific gear diagram or animation;
-- no meaning available only through color.
+- bilingual English/Chinese;
+- source/model/date visible;
+- claim type + evidence strength visible;
+- `documented` and `not established` both visible;
+- explicit sentence that the interactive ledger is **not a Burroughs reconstruction** and does not model type bars, carriage, ribbon, or paper-feed geometry;
+- explicit sentence that “audit trail” is a modern comparison label unless a cited source uses that wording;
+- no meaning conveyed only by color;
+- no decorative gear/printer animation unrelated to state.
 
-If the current page becomes too dense, use `<details>` sections/cards instead of creating a new route.
-
-## D1. Optional minimal division text reconciliation
-
-Only if it is a small clean change, update `#/operator-division` source-boundary prose so it points visitors to the new control source map and distinguishes:
-
-- generic repeated-subtraction/overshoot/correction P/M trace;
-- documented Thomas mode/counter roles;
-- Curta operator procedure evidence;
-- unmodeled source-specific correction geometry.
-
-Do not redesign the division route in this task.
+Add navigation/home/teaching-path discoverability without large site redesign.
 
 ---
 
-# Verification and documentation reconciliation
+# Part D — reconcile cross-machine docs and verification
 
-After Parts A–D are real:
+After Parts A–C are real:
 
-- update `STATUS.md` to say source-specific control provenance exists, while zeroing/correction geometry remains open;
-- update `TODO.md` by checking the subtraction/control provenance item only if the source map and browser comparison are genuinely complete;
-- update `docs/REPRESENTATION_AND_PROTOCOL.md` only where the new source distinctions materially correct/strengthen its control column;
-- update `docs/VERIFICATION.md` with the actual baseline/final test count and commands run;
-- add a short link from README/teaching path only if it improves discoverability;
-- keep `docs/RESEARCH_GAPS.md` as a research queue, not a status ledger.
+- update `STATUS.md` to record the printing-ledger P/M model and source-backed output-contract comparison;
+- check the `TODO.md` output/audit-trail item only if the broader comparison genuinely landed;
+- extend `docs/REPRESENTATION_AND_PROTOCOL.md` with the new output-contract distinction where it materially improves the existing table rather than duplicating the new note;
+- update `docs/TEACHING_PATH.md` so output contracts appear after finite differences or controls where the conceptual sequence makes sense;
+- update README only enough to expose the new route/research note;
+- update `docs/VERIFICATION.md` with actual baseline/final test counts and commands run;
+- leave `docs/RESEARCH_GAPS.md` as a research queue rather than rewriting it into a status ledger.
 
 Before commit/push, run:
 
@@ -301,58 +408,71 @@ npm run build
 git diff --check
 ```
 
-Perform a bounded local browser smoke of `#/controls`:
+Perform a bounded local browser smoke of the new/updated output page:
 
-- existing setting/crank interaction still works;
-- an attempted setting change during active crank remains visibly blocked;
-- reset works;
-- historical source profiles render from the typed dataset;
-- source IDs / claim type / evidence level / open boundary are readable in English and Chinese;
-- the P/M-vs-history separation is obvious without opening source code;
-- no obvious desktop horizontal overflow.
+- preset steps in the correct order;
+- subtotal visibly preserves accumulator;
+- total visibly clears accumulator;
+- persistent printed lines remain after total clears working state;
+- reset restores initial lesson state;
+- historical source cards render source/model/date + evidence labels + open boundaries;
+- English and Chinese are readable;
+- no obvious desktop horizontal overflow;
+- existing finite-difference output lesson still renders after shared navigation/style changes.
 
-Check final push CI if it completes promptly. Record deployment only if actually observed.
+Check GitHub push CI and Pages deployment if they complete promptly. Record live deployment only if actually observed.
 
-One coherent implementation commit is preferred after the administrator task-file commit. Push required work, then stop.
+One coherent implementation commit is preferred after this administrator task-file commit. Push required work, then stop.
 
 Suggested final subject:
 
 ```text
-feat: ground subtraction and control provenance
+feat: add persistent output contract comparison
 ```
 
 ---
 
 # Optional early-finish work
 
-Only if Parts A–D, tests/build, browser smoke, documentation reconciliation, commit and push are genuinely complete with substantial time remaining:
+Only if the entire main slice, tests/build, browser smoke, documentation reconciliation, commit, and push are complete with substantial time remaining:
 
-1. inspect the Smithsonian IIIF/Mirador representation of the 1868 Thomas instruction pamphlet and add exact page/image anchors **only if legible and actually inspected**;
-2. add one additional precisely scoped Felt/Odhner patent figure anchor that materially clarifies a control relation already in the note;
-3. check the latest Pages deployment for the completed commit and record it if successful.
+1. inspect US2583810A and add the `NON_ADD` P/M action only if its source distinction is accurately documented and doing so stays small;
+2. add one additional identified printing adding-machine object only when it exposes a genuinely different output contract (for example operator-visible versus non-visible tape), not just another model name;
+3. verify the completed commit's Pages deployment and record it if live.
 
-Do **not** start broader output/audit-trail research, reliability/torque modeling, source-specific geometry, or a new machine family in this slice.
+Do **not** start reliability/torque/tolerance modeling, source-specific printer geometry, cash-register/accounting-machine business logic, or a new machine family in this slice.
+
+# Evidence boundaries
+
+- Generic printing-ledger state/event model: **P/M**.
+- Smithsonian identified-object descriptions: **H**, normally E2 institutional/catalog evidence unless the object itself is being directly measured.
+- US885202A / other inspected patents: **H/E1** for the disclosed intended design, not proof of exact production implementation across all revisions.
+- Existing Difference Engine source map retains its existing H/R boundaries; do not upgrade P/M event order to historical timing.
+- “Audit trail” is an analytical comparison label unless a source explicitly uses the term.
+- Do not generalize one Burroughs object's paper visibility, controls, carriage, or zeroing behavior to all Burroughs machines.
 
 # Stop conditions
 
 Stop and record a blocker rather than guessing if:
 
-- a source page is inaccessible and the needed claim depends on inspecting it;
-- several Thomas/Comptometer revisions conflict and the exact model cannot be resolved;
-- implementing the historical comparison would require inventing linkage timing/geometry;
-- the current `#/controls` P/M mechanism would need semantic changes merely to imitate a patent;
-- a conflicting control-provenance implementation has already landed on remote `main`.
+- a required source cannot be inspected and the claimed total/subtotal/output behavior depends on it;
+- the current Difference Engine source map conflicts with the new comparison and exact source resolution is needed;
+- implementing persistent output requires mutating existing arithmetic core semantics rather than adding a clean independent model;
+- the route would require a broad router/site rewrite unrelated to output contracts;
+- a conflicting output-contract implementation already landed on remote `main`.
 
-Narrow the claim instead of filling gaps with generic calculator knowledge.
+Narrow the source claim or UI scope instead of filling missing historical detail with inference.
 
 # Git discipline
 
 - remote `main` is authoritative;
-- pull/fetch before work;
-- inspect current code/research before creating parallel abstractions;
-- keep source-specific claims attached to exact source/model IDs;
-- run the full acceptance commands;
-- inspect diff for unrelated cleanup;
-- update status/verification only after verification passes;
-- commit and push;
+- fetch/pull before work;
+- inspect current code/tests before adding parallel abstractions;
+- run baseline tests first;
+- keep historical profiles distinct by object/patent/model context;
+- keep P/M reducer/event logic deterministic and replayable;
+- run all acceptance commands;
+- inspect final diff for unrelated changes;
+- update status/verification only after implementation/tests are real;
+- commit and push one coherent checkpoint;
 - after push, stop and wait for the next `CURRENT_AGENT_TASK.md` revision.
