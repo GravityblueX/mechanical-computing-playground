@@ -1,5 +1,25 @@
 # Verification record
 
+## 2026-09-01 — Thomas register controls and independent lifecycle
+
+The current-main pre-edit baseline passed typecheck and 264 tests across 20 files. The Smithsonian `nmah_904757` IIIF manifest was directly inspected: its sole 3000×1846 canvas is one readable open spread of the 1868 pamphlet, with result windows `C`, multiplier/quotient windows `D`, right knob `O` clearing `D`, and left knob `P` clearing `C`. The 1867 `MA.327900` and ca.1873 `MA.335215` catalog/object descriptions were kept separate, and Oxford's attribution of independent carriage zeroing to an 1865 booklet engraving remains R/E2 rather than a directly inspected primary booklet.
+
+A generic P/M `register-lifecycle` model now wraps the existing revolution-counter state and exposes independent result/revolution clears plus mode selection. Already-zero clears are recorded deterministic actions; replay is action-derived and rejects forged preserved-register values, before-values, order, counter state and final state.
+
+- `npm run typecheck` — pass
+- `npm test -- --run` — pass, 277 tests across 21 files
+- `npm run build` — pass
+- `git diff --check` — pass
+- focused register lifecycle plus revolution-counter/operator-division/setting-crank/key-integrity regression — 85 tests passed
+
+Local bilingual browser smoke:
+
+- `#/controls` preserved `8478 / 27` through mode selection, cleared revolutions to `0` while retaining result `8478`, then cleared result independently; English/Chinese evidence boundaries rendered without desktop horizontal overflow;
+- `#/division` retained the operator-division lesson at phase `READY` on reset;
+- `#/about` retained the evidence-policy boundary.
+
+The pamphlet manifest exposes no additional procedure pages, and no Thomas linkage/timing or universal revision claim is made. No deployment check was performed for this not-yet-pushed commit.
+
 ## 2026-09-01 — Controlled-key source boundary and key-stroke integrity
 
 The current-main pre-edit baseline passed typecheck and 251 tests across 19 files. This slice directly inspected Turck's 1921 public-domain facsimile at viewer pages 179–182 / printed pp. 159–162, the Smithsonian `nmah_905178` catalog and one-canvas IIIF manifest, and Science Museum Group object `1921-16`. It added a generic P/M key-stroke-integrity controller that wraps the existing accumulator instead of duplicating arithmetic: incomplete release leaves arithmetic unchanged, explicit detection locks unrelated input, correction commits the errant key exactly once through existing key events, and release preserves the result.

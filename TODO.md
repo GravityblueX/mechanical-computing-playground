@@ -29,6 +29,7 @@
 - [x] Deepen Difference Engine No. 2 and Differential Analyzer publication precision with the 2020 R/E2 technical description, BAB/B/001 H/E1 record, and Bush–Caldwell 1931 application facsimile while preserving inaccessible Bush/Shannon and generation boundaries.
 - [x] Harden operator-division quotient-nine/exact-zero causality and replay, then separate Curta facsimile controls from E3 division transcription without back-filling named-machine states.
 - [x] Ground Controlled-key incomplete-stroke responsibility in Turck 1921 and add a tested generic exactly-once key-stroke integrity/interlock lesson.
+- [x] Directly inspect the exposed Thomas 1868 register legend and add a tested generic independent result/revolution-register lifecycle lesson.
 
 ## Repository maintenance
 

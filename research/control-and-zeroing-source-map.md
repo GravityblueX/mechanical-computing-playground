@@ -18,26 +18,47 @@ Historical evidence strength follows `docs/EVIDENCE_POLICY.md`.
 
 A mode selector, zeroing actuator, crank-home lock, canceling control, or key stroke may contain no arithmetic result. It still determines which transition is legal, what operation occurs, whether a register begins in a valid state, and whether a jammed or incorrect operation can be recovered. These responsibilities are distributed differently by machine and revision; there is no universal calculator control mechanism.
 
-## 1. Thomas arithmometer: keep identified objects separate
+## 1. Thomas arithmometer: pamphlet, objects, and reconstruction remain separate
 
-Institutional anchors:
+### 1.1 Directly inspected 1868 pamphlet image
 
-- Smithsonian/NMAH Thomas Arithmometer `nmah_690683`: <https://americanhistory.si.edu/collections/object/nmah_690683>
-- stepped-drum object group: <https://americanhistory.si.edu/it/collections/object-groups/calculating-machines/stepped-drum-calculating-machines>
-- *Instructions pour se Servir de l'Arithmomètre* (1868), `nmah_904757`: <https://www.americanhistory.si.edu/collections/object/nmah_904757>
+Smithsonian/NMAH `nmah_904757`, ID `MA.318961.02`, identifies *Instruction pour se servir de l'Arithmomètre, machine à calculer inventée par M. Thomas (de Colmar)*, Paris, Imprimerie de Félix Malteste et Cie, 1868, gift of Columbia University Henry Krumb School of Mines, related to `MA.335215`.
 
-At the precision recorded by the specified museum material, the identified 1867 Thomas object supports separate responsibilities for:
+<https://americanhistory.si.edu/collections/object/nmah_904757>
 
-- selecting addition/multiplication versus subtraction/division with a lever;
-- opposite revolution-register direction for those mode groups;
-- identified Thomas examples having dedicated knobs/controls for zeroing result and revolution registers.
+The IIIF manifest `NMAH-AHB2018q019415` exposes **one canvas**, 3000×1846. It is a photograph of one open spread: the left side is the title/cover; the right is an `ARITHMOMÈTRE` drawing and `EXPLICATION DU DESSIN`, not a complete page sequence. The readable legend directly identifies:
 
-- Claim type: **H**.
-- Evidence: **E1** for the identified catalogued object/control; catalog interpretation must not be expanded beyond its wording.
+- `B`: operation selector; drawing labels visibly separate addition/multiplication from subtraction/division;
+- `C`: windows containing operation results;
+- `D`: windows indicating multiplier and quotient;
+- `O`: right-hand knob resetting the figures in windows `D` to zero;
+- `P`: left-hand knob resetting the figures in windows `C` to zero;
+- a note says both knobs also serve to lift and slide movable plate/carriage `M`.
 
-The Smithsonian pages returned HTTP 403 in this environment. The identifiers and bounded claims required by the institutional records are retained, but no photograph, internal linkage, or additional model detail was inferred. The 1868 pamphlet catalog establishes existence/date/provenance only. Its pages were not inspected, so this note makes no page-level operating-instruction claim.
+- Claim type: **H**; evidence: **E1 primary pamphlet image**, at this single-spread precision.
+- Access boundary: no printed page number is visible; no additional canvases expose full multiplication/division procedure, initial/final state, counter direction, or exact zeroing linkage/timing. Small obscured words in the `M`/`N` legend are not used for claims.
 
-Do not merge `nmah_690683`, the separately cited `nmah_690684`, Burkhardt objects, later Thomas zeroing controls, and an uninspected pamphlet into one canonical Thomas geometry.
+### 1.2 Identified Smithsonian objects
+
+The 1867 object `nmah_690683` / `MA.327900`, maker number recorded by the object text as No. 787 (manifest metadata says 747), has eight setting levers, seven carriage positions, nine revolution windows and sixteen result windows. Its catalog states that a lever selects addition/multiplication versus subtraction/division, the revolution register runs clockwise for subtraction/division and counterclockwise for addition/multiplication, and a right carriage knob zeros the revolution register. The left control is described only as a lifting knob; the record does not state that it zeros the result register.
+
+<https://americanhistory.si.edu/collections/object/nmah_690683>
+
+The ca.1873 object `nmah_690686` / `MA.335215`, maker No. 1068, has ten setting levers, eleven revolution windows and twenty result windows. Its catalog explicitly assigns the black right knob to zeroing the revolution register and the left knob to zeroing the result register. It also states that the separately stored instruction book is dated 1868.
+
+<https://americanhistory.si.edu/collections/object/nmah_690686>
+
+Both manifests expose object photographs only (one canvas each); catalog descriptions and visible objects are H/E1 at their stated precision. The two capacities, knob descriptions and provenance histories must not be merged into one canonical revision.
+
+### 1.3 Oxford / 1865 booklet attribution
+
+Stephen Johnston's Museum of the History of Science institutional account, *Making the arithmometer count* (1997), says its Figure 1 engraving comes from an 1865 instruction booklet. It describes mature-machine result dials `C`, quotient/counter dials `D`, and independent zeroing by the two knurled knobs at opposite carriage ends (`O`, `P`). This is used as **R/E2 institutional reconstruction/synthesis**: the web article and figure attribution were inspected, not a bibliographically complete primary booklet scan.
+
+<https://www.mhs.ox.ac.uk/staff/saj/arithmometer/>
+
+### 1.4 Remaining boundary
+
+Specialist `arithmometre.org` chronology remains E3 orientation for serial/revision mapping. The directly inspected evidence supports separate register responsibilities on identified 1860s/1870s sources. It does not establish one linkage, action timing, knob geometry, clearing procedure, or production revision history for every Thomas arithmometer.
 
 ## 2. Odhner US 1,510,100: crank-home locking
 

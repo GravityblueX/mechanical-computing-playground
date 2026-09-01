@@ -63,7 +63,7 @@ Current state: `research/subtraction-and-division.md` and a tested generic `8478
 
 Remaining gaps:
 
-- a directly inspected Thomas 1868 instruction facsimile, primary Burkhardt procedure pages, and exact Curta division-example edition/page mapping beyond the directly inspected guide controls and E3 transcription;
+- Thomas multiplication/division procedure pages beyond the directly inspected single 1868 legend spread, primary Burkhardt procedure pages, and exact Curta division-example edition/page mapping beyond the directly inspected guide controls and E3 transcription;
 - source-specific mode/crank/counter directions and correction linkages beyond the bounded Curta viewer-page-1 controls;
 - primary Pascaline complement setup/digit conventions;
 - square-root and other derived procedures only when tied to a precise manual/model.
@@ -72,11 +72,11 @@ Do not back-fill the generic P/M loop as one universal historical procedure.
 
 ## Priority 4 — Control, correction, and machine safety
 
-Current state: tested generic setting–crank and key-stroke-integrity interlocks plus typed Thomas/Odhner/Felt/Pascaline profiles show that permission, zeroing, canceling, incomplete-stroke recovery, and mode state are computational; Turck 1921 directly anchors the Controlled-key blocking responsibility.
+Current state: tested setting–crank, key-stroke-integrity, and independent dual-register lifecycle controls show that permission, zeroing, canceling, incomplete-stroke recovery, and mode state are computational; the single exposed 1868 Thomas pamphlet spread directly anchors separate C/D register roles and O/P zeroing responsibilities.
 
 Remaining gaps:
 
-- exact Thomas instruction pages and zeroing linkage;
+- additional Thomas procedure pages plus exact zeroing linkage/timing and production-revision mapping;
 - production use of Odhner patented locking embodiments;
 - exact primary release-button procedure, trigger/registration timing, and patent-to-production mapping for Model E/F controlled-key revisions;
 - source-specific overflow, carry inhibition, and recovery geometry.
