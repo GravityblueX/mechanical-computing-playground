@@ -2,7 +2,7 @@ export interface SourceAtlasText { en: string; zh: string; }
 export type SourceAtlasTrack = 'difference-engine-no-2' | 'bush-differential-analyzer' | 'curta' | 'analytical-engine';
 export type SourceAtlasClaimType = 'H' | 'R';
 export type SourceAtlasEvidenceStrength = 'E1' | 'E2' | 'E3';
-export type SourceAtlasAccessKind = 'direct archive record' | 'direct catalog' | 'institutional reconstruction' | 'bibliographic-only' | 'direct primary facsimile' | 'specialist-hosted primary facsimile' | 'specialist transcription' | 'reconstruction documentation';
+export type SourceAtlasAccessKind = 'direct archive record' | 'direct catalog' | 'institutional reconstruction' | 'institutional historical study' | 'bibliographic-only' | 'direct primary facsimile' | 'specialist-hosted primary facsimile' | 'specialist transcription' | 'reconstruction documentation';
 
 export interface NamedMachineSourceAnchor {
   id: string;
@@ -15,7 +15,7 @@ export interface NamedMachineSourceAnchor {
   claimType: SourceAtlasClaimType;
   evidenceStrength: SourceAtlasEvidenceStrength;
   accessKind: SourceAtlasAccessKind;
-  inspectedDate: '2026-09-01';
+  inspectedDate: '2026-09-01' | '2026-09-02';
   supports: readonly SourceAtlasText[];
   notEstablished: readonly SourceAtlasText[];
   researchNoteAnchor: string;
@@ -65,6 +65,21 @@ export const NAMED_MACHINE_SOURCE_ANCHORS: readonly NamedMachineSourceAnchor[] =
     id: 'de2-reconstruction-1991-2002', track: 'difference-engine-no-2', generation: { en: 'modern institutional reconstruction', zh: '现代机构复原' }, sourceTitle: "Babbage's Difference Engine No 2, 2002", institution: 'Science Museum Group', sourceUrl: 'https://collection.sciencemuseumgroup.org.uk/objects/co62748', recordIdentifier: '1992-556 / co62748', claimType: 'R', evidenceStrength: 'E2', accessKind: 'institutional reconstruction', inspectedDate: '2026-09-01', researchNoteAnchor: 'research/difference-engine-source-map.md#3-difference-engine-no-2-design-versus-reconstruction',
     supports: [{ en: 'Science Museum construction: calculating section completed 1991, printing mechanism added 2002; DE2 was not built in Babbage’s lifetime', zh: 'Science Museum 建造：计算部分 1991 年完成，打印机构 2002 年加入；差分机二号未在 Babbage 生前建成' }],
     notEstablished: [{ en: 'a Babbage-lifetime artifact or automatic identity between reconstructed choices and every original drawing detail', zh: 'Babbage 生前实物，或复原选择与每一项原图细节自动等同' }],
+  },
+  {
+    id: 'scheutz-1853-smithsonian', track: 'difference-engine-no-2', generation: { en: 'built Scheutz printing difference engine, 1853', zh: '1853 年建成的 Scheutz 打印差分机' }, sourceTitle: 'Scheutz Difference Engine', institution: 'Smithsonian / National Museum of American History', accessHost: 'NMAH catalog + Smithsonian IIIF manifest', sourceUrl: 'https://americanhistory.si.edu/collections/object/nmah_997042', recordIdentifier: 'MA.323659 / nmah_997042; made 1853; 56 × 170 × 58 cm', claimType: 'H', evidenceStrength: 'E1', accessKind: 'direct catalog', inspectedDate: '2026-09-02', documentRole: 'historical publication', fullFacsimileInspected: false, pageFigureAnchors: ['NMAH object record', 'IIIF SIA-89-22028: one 3000×1946 object-image canvas'], researchNoteAnchor: 'research/difference-engine-source-map.md#smithsonian-1853-built-machine',
+    supports: [{ en: 'surviving built printing calculator object, Georg and Edvard Scheutz maker identity, 1853 Stockholm date/place, materials/dimensions, Paris 1855 exhibition, Dudley sale and U.S. government-contract catalog context', zh: '存世建成的打印计算器实物、Georg 与 Edvard Scheutz 制作者、1853 年 Stockholm 日期/地点、材料/尺寸、1855 Paris 展览、售予 Dudley 及美国政府合同的目录语境' }],
+    notEstablished: [{ en: 'internal geometry, printer timing, tooth counts, throughput, reliability/error rate, government-contract workflow, Babbage-printer identity, or repository P/M output-event identity', zh: '内部几何、打印时序、齿数、吞吐量、可靠性/错误率、政府合同流程、与 Babbage 打印机构相同，或与本站 P/M 输出事件相同' }],
+  },
+  {
+    id: 'scheutz-1857-drawings-smithsonian', track: 'difference-engine-no-2', generation: { en: 'Scheutz operational drawing set, ca. 1857', zh: '约 1857 年 Scheutz 操作图纸组' }, sourceTitle: 'Sheet of Drawings of the Scheutz Difference Engine', institution: 'Smithsonian / National Museum of American History', accessHost: 'NMAH catalog + Smithsonian IIIF manifest', sourceUrl: 'https://americanhistory.si.edu/collections/object/nmah_1005138', recordIdentifier: '1988.0798.01 / nmah_1005138; ca. 1857; 14 figures; catalog says patent No. 2214', claimType: 'H', evidenceStrength: 'E1', accessKind: 'direct catalog', inspectedDate: '2026-09-02', documentRole: 'archive drawing', fullFacsimileInspected: false, pageFigureAnchors: ['catalog: Fig. 1 through Figure 14', 'IIIF SIA-2002-16607: one 3000×1970 drawing-image canvas'], researchNoteAnchor: 'research/difference-engine-source-map.md#smithsonian-ca-1857-operational-drawing-set',
+    supports: [{ en: 'catalogued ca. 1857 drawing object and its instruction provenance: the set plus an unexposed letter accompanied the Albany shipment; catalog says figures are similar to but not identical with final patent specifications and numbered differently', zh: '约 1857 年图纸实物及其目录所述操作说明来源：该图纸组与一封未公开信件随 Albany 装运；目录称图形与最终专利说明相似但不相同，编号也不同' }],
+    notEstablished: [{ en: 'letter content beyond the catalog summary, exact geometry, equivalence with patent figures, reconciliation of catalog No. 2214 versus Merzbach/patent No. 2216, Babbage-printer architecture, or repository P/M output-event identity', zh: '超出目录摘要的信件内容、确切几何、与专利图等同、目录 2214 与 Merzbach/专利 2216 的编号冲突解释、Babbage 打印机构或本站 P/M 输出事件身份' }],
+  },
+  {
+    id: 'scheutz-merzbach-1977', track: 'difference-engine-no-2', generation: { en: 'Smithsonian historical synthesis and reproduced patent, 1977', zh: '1977 年 Smithsonian 历史研究及专利复刻' }, sourceTitle: 'Georg Scheutz and the First Printing Calculator', institution: 'Smithsonian Institution Press / GovInfo access', accessHost: 'U.S. Government GovInfo PDF', sourceUrl: 'https://www.govinfo.gov/content/pkg/GOVPUB-SI-PURL-gpo20587/pdf/GOVPUB-SI-PURL-gpo20587.pdf', recordIdentifier: 'Smithsonian Studies in History and Technology no. 36; 84-page PDF; Appendix I identifies British Patent A.D. 1854 No. 2216', claimType: 'H', evidenceStrength: 'E2', accessKind: 'institutional historical study', inspectedDate: '2026-09-02', documentRole: 'historical publication', fullFacsimileInspected: false, pageFigureAnchors: ['p. 13 completion', 'pp. 19–21 patent/Paris chronology', 'pp. 26–29 Albany/use/contract', 'Appendix I pp. 43–55 reproduced patent No. 2216'], researchNoteAnchor: 'research/difference-engine-source-map.md#merzbach-1977-institutional-study-and-reproduced-patent',
+    supports: [{ en: 'institutional chronology of 1853 completion, 1854–1855 patent process, Paris 1855, Albany 1857 and bounded 1858 work; Appendix I separately reproduces identified patent No. 2216', zh: '机构研究所述 1853 完工、1854–1855 专利过程、1855 Paris、1857 Albany 及有限的 1858 工作；附录 I 另行复刻具名专利 2216' }],
+    notEstablished: [{ en: 'that synthesis prose is primary E1 evidence, that the Smithsonian 14-figure sheet equals patent figures, exact printer synchronization/performance, Babbage-printer architecture, or repository P/M event timing', zh: '研究叙述本身属于 E1 一手证据、Smithsonian 14 图纸组等同专利图、确切打印同步/性能、Babbage 打印机构或本站 P/M 事件时序' }],
   },
   {
     id: 'smithsonian-da-group', track: 'bush-differential-analyzer', generation: { en: 'original MIT analyzer and later generations', zh: 'MIT 原始分析机及后续世代' }, sourceTitle: 'Differential Analyzer Parts and Documentation', institution: 'Smithsonian/NMAH', sourceUrl: 'https://americanhistory.si.edu/collections/object-groups/mechanical-integrators/differential-analyzers', recordIdentifier: 'NMAH object group', claimType: 'H', evidenceStrength: 'E1', accessKind: 'direct catalog', inspectedDate: '2026-09-01', researchNoteAnchor: 'research/differential-analyzer.md#2-smithsoniannational-museum-of-american-history-records',

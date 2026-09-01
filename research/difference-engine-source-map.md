@@ -154,14 +154,53 @@ Science Museum Group, object `co62255`, *Scheutz Difference Engine, third model,
 
 The catalog identifies a Bryan Donkin & Co. 1859 machine, bought by the British government for the English Life Table of 1864, and includes a surviving holder described as part of the printing apparatus.
 
-### Smithsonian boundary
+### Smithsonian 1853 built machine
 
-Smithsonian record `MA.323659` / `nmah_997042` and the institutional difference-engine group were requested, but this environment returned HTTP 403. Their identifiers are retained as future anchors; no additional inaccessible catalog detail is asserted here.
+Directly inspected NMAH record and IIIF metadata:
 
-- Built engines/object provenance: **H/E1** where established by the surviving Science Museum record.
-- CHM historical synthesis: **H/E2**.
+- <https://americanhistory.si.edu/collections/object/nmah_997042>
+- `MA.323659` / `nmah_997042`; maker Georg and Edvard Scheutz; made 1853 in Stockholm;
+- metal mechanism, paper printout, wooden base; 56 × 170 × 58 cm;
+- the catalog calls it the first printing calculator sold, records its 1855 Paris world's-fair exhibition, sale to Dudley Observatory in **“Schenectedy”** [catalog spelling], New York, and computations under a U.S. government contract;
+- related-object pointer: drawing set `1988.0798.01`.
 
-Scheutz machines show that printing difference engines were actually built in the nineteenth century. Their architecture must not be relabelled as Babbage's printer architecture, and their use/effectiveness must not be romanticized: CHM notes that the 1859 machine's contribution was limited and operation temperamental.
+The institutional difference-engine group separately says Babbage proposed a difference engine and built a small section, while Georg and Edvard Scheutz and George B. Grant actually built difference engines. It is grouping context, not a replacement for the object record.
+
+- Claim type: **H**; evidence **E1 at surviving-object/catalog precision**.
+- The 16-slide web presentation and one-canvas IIIF manifest establish available object imagery, not gearing, printer timing, throughput, reliability, error rate or contract workflow.
+
+### Smithsonian ca. 1857 operational drawing set
+
+Directly inspected NMAH record and IIIF metadata:
+
+- <https://americanhistory.si.edu/collections/object/nmah_1005138>
+- `1988.0798.01` / `nmah_1005138`; Georg and Edvard Scheutz; ca. 1857; Stockholm; tan paper with white cloth backing, 66.04 × 42.2275 cm;
+- catalog says the engine was shipped to Dudley Observatory in **Albany** in 1857 and that its use instructions consisted of this drawing set plus a letter explaining number-system conversion;
+- fourteen drawings are labeled Fig. 1 through Figure 14;
+- catalog says they are similar to, but not identical with, final specifications for British Patent A.D. 1854, No. **2214**, with somewhat different numbering.
+
+- Claim type: **H**; evidence **E1 at drawing-object/catalog precision**.
+- The related letter itself was not exposed and its contents were not inspected. The single IIIF canvas was used for record identity only. The catalog's patent number conflicts with the directly inspected Merzbach title/Appendix I identity, **No. 2216**; this note preserves both source wordings and does not silently repair either.
+
+### Merzbach 1977 institutional study and reproduced patent
+
+GovInfo directly exposes the 84-page Smithsonian publication *Georg Scheutz and the First Printing Calculator*, Uta C. Merzbach, *Smithsonian Studies in History and Technology* no. 36, Smithsonian Institution Press, 1977.
+
+<https://www.govinfo.gov/content/pkg/GOVPUB-SI-PURL-gpo20587/pdf/GOVPUB-SI-PURL-gpo20587.pdf>
+
+Bounded exact printed-page anchors:
+
+- abstract: machine completed in 1853, Paris 1855, Dudley purchase in 1856, brief 1858 U.S. Navy/Nautical Almanac contract work;
+- p. 13: machine completed October 1853;
+- pp. 19–20: provisional patent petition filed 17 October 1854; full specification signed 9 March 1855, sealed 13 April; Letters Patent **No. 2216 (A.D. 1854)**;
+- p. 21: machine installed at the Paris Exposition in August 1855;
+- pp. 26–27: arrival in Albany in April 1857; drawings and Edvard Scheutz letter were the only explanation; Mars computations were stereotyped;
+- pp. 27–29: machine-produced Mars/refraction work and the bounded U.S. government-contract trial;
+- Appendix I, pp. 43–55: clearly identified reproduction/transcription of British Patent A.D. 1854 No. 2216, including provisional and final specification figures.
+
+Merzbach's narrative is **H/E2 institutional synthesis**. Appendix I is a directly inspected, identified reproduced primary patent layer at its transcription/reproduction precision; it is not evidence that the Smithsonian 14-figure sheet equals the patent figures. The abstract's “patented in Great Britain in 1834” is retained as an apparent printed inconsistency rather than used against the detailed 1854 chronology.
+
+Scheutz machines establish an actually built nineteenth-century printing-difference-engine line. Their architecture must not be relabelled as Babbage's printer architecture; the object photos, drawing catalog and later synthesis do not establish exact geometry, synchronization, measured performance or universal effectiveness.
 
 ## 6. Repository model and output boundary
 
@@ -193,4 +232,4 @@ Open before any source-specific mechanical visualization:
 - formatting controls at drawing/mechanism level;
 - stereotype materials and production process details;
 - tolerances, force, backlash and reconstruction manufacturing decisions;
-- independently accessible Smithsonian object detail for the 1853 Scheutz engine.
+- exact Scheutz printer synchronization, internal geometry, measured reliability/error/throughput, related-letter text, and reconciliation of the Smithsonian `2214` versus Merzbach/patent `2216` numbering conflict.

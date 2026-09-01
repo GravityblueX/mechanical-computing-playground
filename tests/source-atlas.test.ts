@@ -46,6 +46,22 @@ describe('named-machine source anchor atlas', () => {
     expect(built.notEstablished.map(item => item.en).join(' ')).toMatch(/Babbage-lifetime artifact/);
   });
 
+  it('separates the built Scheutz machine, operational drawings, patent reproduction, Babbage designs, and repository output', () => {
+    const built = getNamedMachineSourceAnchor('scheutz-1853-smithsonian');
+    const drawings = getNamedMachineSourceAnchor('scheutz-1857-drawings-smithsonian');
+    const study = getNamedMachineSourceAnchor('scheutz-merzbach-1977');
+    expect(built).toMatchObject({ claimType: 'H', evidenceStrength: 'E1', accessKind: 'direct catalog', recordIdentifier: expect.stringMatching(/MA\.323659.*1853/) });
+    expect(built.supports.map(item => item.en).join(' ')).toMatch(/surviving built printing calculator object/);
+    expect(built.notEstablished.map(item => item.en).join(' ')).toMatch(/internal geometry.*printer timing.*Babbage-printer identity.*repository P\/M/);
+    expect(drawings).toMatchObject({ claimType: 'H', evidenceStrength: 'E1', documentRole: 'archive drawing', recordIdentifier: expect.stringMatching(/14 figures.*2214/) });
+    expect(drawings.supports.map(item => item.en).join(' ')).toMatch(/similar to but not identical.*numbered differently/);
+    expect(drawings.notEstablished.map(item => item.en).join(' ')).toMatch(/letter content.*equivalence with patent figures.*2214.*2216.*Babbage-printer/);
+    expect(study).toMatchObject({ claimType: 'H', evidenceStrength: 'E2', accessKind: 'institutional historical study', documentRole: 'historical publication' });
+    expect(study.pageFigureAnchors).toEqual(expect.arrayContaining([expect.stringMatching(/pp\. 26–29/), expect.stringMatching(/Appendix I pp\. 43–55.*2216/) ]));
+    expect(study.notEstablished.map(item => item.en).join(' ')).toMatch(/synthesis prose is primary E1.*14-figure sheet equals patent figures.*repository P\/M/);
+    expect(getNamedMachineSourceAnchor('de2-reconstruction-1991-2002').claimType).toBe('R');
+  });
+
   it('limits frontlash to the catalogued adjacent-shaft compensation role', () => {
     const anchor = getNamedMachineSourceAnchor('bush-frontlash-1983-3002-04');
     expect(anchor.supports.map(item => item.en).join(' ')).toMatch(/backlash.*output shaft.*adjacent unit.*input shaft/);

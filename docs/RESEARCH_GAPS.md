@@ -21,7 +21,7 @@ Do not add random failure or source-specific linkage animation before those sour
 
 ### 0.2 Named-machine source anchors
 
-Current state: the four-track typed atlas separates directly inspected Difference Engine No. 2, Bush Differential Analyzer, Curta, and Analytical Engine records from later reconstruction/transcription and repository P/M flows. Curta now includes direct Type II service precision at PDF pp. 1–2, 6/leaf N I-a, 10/leaf O-1-2 and 34/leaf S 3, while preserving its replacement-leaf and reused-Type-I-picture warnings.
+Current state: the four-track typed atlas separates directly inspected Difference Engine, Bush Differential Analyzer, Curta, and Analytical Engine records from reconstruction/transcription and repository P/M flows. The Difference Engine track now separates Smithsonian's built 1853 Scheutz machine, ca.1857 operational drawing object, Merzbach 1977 synthesis/reproduced patent, Babbage designs, and the modern DE2 reconstruction.
 
 Remaining gaps:
 
@@ -150,7 +150,7 @@ Only files with real remaining evidence work are listed:
 1. `research/curta-source-map.md` — Type II capacity/date/replacement-leaf chronology and production revision/linkage mapping beyond the inspected service leaves;
 2. `research/analytical-engine-information-flow.md` — content-page images for items 10–20 inside known 1889 chapter pp. 331–338, a defensible printed-catalogue/BAB-code cross-walk, and drawing-level reader/Store/Mill coordination evidence;
 3. `research/differential-analyzer.md` — Bush 1931 facsimile plus component interconnection/error evidence;
-4. `research/difference-engine-source-map.md` — drawing interpretation, timing and manufacturing evidence beyond catalog titles;
+4. `research/difference-engine-source-map.md` — Scheutz/Babbage drawing interpretation, printer timing, measured performance, unexposed Scheutz letter, 2214/2216 catalog/patent reconciliation, and manufacturing evidence beyond catalog titles;
 5. `research/control-and-zeroing-source-map.md` — Thomas instructions, partial-stroke correction and production mapping;
 6. carry source maps — production mapping and measured physical envelopes;
 7. `research/output-and-audit-trail.md` — period office procedure and source-specific printing mechanics.

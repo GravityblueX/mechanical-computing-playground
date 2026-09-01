@@ -1,5 +1,27 @@
 # Verification record
 
+## 2026-09-02 — Smithsonian Scheutz built-engine and operational-drawing evidence
+
+The current-main pre-edit baseline passed typecheck and 291 tests across 21 files. NMAH object records and their IIIF manifests were directly inspected for the surviving 1853 Scheutz engine `MA.323659` / `nmah_997042` and ca.1857 drawing set `1988.0798.01` / `nmah_1005138`. The object record establishes maker/date/place/material/dimensions plus Paris/Dudley/government-contract catalog context; the drawing record establishes 14 figures and the drawings-plus-unexposed-letter instruction provenance. It explicitly says the figures are similar to but not identical with final patent specifications.
+
+The 84-page GovInfo PDF of Merzbach's 1977 Smithsonian study was identity-checked and searched at printed-page precision. Anchors now include p. 13 (1853 completion), pp. 19–21 (patent and Paris chronology), pp. 26–29 (Albany, instructions, work and contract), and Appendix I pp. 43–55 (reproduced British Patent A.D. 1854 No. 2216). The NMAH drawing catalog instead says No. 2214; both source wordings remain explicit and unreconciled. Merzbach prose remains H/E2, while the identified patent appendix is separately described only at reproduced-primary precision.
+
+- `npm run typecheck` — pass
+- `npm test -- --run` — pass, 292 tests across 21 files
+- `npm run build` — pass
+- `git diff --check` — pass
+- focused source-atlas test — 16 tests passed
+
+Local bilingual browser smoke:
+
+- `#/source-atlas` rendered three separated Scheutz cards for built object, operational drawing set and institutional study/patent reproduction, including the 2214/2216 conflict, in English and Chinese;
+- `#/finite-difference` retained its P/M difference/output flow;
+- `#/output-contracts` required no wording correction and retained its table-output boundary;
+- `#/about` retained the evidence-policy boundary;
+- checked routes had no desktop horizontal overflow.
+
+No deployment check was performed for this not-yet-pushed completion commit.
+
 ## 2026-09-01 — H. P. Babbage 1889 publication-access boundary
 
 The current-main pre-edit baseline passed typecheck and 291 tests across 21 files. Cambridge Core directly confirmed the 1889-first-published Spon compilation, chapter 32 *Proceedings of the British Association, 1888*, reproduced chapter range pp. 331–338, and DOI `10.1017/CBO9780511694721.033`. Its accessible preview exposed only numbered items 1–5; the PDF route returned the access page rather than printed page images. Library of Congress metadata independently identifies the Tomash 1982 volume as a reprint of the 1889 E. & F. N. Spon edition, but exposes only an illustration.
