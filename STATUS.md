@@ -1,6 +1,6 @@
 # Current Status
 
-Last reconciled on 2026-09-01 after the human-machine arithmetic-work synthesis slice.
+Last reconciled on 2026-09-01 after the named-machine source-anchor atlas slice.
 
 This file is the **current-state authority** for the repository. `ROADMAP.md` describes where the project should go; `IMPLEMENTATION_PLAN.md` is still useful as a dependency/design specification, but many of its checkboxes predate later implementation and must not be treated as the live task ledger.
 
@@ -13,7 +13,7 @@ This file is the **current-state authority** for the repository. `ROADMAP.md` de
 - GitHub Actions CI and a Pages deployment workflow.
 - Deterministic state/event/replay primitives under `src/core/`.
 - Golden carry fixtures under `fixtures/carry/`.
-- The latest local verification (`docs/VERIFICATION.md`, 2026-09-01 UTC+8) reports typecheck, 208 tests across 18 files, production build, diff check, and bilingual browser smoke passing.
+- The latest local verification (`docs/VERIFICATION.md`, 2026-09-01 UTC+8) reports typecheck, 217 tests across 19 files, production build, diff check, and bilingual browser smoke passing.
 
 Remote CI run `33437862103` passed for the previous operator-division checkpoint `7bebcea2d187f0ed2411de4098c846963df8b32a`. This status still does **not** substitute for CI on later commits.
 
@@ -36,6 +36,7 @@ Remote CI run `33437862103` passed for the previous operator-division checkpoint
 - typed carry-provenance profiles separating Pascal/Felt, Odhner/Talamini, and Thomas 1820 patent/object, 1865, 1880 proposal, and R/E3 revision-history contexts;
 - typed mechanical-error-control profiles separating Thomas inertia/load, Odhner/Talamini carry scheduling, and Bush frontlash/backlash-transmission responsibilities without pseudo-quantitative reliability fields;
 - typed P/M operator-work profiles derived from existing multiplication, key-driven, division, and printing-ledger traces, with categorical counts and no scalar efficiency/productivity score;
+- typed named-machine source anchors separating directly inspected Babbage archive records, the R/E2 1991/2002 DE2 reconstruction, Smithsonian Bush components, and the bibliographic-only Bush 1931 boundary;
 - generic deterministic printing ledger separating working accumulator state from structured persistent ITEM/SUBTOTAL/TOTAL lines, including subtotal retention, total clearing, replay, and tamper rejection;
 - typed output-contract profiles separating identified register-only/printing objects, primary total/subtotal patent semantics, and Difference Engine persistent-output roles;
 - generic continuous integrator with independent/input/integrated quantities, P/M inspection interval, ordered observation/advance events, safe numeric validation, and hardened replay;
@@ -59,6 +60,7 @@ The current browser shell contains non-empty routes or views for:
 - interactive continuous mechanical integration workbench with A/B inputs, explicit sum, coordinate/integral phases, tracer output, stepping, reset, and a link to the documented frontlash responsibility;
 - bilingual mechanical-error-control comparison preserving distinct Thomas, Odhner/Talamini, and Bush source/problem/control boundaries;
 - bilingual arithmetic-work comparison showing what operators choose/repeat/shift/correct/request versus what mechanisms represent/execute/retain across four existing scenarios;
+- bilingual source atlas exposing what each Difference Engine No. 2 or Bush Differential Analyzer source supports and does not establish;
 - hand-crank backpropagation;
 - about / evidence explanation.
 
@@ -97,8 +99,8 @@ The most important remaining gaps are:
 - key-driven computation now has a tested generic P/M mechanism model, but simultaneous multi-column operation, correction, interlocks, and source-specific Comptometer geometry remain intentionally unmodeled;
 - `research/curta-source-map.md` now maps US 2,525,352 figures/architecture and specialist-hosted operator material, while exact manual edition/page/facsimile and production Type I/II revision mapping remain open;
 - `research/analytical-engine-information-flow.md` now maps Menabrea/Lovelace, Charles and H. P. Babbage publications, catalogued Babbage Papers drawings, Walker reconstruction choices, and the repository's P/M boundary; exact facsimile/page mapping and source-specific geometry remain open;
-- `research/differential-analyzer.md` now adds directly inspected Smithsonian frontlash unit `1983.3002.04` / `nmah_693235` and separates integration mathematics, shaft transmission, backlash compensation, torque amplification, and output tracing; Bush 1931 full facsimile/page/figure inspection, exact placement/wiring, numerical backlash/residual error, and physical geometry remain open;
-- `research/difference-engine-source-map.md` now separates Difference Engine No. 1 design/fragment, No. 2 design and 1991/2002 reconstruction, BAB/A/173–176 drawing records, and built Scheutz printing engines; drawing-level geometry/timing and inaccessible Smithsonian detail remain open;
+- `research/differential-analyzer.md` now directly inspects the Smithsonian object group plus input, adder, integrator, tracer and frontlash records while keeping roles/generations separate; Bush 1931 full facsimile/page/figure inspection, exact placement/wiring, numerical backlash/residual error, and physical geometry remain open;
+- `research/difference-engine-source-map.md` now directly anchors the Babbage Papers index, BAB/A/171, BAB/B/013–014, BAB/A/178 notation records, the 1991/2002 reconstruction, and built Scheutz machines; drawing-level interpretation/geometry/timing and inaccessible Smithsonian detail remain open;
 - `research/simulator-matrix.md` now records a bounded prior-art/reuse matrix, but several third-party license, stepping, and maintenance fields remain explicitly unverified;
 - `research/control-and-zeroing-source-map.md` now separates identified Thomas mode/counter/zeroing roles, Odhner US1510100 crank-home locking, Felt US960528 cancel/carry-strain recovery, Turck US1154897 immediate key actuation, and the Pascaline H/R complement boundary; source-specific geometry, uninspected Thomas instructions, partial-stroke correction, and production-revision mapping remain open;
 - `research/output-and-audit-trail.md` and `#/output-contracts` now compare register-only output, identified printing/listing objects, US885202A subtotal/total semantics, and Difference Engine persistent-output roles; direct museum-page access, printer geometry, period office procedure, commercial context, and source-specific production mapping remain open;

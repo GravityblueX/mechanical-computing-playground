@@ -2,319 +2,157 @@
 
 Checked 2026-09-01.
 
-The repository already has enough software scaffolding to demonstrate several ideas. The next useful work is **not** to keep adding famous machine names. It is to fill missing mechanism families, operator protocols, and source chains that change how computation is understood.
+This is a short research queue. `STATUS.md` remains the implementation authority. Completed mechanism slices are summarized here only to prevent old proposals from being mistaken for missing code.
 
-This document is a research queue, not a promise that every topic becomes a full emulator.
+## Priority 0 — Source precision before visual precision
 
-## Priority 0 — Fix the evidence layer before adding visual detail
+### 0.1 Carry architecture: current state and remaining evidence
 
-### 0.1 Carry should become a historical comparison, not only an abstract event chain
+Current state: tested decimal carry, key-driven carry, source-separated Pascal/Felt, Odhner/Talamini, and Thomas provenance, an ordinal P/M scheduler, and public comparisons all exist.
 
-Current state:
+Remaining gaps:
 
-- deterministic `0099 + 1` carry events exist;
-- `research/carry-architecture-source-map.md` now separates Pascal's operational text, Cnam's sautoir description, a CMU reconstruction, Felt US366945A, Felt US762520A, and the Smithsonian Model A catalog context;
-- the visible-carry lesson compares those responsibilities without treating its P/M arrows/events as historical geometry;
-- key-driven carry replay now rejects altered, omitted, inserted, unknown, or final-state-mismatched trace data;
-- `research/rotary-carry-scheduling-source-map.md` separates Odhner US514725A baseline transfer, US1377269A's explicit rapid-rotation miscalculation risk, and Talamini/Marchant US1867603A staggered/phase-overlap improvement;
-- a tested direction-neutral P/M scheduler exposes strictly ordered transfer slots and fails closed on trace tampering;
-- `research/stepped-drum-carry-source-map.md` now separates Thomas 1820 patent/object boundaries, 1865 overrun/sequential-phasing/simultaneous-load evidence, the 1880 simplification proposal, and non-E1 production interpretation.
+- primary/facsimile Pascaline drawing anchors beyond the operational `Avis`;
+- production-revision mapping for Felt Model A, Thomas 1850/1851/1865/1880, and rotary patents;
+- factory instructions and direct mechanism measurements;
+- source-specific force/contact-load, materials, lubrication, tolerances, wear, safe-rate, and failure-envelope evidence.
 
-What remains:
+Do not add random failure or source-specific linkage animation before those sources exist.
 
-1. primary/facsimile Pascaline drawing anchors beyond the operational `Avis`;
-2. exact production-revision mapping between US762520A and surviving Model A mechanisms;
-3. exact Thomas 1850/1851/1865 production mapping, factory instructions, direct mechanism measurements, and stronger 1880 adoption census;
-4. production-revision mapping for the rotary patents;
-5. source-specific force/contact-load, material, lubrication, tolerance, wear, safe-rate, and measured failure-envelope data before reliability modeling.
+### 0.2 Named-machine source anchors
 
-Good starting sources:
+Current state: Curta and Analytical Engine source maps exist. `research/difference-engine-source-map.md`, `research/differential-analyzer.md`, typed `src/exhibits/source-atlas/` anchors, and `#/source-atlas` now separate directly inspected Difference Engine No. 2 and Bush Differential Analyzer records from repository P/M flows.
 
-- ACONIT / Inria virtual museum, Pascaline: <https://aconit.inria.fr/omeka/exhibits/show/histoire-machines/prehistoire/pascaline.html>
-- CMU Pascaline reconstruction materials: <https://www.cs.cmu.edu/~dst/Pascaline/>
-- Smithsonian Comptometer object group: <https://www.si.edu/spotlight/adding-machines/full-keyboard-hill-to-felt-tarrant>
-- Smithsonian Model A Comptometer record: <https://americanhistory.si.edu/collections/object/nmah_690484>
+Remaining gaps:
 
-Completed bounded deliverable:
+- Curta manual edition/page/facsimile and Type I/II production mapping;
+- Analytical Engine exact facsimile/page mapping and source-specific geometry;
+- legible Babbage drawing interpretation beyond archive titles, including timing/manufacturing evidence;
+- a stable full facsimile of Bush 1931 before page/figure claims;
+- exact Bush component interconnection, revision mapping, torque-amplifier construction, and measured error data.
 
-- explanatory essay linked to a source-separated carry map;
-- typed provenance and a public carry-architecture comparison;
-- no source-specific linkage drawing.
+Archive images and object photographs are not self-interpreting geometry proof.
 
-### 0.2 Named-machine pages need page/figure-level source anchors
+## Priority 1 — Multiplication architecture
 
-The Curta, Analytical Engine, and Differential Analyzer tracks currently have explanatory value but thin provenance.
+Current state: repeated addition, conceptual stepped-drum and pinwheel paths, and a tested Steiger/Millionaire-informed direct-multiplication P/M model now compare operator repetition with represented multiple selection for `314 × 27`.
 
-For each named machine, the next research pass should record:
+Remaining gaps:
 
-- exact edition / model / revision;
-- primary manual, patent, drawing, or artifact record;
-- what part of the software model corresponds to that source;
-- what is not known;
-- whether a modern reconstruction is being followed.
+- source-specific Millionaire control-plate/cam/gearing geometry and model/revision mapping;
+- primary operating instructions;
+- measured torque, speed, wear, reliability, or comparative performance evidence.
 
-A source list with five URLs is not enough if the UI shows a specific internal sequence.
+The existing two-cycle direct trace is a P/M count, not historical speed.
 
----
+## Priority 2 — Key-driven input and controls
 
-## Priority 1 — Multiplication architecture is missing its most important contrast
+Current state: `research/key-driven-computation.md`, Turck/Felt source anchors, a tested generic key-driven accumulator, carry replay, and the operator-work comparison establish `keypress → accumulate` as a distinct protocol.
 
-The current comparison focuses on repeated addition, stepped drums, and pinwheels. But stepped-drum and pinwheel machines often share the same **operator-level repeated-addition algorithm**: set a multiplicand, crank according to a multiplier digit, shift the carriage, repeat.
+Remaining gaps:
 
-That means the repository currently compares two actuator architectures without yet showing the stronger algorithmic break: **direct multiplication**.
+- exact Model A and later revision geometry/timing;
+- simultaneous multi-column input;
+- sourced incomplete-stroke detection and correction;
+- production mapping of carry/cancel/interlock mechanisms;
+- operator manuals and measured training/throughput evidence.
 
-### Add: Millionaire / direct-multiplication track
+## Priority 3 — Subtraction, division, and derived operator algorithms
 
-Why it matters:
+Current state: `research/subtraction-and-division.md` and a tested generic `8478 ÷ 314` P/M trace expose repeated subtraction, quotient state, overshoot, add-back correction, carriage shift, and completion.
 
-- the user sets a multiplier digit;
-- one operating cycle can select the appropriate multiple instead of requiring that many repeated cranks;
-- the mechanism therefore embodies part of the multiplication table.
+Remaining gaps:
 
-Strong starting sources:
+- identified manual pages for Thomas, Burkhardt, Curta, and pinwheel procedures;
+- source-specific mode/crank/counter directions and correction linkages;
+- primary Pascaline complement setup/digit conventions;
+- square-root and other derived procedures only when tied to a precise manual/model.
 
-- Smithsonian direct multiplication group: <https://www.si.edu/spotlight/calculating-machines/direct-multiplication-calculating-machines>
-- Smithsonian Millionaire object: <https://www.si.edu/object/nmah_694168>
-- Otto Steiger, US 538,710 (1895): <https://patents.google.com/patent/US538710A/en>
-- Otto Steiger, US 558,913 (1896): <https://patents.google.com/patent/US558913A/en>
+Do not back-fill the generic P/M loop as one universal historical procedure.
 
-The 1896 patent is especially useful because it explicitly describes a control mechanism as a mechanical representative of the multiplication table.
+## Priority 4 — Control, correction, and machine safety
 
-Recommended exhibit comparison:
+Current state: a tested generic setting–crank interlock and typed Thomas/Odhner/Felt/Pascaline profiles show that permission, zeroing, canceling, and mode state are computational.
 
-```text
-314 × 27
+Remaining gaps:
 
-A. repeated addition baseline
-B. stepped drum + carriage
-C. pinwheel + carriage
-D. direct multiplication / Millionaire-style control
-```
+- exact Thomas instruction pages and zeroing linkage;
+- production use of Odhner patented locking embodiments;
+- sourced partial-stroke detection/correction;
+- source-specific overflow, carry inhibition, and recovery geometry.
 
-Report not only result and crank count, but also:
+## Priority 5 — Representation and human-machine protocol
 
-- what was pre-encoded in geometry;
-- what the operator had to repeat;
-- what state the machine had to store;
-- what changed when the carriage shifted;
-- where the multiplication table “lived.”
+Current state: `docs/REPRESENTATION_AND_PROTOCOL.md` compares implemented families; `research/human-machine-arithmetic-labor.md` and `#/arithmetic-labor` compare selection, repetition, place management, correction, machine control, and persistent output using existing P/M traces.
 
----
+Remaining gaps:
 
-## Priority 2 — Input architecture / human-machine protocol
+- deeper model/revision-specific representation sources;
+- exact operator manuals and commercial procedures;
+- directly measured skill, training, effort, productivity, and error-rate evidence.
 
-### Add: Comptometer and key-driven computation
+No scalar automation or efficiency ranking is planned.
 
-The repository is currently crank-centric. That hides an important design change: in a Comptometer, depressing a key does not merely set a future value. The keystroke itself enters that amount into the mechanism.
+## Priority 6 — Continuous mechanical computing
 
-Smithsonian overview:
+Current state: a tested ideal continuous integrator and P/M flow expose addition, integration, coordinate advance, and tracing. Smithsonian input, adder, integrator, tracer, and frontlash records are now directly inspected and remain separate source roles.
 
-<https://www.si.edu/spotlight/adding-machines/full-keyboard-hill-to-felt-tarrant>
+Remaining gaps:
 
-Useful object records include:
+- distinguish planimeters, curve integrators, differential analyzers, and specialized analog machines only when each adds a mechanism lesson;
+- stable Bush 1931 full facsimile/page/figure anchors;
+- disk-and-wheel/contact geometry, torque amplification, shaft routing, scale factors, and real timing;
+- numerical backlash, residual error, slip/drift, and measured tolerance evidence;
+- exact original versus improved MIT generation mapping.
 
-- early wooden-box Comptometer: <https://americanhistory.si.edu/collections/object/nmah_690456>
-- Model A / duplex behavior: <https://americanhistory.si.edu/collections/object/nmah_690484>
-
-Questions worth modeling:
-
-- `set → crank` versus `press → accumulate`;
-- one digit column versus multiple simultaneous key columns;
-- how key travel can encode digit magnitude;
-- correction after a partial keystroke;
-- carry under fast multi-column entry;
-- subtraction aids such as complementary digits and carry-control levers.
-
-This should become `research/key-driven-computation.md` before any keyboard animation is added.
-
----
-
-## Priority 3 — Arithmetic beyond addition and multiplication
-
-The current repository says relatively little about how mechanical machines implement the operations users actually had to perform.
-
-### 3.1 Subtraction and complement arithmetic
-
-Write a cross-machine note on at least:
-
-- Pascaline complement-based subtraction;
-- complementary key legends on adding machines;
-- machines where crank direction changes between addition/multiplication and subtraction/division.
-
-Questions:
-
-- Is subtraction a reverse motion, a complement representation, a separate mode, or some combination?
-- Does the carry mechanism remain reversible?
-- What does the operator have to remember?
-
-### 3.2 Division as operator-controlled iteration
-
-For stepped-drum/pinwheel machines, division is a particularly good example of human + mechanism cooperation.
-
-Model:
-
-- repeated subtraction;
-- carriage position;
-- revolution counter;
-- overshoot and correction;
-- sign / crank direction where supported.
-
-Do not hide the operator's decision loop behind a single `divide(a,b)` function.
-
-### 3.3 Square root and derived procedures
-
-Curta documentation and historical calculator manuals often include procedures for square roots and other derived computations. These are useful only if the project treats them as **operator algorithms implemented on a limited machine**, not as extra built-in arithmetic instructions.
-
----
-
-## Priority 4 — Control, correction, and machine safety are part of computation
-
-Mechanical calculators contain mechanisms that do not directly represent a number but are essential to reliable operation.
-
-Research topics:
-
-- zeroing / clearing registers;
-- carriage locks;
-- crank locks and zero-position interlocks;
-- correction keys;
-- partial-keystroke detection;
-- preventing operation during an invalid setting transition;
-- overflow indication;
-- carry inhibition where required by subtraction conventions.
-
-Primary-source starting point for an Odhner-family locking problem:
-
-- Valentin Jakob Odhner, US 1,510,100 (1924), crank/calculating-disc locking: <https://patents.google.com/patent/US1510100A/en>
-
-These are a natural fit for the repository's explicit state-machine architecture because an interlock is literally a transition rule: **this action is not permitted in this state**.
-
----
-
-## Priority 5 — Representation should become a cross-machine topic
-
-The project already asks “where does the number exist?” but has not yet turned that into a systematic comparison.
-
-Write a note/table covering:
-
-| Machine family | Input representation | Working representation | Result representation | Operation control |
-|---|---|---|---|---|
-| Pascaline | dial motion | wheel positions | display drums/windows | stylus/manual |
-| Thomas-style arithmometer | setting levers | stepped-drum engagement + registers | result register | crank + carriage |
-| Odhner-style pinwheel | setting levers | number of protruding pins + registers | result register | crank + carriage |
-| Comptometer | key travel / column key | accumulator/register | numeral wheels | keystroke |
-| Millionaire | setting levers + multiplier selector | multiplication-table control + registers | result register | selector + crank |
-| Differential Analyzer | shaft rotation | continuous angular quantity | plotted/read continuous output | coupled shafts |
-
-Every row must be source-backed at the precision stated; the table above is a research scaffold, not final historical proof.
-
-This comparison would make the repository's “information flow” theme much more coherent.
-
----
-
-## Priority 6 — Continuous mechanical computing needs more than one integrator
-
-The existing continuous integrator is enough as a software seed, but the research line should distinguish several families:
-
-- planimeters: integrate area by tracing a boundary;
-- mechanical integrators: integrate a plotted curve;
-- differential analyzers: couple integrators to solve differential equations;
-- specialized analog machines: fire-control, tide prediction, harmonic analysis, etc. only if they add a clear mechanism lesson.
-
-Starting source:
-
-- Smithsonian, Mechanical Integrators and Differential Analyzers: <https://www.si.edu/spotlight/mechanical-integrators>
-
-Do not make “analog computer” one undifferentiated category. The key research question is how a continuous physical quantity is represented, coupled, integrated, and read out.
-
----
+Starting institutional context: <https://www.si.edu/spotlight/mechanical-integrators>
 
 ## Priority 7 — Output and audit trail
 
-The repository focuses heavily on internal state. Historical business machines also changed computation by changing the **output contract**.
+Current state: `research/output-and-audit-trail.md`, a tested persistent printing ledger, Difference Engine output roles, and `#/output-contracts` distinguish live registers, item records, subtotal retention, total clearing, and table-making output.
 
-Worth writing:
+Remaining gaps:
 
-- non-printing result register vs printed paper tape;
-- total / subtotal semantics;
-- red/black printing and audit conventions;
-- tabulation / carriage movement in adding machines;
-- Difference Engine printing/stereotyping ambitions as a different response to transcription error.
-
-This is where computation connects to office practice, bookkeeping, and trust.
-
-A useful exhibit would show that “output” is not always a number on a display: it may be a persistent record designed to reduce re-copying and verification labor.
-
----
+- period office procedures, terminology, red/black printing, tabulation, and carriage use;
+- model/revision-specific printer, ribbon, type-bar, paper-feed, and clearing geometry;
+- direct evidence for verification workflow and measured transcription/error effects;
+- Babbage printer synchronization, formatting, stereotype materials, and manufacturing process.
 
 ## Priority 8 — Reliability, torque, tolerance, and wear
 
-This is a high-value but source-sensitive line. US1377269A provides one explicit H/E1 rapid-rotation/transfer-arm miscalculation risk and a wear-reduction design claim; US1867603A provides H/E1 spacing/capacity/speed reasoning plus a bounded ~22% experiment. Thomas 1865 adds H/E1 dial overrun, simultaneous-load/plate-lift false-result, moderation and full-position conditioning claims. Smithsonian frontlash unit `1983.3002.04` / `nmah_693235` now provides directly inspected H/E1 object/catalog evidence for backlash compensation in a drive between adjacent-unit shafts. `research/mechanical-error-control.md` and the public comparison keep these responsibilities source-separated; no reliability probability is modeled.
+Current state: Thomas 1865, Odhner US1377269A, Talamini/Marchant US1867603A, and Smithsonian frontlash `1983.3002.04` provide separated H/E1 error-control responsibilities. No reliability probability or physics simulator is claimed.
 
-Questions:
+Remaining gaps:
 
-- why long carry chains create force/timing problems;
-- where springs, latches, detents, or stored energy decouple loads;
-- numerical backlash/lost motion and residual error after the now-identified Bush frontlash responsibility;
-- manufacturing tolerances;
-- lubrication and wear;
-- maximum safe operating speed;
-- why later designs add locks/correction mechanisms.
+- force/contact-load and torque measurements;
+- numerical backlash/lost motion and residual error;
+- manufacturing tolerances, lubrication, materials, wear, and safe operating rate;
+- production adoption and revision mapping;
+- documented experimental setups before any stochastic failure model.
 
-Do not implement random “gear failure” animations without evidence. A reliability model should be tied to a documented mechanism or clearly labeled engineering experiment.
+## Priority 9 — Commercial and labor context
 
----
+Current state: Smithsonian's calculating-machine overview was directly inspected for named user groups and the early repeated-crank/carriage-shift workflow. The arithmetic-work layer compares concrete responsibilities without ranking machines.
 
-## Priority 9 — Commercial and labor context, without turning into a generic social history
+Remaining questions require direct sources:
 
-A bounded context layer now exists in `research/human-machine-arithmetic-labor.md` and `#/arithmetic-labor`: it compares concrete input, repetition, place, stop/correction, machine-control, and output responsibilities without ranking machines. Mechanical calculators were working tools, not only inventions.
+- operator skill and training by identified machine/model;
+- keyboard effects on workflow or throughput;
+- printing and verification procedure;
+- measured time saved, error-rate changes, wages/cost, fatigue, or employment effects.
 
-Smithsonian's calculating-machine overview notes use by scientists, engineers, statisticians, actuaries, government officials, payroll clerks, and business students, and the eventual displacement of mechanical calculators by inexpensive electronic calculators in the 1970s:
+Keep this bounded to human-machine arithmetic responsibility, not a generic social history.
 
-<https://www.si.edu/spotlight/calculating-machines>
+## Files to deepen next
 
-The Smithsonian overview was directly inspected on 2026-09-01 for its stated user groups and early repeated-crank/carriage-shift workflow. Repository event counts now cover four P/M scenarios, but they establish no historical productivity, speed, training, fatigue, wage/cost, labor-saving, or error-rate effect.
+Only files with real remaining evidence work are listed:
 
-Remaining research questions:
+1. `research/curta-source-map.md` — exact manual edition/page/facsimile and Type I/II mapping;
+2. `research/analytical-engine-information-flow.md` — exact facsimile/page and drawing-level coordination anchors;
+3. `research/differential-analyzer.md` — Bush 1931 facsimile plus component interconnection/error evidence;
+4. `research/difference-engine-source-map.md` — drawing interpretation, timing and manufacturing evidence beyond catalog titles;
+5. `research/control-and-zeroing-source-map.md` — Thomas instructions, partial-stroke correction and production mapping;
+6. carry source maps — production mapping and measured physical envelopes;
+7. `research/output-and-audit-trail.md` — period office procedure and source-specific printing mechanics.
 
-- what operator skill was required by different machine families?
-- which operations were mechanized and which remained procedural knowledge?
-- how did keyboard design change throughput and training?
-- when did printing change verification work?
-
-Keep the focus on **human-machine division of arithmetic labor**.
-
----
-
-## Priority 10 — Things that are interesting but should not displace the core
-
-Possible later branches:
-
-- Antikythera mechanism;
-- astronomical clocks and geared prediction;
-- slide rules;
-- harmonic analyzers;
-- tide-predicting machines;
-- mechanical logic and pre-electronic control;
-- Z1 / electromechanical boundary cases;
-- mechanical toys or automata that encode sequences.
-
-These should be added only when the repository can state the specific computational mechanism it wants to expose. “It has gears and is old” is not enough.
-
-## Files that should be written or expanded next
-
-Recommended order:
-
-1. `research/carry-is-the-hard-part.md` — expand with Pascaline + Comptometer cases;
-2. `research/multiplication-mechanisms.md` — add direct multiplication / Millionaire and primary sources;
-3. `research/key-driven-computation.md` — new;
-4. `research/subtraction-and-division.md` — new;
-5. `research/simulator-matrix.md` — complete the old backlog item;
-6. `research/curta-source-map.md` — turn placeholder into page/figure-level source map;
-7. `research/analytical-engine-information-flow.md` — primary-source and emulator provenance pass;
-8. `research/differential-analyzer.md` — strengthen continuous-mechanics evidence;
-9. `docs/REPRESENTATION_COMPARISON.md` — cross-machine “where does the number live?” table;
-10. `docs/OPERATOR_PROTOCOLS.md` — cross-machine human action / interlock / correction comparison.
-
-The governing rule is simple:
-
-> Add a machine only when it teaches a mechanism or operator protocol that the existing machines do not already teach.
+> Add or deepen a machine only when a directly supported mechanism, representation, operator protocol, or evidence question is gained.

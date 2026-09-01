@@ -1,5 +1,25 @@
 # Verification record
 
+## 2026-09-01 — named-machine source-anchor atlas
+
+The pre-edit remote-main baseline was 208 tests across 18 files. This slice directly inspected Babbage Papers archive/index, calculation-drive, printing/stereotype, motion-notation and 1991/2002 reconstruction records; directly inspected the Smithsonian Differential Analyzer group plus five component records; retained Bush 1931 as bibliographic-only after a bounded facsimile attempt; and added typed supports/not-established anchors with a bilingual public atlas.
+
+- `npm run typecheck` — pass
+- `npm test -- --run` — pass, 217 tests across 19 files
+- `npm run build` — pass
+- `git diff --check` — pass
+
+Local browser smoke against Vite:
+
+- `#/source-atlas` rendered two track groups and 13 source cards, including BAB/A/171 calculation-only limits, Babbage lifetime-build boundaries, R/E2 reconstruction status, five separate Bush roles, and the Bush 1931 bibliographic-only warning in English and Chinese;
+- `#/finite-difference` still advanced arithmetic/output traces and exposed its source-atlas cross-link;
+- `#/continuous` still completed to tracer output `1.5`, reset, and exposed its source-atlas cross-link;
+- `#/mechanical-error-control` still rendered separate Thomas, Odhner/Talamini and Bush responsibilities;
+- `#/about` still rendered the evidence-policy explanation;
+- no desktop horizontal overflow was observed on the five checked routes.
+
+No deployment check was performed for this not-yet-pushed commit; no claim that the new route is already live is made.
+
 ## 2026-09-01 — human-machine arithmetic-work synthesis
 
 The pre-edit remote-main baseline was 201 tests across 17 files. This slice directly inspected the Smithsonian calculating-machine overview, added a source-separated arithmetic-responsibility note, derived four typed P/M profiles from existing multiplication/key-driven/division/printing traces, and added a bilingual public comparison without an efficiency score or pseudo-historical productivity data.

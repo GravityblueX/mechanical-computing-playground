@@ -26,4 +26,5 @@ An arrow means “influences” by default, not “these two physical parts are 
 9. **Continuous integration / 连续积分** — step a P/M inspection chain from two input quantities through explicit addition, coordinate advance, integration, and tracer output; Smithsonian component roles are H/E1 anchors, while this wiring/order is not historical timing.
 10. **Mechanical error control / 机械误差控制** — compare Thomas inertia/load and phasing, Odhner/Talamini rotary conditioning/scheduling, and Bush frontlash compensation. Source cards are evidence metadata, not a random failure, RPM, torque, tolerance, or residual-error simulator.
 11. **Operator work / 操作分工** — compare who selects, repeats, shifts, detects/corrects, and requests output in existing multiplication, key-driven, division, and printing-ledger P/M traces. Categorical event counts are not a leaderboard or historical productivity data.
-12. **Hand-crank backprop / 手摇反向传播** — follow numerical influence; the shafts and gears are counterfactual teaching elements.
+12. **Source atlas / 史料图谱** — inspect exact Babbage archive, DE2 reconstruction, Smithsonian component, and Bush bibliographic anchors; every card separates what the record supports from geometry/timing/wiring it does not establish.
+13. **Hand-crank backprop / 手摇反向传播** — follow numerical influence; the shafts and gears are counterfactual teaching elements.

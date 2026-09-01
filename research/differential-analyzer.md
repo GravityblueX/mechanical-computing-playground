@@ -23,7 +23,7 @@ Vannevar Bush, “The Differential Analyzer. A New Machine for Solving Different
 - Claim type: **H**.
 - Evidence: **E1 for what Bush published**.
 
-This pass verified the bibliographic metadata/DOI route, but did not obtain a stable full facsimile through the available environment. It therefore makes no uninspected page quotation or figure-specific geometry claim. The paper identifies a 1931 publication about Bush's then-new machine; it does not establish that every later Differential Analyzer generation used one unchanged construction.
+This pass rechecked the DOI and attempted the ScienceDirect PII route. The latter presented a human-verification challenge, and no stable, lawfully accessible full facsimile or institutional scan was directly inspectable. Access therefore remains **bibliographic-only**: no page quotation, figure number, or figure-specific geometry claim is used. The paper identifies a 1931 publication about Bush's then-new machine; it does not establish that every later Differential Analyzer generation used one unchanged construction.
 
 ## 2. Smithsonian/National Museum of American History records
 
@@ -37,12 +37,12 @@ This pass verified the bibliographic metadata/DOI route, but did not obtain a st
 - Frontlash Unit, `1983.3002.04` / `nmah_693235`: <https://americanhistory.si.edu/collections/object/nmah_693235>
 - related frontlash-unit comparison records named by that catalog: `1983.3002.09` / `nmah_693240`, `.10` / `nmah_693241`, and `.11` / `nmah_693242`
 
-The task's institutional-record anchors identify the following catalogued roles:
+The object-group page and all five named component records were directly inspected in the browser on 2026-09-01. The group page distinguishes the original analyzer completed in 1930, a later improved MIT analyzer, and postwar GE/UCLA components rather than flattening them into one generation. The component records identify these separate catalogued roles:
 
-- the integrator unit contains two of six original integrators associated with the MIT analyzer;
-- an input-table carriage converted motion produced by tracing a graph into shaft motion supplied to the machine;
-- a differential gear combined two shaft rotations so its output represented their sum;
-- an output-table carriage/tracer converted result-shaft rotation into a drawn result;
+- `MA.314824` contains two of six original integrators associated with the MIT analyzer; its record also documents later transfer to Wayne University and Smithsonian provenance;
+- input-table carriage `1983.3002.01` used a pointer to follow a graph, with the resulting motion transported by a shaft to an appropriate part of the machine;
+- adder/differential gear `1983.3002.02` connected shafts `a` and `b`, with gearing chosen so shaft `c` represented the sum of their revolutions;
+- output-table carriage/tracer `1983.3002.03` received result-shaft rotation and drew the result on an output table;
 - the ca. 1930 frontlash unit `1983.3002.04` compensated for backlash in a drive between the output shaft of one unit and the input shaft of an adjacent unit. Its record explicitly directs comparison with `.09`, `.10`, and `.11`.
 
 - Claim type: **H**.
@@ -50,7 +50,7 @@ The task's institutional-record anchors identify the following catalogued roles:
 
 ### Access limitation and safe use
 
-The `www.si.edu` and `americanhistory.si.edu` frontlash object routes were directly inspected in the browser in this pass; the latter initially displayed request verification but its rendered catalog record was readable. Other Smithsonian routes may still reject automated requests, so access is route-specific rather than a blanket availability claim.
+The `americanhistory.si.edu` object-group route initially displayed request verification but then rendered its catalog listing; the `www.si.edu` routes for the integrator, input carriage, adder, tracer and frontlash objects all rendered readable records. This is a route-specific observation, not a blanket Smithsonian availability claim.
 
 The frontlash record describes a steel shaft/cylinder, thin brass drum, friction band, planetary gearing and disc, but this pass uses those details only as catalog description—not as a complete analyzer geometry map. The records do not establish that the surviving input, adder, integrator, frontlash and tracer objects were permanently wired as the exact chain used by the browser. They also do not place this particular frontlash object between any particular surviving pair. Images are linked, not copied.
 

@@ -24,6 +24,7 @@
 - [x] Ground Thomas stepped-drum carry evolution with 1820/1865/1880 revision boundaries and a cross-family public comparison.
 - [x] Map source-separated mechanical error-control responsibilities across Thomas, Odhner/Talamini, and Bush frontlash evidence.
 - [x] Compare human versus machine arithmetic responsibilities using counts derived from existing multiplication, key-driven, division, and persistent-output traces.
+- [x] Add a named-machine source atlas for directly inspected Difference Engine No. 2 and Bush Differential Analyzer records, preserving supports/not-established boundaries.
 
 ## Repository maintenance
 

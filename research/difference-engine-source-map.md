@@ -65,24 +65,62 @@ The CHM account supports, at institutional-reconstruction level, a printer share
 
 The central output-contract point is conservative: a persistent checking copy or plate-making path reduces the need to re-copy and typeset computed table values manually, moving the trust boundary beyond arithmetic alone. It does not eliminate every possible human or production error.
 
-## 4. Babbage Papers drawing anchors
+## 4. Babbage Papers drawing and notation anchors
 
-Science Museum Group catalog/search records directly verify these drawing identities and described subjects:
+The Science Museum Group archive index was directly inspected:
 
-- `BAB/A/173`, plan of inking, printing and stereotype apparatus; direct record `aa110000316`; tracing `BAB/B/014`, `aa110000344`:
-  <https://collection.sciencemuseumgroup.org.uk/documents/aa110000316/plan-of-inking-printing-and-stereotype-apparatus>
-  <https://collection.sciencemuseumgroup.org.uk/documents/aa110000344/plan-of-inking-printing-and-stereotype-apparatus-tracing-of-bab-a-173>
-- `BAB/A/174`, rack pinions connecting table figure wheels with printing/stereotype sectors, `aa110000317`; tracing `aa110000342`:
+- *The Babbage Papers*, `BAB` / institutional record `aa110000003`, made 1821–1905:
+  <https://collection.sciencemuseumgroup.org.uk/documents/aa110000003/the-babbage-papers>
+
+The catalog describes 11 plan-press drawers plus 8 linear metres of shelving, open access, and three broad material types: notebooks, engineering drawings, and notations describing intended actions. This is H/E1 for archive identity, extent, arrangement and catalogued scope—not a source-specific geometry claim.
+
+### Calculation/addition drive subject
+
+- `BAB/A/171` / `aa110000314`, *Addition carriage and mode of driving the axes of Difference Engine No. 2*:
+  <https://collection.sciencemuseumgroup.org.uk/documents/aa110000314/addition-carriage-and-mode-of-driving-the-axes-of-difference-engine-no-2>
+
+The directly inspected record identifies one sheet, 62 × 89 cm, open access. Its title safely anchors a calculating/addition-carriage drive subject. It is not evidence for printer timing or full printer geometry.
+
+### Printing/stereotype subjects
+
+Directly inspected records include:
+
+- `BAB/B/013` / `aa110000343`, tracing of `BAB/A/172`, *End view of inking printing paper and stereotyping apparatus*, made 1847–1848, one sheet:
+  <https://collection.sciencemuseumgroup.org.uk/documents/aa110000343>
+- `BAB/B/014` / `aa110000344`, tracing of `BAB/A/173`, *Plan of inking, printing and stereotype apparatus*, made 1847–1848, one sheet:
+  <https://collection.sciencemuseumgroup.org.uk/documents/aa110000344>
+- `BAB/A/174`, rack pinions connecting table figure wheels with printing/stereotype sectors, `aa110000317`; tracing `BAB/B/012`, `aa110000342`:
   <https://collection.sciencemuseumgroup.org.uk/documents/aa110000317/rack-pinions-for-connecting-table-figure-wheels-with-printing-stereotype-sectors-elevation>
 - `BAB/A/175`, plan of cams for punching with small stereotype sectors and removing paper rollers, `aa110000318`:
   <https://collection.sciencemuseumgroup.org.uk/documents/aa110000318/plan-of-cams-for-punching-with-small-stereotype-sectors-and-cams-for-removing-paper-rollers>
-- `BAB/A/176`, calculating part with means of conveying numbers to stereotype sectors, `aa110000319`; tracing `aa110000115`:
+- `BAB/A/176`, calculating part with means of conveying numbers to stereotype sectors, `aa110000319`; tracing `BAB/B/004`, `aa110000115`:
   <https://collection.sciencemuseumgroup.org.uk/documents/aa110000319/plan-of-the-calculating-part-of-the-difference-engine-with-the-means-of-conveying-numbers-to-stereotype-sectors>
 
-- Claim type: **H**.
-- Evidence: **E1** for archive identity/existence and catalogued subject.
+### General-motion notation
 
-The available pages expose images, but this pass uses catalog identity/title only. It does not claim tooth counts, dimensions, exact linkage paths, synchronization or timing. Images were not copied.
+The archive records directly expose the `BAB/A/178` set rather than leaving it as an index-only pointer:
+
+- `BAB/A/178` / `aa110000321`, *General notation of the motions of the Difference Engine No. 2*: six related plans, open access;
+- `BAB/A/178/1` / `aa110000322`, circular motions of calculating axes;
+- `BAB/A/178/2` / `aa110000323`, vertical motions of calculating axes;
+- `BAB/A/178/3` / `aa110000324`, *Motions of the printing apparatus*, August 1848, one sheet, 64 × 94 cm;
+- `BAB/A/178/4` / `aa110000325` and `/5` / `aa110000326`, motions of stereotype frames; `/4` was directly inspected as August 1848, one sheet, 64 × 94 cm.
+
+Parent: <https://collection.sciencemuseumgroup.org.uk/documents/aa110000321>
+
+- Claim type: **H**.
+- Evidence: **E1** for archive identity/existence, dates/dimensions where stated, and catalogued subjects.
+
+The records are open access and state that copies may be supplied under current copyright legislation and Science Museum Group terms. Images were viewed only to identify the records and were not copied. Titles and image availability do not establish tooth counts, linkage paths, synchronization, force/load, tolerances, manufacturing method, whether the complete printer was built in Babbage’s lifetime, or the repository browser event order.
+
+The source chain therefore remains separated:
+
+```text
+BAB/A/171 calculation/addition-drive subject
+BAB/A/172–178 printing/stereotype drawing and motion-notation subjects
+Science Museum 1991/2002 construction = R/E2 institutional reconstruction
+repository difference/output trace = P/M inspection model
+```
 
 ## 5. Scheutz: built printing engines are a separate history
 
