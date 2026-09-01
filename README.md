@@ -186,7 +186,7 @@ machines/<name>/
 
 用 `0099 + 1` 看见多级 carry，而不是数字瞬间变成 `0100`。
 
-`#/visible-carry` 在原有 `0099 + 1` 串行 P/M 事件下方新增来源分离比较：Pascal 本人对自动进位/借位的操作主张、Cnam/CMU 的 sautoir 资料、Felt US 366,945 的早期按键进位、US 762,520 的重叠按键延迟进位问题，以及 Smithsonian Model A 量产背景。浏览器事件不是这些机器的历史时序或几何。研究入口：[`research/carry-is-the-hard-part.md`](research/carry-is-the-hard-part.md)、[`research/carry-architecture-source-map.md`](research/carry-architecture-source-map.md)。
+`#/visible-carry` 在原有 `0099 + 1` 串行 P/M 事件下方新增来源分离比较：Pascal/Cnam/CMU、Felt 1887/1904、Smithsonian Model A，以及 Odhner US 514,725、Valentin Odhner US 1,377,269、Talamini/Marchant US 1,867,603。页面另显示三段严格递增的 P/M 序数进位槽；这些槽不是历史角度、毫秒、齿位、安全转速或失效概率。研究入口：[`research/carry-is-the-hard-part.md`](research/carry-is-the-hard-part.md)、[`research/carry-architecture-source-map.md`](research/carry-architecture-source-map.md)、[`research/rotary-carry-scheduling-source-map.md`](research/rotary-carry-scheduling-source-map.md)。
 
 ### Finite Difference
 

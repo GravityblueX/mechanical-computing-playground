@@ -20,6 +20,7 @@
 - [x] Deepen subtraction/control provenance: separate Thomas, Odhner, Felt/Tarrant, and Pascaline source roles; add typed evidence profiles and the controls comparison without generalizing across families.
 - [x] Deepen output/audit-trail comparison beyond Difference Engines with identified register/printing objects, primary subtotal/total semantics, a tested persistent ledger, and a public comparison route.
 - [x] Ground carry architecture provenance with Pascal/Felt/Model A source separation, hardened key-driven replay, and a public visible-carry comparison.
+- [x] Ground Odhner-family rotary carry scheduling/reliability with three separated patents, a fail-closed ordinal scheduler, and a public comparison.
 
 ## Repository maintenance
 

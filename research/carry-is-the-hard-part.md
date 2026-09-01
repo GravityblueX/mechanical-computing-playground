@@ -12,7 +12,7 @@ Why is a multi-digit mechanical register more than a row of ten-position wheels,
 - Claims about Pascaline and Comptometer mechanisms: **H**, with sources below.
 - The repository's `carry pending → carry propagated` event chain: **P/M** (pedagogical model with deterministic computational validation).
 
-See `docs/EVIDENCE_POLICY.md`. Exact source/model separation now lives in [`carry-architecture-source-map.md`](carry-architecture-source-map.md).
+See `docs/EVIDENCE_POLICY.md`. Exact Pascaline/Felt source separation lives in [`carry-architecture-source-map.md`](carry-architecture-source-map.md); Odhner-family rotary conditioning, rapid-rotation failure, and staggered opportunity evidence lives in [`rotary-carry-scheduling-source-map.md`](rotary-carry-scheduling-source-map.md).
 
 ## 1. The abstract problem
 
@@ -114,7 +114,13 @@ Comptometer key-driven multi-column carry
 
 without pretending that one software state machine is a geometric replica of all three.
 
-## 4. Carry and subtraction are coupled design choices
+## 4. Rotary carry adds conditioning and opportunity order
+
+The Odhner-family patent chain exposes a third problem distinct from Pascaline stored release and Felt key overlap. US514725A describes a register crossing positioning a transfer arm so a rotary carry pin can advance the next order. US1377269A explicitly warns that rapid rotation may throw that arm out of its adjusted position, preventing carry action and causing miscalculation. US1867603A explains that a carry may itself create the next boundary crossing, so dependent rotary opportunities cannot all arrive simultaneously; they must be staggered.
+
+The repository models only that last dependency with strictly increasing ordinal slots. Those slots are P/M—not historical angles, milliseconds, speeds, tooth locations, or failure probabilities.
+
+## 5. Carry and subtraction are coupled design choices
 
 The Pascaline example shows why subtraction belongs next to carry research. If the transfer mechanism is naturally one-directional, subtraction may be expressed using complements rather than by reversing the whole transfer train.
 
@@ -128,7 +134,7 @@ subtract = run add mechanism backward
 
 until a specific machine's mechanism/manual supports it.
 
-## 5. What the current code proves — and what it does not
+## 6. What the current code proves — and what it does not
 
 The current exhibit can prove that its own deterministic model:
 
@@ -147,13 +153,13 @@ It does **not** prove:
 
 Those require machine-specific evidence.
 
-## 6. Next research tasks
+## 7. Next research tasks
 
 1. Add primary/facsimile Pascaline drawing anchors beyond Pascal's operational `Avis`; that text does not describe sautoir geometry.
 2. Map US762520A to particular Model A production revisions only if manufacturing/object evidence supports it.
-3. Add at least one stepped-drum or pinwheel carry mechanism source so the multiplication track can show how accumulator carry interacts with repeated cranking.
-4. Measure/source force, spring, wear, tolerance, and safe-rate claims before reliability modeling.
-5. Only after those sources are mapped, decide whether a second carry state machine is warranted.
+3. Map US514725A/US1377269A/US1867603A to identified production revisions only with object/manufacturing evidence.
+4. Add a stepped-drum accumulator-carry comparison distinct from the now-sourced pinwheel/rotary path.
+5. Measure/source force, spring/contact load, wear, tolerance, lubrication and safe-rate/failure-envelope claims before reliability modeling.
 
 ## Project decision
 

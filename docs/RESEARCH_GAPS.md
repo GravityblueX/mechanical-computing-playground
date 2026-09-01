@@ -15,14 +15,17 @@ Current state:
 - deterministic `0099 + 1` carry events exist;
 - `research/carry-architecture-source-map.md` now separates Pascal's operational text, Cnam's sautoir description, a CMU reconstruction, Felt US366945A, Felt US762520A, and the Smithsonian Model A catalog context;
 - the visible-carry lesson compares those responsibilities without treating its P/M arrows/events as historical geometry;
-- key-driven carry replay now rejects altered, omitted, inserted, unknown, or final-state-mismatched trace data.
+- key-driven carry replay now rejects altered, omitted, inserted, unknown, or final-state-mismatched trace data;
+- `research/rotary-carry-scheduling-source-map.md` separates Odhner US514725A baseline transfer, US1377269A's explicit rapid-rotation miscalculation risk, and Talamini/Marchant US1867603A staggered/phase-overlap improvement;
+- a tested direction-neutral P/M scheduler exposes strictly ordered transfer slots and fails closed on trace tampering.
 
 What remains:
 
 1. primary/facsimile Pascaline drawing anchors beyond the operational `Avis`;
 2. exact production-revision mapping between US762520A and surviving Model A mechanisms;
-3. a sourced stepped-drum or pinwheel accumulator-carry comparison;
-4. source-specific force, spring, tolerance, wear, safe-rate, and failure data before reliability modeling.
+3. stepped-drum accumulator-carry evidence distinct from the completed pinwheel/rotary patent chain;
+4. production-revision mapping for the rotary patents;
+5. source-specific force/contact-load, material, lubrication, tolerance, wear, safe-rate, and measured failure-envelope data before reliability modeling.
 
 Good starting sources:
 
@@ -244,7 +247,7 @@ A useful exhibit would show that “output” is not always a number on a displa
 
 ## Priority 8 — Reliability, torque, tolerance, and wear
 
-This is a high-value but source-sensitive future line.
+This is a high-value but source-sensitive future line. US1377269A now provides one explicit H/E1 rapid-rotation/transfer-arm miscalculation risk and a wear-reduction design claim; US1867603A provides H/E1 spacing/capacity/speed reasoning plus a bounded ~22% experiment. The repository models only ordinal dependency—not reliability probability.
 
 Questions:
 
