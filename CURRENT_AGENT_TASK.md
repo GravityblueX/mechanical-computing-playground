@@ -2,23 +2,18 @@
 
 Issued: 2026-09-01
 Owner: local coding/research agent
-Target duration: roughly 75–90 minutes
+Target duration: roughly 90–120 minutes by old estimates; recent agent throughput suggests this should occupy about one useful hour
 Repository authority: remote `main`
 
-Previous task is complete and archived at `tasks/archive/2026-09-01-analytical-engine-flow.md`.
+Previous task is complete and archived at `tasks/archive/2026-09-01-continuous-mechanics.md`.
 
-The last two substantial source+implementation slices each completed in roughly 32–34 minutes despite larger estimates. This assignment is intentionally broader, but it is still one coherent theme: **make the continuous-mechanical-computing line as evidence-aware and inspectable as the newer discrete-mechanism lessons**. Do not compensate for spare time by inventing geometry or starting unrelated machines.
+The previous continuous-mechanics assignment landed as `2e39ab12b162b2e06bf147a2fb6e94409c4d7736` and passed push CI run `33452190710`. It delivered 108 passing tests across 12 files plus the continuous browser smoke check. There were no open PRs at administrator review time.
 
-Administrator preflight since the previous agent checkpoint:
+Recent substantial source+implementation slices have repeatedly completed in about 32–34 minutes despite nominal 75–90 minute estimates. This assignment is intentionally broader, but remains one coherent question:
 
-- PR #3 was reviewed and merged: unknown direct-multiplication event discriminators now fail closed;
-- PR #4 was reviewed and merged: unknown setting–crank action/event discriminators now fail closed;
-- PR #5 was reviewed and merged: unknown operator-division action/event discriminators now fail closed;
-- current main after those merges is at least `be1b5c80dca1d88553997236669859460a26a067` plus the task-archive/assignment documentation commits;
-- main CI run `33449580167` passed for `be1b5c80dca1d88553997236669859460a26a067`;
-- there were no open PRs after those merges.
+> A Difference Engine is not only a machine that produces the next number. What changes when the output contract is designed to carry a computed table value into a persistent printed or stereotyping workflow without a human re-copy step?
 
-Fetch/pull again before work; remote `main` always wins over the SHA above.
+Fetch/pull remote `main` before starting. Remote state always wins over the SHA above.
 
 ## Read before work
 
@@ -28,324 +23,343 @@ Read in this order:
 2. `TODO.md`
 3. `AGENTS.md`
 4. `docs/EVIDENCE_POLICY.md`
-5. `docs/RESEARCH_GAPS.md`, especially Priority 0.2, Priority 5, and Priority 6
+5. `docs/RESEARCH_GAPS.md`, especially Priority 0.2 and Priority 7
 6. `docs/PRIOR_ART.md`
-7. `research/differential-analyzer.md`
-8. `src/mechanisms/continuous-integrator/index.ts`
-9. current `#/continuous` rendering and any imports/usages in `src/main.ts`
-10. existing replay/tamper-validation patterns in direct multiplier, operator division, setting–crank interlock, and Analytical Engine flow
-11. relevant tests and `docs/VERIFICATION.md`
-12. `docs/PUBLISHING.md` only if deployment verification is touched
+7. `research/difference-engine-addition.md`
+8. `research/finite-difference-design.md`
+9. `src/mechanisms/difference-column/index.ts`
+10. `tests/difference-column.test.ts` and any finite-difference coverage in other tests
+11. the current `#/finite-difference` renderer/state in `src/main.ts`
+12. replay/tamper-validation patterns already used by direct multiplier, operator division, setting–crank interlock, Analytical Engine flow, and continuous integration
+13. `docs/VERIFICATION.md`
 
 Do not use stale unchecked boxes in `IMPLEMENTATION_PLAN.md` as a task source.
 
-Before changing code, run the full current test suite once. The three merged hardening PRs added regression tests after the 91-test Analytical Engine checkpoint, so record the **actual** baseline rather than assuming the old count.
+Before editing, run the full current test suite once and record the actual baseline.
 
 # Objective
 
-Turn the current one-paragraph Differential Analyzer note and minimal Euler-like helper into a source-backed, deterministic **continuous-mechanics teaching line** that answers three separate questions without conflating them:
+Complete four connected pieces:
 
-> What do surviving Bush Differential Analyzer components and contemporary publications actually establish?
+1. build a proper **Difference Engine provenance/source map** that distinguishes Babbage design, surviving fragment, modern reconstruction, and actually built Scheutz difference engines;
+2. harden the existing generic `difference-column` P/M replay model to the repository's current deterministic/tamper-resistant standard;
+3. add a small tested **tabular-output teaching flow** that separates “a value has been computed” from “a persistent output artifact has been produced,” without pretending to reconstruct Babbage's printer geometry;
+4. upgrade `#/finite-difference` so the visitor can see the calculation/output boundary and the historical evidence boundary in the same lesson.
 
-> What mathematical relation does an integrator represent?
-
-> What event ordering and sampling does this repository introduce only so a browser visitor can inspect a continuous process step by step?
-
-The result should improve `research/differential-analyzer.md`, harden the generic continuous-integrator state/replay model, and upgrade `#/continuous` into a small evidence-aware workbench. It must **not** become a full Differential Analyzer emulator or a source-specific geometric reconstruction.
-
-A final required comparison document should then connect this continuous representation/protocol to the discrete machine families already implemented.
+Do not build a full Difference Engine emulator, printer animation, type-setting mechanism, stereotype press, or source-specific gear geometry.
 
 ---
 
-# Part A — replace the Differential Analyzer placeholder with a real provenance map
+# Part A — create `research/difference-engine-source-map.md`
 
-`research/differential-analyzer.md` is currently only one paragraph. Replace it with a source/provenance note following `docs/EVIDENCE_POLICY.md`:
+The current `research/difference-engine-addition.md` is only a short mathematical note. Keep it if it remains useful, but create a dedicated source/provenance map for named-machine claims.
+
+Use the two-axis policy in `docs/EVIDENCE_POLICY.md` and structure the note approximately as:
 
 ```text
 Question
 Claim types
+Machine/design generations
 Sources
 What each source directly establishes
-What is reconstructed/inferred
-What this repository simplifies
-Implementation consequence
-Uncertainties
+What later reconstruction establishes
+What this repository models
+Output/printing boundary
+Open/unverified details
+Implementation consequences
 Date checked
 ```
 
-## A1. Vannevar Bush, 1931
+## A1. Difference Engine No. 1 boundary
 
-Primary publication to identify precisely:
+Strong institutional anchor:
 
-- Vannevar Bush, “The Differential Analyzer. A New Machine for Solving Differential Equations,” *Journal of the Franklin Institute*, vol. 212, no. 4 (October 1931), pp. 447–488.
+- Science Museum Group, `Difference Engine No. 1`, object `co62243`:
+  <https://collection.sciencemuseumgroup.org.uk/objects/co62243/difference-engine-no-1-difference-engine>
 
-Use an accessible scan/facsimile or institutional bibliographic record if you can locate one. If the available environment only establishes publication metadata, figures, or secondary descriptions, say exactly that. Do not quote or assign figure/page claims you did not actually inspect.
+Record only what the source supports at the precision inspected:
 
-The paper is **H/E1** for what Bush published about the 1931 machine. It is not proof that every later Differential Analyzer shared the same construction.
+- the surviving 1832 portion was assembled by Joseph Clement;
+- it is only a portion of the planned engine, not the completed whole machine;
+- the Difference Engine project aimed to calculate numerical series by finite differences and automatically print results.
 
-## A2. Smithsonian / National Museum of American History object records
+Do not use the surviving fragment as proof that every planned printing/output mechanism was physically completed in 1832.
 
-Use the institutional object group and individual records as strong anchors for surviving components and their catalogued functions:
+## A2. Difference Engine No. 2 design versus modern reconstruction
 
-- Differential Analyzer Parts and Documentation:
-  <https://americanhistory.si.edu/collections/object-groups/mechanical-integrators/differential-analyzers>
-- Integrator Unit from Bush Differential Analyzer, `MA.314824`:
-  <https://www.si.edu/object/integrator-unit-bush-differential-analyzer%3Anmah_1215155>
-- Input Table Carriage, `1983.3002.01`:
-  <https://www.si.edu/object/input-table-carriage-bush-differential-analyzer%3Anmah_693232>
-- Adder / Differential Gear, `1983.3002.02`:
-  <https://www.si.edu/object/nmah_693233>
-- Output Table Carriage / Tracer, `1983.3002.03`:
-  <https://www.si.edu/object/carriage-and-tracer-output-table-bush-differential-analyzer%3Anmah_693234>
+Use both an institutional object record and a reconstruction/history source:
 
-Important catalogued relationships worth checking precisely rather than generalizing:
+- Science Museum Group, `Babbage's Difference Engine No 2, 2002`, object `co62748` (or the canonical current equivalent):
+  <https://collection.sciencemuseumgroup.org.uk/objects/co62748>
+- Computer History Museum, `The Engines`:
+  <https://www.computerhistory.org/babbage/engines>
+- Computer History Museum, `A Modern Sequel`:
+  <https://www.computerhistory.org/babbage/modernsequel/>
 
-- the surviving integrator unit contains two of the six original integrators associated with the MIT analyzer;
-- an input-table carriage converted a traced graph motion into shaft motion sent into the machine;
-- the catalogued differential gear combined two shaft rotations so an output represented their sum;
-- the output-table tracer converted result-shaft rotation into a drawn result.
-
-Use these records as **H/E1 for the surviving/catalogued component and the museum-described role**. Do not infer that these four specific surviving objects were always wired in one fixed chain or that their catalog prose gives complete internal geometry.
-
-Do not copy Smithsonian images merely because the records expose them. Link records unless image reuse is separately justified/licensed.
-
-## A3. Near-contemporary mathematical/engineering interpretation
-
-Useful anchor:
-
-- Claude E. Shannon, “Mathematical Theory of the Differential Analyzer,” 1941, DOI `10.1002/sapm1941201337`.
-
-Use Shannon for mathematical/system interpretation at the precision actually supported by the paper; it is not an original 1930 artifact record.
-
-Also distinguish the later MIT machine generation from the original analyzer. Bush & Caldwell’s 1945 “A New Type of Differential Analyzer” belongs to a later machine and must not be silently used as the geometry of the ca. 1930 components.
-
-## A4. Machine-generation boundary
-
-The note must explicitly separate at least:
+Keep these layers separate:
 
 ```text
-original MIT analyzer / ca. 1930 surviving components
-1931 Bush publication
-later improved MIT/Rockefeller analyzer work
-postwar GE/UCLA components in Smithsonian collections
-modern historical reconstruction/interpretation
-this repository's P/M continuous lesson
+1847–1849 Babbage design
+1991 completion of modern calculating section
+2002 completion/addition of modern printing/stereotyping apparatus
+modern manufacturing drawings/decisions needed to build from historical plans
 ```
 
-Do not flatten all of these into “the Differential Analyzer.”
+The Science Museum/CHM reconstruction is **R with strong institutional evidence**, not a machine Babbage completed in his lifetime.
 
-## A5. Required project decision
+Important output relationship supported by the CHM material:
 
-End the note by stating exactly what the browser model will claim:
+- Difference Engine No. 2 and the Analytical Engine printer design support hardcopy/check-copy output and stereotyping at the design/reconstruction level;
+- the printer/output apparatus can format tabular output;
+- this matters because the output chain was intended to reduce transcription/typesetting error, not merely display a result.
 
-- shaft/continuous quantity, addition relation, integration relation, and plotted output are taught as **functional relationships**;
-- any discrete event order / sample interval exists only so the browser can inspect and replay the relation and is **P/M**, not historical machine timing;
-- no cams, disk/wheel geometry, torque amplifier geometry, shaft layout, backlash, scale factor, or physical dimensions are claimed unless separately sourced;
-- the current lesson is a mechanism-level teaching model, not an emulator of Bush's complete analyzer.
+Do not copy marketing superlatives or infer exact printer timing from overview prose.
+
+## A3. Babbage Papers drawing-level anchors
+
+Use the Science Museum Group archive records for the output apparatus. At minimum inspect and record the identifiers/relationships around:
+
+- `BAB/A/173` — plan of inking, printing and stereotype apparatus;
+- `BAB/A/174` — rack/pinions connecting table figure wheels with printing/stereotype sectors;
+- `BAB/A/175` — cams associated with stereotype/paper-roller actions;
+- `BAB/A/176` — calculating part with means of conveying numbers to stereotype sectors;
+- the catalog page/record grouping these drawings, including the tracing record exposed as `BAB/B/014` where applicable:
+  <https://collection.sciencemuseumgroup.org.uk/documents/aa110000344>
+
+These archive records are **H/E1 for the existence, date/catalog identity, and described subject of the drawings**. Unless you actually inspect a legible facsimile in enough detail, do not claim tooth counts, motion sequence, dimensions, or exact linkage paths from the titles alone.
+
+Record exact identifiers so later geometry work knows where to return.
+
+## A4. Actually built printing difference engines: Scheutz boundary
+
+This comparison is required because it prevents the note from becoming “Babbage design = nineteenth-century deployed machine.”
+
+Use:
+
+- Smithsonian/National Museum of American History, Scheutz Difference Engine, `MA.323659` / record `nmah_997042`:
+  <https://americanhistory.si.edu/collections/object/nmah_997042>
+- Smithsonian difference-engine group:
+  <https://americanhistory.si.edu/it/collections/object-groups/calculating-machines/difference-engines>
+- Computer History Museum, Georg & Edvard Scheutz:
+  <https://www.computerhistory.org/babbage/georgedvardscheutz/>
+- Science Museum Group, Scheutz Difference Engine, third model, 1859, object `1914-122/1` / `co62255`:
+  <https://collection.sciencemuseumgroup.org.uk/objects/co62255>
+
+At the precision these sources support, distinguish:
+
+- Scheutz working prototype (1843) and later metal machines;
+- the 1853 machine now at Smithsonian;
+- the 1859 machine associated with the English Life Table workflow;
+- historically built/used printing calculators versus Babbage's uncompleted lifetime projects and later reconstruction.
+
+Do not imply that Scheutz printer architecture is Babbage's printer architecture.
+
+## A5. Required project conclusion
+
+The note must finish with a narrow implementation boundary:
+
+```text
+M: finite differences can generate polynomial tables by repeated addition.
+H/R: Babbage designs and later reconstruction make automatic tabular printing/stereotyping part of the Difference Engine output story at the source-supported level.
+H: Scheutz engines provide an actually built nineteenth-century printing-difference-engine comparison.
+P/M: this repository serializes calculation-ready → persistent-output roles only for inspection; it does not claim historical printer phase timing or geometry.
+```
+
+Also list what remains open before source-specific geometry:
+
+- exact drawing/facsimile interpretation;
+- printer synchronization and transfer timing;
+- specific formatting controls at drawing/mechanism level;
+- stereotyping material/process implementation details;
+- tolerances, force, backlash, and manufacturing choices.
 
 ---
 
-# Part B — harden `continuous-integrator` into a deterministic inspectable model
+# Part B — harden `src/mechanisms/difference-column/`
 
-The current module is essentially:
+The current model is mathematically useful but its replay reducer is older and weaker than newer modules. Bring it to the current repository standard without changing the pedagogical finite-difference semantics unnecessarily.
+
+## B1. State/input validation
+
+Preserve support for the existing 2..5 leading-value model unless tests/documentation justify a change.
+
+Require/validate at least:
+
+- finite numeric columns;
+- finite results after each addition;
+- valid row/output consistency where serialized state crosses a public reducer/replay boundary;
+- safe or explicitly bounded behavior when arithmetic would become non-finite;
+- invalid serialized state must not be silently normalized.
+
+Do not introduce arbitrary historical digit widths and call them Babbage limits.
+
+## B2. Event/replay validation
+
+The current `reduceDifferenceEvent()` largely trusts serialized event fields. Harden it so replay verifies the semantic relation instead of trusting attacker/tamper-provided `after` values.
+
+At minimum:
+
+- sequence order must be contiguous and correct;
+- source/target orders must be valid and match the model's permitted update order;
+- `sourceOrder === targetOrder + 1` for the current P/M algorithm;
+- `addend` must equal the current source column value;
+- `before` must equal the current target value;
+- `after` must equal the recomputed `before + addend` (within exact semantics appropriate to the numeric model; do not introduce tolerance unless genuinely needed);
+- unknown serialized event discriminators fail closed at runtime;
+- omitted/duplicated/reordered events fail replay;
+- a crank claiming an altered final row/output fails validation rather than being accepted because replay ignores the claimed `after` state.
+
+If a trace/action wrapper is the cleanest way to express this, use it; do not create gratuitous framework churn.
+
+Keep existing public helpers working where practical.
+
+## B3. Required tests
+
+Add focused tests proving at least:
+
+1. square preset still generates the established sequence;
+2. cubic preset still generates the established sequence;
+3. replay reproduces a normal crank exactly;
+4. changed `sequence` is rejected;
+5. changed `sourceOrder` or `targetOrder` is rejected;
+6. changed `addend` is rejected;
+7. changed `before` is rejected;
+8. changed `after` is rejected;
+9. omitted or reordered event is rejected;
+10. forged claimed final state/output is rejected if the trace carries one;
+11. unknown event type fails closed at runtime;
+12. non-finite initial or resulting state is rejected.
+
+---
+
+# Part C — add a generic tabular-output teaching flow
+
+Create an appropriately named small module, preferably under `src/exhibits/` if it composes existing mechanisms rather than representing a reusable historical mechanism. For example:
 
 ```text
-state = { time, input, output, step }
-output += input * step
+src/exhibits/difference-output-flow/
 ```
 
-That is useful mathematically but too thin for the repository's current state/event/replay standard and can accidentally look like “this is how the historical machine ticks.”
-
-Refactor conservatively under `src/mechanisms/continuous-integrator/`.
-
-## B1. Preserve the correct abstraction boundary
-
-The model should express a generic relation equivalent to:
+The purpose is to make this distinction inspectable:
 
 ```text
-independent quantity advances
-input rate / shaft quantity is observed for the teaching interval
-integrated output advances by the represented relation
+finite-difference arithmetic produces a table value
+→ value becomes ready for output
+→ persistent check-copy / print role
+→ optional stereotyping-role representation
 ```
 
-The browser may discretize observation into steps, but the code/UI must label the sample/step as a **P/M inspection device**, not as a historical crank, gear tooth, clock tick, or claim about physical Differential Analyzer timing.
+This is a **P/M explanatory flow mapped to source-backed historical output roles**, not historical printer timing.
 
-Keep existing public imports working through wrappers if that is cleaner, or migrate all current usages/tests coherently. Do not leave two contradictory integrator semantics.
+## C1. Minimum state/events
 
-## B2. Minimum state
+Use a deterministic trace with explicit state such as:
 
-Use finite, validated numeric state and explicit naming. Include at least:
+- generated/table value;
+- row/index;
+- calculation-ready flag;
+- check-copy value or persistent-print state;
+- stereotype/output-master state only as a functional role;
+- event index/sequence;
+- evidence/model metadata only if useful for inspection.
 
-- independent variable / teaching coordinate;
-- current input rate or represented input quantity;
-- integrated output quantity;
-- sample/inspection interval;
-- cycle/sample count;
-- ordered sequence identity;
-- claim/model metadata only if it genuinely aids inspection.
-
-Do not call the independent variable “time” unless the fixture specifically models time; Differential Analyzers could represent more general independent variables.
-
-## B3. Actions/events/replay
-
-Use deterministic actions/events or an immutable trace builder consistent with current repository patterns. The visitor/test must be able to inspect a cycle equivalent to:
+A reasonable event vocabulary could be equivalent to:
 
 ```text
-INPUT_QUANTITY_OBSERVED
-INDEPENDENT_QUANTITY_ADVANCED
-INTEGRATED_QUANTITY_ADVANCED
+TABLE_VALUE_READY
+CHECK_COPY_RECORDED
+STEREOTYPE_OUTPUT_ROLE_RECORDED
 ```
 
-Names may differ if a better vocabulary emerges.
+Choose better names if appropriate.
 
-Requirements:
+Do not invent a historical claim that those are three stop-motion machine phases. The UI/research text must explicitly say the serialized order is for browser inspection of output responsibilities.
 
-- same state + action → identical ordered events/state;
-- replay from initial state + events reproduces final state;
+## C2. Arithmetic ownership
+
+The output flow must **consume** a value produced by the tested difference-column state/transition; it must not recompute the polynomial or maintain a second secret arithmetic implementation.
+
+Use a small known fixture such as a square-number row.
+
+## C3. Replay/tamper requirements
+
+Follow newer module standards:
+
+- deterministic trace;
+- replay reproduces final state;
 - sequence tampering fails;
-- arithmetic tampering fails;
-- unknown serialized action/event discriminators fail closed where runtime union boundaries exist;
-- NaN/Infinity/non-positive interval and impossible state are rejected;
-- do not trust arbitrary serialized `outputAfter`; recompute/validate the mathematical relation.
+- row/value tampering fails;
+- output state cannot exist before its prerequisite event;
+- unknown serialized event type fails closed;
+- output artifacts are derived/validated rather than blindly trusted from serialized fields.
 
-Use floating-point tolerances intentionally in tests where necessary rather than brittle accidental equality.
+## C4. Tests
+
+Add focused tests proving at least:
+
+- the output flow receives the actual generated value from the finite-difference model;
+- check-copy/persistent output is absent before its event;
+- stereotype/master role is absent before its event;
+- normal replay matches final state;
+- event order/value tampering fails;
+- unknown event type fails closed.
+
+Do not model typography, paper motion, ink transfer, plaster chemistry, or physical stereotype-sector geometry.
 
 ---
 
-# Part C — upgrade `#/continuous` into an evidence-aware continuous-mechanics workbench
+# Part D — upgrade `#/finite-difference`
 
-Do not build 3D/physics. Use the existing site style and current deterministic-inspector patterns.
+Keep the current arithmetic teaching path. Add a compact second layer that answers:
 
-## C1. Default functional teaching chain
+> Once the next table value exists, how does “output” differ from merely seeing the number in an internal state table?
 
-Use a small P/M fixture inspired by roles directly documented in the Smithsonian records, for example:
+## D1. Required presentation
 
-```text
-input shaft A quantity
-input shaft B quantity
-→ adder/differential relation c = a + b
-→ generic integrator relation over an inspection interval
-→ output quantity
-→ output-tracer role
-```
+Without a large redesign, expose:
 
-Use simple values whose arithmetic is obvious, e.g. `a=2`, `b=1`, summed rate `3`, interval `0.5`, integrated contribution `1.5`. You may choose equally clear values.
-
-Critical boundary:
-
-- Smithsonian documents these component **roles** on surviving Bush Analyzer components;
-- the repository's exact connection of those roles into one tiny five-step example is **P/M** unless a source explicitly establishes that exact wiring;
-- the serialized order is for inspection/replay, not a claim that the physical machine operated in stop-motion phases.
-
-If the existing architecture makes a separate `continuous-flow` exhibit module cleaner than putting all logic in `main.ts`, do that. Core arithmetic/state must not live only in the DOM renderer.
-
-## C2. Minimum visitor affordances
-
-Provide:
-
-- reset;
-- step one event/inspection phase;
-- optional complete-one-cycle control if cheap;
-- current input A/B quantities;
-- adder output / effective integrator input;
-- independent coordinate and sample interval;
-- integrator before/after quantity;
-- current output/tracer state;
-- ordered text event log;
-- bilingual explanatory text;
-- keyboard access for the main step control if consistent with the current routes;
+- current finite-difference columns and generated value as before;
+- a small `calculation → persistent output` flow using the tested module from Part C;
+- step/reset controls for the output-flow events, or reuse the existing step control if it stays understandable;
+- text state showing whether the value is merely computed, recorded as a check-copy/persistent print role, and mapped to the stereotyping/master-output role;
+- an ordered text event log;
+- bilingual text;
+- keyboard access consistent with current interactive routes if inexpensive;
 - no meaning available only through color/motion.
+
+## D2. Evidence labels must be explicit
 
 The route must visibly distinguish:
 
-```text
-H/E1 museum-documented component role
-M integration/addition relation
-P/M tiny browser connection + serialized observation order
-open/unmodeled physical geometry
-```
+- **M** finite-difference mathematics;
+- **H/E1** Babbage Papers drawing/catalog facts where exact archive records are cited;
+- **R/institutional reconstruction** the Science Museum/CHM built Difference Engine No. 2 and its completed printer;
+- **H** actually built Scheutz printing-difference-engine comparison;
+- **P/M** this repository's serialized `value ready → output roles` flow;
+- **open** historical printer timing/geometry not modeled.
 
-Do not describe the current discrete helper as “a faithful Differential Analyzer simulation.”
+Do not label the browser output trace as a simulation of BAB/A/173–176.
 
-## C3. Focused tests
+## D3. Teaching point
 
-Add tests sufficient to prove at least:
+The page should make this idea clear in state and prose:
 
-1. a constant input relation integrates to the expected result for the default fixture;
-2. the adder relation used by the workbench is explicit rather than hidden in UI arithmetic;
-3. integrated output is not available before the appropriate integration event;
-4. output/tracer state is not populated before the output event;
-5. repeated cycles advance the independent quantity and accumulated output deterministically;
-6. replay reproduces final state;
-7. sequence tampering is rejected;
-8. altered input/sum/integration result fields are rejected;
-9. unknown serialized event/action types fail closed if such a boundary exists;
-10. invalid finite values / interval are rejected;
-11. the model remains a P/M sample/inspection abstraction and does not introduce source-specific geometry metadata as if it were historical state.
+> The historical problem was not only obtaining a correct numerical value. Re-copying and typesetting could reintroduce error after calculation, so persistent/automatic output changes the trust boundary of the whole table-making workflow.
 
-Do not introduce a new browser-testing framework solely for this task.
+Use the CHM/Science Museum evidence at the precision actually inspected. Do not turn this into a general claim that every historical difference engine eliminated all human error.
 
 ---
 
-# Part D — required bounded cross-machine comparison document
-
-After Parts A–C are working, create:
-
-```text
-docs/REPRESENTATION_AND_PROTOCOL.md
-```
-
-This is deliberately required because the repository now has enough implemented families for the cross-machine idea to become useful, and the previous source-heavy tasks have been completing well under budget.
-
-Keep it concise and source-aware. Compare **only** these already-supported rows:
-
-1. Pascaline / dial-and-carry case;
-2. generic stepped-drum or pinwheel set→crank family (one combined row is fine if distinctions are stated);
-3. key-driven / Comptometer-informed P/M model;
-4. direct-multiplication / Millionaire-informed P/M model;
-5. Analytical Engine information-flow lesson;
-6. continuous / Differential Analyzer-informed lesson.
-
-Use these axes:
-
-```text
-input representation
-working numeric/physical representation
-human action that advances computation
-operation/control representation
-carry/correction/interlock or equivalent constraint
-output contract
-historical source boundary
-repository P/M boundary
-open/unverified detail
-```
-
-Rules:
-
-- reuse the repository's existing source notes rather than starting six new research projects;
-- every historical cell must be supportable by the cited research note/source at the precision stated;
-- use `open / unverified` rather than smoothing over a gap;
-- do not imply that “shaft rotation = memory,” “Mill = CPU,” or other modern analogies are identities;
-- the point is to answer **where the number/control lives and what the human must do**, not to rank machines.
-
-If a row cannot be supported without new source research, leave the exact cell open and say why.
-
----
-
-# Documentation and verification reconciliation
+# Documentation reconciliation
 
 After implementation/tests are real:
 
-- update `STATUS.md` to reflect the strengthened Differential Analyzer provenance and continuous workbench;
-- update `TODO.md` to mark `research/differential-analyzer.md` strengthened only if Part A is genuinely complete;
-- add `docs/REPRESENTATION_AND_PROTOCOL.md` to README/teaching navigation only if the link is genuinely useful; avoid README churn for its own sake;
-- update `docs/VERIFICATION.md` with:
-  - the post-PR-merge baseline if observed;
-  - all commands actually run;
-  - final test count/files;
-  - local `#/continuous` smoke results;
-  - deployment state only if actually checked;
-- keep `ROADMAP.md` changes minimal unless the new comparison materially closes/reframes a track;
+- update `STATUS.md` to describe the Difference Engine provenance/output-contract slice accurately;
+- update `TODO.md` with a checked item for the Difference Engine source map/output lesson only if it is genuinely complete;
+- update `docs/VERIFICATION.md` with the actual baseline and final test count/files, commands run, and bounded `#/finite-difference` smoke results;
+- update `research/difference-engine-addition.md` only enough to migrate its obsolete A/D wording to the two-axis evidence policy and point to the new source map;
+- add a useful link from README/teaching path if the new output layer materially changes the route;
+- keep `ROADMAP.md` edits minimal;
 - do not rewrite `docs/RESEARCH_GAPS.md` as a status ledger.
 
 Before commit/push, run:
@@ -357,60 +371,67 @@ npm run build
 git diff --check
 ```
 
-Perform a bounded local browser smoke check of `#/continuous`:
+Perform a bounded local browser smoke of `#/finite-difference`:
 
-- initial/reset state;
-- event stepping;
-- visible adder/integrator/output state;
-- no obvious desktop horizontal overflow;
-- bilingual text/state remains readable.
+- square preset still works;
+- arithmetic step remains understandable;
+- new output flow can be stepped/reset;
+- persistent-output states appear only after their events;
+- evidence labels remain readable in English and Chinese;
+- no obvious desktop horizontal overflow.
 
-If the final commit's Pages deployment completes while you are still working and the public route is reachable, you may record a deployed smoke check. Otherwise do not wait indefinitely and do not claim the new route live merely because an older deployment is live.
+Check the final push CI if it completes promptly; do not wait indefinitely. Record remote deployment only if actually observed.
 
-One coherent commit is fine; a research checkpoint followed by implementation/docs is also fine. Push all required work, then stop.
+One coherent commit is fine. Push all required work, then stop.
 
 Suggested final subject:
 
 ```text
-feat: ground continuous mechanical integration
+feat: ground Difference Engine output flow
 ```
 
 ---
 
 # Optional early-finish work
 
-Only if Parts A–D, full tests/build, browser smoke, docs reconciliation, commit and push are genuinely complete with substantial time remaining, spend at most one small additional checkpoint **scoping** the next named-machine evidence task:
+Only if Parts A–D, full verification, browser smoke, documentation reconciliation, commit and push are genuinely complete with substantial time remaining, spend at most one small checkpoint scoping the next provenance task:
 
 ```text
-research/difference-engine-source-map.md
+research/output-and-audit-trail.md
 ```
 
-Do not implement new Difference Engine geometry. A useful optional checkpoint would only identify primary/museum/reconstruction sources, exact questions to resolve, and how they map to the already-existing finite-difference teaching model.
+Limit optional scope to a source-aware outline comparing:
 
-If completing the optional work would delay or weaken the required continuous slice, skip it.
+- non-printing result registers;
+- Babbage/Scheutz table output;
+- later printing adding/calculating machines;
+- total/subtotal/audit semantics as future research questions.
+
+Do not implement a generic office-printing machine, red/black printing, or bookkeeping workflow without sources.
+
+If optional work would weaken the required Difference Engine slice, skip it.
 
 # Evidence and stop conditions
 
 Stop and record a precise blocker rather than guessing if:
 
-- you cannot distinguish the original MIT analyzer from later improved or GE/UCLA machines at the precision needed for a claim;
-- a museum record establishes a component exists but not the connection/timing you want to draw;
-- a full Bush paper/facsimile is unavailable and an exact page/figure claim would therefore be invented;
-- modeling real disk-and-wheel geometry, torque amplification, backlash, frontlash, shaft layout, or scale factors becomes necessary;
-- the continuous model starts becoming a numerical ODE solver hidden behind historical language;
-- shared replay changes would require a broad incompatible migration;
-- a concurrent implementation of the same continuous track lands on remote `main`.
+- the Science Museum archive records are inaccessible enough that drawing identifiers/subjects cannot be verified;
+- source text conflicts about which Difference Engine design/output feature is being described and the conflict cannot be resolved conservatively;
+- implementing the output flow would require inventing printer geometry/timing;
+- hardening `difference-column` requires changing the mathematical update semantics in a way that breaks established tests/teaching without a clear reason;
+- a conflicting Difference Engine implementation lands on remote `main`;
+- shared replay semantics would require a repository-wide migration rather than this bounded slice.
 
-The intended result is **not** “we simulated a Differential Analyzer.” It is a tested lesson where a visitor can see a continuous quantity relation, addition/integration/output flow, and the boundary between surviving historical component roles and this repository's own inspectable browser model.
+Do not start new machines, 3D physics, or reliability/torque simulation in this slice.
 
 # Git discipline
 
 - remote `main` is authoritative;
-- fetch/pull before work and again before final push if substantial time has passed;
-- inspect current code/tests before creating parallel abstractions;
-- preserve the three newly merged discriminator-hardening fixes;
-- do not fold unrelated cleanup into this task;
-- inspect the final diff;
+- fetch/pull before work;
+- inspect existing source/tests before creating parallel abstractions;
+- one coherent checkpoint or a small research checkpoint + implementation checkpoint is acceptable;
 - run all acceptance commands;
+- inspect the final diff for unrelated changes;
+- update status/verification only after tests actually pass;
 - commit and push;
 - after push, stop and wait for the next `CURRENT_AGENT_TASK.md` revision.
