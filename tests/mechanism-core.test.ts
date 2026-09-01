@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { parseTrace, replayTrace, serializeTrace } from '../src/core/trace';
+import { canonicalize, parseTrace, replayTrace, serializeTrace } from '../src/core/trace';
 import type { MechanismEvent } from '../src/core/events';
 import {
   crankPlusOne,
@@ -79,6 +79,22 @@ describe('deterministic transition contract', () => {
 });
 
 describe('canonical JSON trace and UI-independent replay', () => {
+  it('canonicalizes nested object keys without changing array order', () => {
+    const canonical = [
+      { type: 'FIRST', payload: { left: 1, right: 2 } },
+      { type: 'SECOND', payload: { left: 3, right: 4 } },
+    ];
+    const reorderedKeys = [
+      { payload: { right: 2, left: 1 }, type: 'FIRST' },
+      { payload: { right: 4, left: 3 }, type: 'SECOND' },
+    ];
+
+    expect(JSON.stringify(canonicalize(reorderedKeys))).toBe(JSON.stringify(canonicalize(canonical)));
+    expect(JSON.stringify(canonicalize(reorderedKeys.slice().reverse()))).not.toBe(
+      JSON.stringify(canonicalize(canonical)),
+    );
+  });
+
   it('serializes identical state/action byte-for-byte identically', () => {
     expect(serializeTrace(createCrankTrace([9, 9, 0, 0], 7))).toBe(
       serializeTrace(createCrankTrace([9, 9, 0, 0], 7)),
