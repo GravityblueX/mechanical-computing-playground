@@ -1,6 +1,6 @@
 # Current Status
 
-Last reconciled on 2026-09-01 after the Thomas stepped-drum carry evolution slice.
+Last reconciled on 2026-09-01 after the cross-machine mechanical error-control slice.
 
 This file is the **current-state authority** for the repository. `ROADMAP.md` describes where the project should go; `IMPLEMENTATION_PLAN.md` is still useful as a dependency/design specification, but many of its checkboxes predate later implementation and must not be treated as the live task ledger.
 
@@ -13,7 +13,7 @@ This file is the **current-state authority** for the repository. `ROADMAP.md` de
 - GitHub Actions CI and a Pages deployment workflow.
 - Deterministic state/event/replay primitives under `src/core/`.
 - Golden carry fixtures under `fixtures/carry/`.
-- The latest local verification (`docs/VERIFICATION.md`, 2026-09-01 UTC+8) reports typecheck, 194 tests across 16 files, production build, diff check, and a bilingual visible-carry browser smoke check passing.
+- The latest local verification (`docs/VERIFICATION.md`, 2026-09-01 UTC+8) reports typecheck, 201 tests across 17 files, production build, diff check, and bilingual browser smoke passing.
 
 Remote CI run `33437862103` passed for the previous operator-division checkpoint `7bebcea2d187f0ed2411de4098c846963df8b32a`. This status still does **not** substitute for CI on later commits.
 
@@ -34,6 +34,7 @@ Remote CI run `33437862103` passed for the previous operator-division checkpoint
 - generic setting–crank interlock with explicit lock/phase transitions, invalid-action rejection, and hardened replay;
 - typed control-provenance profiles preserving source/model, H/R claim type, E1–E4 strength, documented roles, and explicit not-established boundaries;
 - typed carry-provenance profiles separating Pascal/Felt, Odhner/Talamini, and Thomas 1820 patent/object, 1865, 1880 proposal, and R/E3 revision-history contexts;
+- typed mechanical-error-control profiles separating Thomas inertia/load, Odhner/Talamini carry scheduling, and Bush frontlash/backlash-transmission responsibilities without pseudo-quantitative reliability fields;
 - generic deterministic printing ledger separating working accumulator state from structured persistent ITEM/SUBTOTAL/TOTAL lines, including subtotal retention, total clearing, replay, and tamper rejection;
 - typed output-contract profiles separating identified register-only/printing objects, primary total/subtotal patent semantics, and Difference Engine persistent-output roles;
 - generic continuous integrator with independent/input/integrated quantities, P/M inspection interval, ordered observation/advance events, safe numeric validation, and hardened replay;
@@ -54,7 +55,8 @@ The current browser shell contains non-empty routes or views for:
 - interactive output-contract lesson exposing `+12, +8, SUBTOTAL, +5, TOTAL`, persistent record versus accumulator state, and source-separated register/listing/Difference Engine comparisons;
 - Curta;
 - interactive Analytical Engine P/M information flow for `(ab+c)d`, with Store/Mill/card roles, intermediate `p/q`, output, stepping, and hardened replay;
-- interactive continuous mechanical integration workbench with A/B inputs, explicit sum, coordinate/integral phases, tracer output, stepping, reset, and evidence-layer text;
+- interactive continuous mechanical integration workbench with A/B inputs, explicit sum, coordinate/integral phases, tracer output, stepping, reset, and a link to the documented frontlash responsibility;
+- bilingual mechanical-error-control comparison preserving distinct Thomas, Odhner/Talamini, and Bush source/problem/control boundaries;
 - hand-crank backpropagation;
 - about / evidence explanation.
 
@@ -93,7 +95,7 @@ The most important remaining gaps are:
 - key-driven computation now has a tested generic P/M mechanism model, but simultaneous multi-column operation, correction, interlocks, and source-specific Comptometer geometry remain intentionally unmodeled;
 - `research/curta-source-map.md` now maps US 2,525,352 figures/architecture and specialist-hosted operator material, while exact manual edition/page/facsimile and production Type I/II revision mapping remain open;
 - `research/analytical-engine-information-flow.md` now maps Menabrea/Lovelace, Charles and H. P. Babbage publications, catalogued Babbage Papers drawings, Walker reconstruction choices, and the repository's P/M boundary; exact facsimile/page mapping and source-specific geometry remain open;
-- `research/differential-analyzer.md` now separates Bush 1931 publication metadata, Smithsonian surviving component roles, Shannon's interpretation path, later machine generations, and the repository P/M chain; full facsimile/page/figure inspection and physical geometry remain open;
+- `research/differential-analyzer.md` now adds directly inspected Smithsonian frontlash unit `1983.3002.04` / `nmah_693235` and separates integration mathematics, shaft transmission, backlash compensation, torque amplification, and output tracing; Bush 1931 full facsimile/page/figure inspection, exact placement/wiring, numerical backlash/residual error, and physical geometry remain open;
 - `research/difference-engine-source-map.md` now separates Difference Engine No. 1 design/fragment, No. 2 design and 1991/2002 reconstruction, BAB/A/173–176 drawing records, and built Scheutz printing engines; drawing-level geometry/timing and inaccessible Smithsonian detail remain open;
 - `research/simulator-matrix.md` now records a bounded prior-art/reuse matrix, but several third-party license, stepping, and maintenance fields remain explicitly unverified;
 - `research/control-and-zeroing-source-map.md` now separates identified Thomas mode/counter/zeroing roles, Odhner US1510100 crank-home locking, Felt US960528 cancel/carry-strain recovery, Turck US1154897 immediate key actuation, and the Pascaline H/R complement boundary; source-specific geometry, uninspected Thomas instructions, partial-stroke correction, and production-revision mapping remain open;

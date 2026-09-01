@@ -34,22 +34,25 @@ This pass verified the bibliographic metadata/DOI route, but did not obtain a st
 - Input Table Carriage, `1983.3002.01` / `nmah_693232`: <https://www.si.edu/object/input-table-carriage-bush-differential-analyzer%3Anmah_693232>
 - Adder / Differential Gear, `1983.3002.02` / `nmah_693233`: <https://www.si.edu/object/nmah_693233>
 - Output Table Carriage / Tracer, `1983.3002.03` / `nmah_693234`: <https://www.si.edu/object/carriage-and-tracer-output-table-bush-differential-analyzer%3Anmah_693234>
+- Frontlash Unit, `1983.3002.04` / `nmah_693235`: <https://americanhistory.si.edu/collections/object/nmah_693235>
+- related frontlash-unit comparison records named by that catalog: `1983.3002.09` / `nmah_693240`, `.10` / `nmah_693241`, and `.11` / `nmah_693242`
 
 The task's institutional-record anchors identify the following catalogued roles:
 
 - the integrator unit contains two of six original integrators associated with the MIT analyzer;
 - an input-table carriage converted motion produced by tracing a graph into shaft motion supplied to the machine;
 - a differential gear combined two shaft rotations so its output represented their sum;
-- an output-table carriage/tracer converted result-shaft rotation into a drawn result.
+- an output-table carriage/tracer converted result-shaft rotation into a drawn result;
+- the ca. 1930 frontlash unit `1983.3002.04` compensated for backlash in a drive between the output shaft of one unit and the input shaft of an adjacent unit. Its record explicitly directs comparison with `.09`, `.10`, and `.11`.
 
 - Claim type: **H**.
 - Evidence: **E1 for the surviving/catalogued objects and museum-described roles**.
 
 ### Access limitation and safe use
 
-Direct requests to the Smithsonian object/group pages returned request-verification/403 responses in this environment. The repository therefore preserves the exact identifiers and bounded catalogued-role statements supplied by the institutional records/task, but does not pretend to have inspected additional dimensions, inscriptions, photographs, internal geometry, or wiring descriptions.
+The `www.si.edu` and `americanhistory.si.edu` frontlash object routes were directly inspected in the browser in this pass; the latter initially displayed request verification but its rendered catalog record was readable. Other Smithsonian routes may still reject automated requests, so access is route-specific rather than a blanket availability claim.
 
-The records do not establish that these four surviving objects were permanently wired as the exact chain used by the browser. Images are linked, not copied.
+The frontlash record describes a steel shaft/cylinder, thin brass drum, friction band, planetary gearing and disc, but this pass uses those details only as catalog description—not as a complete analyzer geometry map. The records do not establish that the surviving input, adder, integrator, frontlash and tracer objects were permanently wired as the exact chain used by the browser. They also do not place this particular frontlash object between any particular surviving pair. Images are linked, not copied.
 
 ## 3. Mathematical and engineering interpretation
 
@@ -86,7 +89,19 @@ Do not flatten these into one timeless “Differential Analyzer”:
 | modern reconstruction/interpretation | R unless tied precisely to primary drawings/artifacts |
 | this repository | generic P/M functional chain and inspection sampler |
 
-## 5. What is inferred and what remains open
+## 5. Separate responsibilities
+
+| Responsibility | Evidence boundary |
+|---|---|
+| integration mathematics | `Δy = u·Δx` is M; the browser's interval is a P/M inspection choice |
+| shaft transmission | catalogued units expose input/output shaft roles at component precision; exact full-machine routing remains open |
+| backlash compensation | `1983.3002.04` / `nmah_693235` is H/E1 object evidence for the museum-stated frontlash role between adjacent-unit shafts |
+| output tracing | `1983.3002.03` / `nmah_693234` supplies the catalogued tracer role; browser output values/wiring are P/M |
+| torque amplification | separate responsibility; no authoritative/primary construction claim was newly inspected here |
+
+Frontlash compensation is not silently equated with torque amplification. The frontlash record establishes no numerical backlash, residual error, tolerance, efficiency, response time, or exact full-machine placement.
+
+## 6. What is inferred and what remains open
 
 The broad functional connection—continuous quantities can be coupled, added, integrated, and plotted—is historically grounded at role level. The repository's exact sequence:
 
@@ -105,12 +120,12 @@ Open/unmodeled:
 - disk-and-wheel geometry and contact kinematics;
 - torque-amplifier construction;
 - shaft routing and actual interconnection;
-- backlash/frontlash, slip, drift and error propagation;
+- numerical backlash/residual error and the placement of identified frontlash units; slip, drift and error propagation;
 - scale factors, units, tolerances and physical dimensions;
 - real operating timing;
 - exact distinctions among individual MIT revisions beyond the bounded records above.
 
-## 6. Implementation consequence
+## 7. Implementation consequence
 
 `src/mechanisms/continuous-integrator/` now represents an independent coordinate, observed input, inspection interval, accumulated output, sample count, ordered P/M events and hardened replay. Its three phases—observe input, advance coordinate, advance integral—are an **inspection device**, not historical machine timing.
 

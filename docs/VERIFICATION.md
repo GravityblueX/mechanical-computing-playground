@@ -1,5 +1,23 @@
 # Verification record
 
+## 2026-09-01 — cross-machine mechanical error control
+
+The pre-edit remote-main baseline was 194 tests across 16 files. This slice added a source-separated Thomas/Odhner/Talamini/Bush error-control map, directly inspected and recorded Smithsonian frontlash unit `1983.3002.04` / `nmah_693235`, separated integration/shaft/backlash/torque/tracing responsibilities, added four typed profiles and a bilingual public comparison, and left the ideal continuous-integrator mechanism unchanged.
+
+- `npm run typecheck` — pass
+- `npm test -- --run` — pass, 201 tests across 17 files
+- `npm run build` — pass
+- `git diff --check` — pass
+
+Local browser smoke against Vite:
+
+- `#/mechanical-error-control` rendered four separate source cards, three distinct error classes, the Smithsonian catalog/record identity, and the no-probability/no-RPM/no-physics boundary in English and Chinese;
+- `#/visible-carry` still completed `0099 + 1` to `0100` and exposed its cross-link;
+- `#/continuous` still completed the six-event ideal P/M cycle to tracer output `1.5`, reset correctly, and displayed the separate H/E1 frontlash responsibility;
+- no desktop horizontal overflow was observed on the three checked routes.
+
+No deployment check was performed for this not-yet-pushed commit; no claim that the new route is already live is made.
+
 ## 2026-09-01 — Thomas stepped-drum carry evolution
 
 The pre-edit remote-main baseline was 190 tests across 16 files. This slice separated Thomas 1820 patent and surviving-object contexts, mapped Thomas 1865 rapid overrun, successive stepped-cylinder phasing, older simultaneous-load/false-result and replacement relationships, separated the Thomas de Bojano 1880 20→10-part proposal from R/E3 production interpretation, and reused the existing source-neutral ordinal P/M timeline for a cross-family visible-carry comparison.

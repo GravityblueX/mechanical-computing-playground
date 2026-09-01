@@ -248,13 +248,13 @@ A useful exhibit would show that “output” is not always a number on a displa
 
 ## Priority 8 — Reliability, torque, tolerance, and wear
 
-This is a high-value but source-sensitive future line. US1377269A provides one explicit H/E1 rapid-rotation/transfer-arm miscalculation risk and a wear-reduction design claim; US1867603A provides H/E1 spacing/capacity/speed reasoning plus a bounded ~22% experiment. Thomas 1865 adds H/E1 dial overrun, simultaneous-load/plate-lift false-result, moderation and full-position conditioning claims. The repository models only ordinal dependency—not reliability probability.
+This is a high-value but source-sensitive line. US1377269A provides one explicit H/E1 rapid-rotation/transfer-arm miscalculation risk and a wear-reduction design claim; US1867603A provides H/E1 spacing/capacity/speed reasoning plus a bounded ~22% experiment. Thomas 1865 adds H/E1 dial overrun, simultaneous-load/plate-lift false-result, moderation and full-position conditioning claims. Smithsonian frontlash unit `1983.3002.04` / `nmah_693235` now provides directly inspected H/E1 object/catalog evidence for backlash compensation in a drive between adjacent-unit shafts. `research/mechanical-error-control.md` and the public comparison keep these responsibilities source-separated; no reliability probability is modeled.
 
 Questions:
 
 - why long carry chains create force/timing problems;
 - where springs, latches, detents, or stored energy decouple loads;
-- backlash and lost motion;
+- numerical backlash/lost motion and residual error after the now-identified Bush frontlash responsibility;
 - manufacturing tolerances;
 - lubrication and wear;
 - maximum safe operating speed;

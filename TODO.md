@@ -22,6 +22,7 @@
 - [x] Ground carry architecture provenance with Pascal/Felt/Model A source separation, hardened key-driven replay, and a public visible-carry comparison.
 - [x] Ground Odhner-family rotary carry scheduling/reliability with three separated patents, a fail-closed ordinal scheduler, and a public comparison.
 - [x] Ground Thomas stepped-drum carry evolution with 1820/1865/1880 revision boundaries and a cross-family public comparison.
+- [x] Map source-separated mechanical error-control responsibilities across Thomas, Odhner/Talamini, and Bush frontlash evidence.
 
 ## Repository maintenance
 
