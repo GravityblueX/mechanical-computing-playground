@@ -1,6 +1,6 @@
 # Current Status
 
-Last reconciled on 2026-09-01 after the source-specific subtraction, zeroing, and control-provenance slice.
+Last reconciled on 2026-09-01 after the persistent output-contract and printing-ledger slice.
 
 This file is the **current-state authority** for the repository. `ROADMAP.md` describes where the project should go; `IMPLEMENTATION_PLAN.md` is still useful as a dependency/design specification, but many of its checkboxes predate later implementation and must not be treated as the live task ledger.
 
@@ -13,7 +13,7 @@ This file is the **current-state authority** for the repository. `ROADMAP.md` de
 - GitHub Actions CI and a Pages deployment workflow.
 - Deterministic state/event/replay primitives under `src/core/`.
 - Golden carry fixtures under `fixtures/carry/`.
-- The latest local verification (`docs/VERIFICATION.md`, 2026-09-01 UTC+8) reports typecheck, 133 tests across 13 files, production build, diff check, and a local controls-route smoke check passing.
+- The latest local verification (`docs/VERIFICATION.md`, 2026-09-01 UTC+8) reports typecheck, 150 tests across 14 files, production build, diff check, and local output-contract/finite-difference browser smoke checks passing.
 
 Remote CI run `33437862103` passed for the previous operator-division checkpoint `7bebcea2d187f0ed2411de4098c846963df8b32a`. This status still does **not** substitute for CI on later commits.
 
@@ -32,6 +32,8 @@ Remote CI run `33437862103` passed for the previous operator-division checkpoint
 - generic operator-driven division with repeated subtraction, per-place quotient counts, overshoot, mandatory correction, carriage shift, and hardened replay;
 - generic setting–crank interlock with explicit lock/phase transitions, invalid-action rejection, and hardened replay;
 - typed control-provenance profiles preserving source/model, H/R claim type, E1–E4 strength, documented roles, and explicit not-established boundaries;
+- generic deterministic printing ledger separating working accumulator state from structured persistent ITEM/SUBTOTAL/TOTAL lines, including subtotal retention, total clearing, replay, and tamper rejection;
+- typed output-contract profiles separating identified register-only/printing objects, primary total/subtotal patent semantics, and Difference Engine persistent-output roles;
 - generic continuous integrator with independent/input/integrated quantities, P/M inspection interval, ordered observation/advance events, safe numeric validation, and hardened replay;
 - continuous-flow teaching chain with explicit adder relation and tracer-output boundary;
 - shared mechanism core and trace/replay support.
@@ -47,6 +49,7 @@ The current browser shell contains non-empty routes or views for:
 - interactive multiplication comparison with event/cycle stepping for direct multiplication;
 - interactive operator-division procedure for `8478 ÷ 314` with visible overshoot/correction;
 - interactive setting–crank interlock lesson with a visible blocked setting attempt and typed source-comparison cards for Thomas, Odhner, Felt/Tarrant, and Pascaline controls;
+- interactive output-contract lesson exposing `+12, +8, SUBTOTAL, +5, TOTAL`, persistent record versus accumulator state, and source-separated register/listing/Difference Engine comparisons;
 - Curta;
 - interactive Analytical Engine P/M information flow for `(ab+c)d`, with Store/Mill/card roles, intermediate `p/q`, output, stepping, and hardened replay;
 - interactive continuous mechanical integration workbench with A/B inputs, explicit sum, coordinate/integral phases, tracer output, stepping, reset, and evidence-layer text;
@@ -92,7 +95,8 @@ The most important remaining gaps are:
 - `research/difference-engine-source-map.md` now separates Difference Engine No. 1 design/fragment, No. 2 design and 1991/2002 reconstruction, BAB/A/173–176 drawing records, and built Scheutz printing engines; drawing-level geometry/timing and inaccessible Smithsonian detail remain open;
 - `research/simulator-matrix.md` now records a bounded prior-art/reuse matrix, but several third-party license, stepping, and maintenance fields remain explicitly unverified;
 - `research/control-and-zeroing-source-map.md` now separates identified Thomas mode/counter/zeroing roles, Odhner US1510100 crank-home locking, Felt US960528 cancel/carry-strain recovery, Turck US1154897 immediate key actuation, and the Pascaline H/R complement boundary; source-specific geometry, uninspected Thomas instructions, partial-stroke correction, and production-revision mapping remain open;
-- `docs/REPRESENTATION_AND_PROTOCOL.md` now compares representation and operator protocol across six implemented lessons; output/audit-trail depth, commercial context, reliability/torque/tolerance, and source-specific geometry remain future work.
+- `research/output-and-audit-trail.md` and `#/output-contracts` now compare register-only output, identified printing/listing objects, US885202A subtotal/total semantics, and Difference Engine persistent-output roles; direct museum-page access, printer geometry, period office procedure, commercial context, and source-specific production mapping remain open;
+- `docs/REPRESENTATION_AND_PROTOCOL.md` compares representation, operator protocol, and now a distinct persistent-output contract row; reliability/torque/tolerance and source-specific geometry remain future work.
 
 See `docs/RESEARCH_GAPS.md` for the full queue.
 
@@ -120,7 +124,7 @@ Historical/reconstruction claims then receive `E1–E4` evidence strength separa
 
 1. **Deepen control sources only where exact evidence is available**: Thomas instruction pages, production mapping of patented embodiments, partial-stroke correction, and source-specific geometry remain open after the completed family-separated provenance map.
 2. **Deepen Difference Engine and Differential Analyzer facsimile/page/figure anchors** before any source-specific geometry; the generation/source maps now exist.
-3. **Deepen cross-machine comparison layers** beyond representation/protocol and the new Difference Engine output case: broader output/audit trail and eventually reliability/torque/tolerance when evidence supports it.
+3. **Deepen remaining cross-machine comparison layers** after the completed output-contract slice: commercial context and eventually reliability/torque/tolerance only when evidence supports them.
 4. **Only then deepen source-specific geometry/animation.** Do not reward visual detail unsupported by source detail.
 
 ## External publishing state

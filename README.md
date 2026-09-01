@@ -194,6 +194,10 @@ machines/<name>/
 
 数学模型、Babbage 设计、1991/2002 现代复原、Scheutz 实际建成的打印差分机与本仓 P/M 输出流必须分开。来源地图：[`research/difference-engine-source-map.md`](research/difference-engine-source-map.md)。
 
+### Persistent Output Contracts
+
+`#/output-contracts` 把工作累加器与持久记录分开：`+12`、`+8`、小计、`+5`、总计形成结构化记录；小计保留累加器，总计清零，但纸面式记录不会随之消失。它是经过测试和重放验证的 P/M 台账，不是 Burroughs 打印机构复原。页面同时分开比较非打印结果寄存器、已识别的 Burroughs 打印对象、US 885,202 的总计/小计语义与差分机持久输出问题。研究入口：[`research/output-and-audit-trail.md`](research/output-and-audit-trail.md)。
+
 ### Multiplication Compare
 
 仓库已有 repeated addition / stepped drum / pinwheel / direct multiplication 四路比较。直接乘法分支把 Otto Steiger / Millionaire 所代表的架构差异变成可单步、可重放的功能模型：乘法表的一部分不再由操作者通过重复曲柄提供，而由机器的选择机构承载。模型刻意不宣称复原 Millionaire 控制板的具体几何。详见 [`research/multiplication-mechanisms.md`](research/multiplication-mechanisms.md)。

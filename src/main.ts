@@ -9,6 +9,8 @@ import { createAnalyticalFlowTrace, stateAtAnalyticalEvent, type AnalyticalFlowE
 import { createContinuousFlowTrace, stateAtContinuousEvent, type ContinuousFlowEvent } from './exhibits/continuous-flow';
 import { createDifferenceOutputTrace, stateAtDifferenceOutputEvent, type DifferenceOutputTrace } from './exhibits/difference-output-flow';
 import { CONTROL_EVIDENCE_PROFILES } from './exhibits/control-provenance';
+import { OUTPUT_CONTRACT_PROFILES } from './exhibits/output-contracts';
+import { PRINTING_LEDGER_PRESET, reducePrintingLedgerEvent, tracePrintingLedger, type PrintingLedgerEvent } from './mechanisms/printing-ledger';
 import { evaluate, type StageAState } from './backprop/core/stage-a';
 import { createPhaseMachine, runPhaseCycle, stepPhase, STAGE_A_PHASES, type PhaseMachineState } from './backprop/core/phase-machine';
 import { mapStageA } from './backprop/mechanical-mapping';
@@ -45,6 +47,9 @@ let analyticalKeyboardBound = false;
 let continuousTrace = createContinuousFlowTrace();
 let continuousEventIndex = 0;
 let continuousKeyboardBound = false;
+const printingLedgerTrace = tracePrintingLedger(PRINTING_LEDGER_PRESET);
+let printingLedgerIndex = 0;
+let outputKeyboardBound = false;
 let back: StageAState = evaluate({ x1: 2, x2: 3, w1: 0, w2: 0, target: 10, learningRate: 0.01 });
 let phaseMachine: PhaseMachineState = createPhaseMachine(back);
 let backPreset = 'stable';
@@ -56,6 +61,7 @@ const routes: Array<[string, Copy]> = [
   ['/multiplication', { en: 'Multiplication', zh: '乘法' }],
   ['/division', { en: 'Division', zh: '除法' }],
   ['/controls', { en: 'Controls', zh: '互锁' }],
+  ['/output-contracts', { en: 'Output', zh: '输出' }],
   ['/curta', { en: 'Curta', zh: 'Curta' }],
   ['/analytical-engine', { en: 'Analytical Engine', zh: '分析机' }],
   ['/continuous', { en: 'Integration', zh: '积分' }],
@@ -328,6 +334,26 @@ function continuous() {
   if (!continuousKeyboardBound) { continuousKeyboardBound = true; window.addEventListener('keydown', (event) => { if (location.hash === '#/continuous' && event.key === 'ArrowRight' && continuousEventIndex < continuousTrace.events.length) { event.preventDefault(); continuousEventIndex += 1; continuous(); } }); }
 }
 
+function outputContracts() {
+  const state = printingLedgerTrace.events.slice(0, printingLedgerIndex).reduce(reducePrintingLedgerEvent, structuredClone(printingLedgerTrace.initialState));
+  const eventLabel = (event: PrintingLedgerEvent) => event.type === 'ITEM_RECORDED'
+    ? t(`add and print item ${event.amount}: ${event.accumulatorBefore} → ${event.accumulatorAfter}`, `累加并打印项目 ${event.amount}：${event.accumulatorBefore} → ${event.accumulatorAfter}`)
+    : event.type === 'SUBTOTAL_RECORDED'
+      ? t(`print subtotal ${event.line.value}; retain accumulator ${event.accumulatorAfter}`, `打印小计 ${event.line.value}；累加器保留 ${event.accumulatorAfter}`)
+      : t(`print total ${event.line.value}; clear ${event.accumulatorBefore} → 0`, `打印总计 ${event.line.value}；清零 ${event.accumulatorBefore} → 0`);
+  const record = state.printedLines.map(line => `${String(line.sequence + 1).padStart(2, '0')}  ${line.kind.padEnd(8)} ${line.value}`).join('\n') || t('Paper record is empty.', '纸面记录为空。');
+  const log = printingLedgerTrace.events.slice(0, printingLedgerIndex).map(event => `${String(event.sequence).padStart(2, '0')} · ${eventLabel(event)}`).join('\n') || t('No ledger operation yet.', '还没有台账操作。');
+  const profiles = OUTPUT_CONTRACT_PROFILES.map(profile => `<details><summary><b>${copy(profile.family)}</b> · ${profile.dateOrModel} · ${profile.claimType}/${profile.evidenceStrength}</summary><p><a href="${profile.sourceUrl}" target="_blank" rel="noreferrer">${esc(profile.sourceLabel)}</a></p><p><b>${t('Output medium / contract:', '输出介质 / 契约：')}</b> ${copy(profile.outputMedium)}</p><b>${t('Documented', '资料支持')}</b><ul>${profile.documentedBehaviors.map(item => `<li>${copy(item)}</li>`).join('')}</ul><b>${t('Not established', '未确认')}</b><ul>${profile.notEstablished.map(item => `<li>${copy(item)}</li>`).join('')}</ul></details>`).join('');
+  shell(
+    { en: 'When does an answer become a persistent record?', zh: '答案何时变成可留存的记录？' },
+    { en: 'Subtotal retains working arithmetic; total clears it, while both printed lines persist.', zh: '小计保留工作算术状态；总计清除它，但两种打印行都会持续存在。' },
+    `${lesson({ en: 'Separate a live accumulator from a paper-like record.', zh: '把实时累加器与纸面式持久记录分开。' }, { en: 'Step +12, +8, subtotal, +5, then total.', zh: '依次单步执行 +12、+8、小计、+5、总计。' }, { en: 'The same printed number can have different next-state semantics.', zh: '同一个打印数字可以具有不同的后续状态语义。' })}<section><div class="structure-callout">${evidenceBadge('TEACHING', locale)} ${t('P/M generic printing ledger—not a Burroughs reconstruction. It does not model type bars, carriage, ribbon, paper feed, or historical operation timing.', 'P/M 通用打印台账——不是 Burroughs 复原。它不模拟字杆、位架、色带、走纸或历史操作时序。')}</div><div class="state-grid"><div><small>${t('working accumulator', '工作累加器')}</small><strong>${state.accumulator}</strong></div><div><small>${t('persistent lines', '持久记录行')}</small><strong>${state.printedLines.length}</strong></div><div><small>${t('items entered', '已录入项目')}</small><strong>${state.itemCount}</strong></div><div><small>${t('next operation', '下一操作')}</small><strong>${printingLedgerTrace.actions[printingLedgerIndex]?.type ?? t('COMPLETE', '完成')}</strong></div></div><div class="comparison"><div class="machine"><b>${t('Working arithmetic state', '工作算术状态')}</b><p>${t('Subtotal keeps it; total clears it.', '小计保留；总计清零。')}</p></div><div class="versus">≠</div><div class="machine"><b>${t('Persistent record', '持久记录')}</b><pre>${esc(record)}</pre></div></div><div class="controls"><button id="output-step" ${printingLedgerIndex >= printingLedgerTrace.events.length ? 'disabled' : ''}>${t('Step next operation', '推进下一操作')}</button><button class="secondary" id="output-reset">${t('Reset', '重置')}</button></div><p class="status" aria-live="polite">${t('Operation', '操作')} ${printingLedgerIndex} / ${printingLedgerTrace.events.length}</p><details open><summary>${t('Ordered P/M ledger log', '有序 P/M 台账日志')}</summary><pre>${esc(log)}</pre></details><p class="model-note">${t('“Audit trail” is a modern comparison label here; the inspected early sources speak of listing, items, totals, and subtotals.', '这里的“审计轨迹”是现代比较标签；已检查的早期资料使用列单、项目、总计与小计等说法。')}</p><h2>${t('Historical output contracts differ by source', '历史输出契约因来源而异')}</h2><p class="structure-callout">${t('The generic ledger above is not the event timing or mechanism of any profile below. Difference Engine persistent output addresses mathematical-table transcription, not office transaction listing.', '上方通用台账不是下方任一资料的事件时序或机构。差分机持久输出处理数学表格转录问题，并非办公交易列单。')}</p>${profiles}</section>`
+  );
+  document.querySelector('#output-step')?.addEventListener('click', () => { printingLedgerIndex = Math.min(printingLedgerIndex + 1, printingLedgerTrace.events.length); outputContracts(); });
+  document.querySelector('#output-reset')?.addEventListener('click', () => { printingLedgerIndex = 0; outputContracts(); });
+  if (!outputKeyboardBound) { outputKeyboardBound = true; window.addEventListener('keydown', event => { if (location.hash === '#/output-contracts' && event.key === 'ArrowRight' && printingLedgerIndex < printingLedgerTrace.events.length) { event.preventDefault(); printingLedgerIndex += 1; outputContracts(); } }); }
+}
+
 function backprop() {
   const state = phaseMachine.state;
   const mapping = mapStageA(state);
@@ -361,6 +387,7 @@ function render() {
   else if (path === '/multiplication') multiplication();
   else if (path === '/division') division();
   else if (path === '/controls') controls();
+  else if (path === '/output-contracts') outputContracts();
   else if (path === '/curta') curta();
   else if (path === '/analytical-engine') analytical();
   else if (path === '/continuous') continuous();

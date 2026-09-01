@@ -1,5 +1,26 @@
 # Verification record
 
+## 2026-09-01 — persistent output contracts and printing ledger
+
+The pre-edit remote-main baseline was 133 tests across 13 files. This slice added a deterministic P/M printing ledger with structured persistent ITEM/SUBTOTAL/TOTAL lines, subtotal retention, total clearing, safe-integer validation, replay and tamper rejection; a typed five-profile output provenance dataset; a source-backed register/listing/Difference Engine comparison; and the bilingual `#/output-contracts` route.
+
+- `npm run typecheck` — pass
+- `npm test -- --run` — pass, 150 tests across 14 files
+- `npm run build` — pass
+- `git diff --check` — pass
+
+Local browser smoke against Vite:
+
+- `+12`, `+8`, subtotal, `+5`, and total stepped in the required order;
+- subtotal left the working accumulator at 20, total cleared 25 to 0, and all five structured lines persisted;
+- reset restored an empty record and zero accumulator;
+- five source profiles rendered source/model/date, claim/evidence labels, documented behavior, and open boundaries in English and Chinese;
+- the generic-ledger/Burroughs boundary and modern “audit trail” terminology boundary were visible;
+- no desktop horizontal overflow was observed;
+- the existing finite-difference output lesson still rendered.
+
+No deployment check was performed for this not-yet-pushed commit; no claim that this upgraded route is already live is made.
+
 ## 2026-09-01 — subtraction, zeroing, and control provenance
 
 The pre-edit remote-main baseline was 128 tests across 12 files. This slice added a family-separated source map for Thomas, Odhner, Felt/Tarrant and Pascaline controls; a typed evidence dataset with source/model, two-axis evidence labels, documented roles and explicit open boundaries; and source-driven comparison cards below the unchanged generic P/M interlock lesson. It also tightened the operator-division evidence boundary without changing its mechanism.

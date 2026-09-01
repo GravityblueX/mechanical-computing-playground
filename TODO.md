@@ -18,7 +18,7 @@
 - [x] Add `docs/REPRESENTATION_AND_PROTOCOL.md` across the six currently supported machine/lesson families.
 - [x] Ground Difference Engine provenance/output contracts: add the Babbage/Scheutz source map, harden difference-column replay, and connect persistent output roles to `#/finite-difference` without claiming printer geometry.
 - [x] Deepen subtraction/control provenance: separate Thomas, Odhner, Felt/Tarrant, and Pascaline source roles; add typed evidence profiles and the controls comparison without generalizing across families.
-- [ ] Deepen output/audit-trail comparison beyond Difference Engines only after source-backed printing-machine material is available.
+- [x] Deepen output/audit-trail comparison beyond Difference Engines with identified register/printing objects, primary subtotal/total semantics, a tested persistent ledger, and a public comparison route.
 
 ## Repository maintenance
 

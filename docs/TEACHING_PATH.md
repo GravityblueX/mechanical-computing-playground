@@ -17,10 +17,11 @@ An arrow means “influences” by default, not “these two physical parts are 
 
 1. **Carry / 进位** — supermarket total `¥99 → ¥100`; observe the behavior, then distinguish the functional carry arrow from an unknown real linkage.
 2. **Finite differences / 有限差分** — generate square/cubic values, then step a separate P/M path from calculated value to check-copy and master/stereotype output roles; distinguish mathematics, historical drawings/objects, modern reconstruction, and open printer geometry.
-3. **Multiplication / 乘法** — decompose a warehouse order into ones, tens, turns, and shifts; do not read the lanes as a cutaway.
-4. **Operator division / 操作者除法** — build `8478 ÷ 314 = 27` from repeated subtraction, an overshoot, add-back correction, quotient counting, and carriage shift; the P/M events are not historical machine geometry.
-5. **Controls and interlocks / 控制与互锁** — exercise the generic P/M lock state, then compare typed source profiles for Thomas, Odhner, Felt/Tarrant and Pascaline; each profile exposes both documented roles and what remains unestablished.
-6. **Curta** — follow the human operation path while treating the cylinder drawing as an operational teaching model.
-7. **Analytical Engine / 分析机** — step a tested `(ab+c)d` teaching trace through Number/Directive/Operation roles, Store, Mill, intermediate `p/q`, and output; historical roles, Walker's later emulator choices, and the repository's P/M order are shown as separate layers.
-8. **Continuous integration / 连续积分** — step a P/M inspection chain from two input quantities through explicit addition, coordinate advance, integration, and tracer output; Smithsonian component roles are H/E1 anchors, while this wiring/order is not historical timing.
-9. **Hand-crank backprop / 手摇反向传播** — follow numerical influence; the shafts and gears are counterfactual teaching elements.
+3. **Output contracts / 输出契约** — step `+12, +8, subtotal, +5, total`; observe that subtotal retains the accumulator, total clears it, and the structured paper-like record persists in both cases. Compare identified register/listing objects and Difference Engine output without reading the P/M ledger as Burroughs mechanics.
+4. **Multiplication / 乘法** — decompose a warehouse order into ones, tens, turns, and shifts; do not read the lanes as a cutaway.
+5. **Operator division / 操作者除法** — build `8478 ÷ 314 = 27` from repeated subtraction, an overshoot, add-back correction, quotient counting, and carriage shift; the P/M events are not historical machine geometry.
+6. **Controls and interlocks / 控制与互锁** — exercise the generic P/M lock state, then compare typed source profiles for Thomas, Odhner, Felt/Tarrant and Pascaline; each profile exposes both documented roles and what remains unestablished.
+7. **Curta** — follow the human operation path while treating the cylinder drawing as an operational teaching model.
+8. **Analytical Engine / 分析机** — step a tested `(ab+c)d` teaching trace through Number/Directive/Operation roles, Store, Mill, intermediate `p/q`, and output; historical roles, Walker's later emulator choices, and the repository's P/M order are shown as separate layers.
+9. **Continuous integration / 连续积分** — step a P/M inspection chain from two input quantities through explicit addition, coordinate advance, integration, and tracer output; Smithsonian component roles are H/E1 anchors, while this wiring/order is not historical timing.
+10. **Hand-crank backprop / 手摇反向传播** — follow numerical influence; the shafts and gears are counterfactual teaching elements.
