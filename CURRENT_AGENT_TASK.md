@@ -2,18 +2,16 @@
 
 Issued: 2026-09-01
 Owner: local coding/research agent
-Target duration: roughly 90–120 minutes by old estimates; recent agent throughput suggests this should occupy about one useful hour
+Target duration: roughly 2 hours by old estimates; recent throughput suggests this should occupy about one useful hour
 Repository authority: remote `main`
 
-Previous task is complete and archived at `tasks/archive/2026-09-01-continuous-mechanics.md`.
+Previous task is complete and archived at `tasks/archive/2026-09-01-difference-engine-output.md`.
 
-The previous continuous-mechanics assignment landed as `2e39ab12b162b2e06bf147a2fb6e94409c4d7736` and passed push CI run `33452190710`. It delivered 108 passing tests across 12 files plus the continuous browser smoke check. There were no open PRs at administrator review time.
+The Difference Engine assignment landed as `774059118dc0835314643a2b610ab159d13ea66c`; push CI run `33456003716` passed. It raised the suite from 108 to 128 tests across 12 files, hardened replay, added a source map and output-contract model, upgraded the browser lesson, and still completed in roughly 30 minutes. This task is therefore deliberately broader, but it remains one coherent question:
 
-Recent substantial source+implementation slices have repeatedly completed in about 32–34 minutes despite nominal 75–90 minute estimates. This assignment is intentionally broader, but remains one coherent question:
+> Mechanical arithmetic depends on controls that do not themselves “contain the answer”: mode selectors, zeroing/canceling mechanisms, crank-home locks, correction paths, and the distinction between a key that merely sets state and a key that immediately performs arithmetic. Which of those relationships are actually documented for specific machine families, and which should remain generic P/M teaching abstractions?
 
-> A Difference Engine is not only a machine that produces the next number. What changes when the output contract is designed to carry a computed table value into a persistent printed or stereotyping workflow without a human re-copy step?
-
-Fetch/pull remote `main` before starting. Remote state always wins over the SHA above.
+Fetch/pull remote `main` before starting. Remote state always wins.
 
 ## Read before work
 
@@ -23,15 +21,17 @@ Read in this order:
 2. `TODO.md`
 3. `AGENTS.md`
 4. `docs/EVIDENCE_POLICY.md`
-5. `docs/RESEARCH_GAPS.md`, especially Priority 0.2 and Priority 7
-6. `docs/PRIOR_ART.md`
-7. `research/difference-engine-addition.md`
-8. `research/finite-difference-design.md`
-9. `src/mechanisms/difference-column/index.ts`
-10. `tests/difference-column.test.ts` and any finite-difference coverage in other tests
-11. the current `#/finite-difference` renderer/state in `src/main.ts`
-12. replay/tamper-validation patterns already used by direct multiplier, operator division, setting–crank interlock, Analytical Engine flow, and continuous integration
-13. `docs/VERIFICATION.md`
+5. `docs/RESEARCH_GAPS.md`, especially Priority 3 and Priority 4
+6. `research/subtraction-and-division.md`
+7. `research/key-driven-computation.md`
+8. `research/carry-is-the-hard-part.md`
+9. `research/curta-source-map.md`
+10. `src/mechanisms/setting-crank-interlock/index.ts`
+11. `src/mechanisms/operator-division/index.ts`
+12. the current `#/controls`, `#/operator-division`, and key-driven teaching text in `src/main.ts`
+13. relevant tests for interlock/division/key-driven mechanisms
+14. `docs/REPRESENTATION_AND_PROTOCOL.md`
+15. `docs/VERIFICATION.md`
 
 Do not use stale unchecked boxes in `IMPLEMENTATION_PLAN.md` as a task source.
 
@@ -41,326 +41,256 @@ Before editing, run the full current test suite once and record the actual basel
 
 Complete four connected pieces:
 
-1. build a proper **Difference Engine provenance/source map** that distinguishes Babbage design, surviving fragment, modern reconstruction, and actually built Scheutz difference engines;
-2. harden the existing generic `difference-column` P/M replay model to the repository's current deterministic/tamper-resistant standard;
-3. add a small tested **tabular-output teaching flow** that separates “a value has been computed” from “a persistent output artifact has been produced,” without pretending to reconstruct Babbage's printer geometry;
-4. upgrade `#/finite-difference` so the visitor can see the calculation/output boundary and the historical evidence boundary in the same lesson.
+1. create a **source-specific control/zeroing/correction provenance map** that keeps Thomas arithmometer, Odhner-family crank locking, Felt/Tarrant key-driven/canceling machinery, and Pascaline complement subtraction separate rather than inventing a universal calculator control mechanism;
+2. tighten `research/subtraction-and-division.md` so source-specific mode/counter/zeroing claims are anchored to precise objects/patents and generic P/M procedure claims remain visibly generic;
+3. add a small typed **control-provenance teaching dataset/module** and use it to upgrade `#/controls` (and only minimally `#/operator-division` if useful) so visitors can compare the tested generic interlock with documented historical control roles without mistaking the P/M event sequence for any patent drawing;
+4. add focused tests/verification so historical claim metadata cannot silently lose its source/evidence boundary.
 
-Do not build a full Difference Engine emulator, printer animation, type-setting mechanism, stereotype press, or source-specific gear geometry.
+Do **not** build historical gear geometry, a full Thomas/Odhner/Comptometer emulator, a new generic zeroing mechanism, or a partial-stroke correction simulation in this slice.
 
 ---
 
-# Part A — create `research/difference-engine-source-map.md`
+# Part A — create `research/control-and-zeroing-source-map.md`
 
-The current `research/difference-engine-addition.md` is only a short mathematical note. Keep it if it remains useful, but create a dedicated source/provenance map for named-machine claims.
-
-Use the two-axis policy in `docs/EVIDENCE_POLICY.md` and structure the note approximately as:
+Use the two-axis evidence policy. Organize the note approximately as:
 
 ```text
 Question
 Claim types
-Machine/design generations
-Sources
+Why controls are computational state
+Source-specific cases
 What each source directly establishes
-What later reconstruction establishes
-What this repository models
-Output/printing boundary
-Open/unverified details
+What must not be generalized
+Repository P/M boundary
+Open questions before mechanism-specific modeling
 Implementation consequences
 Date checked
 ```
 
-## A1. Difference Engine No. 1 boundary
+The key rule is **one family/model/source at a time**. A mode lever on a Thomas machine is not proof of an Odhner control path; an Odhner crank lock is not a Comptometer correction mechanism.
 
-Strong institutional anchor:
+## A1. Thomas arithmometer: mode, revolution counter, and zeroing
 
-- Science Museum Group, `Difference Engine No. 1`, object `co62243`:
-  <https://collection.sciencemuseumgroup.org.uk/objects/co62243/difference-engine-no-1-difference-engine>
+Start with these institutional sources:
 
-Record only what the source supports at the precision inspected:
+- Smithsonian/NMAH, Thomas Arithmometer `nmah_690683`:
+  <https://americanhistory.si.edu/collections/object/nmah_690683>
+- Smithsonian/NMAH stepped-drum group:
+  <https://americanhistory.si.edu/it/collections/object-groups/calculating-machines/stepped-drum-calculating-machines>
+- Smithsonian/NMAH, *Instructions pour se Servir de l'Arithmomètre*, 1868, `nmah_904757`:
+  <https://www.americanhistory.si.edu/collections/object/nmah_904757>
 
-- the surviving 1832 portion was assembled by Joseph Clement;
-- it is only a portion of the planned engine, not the completed whole machine;
-- the Difference Engine project aimed to calculate numerical series by finite differences and automatically print results.
+At the precision currently visible in the museum records, record separately:
 
-Do not use the surviving fragment as proof that every planned printing/output mechanism was physically completed in 1832.
+- a lever selects addition/multiplication versus subtraction/division on identified Thomas examples;
+- the 1867 object record describes the revolution register turning in opposite directions for the two mode groups;
+- identified later Thomas examples have dedicated controls/knobs for zeroing revolution and result registers;
+- the Smithsonian catalog proves the existence/date/provenance of the 1868 operating-instruction pamphlet, but **the catalog metadata alone does not prove the contents of uninspected pages**.
 
-## A2. Difference Engine No. 2 design versus modern reconstruction
+If the IIIF/Mirador material for the 1868 pamphlet can be inspected legibly, record exact page/image anchors for operator procedure. If not, explicitly mark the pamphlet contents as not yet inspected rather than inventing instructions.
 
-Use both an institutional object record and a reconstruction/history source:
+Do not merge several Thomas dates/models into one imaginary canonical geometry. Record model/date/object IDs next to each claim.
 
-- Science Museum Group, `Babbage's Difference Engine No 2, 2002`, object `co62748` (or the canonical current equivalent):
-  <https://collection.sciencemuseumgroup.org.uk/objects/co62748>
-- Computer History Museum, `The Engines`:
-  <https://www.computerhistory.org/babbage/engines>
-- Computer History Museum, `A Modern Sequel`:
-  <https://www.computerhistory.org/babbage/modernsequel/>
+## A2. Odhner: crank-home locking as a documented control relation
 
-Keep these layers separate:
+Primary patent anchor:
 
-```text
-1847–1849 Babbage design
-1991 completion of modern calculating section
-2002 completion/addition of modern printing/stereotyping apparatus
-modern manufacturing drawings/decisions needed to build from historical plans
-```
+- Valentin Jakob Odhner, US 1,510,100, *Calculating Machine* (1924):
+  <https://patents.google.com/patent/US1510100A/en>
 
-The Science Museum/CHM reconstruction is **R with strong institutional evidence**, not a machine Babbage completed in his lifetime.
+Inspect the patent text and figures enough to record the narrow relationship it actually claims:
 
-Important output relationship supported by the CHM material:
+- the operating crank/calculating discs are associated with a locking device;
+- the crank has a defined zero/home position;
+- the guide/notch/locking relation is arranged so the lock state differs during crank rotation versus zero position;
+- the patent also describes a relation between the crank lock and locking/liberating cam/disc-setting parts.
 
-- Difference Engine No. 2 and the Analytical Engine printer design support hardcopy/check-copy output and stereotyping at the design/reconstruction level;
-- the printer/output apparatus can format tabular output;
-- this matters because the output chain was intended to reduce transcription/typesetting error, not merely display a result.
+Record figure numbers only where actually inspected. Patent disclosure is **H/E1 for the documented intended design**, not proof that every Odhner-family production machine used exactly the illustrated embodiment.
 
-Do not copy marketing superlatives or infer exact printer timing from overview prose.
+The repository's `setting-crank-interlock` remains **P/M**. It may be historically motivated by this class of control problem, but its `SETTING_LOCKED → CRANK_RELEASED → ...` event order must not be relabeled as an Odhner simulation.
 
-## A3. Babbage Papers drawing-level anchors
+## A3. Felt/Tarrant: immediate key actuation, canceling, and carry-strain recovery are distinct claims
 
-Use the Science Museum Group archive records for the output apparatus. At minimum inspect and record the identifiers/relationships around:
+Use primary patents rather than broad “the Comptometer did X” prose.
 
-- `BAB/A/173` — plan of inking, printing and stereotype apparatus;
-- `BAB/A/174` — rack/pinions connecting table figure wheels with printing/stereotype sectors;
-- `BAB/A/175` — cams associated with stereotype/paper-roller actions;
-- `BAB/A/176` — calculating part with means of conveying numbers to stereotype sectors;
-- the catalog page/record grouping these drawings, including the tracing record exposed as `BAB/B/014` where applicable:
-  <https://collection.sciencemuseumgroup.org.uk/documents/aa110000344>
+Required anchors:
 
-These archive records are **H/E1 for the existence, date/catalog identity, and described subject of the drawings**. Unless you actually inspect a legible facsimile in enough detail, do not claim tooth counts, motion sequence, dimensions, or exact linkage paths from the titles alone.
+- Dorr E. Felt, US 960,528, *Calculating-Machine* (1910):
+  <https://patents.google.com/patent/US960528A/en>
+- Joseph A. Turck, US 1,154,897, *Calculating-Machine* (1915), assigned to Felt & Tarrant:
+  <https://patents.google.com/patent/US1154897A/en>
 
-Record exact identifiers so later geometry work knows where to return.
+For US 960,528, record only source-supported claims such as:
 
-## A4. Actually built printing difference engines: Scheutz boundary
+- the patent is directed to a canceling mechanism in the Duplex Comptometer context;
+- it explicitly discusses releasing carry mechanism strain/jamming associated with improper manipulation/held keys or numeral wheels;
+- canceling/zeroing is therefore not merely “set the displayed number to zero” in that documented design context.
 
-This comparison is required because it prevents the note from becoming “Babbage design = nineteenth-century deployed machine.”
+Do **not** infer a generic partial-stroke correction mechanism unless another inspected source establishes it.
 
-Use:
+For US 1,154,897, record the explicit architectural distinction:
 
-- Smithsonian/National Museum of American History, Scheutz Difference Engine, `MA.323659` / record `nmah_997042`:
-  <https://americanhistory.si.edu/collections/object/nmah_997042>
-- Smithsonian difference-engine group:
-  <https://americanhistory.si.edu/it/collections/object-groups/calculating-machines/difference-engines>
-- Computer History Museum, Georg & Edvard Scheutz:
-  <https://www.computerhistory.org/babbage/georgedvardscheutz/>
-- Science Museum Group, Scheutz Difference Engine, third model, 1859, object `1914-122/1` / `co62255`:
-  <https://collection.sciencemuseumgroup.org.uk/objects/co62255>
+- the register operates in immediate response to manipulation of the value key, without an intervening power/control key or lever;
+- the patent is about prime-actuating/key-driven mechanism and high-speed key operation.
 
-At the precision these sources support, distinguish:
+This source can strengthen the repository's `keypress → accumulate` historical motivation, but it does not prove that every Comptometer revision had the same actuator/carry/canceling geometry.
 
-- Scheutz working prototype (1843) and later metal machines;
-- the 1853 machine now at Smithsonian;
-- the 1859 machine associated with the English Life Table workflow;
-- historically built/used printing calculators versus Babbage's uncompleted lifetime projects and later reconstruction.
+If a better Felt patent among the earlier patents cited by Turck is inspected during the task, add it only when it contributes a precise control/carry claim. Do not expand into a patent catalog for its own sake.
 
-Do not imply that Scheutz printer architecture is Babbage's printer architecture.
+## A4. Pascaline: complement subtraction boundary
 
-## A5. Required project conclusion
+Keep this deliberately narrower because current repository evidence is museum/reconstruction-level rather than a newly inspected seventeenth-century primary text.
 
-The note must finish with a narrow implementation boundary:
+Use the existing anchors already in the repository:
 
-```text
-M: finite differences can generate polynomial tables by repeated addition.
-H/R: Babbage designs and later reconstruction make automatic tabular printing/stereotyping part of the Difference Engine output story at the source-supported level.
-H: Scheutz engines provide an actually built nineteenth-century printing-difference-engine comparison.
-P/M: this repository serializes calculation-ready → persistent-output roles only for inspection; it does not claim historical printer phase timing or geometry.
-```
+- ACONIT/Inria Pascaline exhibit;
+- CMU Pascaline reconstruction.
 
-Also list what remains open before source-specific geometry:
+Record the high-level contrast only:
 
-- exact drawing/facsimile interpretation;
-- printer synchronization and transfer timing;
-- specific formatting controls at drawing/mechanism level;
-- stereotyping material/process implementation details;
-- tolerances, force, backlash, and manufacturing choices.
+- the documented/reconstructed carry architecture is directional;
+- subtraction is explained through complementary representation/operator procedure rather than simply reversing a generic carry chain.
+
+Label museum synthesis as **H** and reconstruction behavior as **R**. Do not add source-specific subtraction geometry or digit conventions unless primary/facsimile evidence is actually inspected.
+
+## A5. Required comparison conclusion
+
+The source map must end with a compact comparison like:
+
+| Case | Documented control responsibility | What the repository may teach | What remains unmodeled |
+|---|---|---|---|
+| Thomas identified object(s) | arithmetic mode, counter direction, identified zeroing controls | mode/counter/initial-state responsibilities | exact internal linkage/timing across revisions |
+| Odhner US1510100A | crank-home/disc locking relation | why legal actions depend on mechanism phase | production-family generalization and exact geometry |
+| Felt US960528 | canceling plus carry-strain/jam recovery in specified Duplex context | zeroing/canceling can restore valid control state | generic correction/partial-stroke model |
+| Turck US1154897 | key manipulation directly actuates register | keypress can itself be a compute cycle | universal Comptometer actuator geometry |
+| Pascaline museum/reconstruction | complement-oriented subtraction boundary | representation can replace reverse mechanical motion | source-specific subtraction train |
+
+Use precise source IDs and claim/evidence labels.
 
 ---
 
-# Part B — harden `src/mechanisms/difference-column/`
+# Part B — deepen `research/subtraction-and-division.md`
 
-The current model is mathematically useful but its replay reducer is older and weaker than newer modules. Bring it to the current repository standard without changing the pedagogical finite-difference semantics unnecessarily.
+Do not rewrite the note from scratch. Reconcile it with Part A.
 
-## B1. State/input validation
+Required improvements:
 
-Preserve support for the existing 2..5 leading-value model unless tests/documentation justify a change.
+- replace broad Thomas/arithmometer statements with explicit object/date anchors where possible;
+- separate **mode selection**, **revolution-register direction/counting**, **zeroing**, **overshoot indication**, and **operator correction** instead of treating them as one control bundle;
+- keep Curta procedure claims tied to the current Curta manual/source boundary;
+- keep Pascaline complement claims at H/R precision;
+- link to `research/control-and-zeroing-source-map.md` for the detailed control provenance;
+- explicitly state which parts of `src/mechanisms/operator-division/` are P/M operator-procedure abstractions rather than Thomas/Burkhardt/Curta behavior.
 
-Require/validate at least:
-
-- finite numeric columns;
-- finite results after each addition;
-- valid row/output consistency where serialized state crosses a public reducer/replay boundary;
-- safe or explicitly bounded behavior when arithmetic would become non-finite;
-- invalid serialized state must not be silently normalized.
-
-Do not introduce arbitrary historical digit widths and call them Babbage limits.
-
-## B2. Event/replay validation
-
-The current `reduceDifferenceEvent()` largely trusts serialized event fields. Harden it so replay verifies the semantic relation instead of trusting attacker/tamper-provided `after` values.
-
-At minimum:
-
-- sequence order must be contiguous and correct;
-- source/target orders must be valid and match the model's permitted update order;
-- `sourceOrder === targetOrder + 1` for the current P/M algorithm;
-- `addend` must equal the current source column value;
-- `before` must equal the current target value;
-- `after` must equal the recomputed `before + addend` (within exact semantics appropriate to the numeric model; do not introduce tolerance unless genuinely needed);
-- unknown serialized event discriminators fail closed at runtime;
-- omitted/duplicated/reordered events fail replay;
-- a crank claiming an altered final row/output fails validation rather than being accepted because replay ignores the claimed `after` state.
-
-If a trace/action wrapper is the cleanest way to express this, use it; do not create gratuitous framework churn.
-
-Keep existing public helpers working where practical.
-
-## B3. Required tests
-
-Add focused tests proving at least:
-
-1. square preset still generates the established sequence;
-2. cubic preset still generates the established sequence;
-3. replay reproduces a normal crank exactly;
-4. changed `sequence` is rejected;
-5. changed `sourceOrder` or `targetOrder` is rejected;
-6. changed `addend` is rejected;
-7. changed `before` is rejected;
-8. changed `after` is rejected;
-9. omitted or reordered event is rejected;
-10. forged claimed final state/output is rejected if the trace carries one;
-11. unknown event type fails closed at runtime;
-12. non-finite initial or resulting state is rejected.
+Do not claim that the generic overshoot/correction trace reproduces a particular historical bell, crank direction, counter sign convention, or add-back linkage.
 
 ---
 
-# Part C — add a generic tabular-output teaching flow
+# Part C — add a typed control-provenance teaching layer
 
-Create an appropriately named small module, preferably under `src/exhibits/` if it composes existing mechanisms rather than representing a reusable historical mechanism. For example:
-
-```text
-src/exhibits/difference-output-flow/
-```
-
-The purpose is to make this distinction inspectable:
+Create a small module under `src/exhibits/`, for example:
 
 ```text
-finite-difference arithmetic produces a table value
-→ value becomes ready for output
-→ persistent check-copy / print role
-→ optional stereotyping-role representation
+src/exhibits/control-provenance/
 ```
 
-This is a **P/M explanatory flow mapped to source-backed historical output roles**, not historical printer timing.
+This is **not a mechanical simulator**. It is structured evidence data that keeps source-specific claims out of an undifferentiated prose blob.
 
-## C1. Minimum state/events
+A reasonable shape is:
 
-Use a deterministic trace with explicit state such as:
-
-- generated/table value;
-- row/index;
-- calculation-ready flag;
-- check-copy value or persistent-print state;
-- stereotype/output-master state only as a functional role;
-- event index/sequence;
-- evidence/model metadata only if useful for inspection.
-
-A reasonable event vocabulary could be equivalent to:
-
-```text
-TABLE_VALUE_READY
-CHECK_COPY_RECORDED
-STEREOTYPE_OUTPUT_ROLE_RECORDED
+```ts
+interface ControlEvidenceProfile {
+  id: string;
+  family: string;
+  dateOrModel: string;
+  claimType: 'H' | 'R' | 'H/R';
+  evidenceStrength: 'E1' | 'E2' | 'E3' | 'E4';
+  sourceLabel: string;
+  sourceUrl: string;
+  documentedRoles: readonly string[];
+  notEstablished: readonly string[];
+}
 ```
 
-Choose better names if appropriate.
+Use a shape that fits existing conventions; do not force these exact names.
 
-Do not invent a historical claim that those are three stop-motion machine phases. The UI/research text must explicitly say the serialized order is for browser inspection of output responsibilities.
+Minimum profiles:
 
-## C2. Arithmetic ownership
+1. identified Thomas arithmometer object with mode/counter/zeroing claims at the precision actually supported;
+2. Odhner US1510100A crank-home locking relation;
+3. Felt US960528 canceling/carry-strain context;
+4. Turck US1154897 immediate key-driven actuation;
+5. Pascaline museum/reconstruction complement boundary may be included as a paired H/R entry if it remains clear that it is not primary-patent evidence.
 
-The output flow must **consume** a value produced by the tested difference-column state/transition; it must not recompute the polynomial or maintain a second secret arithmetic implementation.
+## C1. Data integrity tests
 
-Use a small known fixture such as a square-number row.
+Add focused tests for the evidence dataset. At minimum:
 
-## C3. Replay/tamper requirements
+- IDs are unique;
+- every historical/reconstruction profile has a non-empty source URL and source label;
+- evidence/claim labels use the repository's current two-axis vocabulary rather than legacy A–D grades;
+- every profile explicitly states at least one `notEstablished`/open boundary;
+- required source profiles are present;
+- no profile silently labels the repository P/M interlock event sequence as historical evidence.
 
-Follow newer module standards:
-
-- deterministic trace;
-- replay reproduces final state;
-- sequence tampering fails;
-- row/value tampering fails;
-- output state cannot exist before its prerequisite event;
-- unknown serialized event type fails closed;
-- output artifacts are derived/validated rather than blindly trusted from serialized fields.
-
-## C4. Tests
-
-Add focused tests proving at least:
-
-- the output flow receives the actual generated value from the finite-difference model;
-- check-copy/persistent output is absent before its event;
-- stereotype/master role is absent before its event;
-- normal replay matches final state;
-- event order/value tampering fails;
-- unknown event type fails closed.
-
-Do not model typography, paper motion, ink transfer, plaster chemistry, or physical stereotype-sector geometry.
+These tests are not “proof history is true”; they are guardrails that prevent future UI edits from dropping provenance/boundary metadata.
 
 ---
 
-# Part D — upgrade `#/finite-difference`
+# Part D — upgrade `#/controls`
 
-Keep the current arithmetic teaching path. Add a compact second layer that answers:
+Preserve the current tested interactive `setting-crank-interlock` P/M lesson. Do not rewrite its mechanism unless a real bug is found.
 
-> Once the next table value exists, how does “output” differ from merely seeing the number in an internal state table?
+Add a compact source-comparison layer driven from Part C.
 
-## D1. Required presentation
+The page should let a visitor see two clearly separated things:
 
-Without a large redesign, expose:
+```text
+TOP: repository P/M interlock trace
+     setting free → crank cycle → setting locked → return home
 
-- current finite-difference columns and generated value as before;
-- a small `calculation → persistent output` flow using the tested module from Part C;
-- step/reset controls for the output-flow events, or reuse the existing step control if it stays understandable;
-- text state showing whether the value is merely computed, recorded as a check-copy/persistent print role, and mapped to the stereotyping/master-output role;
-- an ordered text event log;
-- bilingual text;
-- keyboard access consistent with current interactive routes if inexpensive;
-- no meaning available only through color/motion.
+BELOW: documented historical control responsibilities
+       Thomas mode/counter/zeroing
+       Odhner crank-home locking relation
+       Felt canceling/carry-strain recovery
+       Turck immediate key-driven actuation
+```
 
-## D2. Evidence labels must be explicit
+Required presentation:
 
-The route must visibly distinguish:
+- bilingual labels;
+- source/model/date visible for each historical profile;
+- claim type/evidence strength visible;
+- `documentedRoles` and `notEstablished` both visible;
+- explicit sentence that the P/M event sequence above is **not** reconstructed from any one of these machines;
+- no source-specific gear diagram or animation;
+- no meaning available only through color.
 
-- **M** finite-difference mathematics;
-- **H/E1** Babbage Papers drawing/catalog facts where exact archive records are cited;
-- **R/institutional reconstruction** the Science Museum/CHM built Difference Engine No. 2 and its completed printer;
-- **H** actually built Scheutz printing-difference-engine comparison;
-- **P/M** this repository's serialized `value ready → output roles` flow;
-- **open** historical printer timing/geometry not modeled.
+If the current page becomes too dense, use `<details>` sections/cards instead of creating a new route.
 
-Do not label the browser output trace as a simulation of BAB/A/173–176.
+## D1. Optional minimal division text reconciliation
 
-## D3. Teaching point
+Only if it is a small clean change, update `#/operator-division` source-boundary prose so it points visitors to the new control source map and distinguishes:
 
-The page should make this idea clear in state and prose:
+- generic repeated-subtraction/overshoot/correction P/M trace;
+- documented Thomas mode/counter roles;
+- Curta operator procedure evidence;
+- unmodeled source-specific correction geometry.
 
-> The historical problem was not only obtaining a correct numerical value. Re-copying and typesetting could reintroduce error after calculation, so persistent/automatic output changes the trust boundary of the whole table-making workflow.
-
-Use the CHM/Science Museum evidence at the precision actually inspected. Do not turn this into a general claim that every historical difference engine eliminated all human error.
+Do not redesign the division route in this task.
 
 ---
 
-# Documentation reconciliation
+# Verification and documentation reconciliation
 
-After implementation/tests are real:
+After Parts A–D are real:
 
-- update `STATUS.md` to describe the Difference Engine provenance/output-contract slice accurately;
-- update `TODO.md` with a checked item for the Difference Engine source map/output lesson only if it is genuinely complete;
-- update `docs/VERIFICATION.md` with the actual baseline and final test count/files, commands run, and bounded `#/finite-difference` smoke results;
-- update `research/difference-engine-addition.md` only enough to migrate its obsolete A/D wording to the two-axis evidence policy and point to the new source map;
-- add a useful link from README/teaching path if the new output layer materially changes the route;
-- keep `ROADMAP.md` edits minimal;
-- do not rewrite `docs/RESEARCH_GAPS.md` as a status ledger.
+- update `STATUS.md` to say source-specific control provenance exists, while zeroing/correction geometry remains open;
+- update `TODO.md` by checking the subtraction/control provenance item only if the source map and browser comparison are genuinely complete;
+- update `docs/REPRESENTATION_AND_PROTOCOL.md` only where the new source distinctions materially correct/strengthen its control column;
+- update `docs/VERIFICATION.md` with the actual baseline/final test count and commands run;
+- add a short link from README/teaching path only if it improves discoverability;
+- keep `docs/RESEARCH_GAPS.md` as a research queue, not a status ledger.
 
 Before commit/push, run:
 
@@ -371,67 +301,58 @@ npm run build
 git diff --check
 ```
 
-Perform a bounded local browser smoke of `#/finite-difference`:
+Perform a bounded local browser smoke of `#/controls`:
 
-- square preset still works;
-- arithmetic step remains understandable;
-- new output flow can be stepped/reset;
-- persistent-output states appear only after their events;
-- evidence labels remain readable in English and Chinese;
+- existing setting/crank interaction still works;
+- an attempted setting change during active crank remains visibly blocked;
+- reset works;
+- historical source profiles render from the typed dataset;
+- source IDs / claim type / evidence level / open boundary are readable in English and Chinese;
+- the P/M-vs-history separation is obvious without opening source code;
 - no obvious desktop horizontal overflow.
 
-Check the final push CI if it completes promptly; do not wait indefinitely. Record remote deployment only if actually observed.
+Check final push CI if it completes promptly. Record deployment only if actually observed.
 
-One coherent commit is fine. Push all required work, then stop.
+One coherent implementation commit is preferred after the administrator task-file commit. Push required work, then stop.
 
 Suggested final subject:
 
 ```text
-feat: ground Difference Engine output flow
+feat: ground subtraction and control provenance
 ```
 
 ---
 
 # Optional early-finish work
 
-Only if Parts A–D, full verification, browser smoke, documentation reconciliation, commit and push are genuinely complete with substantial time remaining, spend at most one small checkpoint scoping the next provenance task:
+Only if Parts A–D, tests/build, browser smoke, documentation reconciliation, commit and push are genuinely complete with substantial time remaining:
 
-```text
-research/output-and-audit-trail.md
-```
+1. inspect the Smithsonian IIIF/Mirador representation of the 1868 Thomas instruction pamphlet and add exact page/image anchors **only if legible and actually inspected**;
+2. add one additional precisely scoped Felt/Odhner patent figure anchor that materially clarifies a control relation already in the note;
+3. check the latest Pages deployment for the completed commit and record it if successful.
 
-Limit optional scope to a source-aware outline comparing:
+Do **not** start broader output/audit-trail research, reliability/torque modeling, source-specific geometry, or a new machine family in this slice.
 
-- non-printing result registers;
-- Babbage/Scheutz table output;
-- later printing adding/calculating machines;
-- total/subtotal/audit semantics as future research questions.
+# Stop conditions
 
-Do not implement a generic office-printing machine, red/black printing, or bookkeeping workflow without sources.
+Stop and record a blocker rather than guessing if:
 
-If optional work would weaken the required Difference Engine slice, skip it.
+- a source page is inaccessible and the needed claim depends on inspecting it;
+- several Thomas/Comptometer revisions conflict and the exact model cannot be resolved;
+- implementing the historical comparison would require inventing linkage timing/geometry;
+- the current `#/controls` P/M mechanism would need semantic changes merely to imitate a patent;
+- a conflicting control-provenance implementation has already landed on remote `main`.
 
-# Evidence and stop conditions
-
-Stop and record a precise blocker rather than guessing if:
-
-- the Science Museum archive records are inaccessible enough that drawing identifiers/subjects cannot be verified;
-- source text conflicts about which Difference Engine design/output feature is being described and the conflict cannot be resolved conservatively;
-- implementing the output flow would require inventing printer geometry/timing;
-- hardening `difference-column` requires changing the mathematical update semantics in a way that breaks established tests/teaching without a clear reason;
-- a conflicting Difference Engine implementation lands on remote `main`;
-- shared replay semantics would require a repository-wide migration rather than this bounded slice.
-
-Do not start new machines, 3D physics, or reliability/torque simulation in this slice.
+Narrow the claim instead of filling gaps with generic calculator knowledge.
 
 # Git discipline
 
 - remote `main` is authoritative;
-- fetch/pull before work;
-- inspect existing source/tests before creating parallel abstractions;
-- one coherent checkpoint or a small research checkpoint + implementation checkpoint is acceptable;
-- run all acceptance commands;
-- inspect the final diff for unrelated changes;
-- update status/verification only after tests actually pass;
+- pull/fetch before work;
+- inspect current code/research before creating parallel abstractions;
+- keep source-specific claims attached to exact source/model IDs;
+- run the full acceptance commands;
+- inspect diff for unrelated cleanup;
+- update status/verification only after verification passes;
 - commit and push;
 - after push, stop and wait for the next `CURRENT_AGENT_TASK.md` revision.
