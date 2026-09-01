@@ -1,5 +1,21 @@
 # Verification record
 
+## 2026-09-02 — Curta Type II systematic service-leaf census
+
+The current-main baseline at `ace1e804e33b8143c899f73f96765aecbfec0059` passed typecheck and 320 tests across 21 files. The actual Type II service targets were resolved from the existing index hrefs rather than visible collector labels: two 43-page green image-only variants and a separate 55-page German image-only scan. Every page of the English-green and German-1967 scans was rendered and visually inspected; the German-green cover/front matter was inspected for the corresponding German notice, and its remaining pages are not claimed as fully inspected. Uncertain marks remain unreadable in the new leaf index.
+
+The green covers internally identify Contina `CURTA Mod. II` but expose no date/revision/document number. Their front matter explicitly describes latest-modification replacement leaves, red changes and retained old leaves, and warns that reused Model I pictures may differ from Model II. The separate German cover internally identifies Model II `11×8×15` and states issue in autumn 1967; revision/addition tables exist on pp. 4–5, but fine-print entries not reliably readable were not converted into chronology. The census records exact readable green leaves for zero/home, carriage/lock, reversing, clearing, crank and zero-positioner responsibilities. It concludes that one dated 1967 German issue exists separately from two undated green replacement-leaf assemblies; no complete cross-scan replacement chronology or production adoption is established.
+
+- `npm run typecheck` — pass
+- `npm test -- --run` — pass, 320 tests across 21 files
+- `npm run build` — pass
+- `git diff --check` — pass
+- focused source-atlas tests — 17 tests passed
+
+A browser smoke was attempted because atlas data changed, but the browser extension was disconnected and local Edge headless DOM capture returned no document. No successful browser smoke is claimed. The build and typed atlas tests validate the public-data change; this access/tool limitation does not alter the evidence result.
+
+No deployment check was performed for this not-yet-pushed completion commit.
+
 ## 2026-09-02 — Analytical replay integration and Curta Type II sheet precision
 
 The current-main pre-edit baseline at `d076a061445b6dce498cc92c5a5e890e6b6693ad` passed typecheck and 302 tests across 21 files. The reviewed behavioral content of conflict-blocked PR #11 exact head `4a98fb186978356af5e860b76d0c15d811a28586` was applied only to the Analytical Engine flow and its tests, preserving current-main PR #10 direct-multiplication action-authority changes. Analytical replay and stepping now derive the canonical initial state/events/final state from an exact safe-integer `{a,b,c,d}` fixture and fail closed on fixture-only or alternate-fixture substitution, unknown enumerable string/Symbol fields, non-finite/undefined extensions, sparse or extended/reordered arrays and final-state tampering. Object member insertion order remains non-semantic.

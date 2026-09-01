@@ -102,7 +102,22 @@ Directly inspected control/service anchors:
 
 These pages establish Type II service responsibilities and named assemblies, not exact historical operator timing, every linkage, production-wide part identity, capacity, serial range, or equality with repository P/M controls.
 
-### 2.4 Type II bill of material and drawing-sheet identity
+### 2.4 Type II systematic service-leaf census
+
+The bounded page-by-page census is maintained in [`research/curta-type-ii-service-leaf-index.md`](curta-type-ii-service-leaf-index.md). It resolves all three actual targets, visually inspects every page of the English-green and German-1967 scans, and inspects the German-green cover/front matter to establish its corresponding German replacement notice.
+
+The result is deliberately narrower than a production chronology:
+
+- both green scans internally identify `CURTA Mod. II` / Contina and state that newly supplied leaves contain latest modifications, changes/additions are red, replaced leaves may be retained, and reused Model I pictures may differ from Model II in detail/proportion;
+- neither green cover exposes an issue date, revision identifier or document number, and readable per-leaf revision dates were not found;
+- the separate German cover internally identifies `MODELL II 11×8×15` and explicitly says the service handbook appeared in **autumn 1967**;
+- its printed leaves and revision/addition tables establish one dated document issue and a revision-table structure, but entries too small to read reliably are left unreadable;
+- the directly readable green anchors include `N I-a`, `O 1-a`, `O 3-a`, `B-2`, `B-3`, `B-4`, `S1-4` through `S3-4`, and `F 52 a`; ambiguous characters are not normalized;
+- no exact cross-scan leaf identity or complete replacement sequence can be ordered from printed evidence.
+
+Therefore one frozen **German 1967 issue** is established separately from two **undated green replacement-leaf assemblies**. PDF order, collector filenames, the modern `Dec.2013 hansjoerg` mark, and the separate BOM/drawing sheet dates do not fill the missing chronology.
+
+### 2.5 Type II bill of material and drawing-sheet identity
 
 Two further manufacturer-origin image facsimiles were opened from the existing mycurta index on 2026-09-02. The mirror labels and filenames were treated only as access provenance; claims below come from visible document-internal text.
 
@@ -128,7 +143,7 @@ Direct scan: <https://www.mycurta.com/Documents/Curta_2_Engineering_Drawings_c_d
 - Capacity boundary: neither inspected Type II BOM/drawing first page visibly states `11×8×15`; capacity remains independently established only by the already inspected dual-model Contina operator guide.
 - Chronology boundary: the 1951/1952/1953 dates belong to particular drawing/list sheets. They do not establish one frozen manual issue, complete replacement-leaf chronology, production start, or unchanged construction across all Type II machines.
 
-### 2.5 Mirror/index boundary
+### 2.6 Mirror/index boundary
 
 The mycurta/vcalc index exposes distinct Type I and Type II English/German service-manual, BOM and drawing links. Curta.org separately lists operator-manual transcriptions. These indexes are access/reference layers; filenames or collector descriptions are not silently promoted into manufacturer provenance.
 
@@ -153,13 +168,15 @@ operator guide: Model I 8×6×11; Model II 11×8×15
 Type I service cover: Model I 8×6×11; autumn 1967
 Type II BOM first table: internal CONTINA A.G. MAUREN / CURTA II identity; sheet date 3.9.52
 Type II drawing-set first sheet: internal Type II identity; drawn 19.9.51 and visible change-table entry 1.4.53
+Type II German service cover: Model II 11×8×15; autumn 1967
+Type II green service variants: undated replacement-leaf/latest-modification assemblies; no complete chronology
 patent: one identified patented embodiment
 ```
 
 Still open:
 
 - serial/revision mapping from patent embodiment to production machines;
-- a Type II service-manual frozen-issue date and replacement-leaf version chronology; the inspected BOM/drawing dates remain sheet-level only;
+- complete Type II replacement-leaf version chronology and readable per-leaf revision dates for the undated green assemblies; the separate German autumn-1967 issue is now established, while BOM/drawing dates remain sheet-level only;
 - whether hidden parts/linkages changed across all production revisions;
 - exact handle, clearing, carriage and safety-lock geometry/timing beyond the inspected Type II service responsibilities;
 - tooth profiles, ratios, decade-transfer sequence, tolerances and measured performance.

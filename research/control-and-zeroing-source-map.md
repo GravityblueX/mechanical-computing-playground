@@ -1,6 +1,6 @@
 # Control, zeroing, correction, and actuation provenance
 
-**Checked: 2026-09-01**
+**Checked: 2026-09-02**
 
 ## Question
 
@@ -121,7 +121,19 @@ Inspected anchors:
 
 This is a primary anchor for the architectural statement `keypress → accumulate`. It does not establish universal Comptometer actuator, carry, canceling, simultaneous-column, or correction geometry.
 
-## 5. Pascaline: complement representation, not generic reverse carry
+## 5. Curta Type II: exact service-leaf responsibility anchors
+
+The systematic service census at [`research/curta-type-ii-service-leaf-index.md`](curta-type-ii-service-leaf-index.md) improves provenance for responsibilities already recorded; it does not derive a new procedure or linkage.
+
+- English-green PDF p. 6 / printed leaf `N I-a`: crank-removal text includes the mainshaft zero-position precondition; the same leaf covers carriage removal and locking-pin responsibility.
+- PDF p. 10 / leaf `O 1-a`: dismantling names the reversing-lever upper group and explicitly prints `RZ`; p. 11 / leaf `O 3-a` continues reversing-lever/lower transmission names. No `UZ` claim is made from an unreadable mark.
+- pp. 25–26 / leaves `B-2` and `B-3`: assembly groups identify complete reversing lever, complete clearing plate, complete crank and complete zero positioner.
+- pp. 28–30 / leaves `S1-4` through `S3-4`: the same responsibility clusters appear in assembly tables.
+- p. 32 / leaf `F 52 a`: clearing-locking/control-disc and zero-positioner adjustment names are visible.
+
+These are **H/E1 document/leaf anchors**. They do not establish operator event timing, complete linkage or force paths, production-wide identity, or equivalence with the repository `setting-crank-interlock` state machine.
+
+## 6. Pascaline: complement representation, not generic reverse carry
 
 Existing bounded sources:
 
@@ -143,6 +155,7 @@ No seventeenth-century primary text was newly inspected. Exact complement digit 
 | Odhner US1510100A | crank-zero lock plus calculating-disc/cam-setting lock relation | legal actions depend on phase/home position | production-family generalization; repository event order as patent timing |
 | Felt US960528A | canceling plus release of carry strain/jam in specified Duplex context | canceling can restore valid control state | generic partial-stroke correction; all-model geometry |
 | Turck US1154897A | value key immediately actuates the register | keypress itself can be a compute cycle | universal Comptometer drive/carry/canceling geometry |
+| Curta Type II service leaves | `N I-a`, `O 1-a`/`O 3-a`, `B-2`/`B-3`, `S1-4`–`S3-4`, `F 52 a`: zero/home, carriage/lock, reversing, clearing and zero-positioner responsibility names | controls and home preconditions are computational responsibilities | operator event timing, linkage/force paths, production-wide identity, repository state-machine equivalence |
 | Pascaline H/R sources | directional carry and complement-oriented subtraction boundary | representation can replace reverse mechanical motion | source-specific subtraction train/digit convention |
 
 ## Repository P/M boundary and implementation consequence

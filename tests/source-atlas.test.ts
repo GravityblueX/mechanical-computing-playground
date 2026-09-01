@@ -136,10 +136,11 @@ describe('named-machine source anchor atlas', () => {
     expect(service.supports.map(item => item.en).join(' ')).not.toMatch(/operator instructions/);
     expect(service.notEstablished.map(item => item.en).join(' ')).toMatch(/operator instructions.*Type II/);
     const type2 = getNamedMachineSourceAnchor('curta-type2-service');
-    expect(type2).toMatchObject({ documentRole: 'service manual', generation: { en: expect.stringMatching(/Model II/) }, fullFacsimileInspected: false });
-    expect(type2.pageFigureAnchors).toEqual(expect.arrayContaining([expect.stringMatching(/leaf N I-a/), expect.stringMatching(/leaf O-1-2/), expect.stringMatching(/leaf S 3/)]));
-    expect(type2.supports.map(item => item.en).join(' ')).toMatch(/mainshaft zero position.*reversing-lever.*clearing plate/);
-    expect(type2.notEstablished.map(item => item.en).join(' ')).toMatch(/dated frozen revision.*reused Model I pictures.*repository/);
+    expect(type2).toMatchObject({ documentRole: 'service manual', generation: { en: expect.stringMatching(/Model II service variants/) }, fullFacsimileInspected: false });
+    expect(type2.recordIdentifier).toMatch(/two 43-page green.*no cover date.*55-page German.*Herbst 1967/);
+    expect(type2.pageFigureAnchors).toEqual(expect.arrayContaining([expect.stringMatching(/leaf N I-a/), expect.stringMatching(/leaves O 1-a and O 3-a/), expect.stringMatching(/B-2.*S1-4/), expect.stringMatching(/leaf F 52 a/), expect.stringMatching(/Herbst 1967/)]));
+    expect(type2.supports.map(item => item.en).join(' ')).toMatch(/two undated green replacement-leaf assemblies.*autumn-1967 German Model II 11×8×15.*zero\/home.*reversing.*zero-positioner/);
+    expect(type2.notEstablished.map(item => item.en).join(' ')).toMatch(/complete replacement-leaf chronology.*date\/revision for each green leaf.*cross-scan leaf identity.*production adoption\/interchangeability.*reused Model I pictures.*repository/);
   });
 
   it('keeps Type II sheet dates at document precision rather than production chronology or geometry', () => {
