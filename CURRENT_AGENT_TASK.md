@@ -5,15 +5,15 @@ Owner: local coding/research agent
 Target duration: about one useful hour at the agent's observed throughput
 Repository authority: remote `main`
 
-Previous task is complete and archived at `tasks/archive/2026-09-01-arithmetic-work-synthesis.md`.
+Previous task is complete and archived at `tasks/archive/2026-09-01-named-machine-source-atlas.md`.
 
-The arithmetic-work slice landed as `42ede1d50b4a9b8a1bdd144d93aa14ee3fb1324f` about 32 minutes after assignment. It changed 11 files (438 additions / 7 deletions), raised the recorded suite from 201 tests across 17 files to 208 tests across 18 files, passed typecheck/tests/build/diff and bilingual browser smoke, and GitHub check runs for CI verify plus Pages build/deploy all completed successfully. No open PR remained.
+The named-machine source-atlas slice landed as `c985fb6eb6ecbf3e80461d1a541a56f97730b3db` about 37 minutes after assignment. It changed 12 files, moved the suite from 208 tests across 18 files to 217 tests across 19 files, passed local typecheck/tests/build/diff plus bilingual browser smoke, and its GitHub `verify`, Pages `build`, and Pages `deploy` checks all completed successfully. No open PR remains.
 
-Several consecutive broad research + typed-data + UI + test slices have now landed in roughly 30–42 minutes. Increase scope again, but keep one coherent question:
+Several consecutive broad slices have completed in roughly 30–42 minutes. Increase scope again, but keep one coherent question:
 
-> **Exactly which directly inspected source record supports each historical role currently shown for Difference Engine No. 2 and the Bush Differential Analyzer, and what does that source still not establish?**
+> **Can the Curta and Analytical Engine lessons be tied to directly inspected primary-document/facsimile anchors at the precision shown in the UI, without turning patents, manuals, scans, or later emulators into unsupported production geometry?**
 
-This is evidence/source hardening. It is **not** permission to infer source-specific geometry from archive images.
+This is a source-hardening + evidence-adapter slice. It is not permission to create source-specific internal animations.
 
 Fetch/pull remote `main` before starting. Remote state always wins.
 
@@ -25,17 +25,16 @@ Read, in order:
 2. `TODO.md`
 3. `AGENTS.md`
 4. `docs/EVIDENCE_POLICY.md`
-5. `docs/RESEARCH_GAPS.md`, especially current Priority 0.2, Priority 6, Priority 8, and the stale completed sections that still read as future work
+5. `docs/RESEARCH_GAPS.md`, especially Priority 0.2, 3, 4, and 5
 6. `docs/STRUCTURE_EVIDENCE.md`
-7. `docs/REPRESENTATION_AND_PROTOCOL.md`
-8. `research/difference-engine-source-map.md`
-9. `research/differential-analyzer.md`
-10. existing Difference Engine / finite-difference / difference-output-flow code and tests
-11. existing continuous-integrator / continuous-flow / mechanical-error-control code and tests
-12. current evidence/provenance profile modules and public evidence cards; reuse their conventions rather than creating incompatible metadata
-13. `docs/TEACHING_PATH.md` and `docs/VERIFICATION.md`
+7. `research/curta-source-map.md`
+8. `research/analytical-engine-information-flow.md`
+9. `research/simulator-matrix.md`
+10. `src/exhibits/source-atlas/index.ts` and `tests/source-atlas.test.ts`
+11. current `#/curta`, `#/analytical-engine`, `#/source-atlas`, evidence-card and navigation code
+12. `docs/TEACHING_PATH.md` and `docs/VERIFICATION.md`
 
-Before editing, run the full test suite once and record the actual baseline. The current ledger says **208 tests across 18 files**; actual repository state wins.
+Before editing, run the full test suite once and record the actual baseline. The current ledger says **217 tests across 19 files**; actual repository state wins.
 
 Do not use stale `IMPLEMENTATION_PLAN.md` checkboxes as task authority.
 
@@ -43,256 +42,262 @@ Do not use stale `IMPLEMENTATION_PLAN.md` checkboxes as task authority.
 
 Complete five connected parts:
 
-1. deepen the Difference Engine No. 2 source map with directly inspected Babbage Papers archive anchors around calculation drive and persistent-output apparatus;
-2. deepen the Bush Differential Analyzer source map with directly inspected Smithsonian component/group anchors and a precise full-facsimile access boundary for Bush 1931;
-3. create one typed **named-machine source-anchor atlas** that existing/future UI can inspect without turning a URL list into unsupported geometry;
-4. add a compact bilingual public source-atlas surface and tests enforcing `supports` versus `not established` boundaries;
-5. reconcile the stale research queue and verification/status docs so already completed direct-multiplication/key-driven/division/etc. work is not still described as wholly missing.
+1. harden the Curta source map with directly inspected patent/facsimile/manual anchors and an explicit Type I / Type II production-mapping boundary;
+2. harden the Analytical Engine source map with directly inspected 1843 facsimile/page anchors and, where accessible, a directly inspected H. P. Babbage / later historical publication facsimile anchor;
+3. extend the existing typed named-machine source atlas with **Curta** and **Analytical Engine** tracks while preserving H/R/P separation;
+4. expand the existing bilingual `#/source-atlas` surface and cross-link it from the two named-machine lessons;
+5. add tests and reconcile STATUS/TODO/RESEARCH_GAPS/VERIFICATION so the new precision is discoverable without claiming geometry that was not inspected.
 
-Do **not** add a new machine family or 3D/source-specific linkage drawing.
+Do **not** add a new machine family, full Curta emulator, Analytical Engine instruction set, or 3D/source-specific linkage drawing.
 
 ---
 
-# Part A — Difference Engine No. 2: archive anchors, not geometry reconstruction
+# Part A — Curta: patent, manual/facsimile, and production-boundary map
 
-Strengthen `research/difference-engine-source-map.md` by directly inspecting authoritative Science Museum Group / institutional records.
+Strengthen `research/curta-source-map.md` by directly inspecting the strongest accessible primary-document material rather than relying only on transcriptions.
 
-Start from these open institutional/archive records and follow only links you can actually inspect:
+## A1. Required starting sources
 
-- The Babbage Papers archive index:
-  <https://collection.sciencemuseumgroup.org.uk/documents/aa110000003/the-babbage-papers>
-- `BAB/A/171`, *Addition carriage and mode of driving the axes of Difference Engine No. 2*:
-  <https://collection.sciencemuseumgroup.org.uk/documents/aa110000314/addition-carriage-and-mode-of-driving-the-axes-of-difference-engine-no-2>
-- tracing `BAB/B/013` of `BAB/A/172`, *End view of inking printing paper and stereotyping apparatus*:
-  <https://collection.sciencemuseumgroup.org.uk/documents/aa110000343>
-- tracing `BAB/B/014` of `BAB/A/173`, *Plan of inking, printing and stereotype apparatus*:
-  <https://collection.sciencemuseumgroup.org.uk/documents/aa110000344>
-- existing source-map anchors for `BAB/A/174–176` and the institutional Difference Engine No. 2 reconstruction/object records already in the repository.
+Re-check and directly inspect:
 
-The archive index also lists `BAB/A/178` and subrecords for general motion notation, including calculating axes, printing apparatus, and stereotype frames. If direct records are discoverable and inspectable, add their exact identifiers/URLs. If not, record only what the archive index itself establishes and leave direct-record inspection open.
+- Curt Herzstark, US 2,525,352:
+  - text/drawings: <https://patents.google.com/patent/US2525352A/en>
+  - patent PDF linked from that record;
+- Curta specialist manual index/transcriptions already recorded in the repository:
+  - <https://curta.org/wiki/CurtaManuals>
+  - <https://curta.org/wiki/DivisionAlgorithm>
+- specialist-hosted original service-manual/factory-document index, if still directly reachable:
+  - <https://www.mycurta.com/cu.htm>
+  - mirror: <https://vcalc.org/cu.htm>
 
-## A1. Record exact source metadata
+The latter pages currently advertise original Type I / Type II service-manual scans and factory drawings/BOM material. Follow only files/links you can actually inspect. A specialist mirror can be an access path to a primary document, but it is not an institution and must not be described as one.
 
-For each directly inspected record used, record only metadata/roles actually visible on the institutional page, such as:
+## A2. Exact-document metadata
 
-- archive identifier (`BAB/A/...`, `BAB/B/...`);
-- institutional document/object record id;
-- title/subject;
-- date where the record supplies it;
-- extent/dimensions only where directly stated;
-- access/open-access status and image license/rights wording at a concise level where visible;
-- what historical role the title/catalog safely supports;
-- what remains unestablished.
+For each primary Curta scan actually used, record as much of the following as the document itself supports:
 
-## A2. Required boundary
+- exact displayed title;
+- Type I or Type II, if the document itself says so;
+- language;
+- edition/revision/date if stated;
+- page count and page number(s) actually inspected;
+- publisher/manufacturer/service provenance if printed on the document;
+- mirror/access URL and host;
+- whether it is an operator manual, service manual, patent, drawing set, BOM, or later transcription;
+- what exact operator/architectural role that document supports;
+- what it does **not** establish.
 
-Archive title/image availability is **H/E1 for record identity and catalogued subject**, not automatic proof of:
+Do not promote a filename, host description, or collector note into manufacturer provenance unless the scan itself supports it.
 
-- exact tooth counts;
-- exact linkage paths not stated by the record;
-- synchronization/timing;
-- force/load/tolerance;
-- manufacturing method;
-- whether every drawn proposal was built in Babbage's lifetime;
-- the repository browser event order.
+## A3. Required Curta boundary
 
-You may inspect images to understand what record you are looking at, but **do not derive new geometry claims from visual interpretation alone in this slice**. Do not copy/archive the images into this repository.
-
-A useful improvement is to connect the source chain conceptually:
+Keep at least these layers separate:
 
 ```text
-BAB/A/171 -> calculating/addition-carriage drive subject
-BAB/A/172–176 -> printing/stereotype transfer/output subjects
-modern DE2 reconstruction -> institutional R/E2 built interpretation
-repository difference/output trace -> P/M inspection model
+US 2,525,352 patent embodiment -> H/E1 for patented design
+primary operator/service manual facsimile -> H/E1 for what that identified document says
+specialist transcription/index -> access/reference layer; strength depends on what was actually inspected
+Type I / Type II production machine -> requires explicit model/revision mapping
+repository #/curta cylinder + generic interlock/division modules -> P or P/M
 ```
 
-without pretending those are one source or one confidence level.
+The patent is **not** proof that every production Type I/II machine exactly matches every drawing/claim. A service manual is not automatically an operator manual. An operator instruction about handle zero-stop does not establish the complete internal locking linkage.
+
+## A4. Minimum Curta source result
+
+Try to obtain at least:
+
+1. one patent figure/page anchor for the compact result/revolution-counting architecture already discussed;
+2. one directly inspected primary manual/service-manual page anchor for a control/operation role such as handle home/zero stop, carriage movement, clearing, setting/result/counter role, or plus/minus mode;
+3. one explicit Type I / Type II capacity or revision anchor **only if the inspected document itself supports it**.
+
+If a primary manual PDF cannot be directly inspected in the environment, preserve the exact access failure and keep the stronger manual/page claim open. That is not a blocker for the Analytical Engine half or for adding only the Curta anchors that are genuinely inspectable.
+
+Do not copy manual scans, patent images, factory drawings, or BOM images into the repository.
 
 ---
 
-# Part B — Bush Differential Analyzer: component anchors and facsimile boundary
+# Part B — Analytical Engine: 1843 facsimile/page map and publication layers
 
-Strengthen `research/differential-analyzer.md` using directly inspected institutional records.
+Strengthen `research/analytical-engine-information-flow.md` by replacing at least part of the current transcription-only precision with directly inspected page/facsimile anchors.
 
-Required institutional starting points:
+## B1. 1843 Menabrea/Lovelace facsimile
 
-- Smithsonian/NMAH, *Differential Analyzer Parts and Documentation*:
-  <https://americanhistory.si.edu/collections/object-groups/mechanical-integrators/differential-analyzers>
-- Integrator Unit from Bush Differential Analyzer, `MA.314824` / `nmah_1215155` (already referenced in research);
-- Input Table Carriage, `1983.3002.01` / `nmah_693232`;
-- Adder / Differential Gear, `1983.3002.02` / `nmah_693233`;
-- Output Table Carriage / Tracer, `1983.3002.03` / `nmah_693234`;
-- Frontlash Unit, `1983.3002.04` / `nmah_693235`.
+Start from the public-domain 1843 publication paths and directly inspect page images/facsimile pages rather than relying only on Fourmilab prose transcription:
 
-Directly inspect the object-group page and as many individual institutional records as the environment permits. Keep route-specific access failures explicit; do not generalize one 403/challenge to the whole Smithsonian collection.
+- Project Gutenberg edition #75107, whose credits state that page images were made available by the Internet Archive:
+  <https://www.gutenberg.org/ebooks/75107>
+- page-image/text presentation:
+  <https://www.gutenberg.org/files/75107/75107-h/75107-h.htm>
+- scanned-page navigation for *Scientific Memoirs*, vol. III (1843), if directly accessible:
+  <https://en.wikisource.org/wiki/Scientific_Memoirs/3/Sketch_of_the_Analytical_Engine_invented_by_Charles_Babbage%2C_Esq.>
 
-## B1. Bush 1931 publication boundary
+Record the original printed-page range and exact printed page(s) you actually inspect for claims such as:
 
-The repository currently has the correct bibliographic anchor:
+- Store versus Mill distinction;
+- Operation/Variable card roles;
+- repeated/backed card groups;
+- intermediate-variable/calculation examples;
+- output/printing statements;
+- Lovelace notes where relevant to the current lesson.
 
-Vannevar Bush, “The Differential Analyzer. A New Machine for Solving Differential Equations,” *Journal of the Franklin Institute* 212(4), October 1931, pp. 447–488, DOI `10.1016/S0016-0032(31)90616-9`.
+Do not quote page numbers merely because a modern HTML transcription has headings. The page number must be tied to a directly inspected facsimile/page image or a source that explicitly preserves the original printed pagination.
 
-Make one bounded attempt to locate a **stable, lawfully accessible full facsimile or institutional scan**. If a complete scan is directly inspectable, record exact page/figure anchors only for claims you actually inspect.
+## B2. H. P. Babbage / collected historical account
 
-If no stable full facsimile is accessible, preserve the bibliographic-only boundary. Do **not** use bookseller snippets, Wikipedia, or a later summary to manufacture Bush page/figure claims. A failed facsimile attempt is not a blocker for the rest of this task.
+The current note uses a Fourmilab transcription of H. P. Babbage's 1888 British Association report for the concrete `(ab+c)d` Number/Directive/Operation-card flow.
 
-## B2. Required separation
+Make a bounded attempt to inspect a stable public-domain scan/facsimile of the 1889 collection:
 
-Keep these responsibilities distinct:
+Henry P. Babbage, *Babbage's Calculating Engines: Being a Collection of Papers Relating to Them; Their History and Construction* (E. & F. N. Spon, 1889).
 
-- input-table curve-following -> shaft input role;
-- adder/differential gear -> combining shaft rotations role;
-- integrator -> integration role;
-- frontlash unit -> museum-stated backlash compensation in a drive between adjacent-unit shafts;
-- output carriage/tracer -> result tracing role;
-- repository `A+B -> integrator -> tracer` exact chain -> P/M teaching wiring.
+Useful discovery/catalog paths include Open Library / Internet Archive records for the 1889 volume. Cambridge's modern reprint metadata may confirm chapter/page ranges, but a paywalled modern reprint preview is not a substitute for directly inspecting the historical page.
 
-Do not infer that the surviving catalogued pieces were permanently wired in the exact repository order. Do not add numerical backlash, residual error, torque, efficiency, safe RPM, tolerance, or scale-factor claims without directly inspected evidence.
+If a full scan is accessible, record exact page anchors for the 1888 report and `(ab+c)d` flow only where directly inspected. If not, keep the existing transcription boundary explicit and do not manufacture page numbers.
 
----
+## B3. Existing drawing records and Walker reconstruction
 
-# Part C — typed named-machine source-anchor atlas
+Re-check the existing Science Museum records already cited for Store/Mill design evolution (`BAB/A/125`, `BAB/D/028`, `BAB/P/167`) and the Walker/Fourmilab authenticity/card/emulator documentation only as needed to keep layers separate.
 
-Create a typed module using current exhibit/evidence conventions, preferably:
+Required separation:
 
 ```text
-src/exhibits/source-atlas/
+1843 Menabrea/Lovelace facsimile -> H/E1 published text at inspected pages
+Charles/H. P. Babbage publications -> H/E1 for what those publications say when directly inspected
+Science Museum drawing catalog records -> H/E1 for record identity/catalogued subject
+Walker/Fourmilab executable choices -> R, not nineteenth-century H
+repository (ab+c)d event trace -> P/M
 ```
 
-This is an **evidence adapter**, not a new machine model.
+Do not turn Walker's merged textual card stream into a historical punched-card encoding claim. Do not infer Mill/Store linkage geometry or card-reader synchronization from catalog titles.
 
-## C1. Anchor shape
+---
 
-Use names that fit the existing codebase. Each anchor should expose concepts equivalent to:
+# Part C — extend the typed source atlas to four tracks
+
+Extend `src/exhibits/source-atlas/` rather than creating a parallel provenance system.
+
+## C1. Track coverage
+
+Add typed source anchors for at least:
+
+### Curta
+
+- US 2,525,352 patent;
+- at least one directly inspected primary manual/service-document facsimile if available;
+- a specialist-transcription/reference anchor only if needed to make an explicit access/provenance boundary, and give it the correct claim/evidence/access semantics rather than silently treating it as E1 institutional evidence.
+
+### Analytical Engine
+
+- 1843 Menabrea/Lovelace facsimile with exact inspected printed-page anchor(s);
+- at least one Babbage publication or H. P. Babbage historical-publication anchor at the strongest access state actually achieved;
+- at least one Science Museum Store/Mill design-record anchor;
+- Walker/Fourmilab as an R reconstruction/emulator anchor, clearly not H.
+
+Keep the existing Difference Engine No. 2 and Bush Differential Analyzer anchors intact unless a real bug is found.
+
+## C2. Typed access semantics
+
+The current atlas access kinds are intentionally small. Extend them only if required by real documents, for example a clearly named concept such as:
 
 ```text
-id
-track / machine generation
-source title
-institution
-source URL
-archive/object/record identifier
-claim type (H or R; P/M only for repository model anchors if included)
-evidence strength where applicable
-access kind (direct catalog, direct archive record, institutional reconstruction, bibliographic-only, etc.)
-inspected date
+direct primary facsimile
+specialist-hosted primary facsimile
+specialist transcription
+```
+
+Do not create a generic quality score or collapse access provenance into evidence strength.
+
+If E3 becomes necessary for a transcription/reference layer, extend the type consistently with `docs/EVIDENCE_POLICY.md`; do not misuse E1/E2 merely to avoid a type change.
+
+Each anchor still needs:
+
+```text
 supports[]
 notEstablished[]
-research note anchor
+researchNoteAnchor
 ```
 
-Do not invent a universal source-quality scalar beyond `docs/EVIDENCE_POLICY.md`.
+and enough identity metadata to let a reviewer reopen the source.
 
-## C2. Required coverage
+## C3. No pseudo-geometry
 
-Include enough directly inspected anchors that both tracks are non-trivial. At minimum cover:
+Do not add tooth count, linkage path, gear ratio, timing, torque, tolerance, reliability, or production-revision fields unless a directly inspected source provides a specific value and the research note identifies the exact location.
 
-### Difference Engine track
-
-- Babbage Papers archive identity/index;
-- `BAB/A/171` calculation/addition-carriage drive subject;
-- at least two printing/stereotype records from `BAB/A/172–176` or their tracings;
-- Difference Engine No. 2 modern institutional reconstruction/object boundary.
-
-### Differential Analyzer track
-
-- Smithsonian object-group/generation context;
-- at least input, adder/differential, integrator, frontlash, and tracer roles where direct records are inspectable;
-- Bush 1931 as either direct-facsimile anchor or explicitly bibliographic-only anchor depending on access actually achieved.
-
-Existing source URLs in research may be reused only after re-checking the current page/record identity in this slice.
-
-## C3. No pseudo-geometry fields
-
-Do not add generic fields such as:
-
-```text
-gearCount
-linkagePath
-rpm
-backlashMagnitude
-tolerance
-force
-```
-
-unless a specific source supplies a specific value and this task has actually inspected it. This slice does not require any such quantitative geometry.
+This task does not require any such quantitative geometry.
 
 ---
 
-# Part D — tests and public source-atlas surface
+# Part D — tests and public atlas integration
 
-## D1. Tests
+## D1. Focused tests
 
-Add focused Vitest coverage proving at least:
+Add tests that prove at least:
 
-1. source-anchor ids are unique;
-2. every H/R anchor has a non-empty source URL, institution, record identifier or explicit bibliographic identifier, evidence role, `supports[]`, and `notEstablished[]`;
-3. `BAB/A/171` is not presented as evidence for printer timing or full printer geometry;
-4. printing/stereotype drawing anchors are not presented as proof that Babbage completed the printer in his lifetime;
-5. the modern Difference Engine No. 2 reconstruction remains R/institutional reconstruction and is not silently merged with Babbage-lifetime artifact evidence;
-6. the Bush frontlash anchor supports only the museum-described adjacent-shaft backlash-compensation responsibility and does not expose numerical backlash/residual-error fields;
-7. the input/adder/integrator/tracer source roles remain separate rather than being converted into one claimed historical wiring chain;
-8. Bush 1931 cannot expose page/figure-specific claims unless the typed access state says a full facsimile was directly inspected in this pass;
-9. no source-atlas profile emits a generic reliability, efficiency, fidelity, or confidence score beyond the repository's claim/evidence policy.
+1. source-anchor ids remain unique across all four tracks;
+2. every new H/R anchor has source URL, source identity, access kind, supports, not-established boundaries, and research-note anchor;
+3. the Curta patent anchor cannot claim identity with every production Type I/II machine;
+4. a service-manual/facsimile anchor cannot silently become an operator-manual claim unless the inspected document actually is one;
+5. Curta handle/carriage/control instructions do not imply exact hidden linkage geometry;
+6. the 1843 Analytical Engine anchor exposes exact printed-page claims only when facsimile/page inspection is recorded;
+7. Walker/Fourmilab remains R and cannot be surfaced as nineteenth-century punched-card syntax or exact historical reader order;
+8. Science Museum Store/Mill drawing records cannot prove a complete built Analytical Engine;
+9. the repository `(ab+c)d` flow remains P/M and is not promoted to historical event timing;
+10. no atlas track emits a scalar fidelity/reliability/quality score.
 
-Do not weaken existing tests.
+Do not weaken existing source-atlas tests.
 
-## D2. Public teaching surface
+## D2. Public source-atlas surface
 
-Add a compact bilingual route, preferably:
-
-```text
-#/source-atlas
-```
-
-or an equally clear name if current routing conventions suggest one.
-
-The visitor should be able to inspect two track groups:
+Expand the existing `#/source-atlas` route to four clearly separated track groups:
 
 ```text
 Difference Engine No. 2
 Bush Differential Analyzer
+Curta
+Analytical Engine
 ```
 
-For each source card show, in text form:
+For each card keep visible text for:
 
-- source/institution/record id;
-- H/R + E strength where applicable;
-- what this source supports;
+- source / institution or host / identifier;
+- H/R + evidence strength where applicable;
+- access kind;
+- exact inspected page/figure anchor where legitimate;
+- what the source supports;
 - what it does not establish;
-- link to source;
-- research-note link/context.
+- source link and research-note context.
 
-Include a short explanation that an archive image or patent drawing is not self-interpreting proof of every physical detail.
+Add a short bilingual explanation distinguishing:
 
-Cross-link from `#/finite-difference` / Difference Engine output material and `#/continuous` where easy, but do not redesign those routes.
+```text
+primary document identity
+access host/mirror
+historical evidence strength
+later reconstruction
+repository teaching model
+```
 
-No meaning may depend only on color. No archive images need to be embedded.
+so a specialist mirror is not mistaken for the original publisher/manufacturer/institution.
+
+Cross-link `#/curta` and `#/analytical-engine` to their source-atlas groups. Do not redesign those lessons.
+
+No meaning may depend only on color. Do not embed copyrighted/manual facsimile images.
 
 ---
 
-# Part E — reconcile the live research queue
-
-`docs/RESEARCH_GAPS.md` still contains several old sections written as if direct multiplication, key-driven computation, subtraction/division, representation, output-contract work, and arithmetic-work comparison were wholly future work even though STATUS/TODO now show them implemented.
-
-Reconcile the document rather than deleting useful historical questions:
-
-- change completed headings/lead paragraphs to **current state + remaining gaps**;
-- preserve still-open items such as model/revision mapping, manuals, partial-stroke correction, exact operator procedure, commercial context, reliability/tolerance evidence, and source-specific geometry;
-- make the “files to write next” list match files that actually still need work;
-- keep `STATUS.md` authoritative and avoid another giant stale checklist.
+# Part E — reconciliation and verification
 
 After Parts A–D are real:
 
-- update `STATUS.md` with the named-source atlas/source-map hardening;
-- update `TODO.md` with one completed bounded line and a short honest next queue;
-- update `docs/TEACHING_PATH.md` so `#/source-atlas` is discoverable;
-- update README/navigation only as needed;
-- update `docs/VERIFICATION.md` with actual baseline/final test counts and commands run;
-- do not rewrite `IMPLEMENTATION_PLAN.md` as a live ledger.
+- update `STATUS.md` to reflect Curta + Analytical Engine source-atlas hardening;
+- add one concise completed line to `TODO.md` and keep the remaining queue short;
+- update the relevant Priority 0.2 / named-machine wording in `docs/RESEARCH_GAPS.md` from “missing” to “current state + remaining gaps”;
+- update `docs/TEACHING_PATH.md` only if the four-track atlas changes the recommended navigation;
+- update README only if needed for discoverability;
+- update `docs/VERIFICATION.md` with actual baseline/final test counts and commands run.
 
----
+Do not rewrite `IMPLEMENTATION_PLAN.md` as a live ledger.
 
 # Acceptance
 
@@ -305,54 +310,57 @@ npm run build
 git diff --check
 ```
 
-If public UI changes, perform local browser smoke in English and Chinese for the new source-atlas route plus quick regressions of:
+If public UI changes, perform local browser smoke in **English and Chinese** for:
 
 ```text
-#/finite-difference
-#/continuous
-#/mechanical-error-control
+#/source-atlas
+#/curta
+#/analytical-engine
 #/about
 ```
 
-Record exactly what was checked.
+Also quick-regress one existing atlas-linked route such as `#/finite-difference` or `#/continuous`.
+
+Record exactly what was checked; do not claim CI or Pages success before remote checks finish.
 
 After push:
 
 - confirm remote `main` contains the commit;
-- inspect GitHub check runs if they finish during the work; do not claim CI/Pages success before they complete;
-- if Pages deploy succeeds, verify the new route is reachable before calling it live;
-- stop after the coherent commit/push. Do not self-assign the next task.
+- inspect GitHub check runs if they complete during the work;
+- if Pages deploy succeeds, verify the atlas route is reachable before calling the new Curta/Analytical groups live;
+- stop after the coherent commit/push. Do not self-assign another task.
 
 # Evidence boundaries
 
-- Science Museum Group / Smithsonian archive/object record identity and catalogued subject can be H/E1 at the precision actually inspected.
-- An institutional reconstruction is R/E2 unless a narrower policy distinction is already established in repository docs.
-- A catalog title describing a mechanism subject does not automatically establish its exact geometry, timing, dimensions, force path, or production use.
-- Babbage design drawings are not proof that the complete Difference Engine No. 2 or printer was built in his lifetime.
-- Surviving Bush Differential Analyzer components do not prove the repository's exact browser wiring/order.
-- Bibliographic metadata is not a full-paper facsimile.
-- Do not quote or cite page/figure details you did not directly inspect.
-- Do not copy museum/archive images into the repository in this slice.
+- A patent is H/E1 for the patented design, not automatic evidence for every production unit.
+- A directly inspected primary manual/service-manual facsimile is primary evidence for what that identified document says; the mirror host and document provenance must remain visible.
+- A specialist transcription is not automatically a facsimile and must not silently receive facsimile/page precision.
+- Type I and Type II must not be treated as internally identical without explicit evidence.
+- The 1843 Menabrea/Lovelace publication is H/E1 at directly inspected printed pages; a modern transcription alone does not create page-level evidence.
+- Walker/Fourmilab is an R executable interpretation and documentation source, not nineteenth-century H evidence.
+- Babbage design sheets and publications do not prove a complete Analytical Engine was built.
+- Repository UI/event ordering remains P/M unless a separately identified historical source establishes the same order at that precision.
+- Do not copy primary scans/images into the repository; link and paraphrase only within normal citation/quotation limits.
 
 # Stop conditions
 
 Stop and leave a clear blocker note rather than guessing if:
 
-- the only way to make a source claim stronger is to infer mechanism geometry from an image without textual/archival support;
-- a source requires inaccessible material and there is no directly inspectable institutional substitute;
-- typed source anchors would require redesigning multiple mechanism cores rather than adapting evidence metadata;
-- the public source atlas would force incompatible evidence semantics with `docs/EVIDENCE_POLICY.md`;
-- a conflicting source-atlas implementation lands on remote `main`.
+- the only way to strengthen a Curta claim is to infer hidden geometry from a service drawing without textual/identified support;
+- a manual scan cannot be identified well enough to distinguish Type I/II, operator/service role, or edition;
+- the only available Analytical Engine page number comes from a transcription rather than an inspected facsimile/page image;
+- extending the source atlas would require changing mechanism-core semantics;
+- a conflicting Curta/Analytical source-atlas implementation lands on remote `main`.
 
-Individual inaccessible records are **not** a blocker. Mark their access state/open question and continue with directly inspected anchors.
+Individual inaccessible manual/facsimile paths are **not** a blocker. Preserve the weaker boundary and complete the other directly supported anchors.
 
-If Parts A–E finish substantially before the target duration, spend remaining time on **source precision and reconciliation**, for example discovering a direct `BAB/A/178` record, verifying exact Science Museum record metadata, inspecting additional directly linked Smithsonian component records, or improving accessibility/tests. Do not start a new machine family or source-specific gear animation.
+If Parts A–E finish substantially before the target duration, use remaining time only for source precision: stronger exact edition/page mapping, direct 1889 scan inspection, Type I/II document identity, accessibility/tests, or cleaning stale named-machine wording. Do not start another machine family, physics model, or source-specific animation.
 
 # Git discipline
 
 - remote `main` is authoritative;
 - fetch/pull before work;
-- inspect existing evidence/profile modules before creating parallel abstractions;
+- inspect existing source-atlas/evidence modules before extending types;
 - one coherent research/evidence/UI checkpoint;
 - run all acceptance commands;
 - inspect diff for unrelated changes;
@@ -363,5 +371,5 @@ If Parts A–E finish substantially before the target duration, spend remaining 
 Suggested commit subject:
 
 ```text
-feat: add named-machine source anchor atlas
+feat: harden Curta and Analytical Engine source anchors
 ```
