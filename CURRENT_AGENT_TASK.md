@@ -5,11 +5,13 @@ Owner: local coding/research agent
 Target duration: about one useful hour
 Repository authority: remote `main`
 
-Previous task is complete and archived at `tasks/archive/2026-09-02-curta-type-ii-service-leaf-census.md`.
+Previous task is complete and archived at `tasks/archive/2026-09-02-scheutz-patent-identity-audit.md`.
 
-The previous Curta census landed as `4441ac3399c0ee54485b7ddfa897080feee9339d`, changing 9 files (about `+163/-16`) and passing 320 tests across 21 files, typecheck, build, diff check, focused source-atlas tests, exact-head CI `33564149496`, and Deploy Pages `33564149453`. Its assignment-to-completion wall time was longer than the preceding half-hour slices, although the exact local-agent start time is not known. This task is therefore deliberately **narrower**: resolve one precise Difference Engine provenance conflict and integrate only evidence that actually improves the repository.
+Administrator review also merged external PR #13 as `8b26b9f645d40e2ef55695b52c158405997262fd`, which hardens shared decimal-register trace/action provenance. **Fetch/pull current remote `main` before doing anything** and run the current-main baseline; do not assume the 320-test count from the previous research slice is still current. PR #13 reported 360 tests across 21 files on its exact head.
 
-> **Question for this slice:** why does the Smithsonian ca.1857 Scheutz drawing-set record say British Patent A.D. 1854 No. **2214**, while independent contemporary/reproduced specification evidence says No. **2216**—and how far can that discrepancy be resolved from directly inspected sources without silently correcting the museum catalog or inventing a provenance story?
+The Scheutz task completed in about 36 minutes with a tightly scoped 7-file diff, so this slice is intentionally somewhat larger while remaining one coherent question.
+
+> **Question for this slice:** what can directly inspected Millionaire/Steiger sources establish about the real operator protocol of direct multiplication—especially multiplier-digit selection, one complete operating turn per multiplier digit, carriage/place handling, visible registers, and mode controls—and which parts of the repository's two-cycle `314 × 27` model must remain P/M rather than being silently upgraded to historical mechanism claims?
 
 ## Read before work
 
@@ -19,154 +21,157 @@ Fetch/pull remote `main`, then read in order:
 2. `TODO.md`
 3. `AGENTS.md`
 4. `docs/EVIDENCE_POLICY.md`
-5. `docs/RESEARCH_GAPS.md`, especially Priority 0.2 and `Files to deepen next`
+5. `docs/RESEARCH_GAPS.md`, especially Priority 1 and the source-precision guardrails
 6. `docs/VERIFICATION.md`
-7. `tasks/archive/2026-09-02-curta-type-ii-service-leaf-census.md`
-8. `research/difference-engine-source-map.md`, especially the Scheutz sections
-9. `src/exhibits/source-atlas/index.ts`
-10. `tests/source-atlas.test.ts`
+7. `tasks/archive/2026-09-02-scheutz-patent-identity-audit.md`
+8. `research/multiplication-mechanisms.md`
+9. `src/mechanisms/direct-multiplier/index.ts`
+10. `src/exhibits/multiplication-compare/index.ts`
+11. the multiplication rendering/evidence code in the public shell and its tests
 
-Run the current-main baseline typecheck/tests before editing and record the actual count. Do not use stale `IMPLEMENTATION_PLAN.md` checkboxes as a task source.
+Run baseline typecheck/tests before editing and record the actual test count. Inspect current replay semantics after merged PR #13; do not weaken or bypass them.
 
-# Part A — reconcile the 2214 / 2216 patent-number conflict
+# Part A — direct primary/source audit of the Millionaire operator protocol
 
-The repository currently preserves all of these facts separately:
+The repository already has Steiger patent references and a P/M direct-multiplication model, but its operator-protocol claims need better source separation.
 
-- Smithsonian drawing-set record `nmah_1005138` says the ca.1857 14-figure drawings are similar to, but not identical with, final specifications for British Patent A.D. 1854 No. **2214**;
-- a directly inspected 1855 *Journal of the Society of Arts* patent list identifies Georg and Edvard Scheutz's calculating/printing invention as No. **2216**;
-- Merzbach 1977 Appendix I reproduces the British specification as **A.D. 1854, No. 2216**.
+## A1. Inspect Steiger US558,913 at operation-text precision
 
-Do not choose one number merely because it is repeated more often. Build a compact source audit.
+Directly inspect the patent text/figures rather than relying on repository paraphrase or search snippets:
 
-## A1. Directly inspect the specification identity
+- Otto Steiger, US 558,913 (1896): <https://patents.google.com/patent/US558913A/en>
 
-Start from the Smithsonian-hosted Merzbach monograph/facsimile already used by the repository:
+Record exact figure/page/column or clearly locatable patent passages for the multiplication sequence, including only what is directly supported, such as:
 
-- Uta C. Merzbach, *Georg Scheutz and the First Printing Calculator* (Smithsonian, 1977)
-- repository landing page: <https://repository.si.edu/items/d3bd18bb-9a77-4ca1-82c9-54db5f6e6d42>
-- public PDF may also be exposed through Smithsonian/GovInfo mirrors.
+- the multiplier lever/scale and what selecting a multiplier digit controls;
+- the statement that the controlling mechanism represents the multiplication table;
+- multiplicand setting/indication if directly described;
+- the instruction to set the multiplier lever to a multiplier figure and turn the operating crank one complete rotation, repeated for successive multiplier figures;
+- how primary/secondary transfer of tens/units partial products is described;
+- factor/multiplier indication if directly stated;
+- any explicit carriage/place-shift operation actually described.
 
-Inspect the Appendix I header and enough surrounding pages to record:
+Do not infer production-machine geometry from the patent beyond the claimed/described design. Patent = H/E1 for the described patented design, not proof that every surviving Egli machine implements every detail unchanged.
 
-- printed patent number;
-- provisional/final specification labels;
-- filing/sealing/publication dates if explicitly printed;
-- inventor names/title wording;
-- figure-sheet headers where readable;
-- exact printed pages used.
+If US538,710 materially clarifies a point that US558,913 references as the former patent, inspect the exact relevant passage only; do not turn this into a complete two-patent mechanical reconstruction.
 
-Treat Merzbach's 1977 reproduction as **R/E2 for the reproduction/editorial layer**, while any clearly reproduced nineteenth-century specification header/text can support H claims only at the precision directly visible. Do not call a modern reprint itself an 1854 artifact.
+## A2. Inspect surviving-object records and related Millionaire documentation
 
-## A2. Independently confirm the contemporary patent-number entry
+Use directly inspectable institutional records to separate **produced-object controls** from **patented design**.
 
-Re-open the already cited period patent-list source and verify the actual printed entry rather than relying on the repository summary:
+Start with NMAH Millionaire object records, especially examples that directly describe:
 
-- *Journal of the Society of Arts*, vol. III, no. 126, 20 April 1855, printed p. 393;
-- existing public-domain scan cited in `research/difference-engine-source-map.md`.
+- lever-set manual machines;
+- multiplier control selectable 0–9;
+- A/M/D/S operation selector;
+- operating crank;
+- multiplier/quotient and result/dividend registers;
+- carriage-shift control;
+- zeroing knobs;
+- the instruction sheet inside the lid.
 
-Record the immediate neighboring entries sufficiently to establish that `2216` belongs to Georg and Edvard Scheutz and is not a line-number or column-reading artifact.
+Useful object records include:
 
-If another period official/patent index can be accessed directly within the time budget, use it as an additional independent identity check. Prefer a nineteenth-century patent index/specification over later summaries.
+- <https://americanhistory.si.edu/collections/object/nmah_694185>
+- <https://americanhistory.si.edu/collections/object/nmah_694184>
+- <https://www.si.edu/object/nmah_694169>
 
-## A3. Identify what No. 2214 actually refers to, if directly possible
+The same accession points to documentation `MA.319929.03` through `.07`. Resolve and inspect whichever records are publicly exposed. Two known starting records are:
 
-Search authoritative/period patent indexes or specification collections for British Patent A.D. 1854 No. **2214**.
+- `MA.319929.04`, *Leaflet, The Millionaire Calculating Machine*: <https://americanhistory.si.edu/collections/object/nmah_694406>
+- `MA.319929.05`, *Pamphlet, The Millionaire Calculating-Machine*: <https://americanhistory.si.edu/collections/object/nmah_694407>
 
-The ideal result is one of:
+Important: `.05` is described as disassembly instructions, so do not mislabel it as an operator manual merely because it is a booklet. Record document role exactly.
 
-1. direct evidence that No. 2214 belongs to a different inventor/invention;
-2. direct evidence that 2214 and 2216 are two distinct stages/documents connected to Scheutz;
-3. no accessible source sufficient to identify 2214 reliably.
+Also inspect the Powerhouse Collection record for the 1907 Egli booklet associated with a Millionaire:
 
-Any of these is acceptable.
+- <https://collection.powerhouse.com.au/object/263911>
 
-Important:
+Its catalog says it is a 9-page booklet plus five figure pages and gives a title about taking the machine apart. If images/pages are publicly renderable, inspect them only for directly readable document identity/control/mechanical information. Respect copyright/display restrictions: record facts and page locations; do not copy long text or redistribute images.
 
-- do **not** infer “Smithsonian typo” merely because 2216 is well supported;
-- do **not** invent a provisional/final-number renumbering story unless a source explicitly establishes it;
-- do **not** treat search-engine snippets as evidence;
-- if a later index says 2214 without primary support, record it as secondary only.
+## A3. Bounded operator-instruction hunt
 
-If 2214 can be identified directly as an unrelated patent, the repository may state that the Smithsonian catalog wording conflicts with the independently identified patent record, but should still avoid speculating about how the catalog error arose.
+Spend a bounded portion of the slice looking for a directly inspectable **operating** instruction sheet/manual, not merely a modern how-to transcription.
 
-# Part B — audit the Smithsonian drawing-set comparison wording
+Good leads may include:
 
-Re-open the directly cited Smithsonian/NMAH drawing-set record:
+- lid-instruction images/IIIF from Smithsonian or another museum;
+- accession-linked documentation;
+- a digitized Egli/Morschhauser instruction sheet or catalog;
+- a period trade/technical publication reproducing the operating sequence.
 
-- `1988.0798.01` / `nmah_1005138`
-- <https://americanhistory.si.edu/collections/object/nmah_1005138>
+A modern specialist transcription such as the BHT Berlin Millionaire page may be used as **E3 navigation/secondary evidence only** unless it exposes/scans the original source it transcribes. Do not upgrade it to E1.
 
-Confirm the exact catalog wording around:
+If no primary operating sheet is readable within the time budget, that is an acceptable negative result. The Steiger patent plus surviving-object controls can still sharpen the boundary.
 
-- 14 drawings / Fig. 1–14;
-- ca.1857 use-instruction context;
-- the related letter explaining number-system conversion;
-- “similar to, but not identical with” the patent final specifications;
-- the catalog's printed/displayed patent number.
+# Part B — build a compact historical/P-M protocol crosswalk
 
-If the IIIF drawing image is usable, inspect only enough to record visible figure count/labels and document identity. **Do not reverse-engineer geometry or assert figure-to-figure equivalence from visual similarity.**
+Update `research/multiplication-mechanisms.md` or create `research/millionaire-operating-protocol.md` **only if the directly inspected evidence is substantial enough to justify a separate file**.
 
-Then search the Merzbach monograph for the drawing set / Dudley delivery / 14-figure instructions and see whether Merzbach himself prints `2214`, `2216`, or another wording in the relevant narrative/caption. This is important because it may locate the discrepancy at the catalog-versus-source layer without guessing causation.
-
-Create a compact table inside `research/difference-engine-source-map.md` such as:
+Create a compact table like:
 
 ```text
-source | date/layer | printed number | what it directly establishes | conflict/boundary
+claim / operation step | source/model/date | direct support | claim/evidence | repository consequence | not established
 ```
 
-Do not create a separate research file unless the evidence is genuinely large enough to justify one.
+At minimum distinguish:
 
-# Part C — bounded related-letter access check
+1. **H/E1 patented design** — multiplier selection + complete operating rotation sequence as directly described in Steiger;
+2. **H/E1 surviving-object/catalog controls** — actual control/register identities on identified Smithsonian examples;
+3. **H/E1/E2 documentation object identity** — instruction/leaflet/disassembly documents, only at content precision actually inspected;
+4. **P/M repository trace** — `314 × 27` decomposed as selected 7 contribution, shift, selected 2 contribution, with two modeled operation cycles.
 
-The Smithsonian drawing record says the ca.1857 operational drawings were accompanied by a letter explaining conversion between number systems. The repository currently records that the letter itself is unexposed.
+Answer explicitly:
 
-Spend a **bounded** amount of time checking whether the related letter is now discoverable through:
+- Is “one modeled operation cycle per multiplier digit” historically supported at operator-protocol level, or only analogous to a patent crank rotation?
+- Does the historical source establish the exact order/direction of multiplier digits used on production machines?
+- Does it establish when/how carriage shifting occurs between multiplier digits?
+- Does it establish that the repository's encoded `0..9` lookup table matches actual control-plate internal representation? If not, preserve P/M.
+- Which registers/controls are directly present on identified surviving machines, and which are generic repository abstractions?
 
-- linked/related Smithsonian records;
-- IIIF manifest metadata;
-- Merzbach's bibliography/illustrations/appendices;
-- a clearly identified archival catalog record.
+Do not let “one turn per digit” become a fake speed/throughput benchmark.
 
-If a directly inspectable letter/facsimile appears, record only its actual identity and the exact conversion/procedure text visible. If it remains unavailable, preserve that as an explicit negative access result and stop this subpart. Do not burn the whole slice hunting a missing object.
+# Part C — public multiplication evidence integration, bounded
 
-# Part D — source-atlas integration only if precision materially improves
-
-Update the Scheutz/Difference Engine source-atlas anchor only if this audit yields a useful public-facing correction/boundary, for example:
-
-- `2216` independently confirmed by reproduced specification plus contemporary patent list;
-- `2214` retained explicitly as Smithsonian catalog wording rather than silently normalized;
-- No. 2214 independently identified as unrelated, if primary evidence proves that;
-- related letter still not inspected.
-
-If updated:
-
-- keep claim type/evidence semantics from `docs/EVIDENCE_POLICY.md`;
-- distinguish museum catalog H/E1 metadata from reproduced specification R/E2 access layers;
-- use `supports` for patent identity/document relationships only;
-- use `notEstablished` for as-built equivalence, geometry, timing, performance, catalog-error cause, and letter content when uninspected;
-- add focused assertions in `tests/source-atlas.test.ts`.
-
-Do not modify the finite-difference mechanism, printing ledger, or public mechanism geometry in this slice.
-
-# Part E — reconciliation and verification
-
-After the source audit:
-
-- update `STATUS.md` only if the 2214/2216 boundary is genuinely sharper;
-- add one concise completed line to `TODO.md`;
-- narrow the relevant line in `docs/RESEARCH_GAPS.md` only if the discrepancy is actually resolved or better bounded;
-- update `docs/VERIFICATION.md` with baseline/final checks, actual test count, and any browser/deployment verification actually performed;
-- preserve all existing Curta, Analytical Engine, Differential Analyzer, carry/control, direct-multiplier, and replay work.
-
-If source-atlas data changes, perform a bilingual browser smoke for:
+If Parts A/B materially sharpen the protocol, update the multiplication exhibit so the visitor can see **two separate layers**:
 
 ```text
-#/source-atlas
-#/finite-difference
+Historical operator/control evidence (identified source/model)
+vs
+Repository P/M event trace (functional abstraction)
+```
+
+A small evidence/protocol panel is enough. Do not redraw the Millionaire internals.
+
+The public layer should be able to state only claims directly supported, for example:
+
+- a Steiger patent describes setting the multiplier lever for a multiplier figure and one complete crank rotation, repeated for successive figures;
+- identified surviving Millionaire records expose multiplier control, operation selector, operating crank, registers and carriage-shift control;
+- the repository models this distinction with one abstract selection/operation cycle per decimal multiplier digit, but does not claim exact cam/control-plate geometry or production timing.
+
+If the source audit does **not** improve public precision enough, do not touch UI merely to create churn.
+
+If UI/source data changes, add focused tests asserting source identity, claim/evidence labels, and explicit `notEstablished` boundaries. Preserve the existing direct-multiplier replay and arithmetic tests.
+
+# Part D — reconciliation and verification
+
+After the audit:
+
+- update `STATUS.md` only if Millionaire provenance is genuinely sharper;
+- add one concise completed line to `TODO.md`;
+- narrow Priority 1 in `docs/RESEARCH_GAPS.md` only for gaps actually closed;
+- update `docs/VERIFICATION.md` with baseline/final test counts and commands actually run;
+- do not alter unrelated Curta, Scheutz, Analytical Engine, Differential Analyzer, carry, key-driven, division, output, continuous or backprop tracks.
+
+If public multiplication UI/evidence changes, perform a bilingual browser smoke for:
+
+```text
+#/multiplication
+#/source-atlas (only if atlas data is touched)
 #/about
 ```
 
-If browser tooling is unavailable, state that explicitly; do not claim a smoke from build/tests alone.
+If browser tooling is unavailable, state that explicitly; build/tests are not a browser smoke.
 
 Before commit/push, run:
 
@@ -177,39 +182,41 @@ npm run build
 git diff --check
 ```
 
-Also run focused source-atlas tests if that area is touched. All final required checks must pass.
+Run focused multiplication/evidence tests for any touched area. All final required checks must pass.
 
 After push:
 
 - confirm remote `main` contains the completion commit;
-- inspect exact-head push CI and Deploy Pages when they complete and record only completed outcomes available before stopping;
+- inspect exact-head CI and Deploy Pages outcomes that complete before stopping;
 - stop and wait for the next `CURRENT_AGENT_TASK.md` revision.
 
 Suggested commit subject:
 
 ```text
-research: reconcile Scheutz patent identity evidence
+research: ground Millionaire operator protocol
 ```
 
 # Evidence boundaries
 
-- nineteenth-century patent list/specification text directly inspected = **H/E1 at the exact printed-text precision inspected**;
-- Merzbach's modern reproduction/editorial framing = **R/E2**, even when it reproduces H/E1-era text;
-- Smithsonian object/drawing catalog identity = **H/E1 at catalog/object precision**, not proof that every cataloged comparison or patent number is error-free;
-- “similar but not identical” does not establish a part-by-part correspondence;
-- a patent specification does not establish the exact as-built 1853 machine or ca.1857 instruction-drawing geometry;
-- a catalog conflict is not permission to invent a correction history;
-- search snippets, filenames, OCR guesses, and modern mirror labels are navigation aids only unless verified against the underlying document.
+- Steiger patent text/figures directly inspected = **H/E1 for the patented design actually described**;
+- Smithsonian/Powerhouse catalog records = **H/E1 at object/document identity and directly described control precision**;
+- readable period instruction sheets/manual pages = **H/E1 at the exact procedure text inspected**;
+- modern museum synthesis = H/E2 unless it is simply reporting object-visible controls;
+- modern specialist transcription without exposed original = **E3 navigation/secondary evidence**;
+- repository direct-multiplier events/table = **P/M**, even if they intentionally mirror a historically documented operator-level distinction;
+- patent rotation count is not measured production speed, effort, reliability, or timing;
+- object controls do not prove hidden control-plate/cam geometry;
+- do not infer production revision chronology from serial-number estimates unless the source directly supports that chronology.
 
 # Stop conditions
 
-Stop a subpart and preserve the unresolved boundary rather than guessing if:
+Stop a subpart and preserve the boundary rather than guessing if:
 
-- No. 2214 cannot be directly identified from a reliable patent/index source;
-- the original specification/facsimile cannot be rendered clearly enough to read its header;
-- the ca.1857 drawing image is too low-resolution for reliable figure labels;
-- the related letter is only mentioned but not exposed;
-- resolving the conflict would require asserting why Smithsonian has `2214` without documentary evidence;
-- the work starts expanding into full Scheutz geometry, printer timing, performance benchmarking, contract/workflow history, or a general British-patent history.
+- instruction-sheet images are present but not readable at reliable resolution;
+- museum pages expose only catalog metadata, not the document's actual procedure text;
+- exact carriage-shift order for multiplication cannot be established directly;
+- a source describes a later keyboard/electric Millionaire and cannot be safely generalized to the lever-set manual model;
+- geometry claims would require interpreting an unlabelled photograph or patent drawing beyond the text;
+- the work starts expanding into complete Millionaire disassembly, performance benchmarking, production serial chronology, division reconstruction, or another machine family.
 
-If Parts A–D finish substantially before one hour, spend remaining time tightening exact page/figure/record citations and source-atlas tests. **Do not start Thomas, Comptometer, Curta, Differential Analyzer, Millionaire, or another family in this slice.**
+If Parts A–C finish substantially before one hour, spend remaining time tightening exact patent figure/passage anchors, resolving accession documentation `.03`–`.07`, and strengthening focused evidence tests. **Do not start a new mechanism family in this slice.**
