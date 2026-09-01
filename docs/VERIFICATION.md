@@ -1,5 +1,25 @@
 # Verification record
 
+## 2026-09-01 — current-main operator-division integration and procedure boundary
+
+The pre-edit current-main baseline was 236 tests across 19 files with typecheck passing. Reviewed PR #6 exact head `7a81ad80068f97ca6fed1dd79a860cb250b64911` applied cleanly on current main without overwriting the later revolution-counter or source-atlas work. The Curta source pass directly inspected *Your CURTA Calculator* viewer page 1/2 for Model I/II control roles and kept the separate Curta.org division examples at E3 transcription precision. The Smithsonian Thomas 1868 route remained behind request verification and no stable exact instruction facsimile was found in the bounded search, so it remains catalog-identity only.
+
+- `npm run typecheck` — pass
+- `npm test -- --run` — pass, 251 tests across 19 files
+- `npm run build` — pass
+- `git diff --check` — pass
+- focused operator-division plus revolution-counter regression — 44 tests passed
+- bounded arithmetic sweep retained from the integrated reviewed patch: dividends `0..500`, divisors `1..50`, offsets `0..2`; 61,845 fitting configurations, 13,305 undersized configurations rejected, no mismatch
+
+Local bilingual browser smoke:
+
+- `#/division` exposed residual `-942` as `OVERSHOOT_PENDING` before the separate detection event changed the phase to `CORRECTION_REQUIRED`; completion produced quotient `27`, remainder `0`;
+- `#/visible-carry` quick regression rendered the carry lesson after the merged revolution-counter hardening;
+- `#/about` retained the evidence boundary;
+- checked desktop routes had no horizontal overflow.
+
+No deployment check was performed for this not-yet-pushed completion commit; no claim that the integration is already live is made.
+
 ## 2026-09-01 — DE2 and Differential Analyzer publication precision
 
 The pre-edit remote-main baseline was 221 tests across 19 files. This slice directly inspected the complete 232-page Science Museum *Charles Babbage's Difference Engine No. 2: Technical Description*, exact R/E2 anchors at p. i, pp. 4–9, 21–24, 33–45, 49–54, 83–85, 187–188 and 212–218, and the H/E1 BAB/B/001 record. Bush 1931 and Shannon 1941 remain bibliographic-only after bounded publisher/repository access attempts; the complete APS facsimile of Bush and Caldwell's separate 1931 application paper, printed pp. 1898–1902 and Figures 1–3, was directly inspected instead.

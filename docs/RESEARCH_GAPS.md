@@ -63,8 +63,8 @@ Current state: `research/subtraction-and-division.md` and a tested generic `8478
 
 Remaining gaps:
 
-- identified manual pages for Thomas, Burkhardt, Curta, and pinwheel procedures;
-- source-specific mode/crank/counter directions and correction linkages;
+- a directly inspected Thomas 1868 instruction facsimile, primary Burkhardt procedure pages, and exact Curta division-example edition/page mapping beyond the directly inspected guide controls and E3 transcription;
+- source-specific mode/crank/counter directions and correction linkages beyond the bounded Curta viewer-page-1 controls;
 - primary Pascaline complement setup/digit conventions;
 - square-root and other derived procedures only when tied to a precise manual/model.
 

@@ -30,7 +30,7 @@ Remote CI run `33437862103` passed for the previous operator-division checkpoint
 - direction-neutral ordinal rotary-carry scheduler with boundary/conditioning/strictly increasing transfer-slot/carry-out events and fail-closed replay;
 - direct-multiplication functional model with an inspectable encoded-multiple table, digit selection, operation cycles, carriage shifts, and replayable events;
 - generic key-driven accumulator with place-value contribution, serialized carry, key-stroke cycles, validated state, and fail-closed action-derived replay that rejects carry/event/final-state tampering;
-- generic operator-driven division with repeated subtraction, per-place quotient counts, overshoot, mandatory correction, carriage shift, and hardened replay;
+- generic operator-driven division with quotient-nine and exact-zero boundary handling, explicit pending/detected/correction phases, per-place quotient counts, mandatory add-back, zero-place shifts, action-derived cycle-bound replay, and undersized-register rejection;
 - generic setting–crank interlock with explicit lock/phase transitions, invalid-action rejection, and hardened replay;
 - typed control-provenance profiles preserving source/model, H/R claim type, E1–E4 strength, documented roles, and explicit not-established boundaries;
 - typed carry-provenance profiles separating Pascal/Felt, Odhner/Talamini, and Thomas 1820 patent/object, 1865, 1880 proposal, and R/E3 revision-history contexts;
@@ -52,7 +52,7 @@ The current browser shell contains non-empty routes or views for:
 - visible carry with the existing interactive P/M chain, Pascaline/Felt profiles, one ordinal P/M schedule, and source-separated rotary versus Thomas stepped-drum carry/reliability sections;
 - interactive finite differences plus a separately stepped calculation→persistent-output responsibility flow;
 - interactive multiplication comparison with event/cycle stepping for direct multiplication;
-- interactive operator-division procedure for `8478 ÷ 314` with visible overshoot/correction;
+- interactive operator-division procedure for `8478 ÷ 314` exposing the negative residual in `OVERSHOOT_PENDING` before detection makes add-back correction legal;
 - interactive setting–crank interlock lesson with a visible blocked setting attempt and typed source-comparison cards for Thomas, Odhner, Felt/Tarrant, and Pascaline controls;
 - interactive output-contract lesson exposing `+12, +8, SUBTOTAL, +5, TOTAL`, persistent record versus accumulator state, and source-separated register/listing/Difference Engine comparisons;
 - Curta;
@@ -99,6 +99,7 @@ The most important remaining gaps are:
 - key-driven computation now has a tested generic P/M mechanism model, but simultaneous multi-column operation, correction, interlocks, and source-specific Comptometer geometry remain intentionally unmodeled;
 - `research/curta-source-map.md` now directly inspects US 2,525,352, the two-page Contina operator guide, and the 1967 Model I service-manual cover; full Type I/II production-revision/linkage mapping remains open;
 - `research/analytical-engine-information-flow.md` now directly anchors 1843 printed pp. 677, 679 and 704, rechecks three Science Museum drawing records, keeps H. P. Babbage 1888 transcription-only, and separates Walker reconstruction; exact reader/Store/Mill geometry and an inspected 1889 facsimile remain open;
+- `research/subtraction-and-division.md` now separates the directly inspected Curta operator-guide viewer-page-1 controls (H/E1 via specialist mirror) from the E3 division transcription; exact Curta division-example edition/pages and the Thomas 1868 instruction facsimile remain open;
 - `research/differential-analyzer.md` now directly inspects the Smithsonian object group/components and Bush–Caldwell 1931 application facsimile pp. 1898–1902/Figs. 1–3 while keeping application, component, browser-flow and generation roles separate; Bush 1931 construction-paper and Shannon 1941 full text, exact placement/wiring, numerical error, and physical geometry remain open;
 - `research/difference-engine-source-map.md` now directly inspects the complete 232-page 2020 Science Museum Technical Description as R/E2 with exact calculation/output/omission/timing/appendix anchors, alongside H/E1 BAB/B/001, BAB/A/171, printing and notation records; Babbage-primary feature interpretation beyond record precision and lifetime manufacturing/timing proof remain open;
 - `research/simulator-matrix.md` now records a bounded prior-art/reuse matrix, but several third-party license, stepping, and maintenance fields remain explicitly unverified;

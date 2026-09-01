@@ -27,6 +27,7 @@
 - [x] Add a named-machine source atlas for directly inspected Difference Engine No. 2 and Bush Differential Analyzer records, preserving supports/not-established boundaries.
 - [x] Extend the source atlas with directly inspected Curta patent/manual and Analytical Engine facsimile/drawing anchors while preserving production, transcription, reconstruction, and P/M boundaries.
 - [x] Deepen Difference Engine No. 2 and Differential Analyzer publication precision with the 2020 R/E2 technical description, BAB/B/001 H/E1 record, and Bush–Caldwell 1931 application facsimile while preserving inaccessible Bush/Shannon and generation boundaries.
+- [x] Harden operator-division quotient-nine/exact-zero causality and replay, then separate Curta facsimile controls from E3 division transcription without back-filling named-machine states.
 
 ## Repository maintenance
 

@@ -45,12 +45,28 @@ These records support a workflow involving modes, registers, repeated operations
 
 ## 2. Curta operator procedure
 
-The Curta.org manual transcription distinguishes setting register, black result/product dial, white counter/quotient dial, carriage position, plus/minus handle state, reversing control, zero-stop locks, and clearing. Its division examples repeatedly operate at a carriage position, notice that a target was overstepped, undo one turn, then move to the next lower carriage position. It also describes subtractive division when a dividend is already present.
+### Directly inspected operator-guide facsimile boundary
 
-- Claim type: **H** for the transcribed operator instructions; **H/R** where this note extracts a general state-machine lesson.
-- Evidence: specialist-hosted manual transcription, treated conservatively as **E2–E3** until exact manual edition/page/facsimile mapping is completed.
+The two-page specialist-mirrored facsimile *Your CURTA Calculator* was directly inspected:
 
-This supports the proposition that carriage, quotient/counter state, overshoot recognition, reversal/add-back, and operator sequencing participate in the computation. It does not imply that every stepped-drum or pinwheel calculator follows Curta controls.
+<https://www.mycurta.com/Documents/Curta-User-Guide-Your-CURTA-Calculator-210810.pdf>
+
+Viewer page 1/2 identifies Contina, Vaduz/Liechtenstein, and says the instructions apply to both Model I (`8×6×11`) and Model II (`11×8×15`). It labels the black result/product dial and white counter/quotient dial; requires the handle to return to zero stop before manipulating other parts; describes raising, rotating and reseating the carriage; and identifies the reversing lever's lower position for special cases including subtractive division. No edition/date or printed page number was visible, and the available scan did not expose a directly inspectable division-example page.
+
+- Claim type: **H** for those visible operator-control statements.
+- Evidence: **E1 primary operator-guide facsimile via a specialist mirror**, at viewer-page-1 precision only.
+- Access boundary: the host is not the original publisher or an institution; no unseen division example is promoted to E1.
+
+### Separate specialist transcription
+
+Curta.org's `DivisionAlgorithm` page was directly inspected as a transcription, not a facsimile. It gives examples `42÷7`, `1728÷12`, and `17.29÷1.2`: the operator builds toward the dividend, notices an overstep, makes one minus turn, moves the carriage to the next lower position, and reads the quotient in the white dial. It also describes subtractive division when the dividend is already present.
+
+<https://curta.org/wiki/DivisionAlgorithm>
+
+- Claim type: **H/R** for the transcribed operator procedure.
+- Evidence: **E3 specialist transcription** until its exact manual edition and printed page are directly matched.
+
+Together these sources support that carriage position, quotient/counter state, overstep recognition, reversal and operator sequencing participate in Curta calculation. They do not prove that every stepped-drum calculator follows Curta controls, or that the repository's negative-residual phases are Curta internal states.
 
 ## 3. Complement subtraction is not reverse motion
 
@@ -101,6 +117,6 @@ The model refuses to claim:
 - automatic division;
 - simultaneous mechanisms or source-specific correction paths.
 
-Its signed residual, negative overshoot state, quotient-digit convention, serialized detection/correction events, and mandatory add-back-before-shift rule are all **P/M operator-procedure choices**. They do not reproduce a Thomas/Burkhardt bell, crank direction, counter direction/sign, Curta dial motion, or machine-specific add-back linkage.
+Its signed residual and temporary quotient digit 10 first enter `OVERSHOOT_PENDING`; a separate detection event makes correction legal; add-back then restores the prior non-negative residual and quotient digit before shift. Exact-zero results must still shift through implied lower zero quotient places. These phases, quotient convention and mandatory add-back-before-shift rule are tested **P/M choices**. They do not reproduce a Thomas/Burkhardt bell, crank direction, counter direction/sign, Curta dial motion, or machine-specific add-back linkage.
 
 Its arithmetic and replay integrity are computationally tested. Historical interpretation remains in this note and [`control-and-zeroing-source-map.md`](control-and-zeroing-source-map.md) rather than being smuggled into generic geometry.
