@@ -1,5 +1,27 @@
 # Verification record
 
+## 2026-09-02 — Scheutz patent identity and Royal Society examination
+
+The current-main pre-edit baseline passed typecheck and 292 tests across 21 files. A directly inspected public-domain scan of *Journal of the Society of Arts*, vol. III no. 126, 20 April 1855, printed p. 393 lists patent 2216 for George and Edward Scheutz under patents sealed 13 April, with the calculating-and-printing-results title and adjacent entries 2208/2304. This independently agrees with the No. 2216 header in Merzbach Appendix I. Smithsonian drawing catalog No. 2214 remains recorded as a discrepancy; it is not silently rewritten or declared a typo.
+
+The original-period scan of the Royal Society committee report was directly inspected across printed pp. 499–509. It separates Scheutz mechanism from Babbage lineage, reports four difference orders / fifteen-digit values / eight printed function digits, describes alternating additions and lead-to-stereotype output, mathematically analyses omitted-difference/decimal limits, and records a backward-print-order limitation. Qualitative smoothness, utility, speed and error-risk language remains committee assessment rather than a controlled modern performance benchmark. No P/M mechanism code or output-contract wording changed.
+
+- `npm run typecheck` — pass
+- `npm test -- --run` — pass, 292 tests across 21 files
+- `npm run build` — pass
+- `git diff --check` — pass
+- focused source-atlas test — 16 tests passed
+
+Local bilingual browser smoke:
+
+- `#/source-atlas` rendered five separated Scheutz cards, including p. 393 patent identity, pp. 499–509 committee report and the visible 2214/2216 discrepancy, in English and Chinese;
+- `#/finite-difference` retained its P/M flow;
+- `#/output-contracts` required no correction and retained its table-output boundary;
+- `#/about` retained the evidence-policy boundary;
+- checked routes had no desktop horizontal overflow.
+
+No deployment check was performed for this not-yet-pushed completion commit.
+
 ## 2026-09-02 — Smithsonian Scheutz built-engine and operational-drawing evidence
 
 The current-main pre-edit baseline passed typecheck and 291 tests across 21 files. NMAH object records and their IIIF manifests were directly inspected for the surviving 1853 Scheutz engine `MA.323659` / `nmah_997042` and ca.1857 drawing set `1988.0798.01` / `nmah_1005138`. The object record establishes maker/date/place/material/dimensions plus Paris/Dudley/government-contract catalog context; the drawing record establishes 14 figures and the drawings-plus-unexposed-letter instruction provenance. It explicitly says the figures are similar to but not identical with final patent specifications.

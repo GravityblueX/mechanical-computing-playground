@@ -150,7 +150,7 @@ Only files with real remaining evidence work are listed:
 1. `research/curta-source-map.md` — Type II capacity/date/replacement-leaf chronology and production revision/linkage mapping beyond the inspected service leaves;
 2. `research/analytical-engine-information-flow.md` — content-page images for items 10–20 inside known 1889 chapter pp. 331–338, a defensible printed-catalogue/BAB-code cross-walk, and drawing-level reader/Store/Mill coordination evidence;
 3. `research/differential-analyzer.md` — Bush 1931 facsimile plus component interconnection/error evidence;
-4. `research/difference-engine-source-map.md` — Scheutz/Babbage drawing interpretation, printer timing, measured performance, unexposed Scheutz letter, 2214/2216 catalog/patent reconciliation, and manufacturing evidence beyond catalog titles;
+4. `research/difference-engine-source-map.md` — Scheutz/Babbage drawing interpretation, printer timing, modern measured performance, unexposed Scheutz letter, why the catalog retains 2214 despite independently confirmed patent 2216, as-built/specification revision mapping, and manufacturing evidence beyond catalog titles;
 5. `research/control-and-zeroing-source-map.md` — Thomas instructions, partial-stroke correction and production mapping;
 6. carry source maps — production mapping and measured physical envelopes;
 7. `research/output-and-audit-trail.md` — period office procedure and source-specific printing mechanics.

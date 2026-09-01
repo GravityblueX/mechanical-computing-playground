@@ -180,7 +180,39 @@ Directly inspected NMAH record and IIIF metadata:
 - catalog says they are similar to, but not identical with, final specifications for British Patent A.D. 1854, No. **2214**, with somewhat different numbering.
 
 - Claim type: **H**; evidence **E1 at drawing-object/catalog precision**.
-- The related letter itself was not exposed and its contents were not inspected. The single IIIF canvas was used for record identity only. The catalog's patent number conflicts with the directly inspected Merzbach title/Appendix I identity, **No. 2216**; this note preserves both source wordings and does not silently repair either.
+- The related letter itself was not exposed and its contents were not inspected. The single IIIF canvas was used for record identity only. The catalog's **No. 2214** wording is preserved as a documented source discrepancy; independent contemporary evidence below identifies the Scheutz patent as **No. 2216**, but this repository does not call the catalog value a typo or silently rewrite it.
+
+### Contemporary patent identity: No. 2216
+
+Directly inspected period scan:
+
+- *Journal of the Society of Arts*, vol. III, no. 126, Friday 20 April 1855, printed p. 393;
+- public-domain JSTOR/Internet Archive scan exposed through Wikimedia Commons, file `jstor-41323556`;
+- under “Weekly List of Patents Sealed,” “Sealed April 13th, 1855,” the entry reads **2216**, George Scheutz and Edward Scheutz, Salisbury Street, for improvements in machinery or apparatus for calculating and printing the results of such calculations;
+- adjacent entries 2208 and 2304 make the entry boundary unambiguous.
+
+<https://commons.wikimedia.org/wiki/File:Journal_of_the_Society_of_Arts,_Vol._3,_no._126_(IA_jstor-41323556).pdf>
+
+This is **H/E1 contemporary-publication evidence for patent identity and stated title only**. It independently agrees with the reproduced specification header in Merzbach Appendix I, **British Patent A.D. 1854, No. 2216** (printed pp. 43–55). It establishes neither patent geometry nor identity between the specification, the as-built Smithsonian machine, and the ca. 1857 14-figure instruction sheet.
+
+### Royal Society committee examination, 1855
+
+Directly inspected original-period article scan:
+
+G. G. Stokes, W. H. Miller, C. Wheatstone and R. Willis, *Report of a Committee appointed by the Council to examine the Calculating Machine of M. Scheutz*, *Proceedings of the Royal Society of London*, vol. 7, printed pp. **499–509**; public-domain JSTOR/Internet Archive scan exposed through Wikimedia Commons (`jstor-111836`).
+
+<https://commons.wikimedia.org/wiki/File:Report_of_a_Committee_Appointed_by_the_Council_to_Examine_the_Calculating_Machine_of_M._Scheutz_(IA_jstor-111836).pdf>
+
+Bounded page anchors:
+
+- pp. 499–500: table-making by finite differences; Babbage lineage is acknowledged, but Scheutz addition/carry mechanism is explicitly described as different;
+- pp. 500–502: the examined machine takes a function and four difference orders to fifteen digits, prints the first eight function digits, advances one stage through alternating addition motions, and impresses calculated values plus argument values into lead for subsequent stereotype-plate production;
+- pp. 502–503: the report describes decimal/senary conversion provisions and gives qualitative observations about freedom/smoothness and reasonable-care expectations;
+- pp. 503–507: it mathematically analyses limits from omitted higher differences and decimal places, including the need for fresh setting rather than claiming unlimited exactness;
+- pp. 507–508: backward calculation would print values in the wrong order without a reversing printing movement; the committee says the main use appears to be mathematical-table computation and reports a reprinting advantage as its assessment, not as a controlled benchmark;
+- pp. 508–509: Stokes's postscript returns to a distinct Babbage capability and does not redefine the examined Scheutz machine.
+
+The report is **H/E1 for what this 1855 committee examined, calculated and reported**. Its qualitative smoothness, care, utility, speed and error-risk language is contemporary assessment, not a modern reliability/throughput measurement protocol and not universal evidence for every Scheutz-derived machine. It does not prove exact surviving-object geometry, printer synchronization, tooth counts, force, tolerance or repository P/M event timing.
 
 ### Merzbach 1977 institutional study and reproduced patent
 
@@ -232,4 +264,4 @@ Open before any source-specific mechanical visualization:
 - formatting controls at drawing/mechanism level;
 - stereotype materials and production process details;
 - tolerances, force, backlash and reconstruction manufacturing decisions;
-- exact Scheutz printer synchronization, internal geometry, measured reliability/error/throughput, related-letter text, and reconciliation of the Smithsonian `2214` versus Merzbach/patent `2216` numbering conflict.
+- exact Scheutz printer synchronization/internal geometry, modern measured reliability/error/throughput, related-letter text, why the Smithsonian catalog currently says `2214` despite independent contemporary/patent `2216` evidence, and as-built versus patent/drawing revision mapping.

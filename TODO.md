@@ -33,6 +33,7 @@
 - [x] Harden decimal/integrator replay against serialized provenance tampering and inspect Curta Type II service controls at exact page/leaf precision.
 - [x] Reconcile the H. P. Babbage 1888 reading, 1889 chapter range, modern reproduction metadata, E3 transcription content, and unavailable drawing-catalogue cross-walk without fabricating page claims.
 - [x] Directly anchor the Smithsonian 1853 Scheutz engine, ca.1857 operational drawing set, and Merzbach/patent provenance while preserving the 2214/2216 conflict and P/M boundary.
+- [x] Independently confirm Scheutz patent No. 2216 in an 1855 patent list and add the Royal Society pp. 499–509 examination layer without erasing the Smithsonian 2214 discrepancy.
 
 ## Repository maintenance
 
