@@ -1,5 +1,25 @@
 # Verification record
 
+## 2026-09-01 — Controlled-key source boundary and key-stroke integrity
+
+The current-main pre-edit baseline passed typecheck and 251 tests across 19 files. This slice directly inspected Turck's 1921 public-domain facsimile at viewer pages 179–182 / printed pp. 159–162, the Smithsonian `nmah_905178` catalog and one-canvas IIIF manifest, and Science Museum Group object `1921-16`. It added a generic P/M key-stroke-integrity controller that wraps the existing accumulator instead of duplicating arithmetic: incomplete release leaves arithmetic unchanged, explicit detection locks unrelated input, correction commits the errant key exactly once through existing key events, and release preserves the result.
+
+- `npm run typecheck` — pass
+- `npm test -- --run` — pass, 264 tests across 20 files
+- `npm run build` — pass
+- `git diff --check` — pass
+- focused key-stroke-integrity/key-driven/setting-crank regression — 51 tests passed
+- operator-division and revolution-counter regressions remained green in the full suite
+
+Local bilingual browser smoke:
+
+- `#/controls` stepped units-key `7` through early release, explicit detection/input lock at accumulator `0`, exactly-once correction to `7`, lock release and return to `IDLE`; English and Chinese source boundaries rendered with no desktop horizontal overflow;
+- `#/arithmetic-labor` retained its existing operator-work profiles;
+- `#/about` retained the evidence-policy boundary;
+- the current key-driven arithmetic presentation remained intact through focused tests and the control scenario's delegated accumulator commit.
+
+The Smithsonian manifest exposed only one object image, not manual pages; Wolff's exact white-button/trigger/upstroke account remains E3 orientation. No deployment check was performed for this not-yet-pushed commit.
+
 ## 2026-09-01 — current-main operator-division integration and procedure boundary
 
 The pre-edit current-main baseline was 236 tests across 19 files with typecheck passing. Reviewed PR #6 exact head `7a81ad80068f97ca6fed1dd79a860cb250b64911` applied cleanly on current main without overwriting the later revolution-counter or source-atlas work. The Curta source pass directly inspected *Your CURTA Calculator* viewer page 1/2 for Model I/II control roles and kept the separate Curta.org division examples at E3 transcription precision. The Smithsonian Thomas 1868 route remained behind request verification and no stable exact instruction facsimile was found in the bounded search, so it remains catalog-identity only.

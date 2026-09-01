@@ -1,6 +1,6 @@
 # Current Status
 
-Last reconciled on 2026-09-01 after the Difference Engine No. 2 and Differential Analyzer publication-precision slice.
+Last reconciled on 2026-09-01 after the Controlled-key source and key-stroke-integrity slice.
 
 This file is the **current-state authority** for the repository. `ROADMAP.md` describes where the project should go; `IMPLEMENTATION_PLAN.md` is still useful as a dependency/design specification, but many of its checkboxes predate later implementation and must not be treated as the live task ledger.
 
@@ -13,7 +13,7 @@ This file is the **current-state authority** for the repository. `ROADMAP.md` de
 - GitHub Actions CI and a Pages deployment workflow.
 - Deterministic state/event/replay primitives under `src/core/`.
 - Golden carry fixtures under `fixtures/carry/`.
-- The latest local verification (`docs/VERIFICATION.md`, 2026-09-01 UTC+8) reports typecheck, 221 tests across 19 files, production build, diff check, and bilingual browser smoke passing.
+- The latest local verification (`docs/VERIFICATION.md`, 2026-09-01 UTC+8) reports typecheck, 264 tests across 20 files, production build, diff check, and bilingual browser smoke passing.
 
 Remote CI run `33437862103` passed for the previous operator-division checkpoint `7bebcea2d187f0ed2411de4098c846963df8b32a`. This status still does **not** substitute for CI on later commits.
 
@@ -30,6 +30,7 @@ Remote CI run `33437862103` passed for the previous operator-division checkpoint
 - direction-neutral ordinal rotary-carry scheduler with boundary/conditioning/strictly increasing transfer-slot/carry-out events and fail-closed replay;
 - direct-multiplication functional model with an inspectable encoded-multiple table, digit selection, operation cycles, carriage shifts, and replayable events;
 - generic key-driven accumulator with place-value contribution, serialized carry, key-stroke cycles, validated state, and fail-closed action-derived replay that rejects carry/event/final-state tampering;
+- generic key-stroke-integrity controller wrapping that accumulator, with incomplete release/detection/input lock, exactly-once errant-stroke commit, lock release, deterministic trace and action-derived replay;
 - generic operator-driven division with quotient-nine and exact-zero boundary handling, explicit pending/detected/correction phases, per-place quotient counts, mandatory add-back, zero-place shifts, action-derived cycle-bound replay, and undersized-register rejection;
 - generic setting–crank interlock with explicit lock/phase transitions, invalid-action rejection, and hardened replay;
 - typed control-provenance profiles preserving source/model, H/R claim type, E1–E4 strength, documented roles, and explicit not-established boundaries;
@@ -53,7 +54,7 @@ The current browser shell contains non-empty routes or views for:
 - interactive finite differences plus a separately stepped calculation→persistent-output responsibility flow;
 - interactive multiplication comparison with event/cycle stepping for direct multiplication;
 - interactive operator-division procedure for `8478 ÷ 314` exposing the negative residual in `OVERSHOOT_PENDING` before detection makes add-back correction legal;
-- interactive setting–crank interlock lesson with a visible blocked setting attempt and typed source-comparison cards for Thomas, Odhner, Felt/Tarrant, and Pascaline controls;
+- interactive setting–crank interlock lesson with a visible blocked setting attempt, plus a stepped incomplete-key-stroke integrity scenario and source-separated Turck/Smithsonian/Science Museum boundaries;
 - interactive output-contract lesson exposing `+12, +8, SUBTOTAL, +5, TOTAL`, persistent record versus accumulator state, and source-separated register/listing/Difference Engine comparisons;
 - Curta;
 - interactive Analytical Engine P/M information flow for `(ab+c)d`, with Store/Mill/card roles, intermediate `p/q`, output, stepping, and hardened replay;
@@ -96,14 +97,15 @@ The most important remaining gaps are:
 
 - carry maps now add Thomas 1820 patent/object separation, 1865 rapid overrun/sequential phasing/simultaneous-load false-result evidence, and the 1880 proposal versus R/E3 adoption boundary; exact Thomas and rotary production mapping, factory instructions/direct measurement, force/contact-load/material/lubrication/tolerance/wear/safe-rate/failure envelopes, and source-specific geometry remain open;
 - direct multiplication now has a tested pedagogical functional state/event model and a fourth comparison path, but no source-specific Millionaire geometry is claimed;
-- key-driven computation now has a tested generic P/M mechanism model, but simultaneous multi-column operation, correction, interlocks, and source-specific Comptometer geometry remain intentionally unmodeled;
+- key-driven computation now has tested accumulator and incomplete-stroke integrity/interlock P/M models; simultaneous multi-column operation, exact Model E/F trigger/release geometry/timing, primary patent mapping, and universal production claims remain intentionally unmodeled;
 - `research/curta-source-map.md` now directly inspects US 2,525,352, the two-page Contina operator guide, and the 1967 Model I service-manual cover; full Type I/II production-revision/linkage mapping remains open;
 - `research/analytical-engine-information-flow.md` now directly anchors 1843 printed pp. 677, 679 and 704, rechecks three Science Museum drawing records, keeps H. P. Babbage 1888 transcription-only, and separates Walker reconstruction; exact reader/Store/Mill geometry and an inspected 1889 facsimile remain open;
 - `research/subtraction-and-division.md` now separates the directly inspected Curta operator-guide viewer-page-1 controls (H/E1 via specialist mirror) from the E3 division transcription; exact Curta division-example edition/pages and the Thomas 1868 instruction facsimile remain open;
 - `research/differential-analyzer.md` now directly inspects the Smithsonian object group/components and Bush–Caldwell 1931 application facsimile pp. 1898–1902/Figs. 1–3 while keeping application, component, browser-flow and generation roles separate; Bush 1931 construction-paper and Shannon 1941 full text, exact placement/wiring, numerical error, and physical geometry remain open;
 - `research/difference-engine-source-map.md` now directly inspects the complete 232-page 2020 Science Museum Technical Description as R/E2 with exact calculation/output/omission/timing/appendix anchors, alongside H/E1 BAB/B/001, BAB/A/171, printing and notation records; Babbage-primary feature interpretation beyond record precision and lifetime manufacturing/timing proof remain open;
 - `research/simulator-matrix.md` now records a bounded prior-art/reuse matrix, but several third-party license, stepping, and maintenance fields remain explicitly unverified;
-- `research/control-and-zeroing-source-map.md` now separates identified Thomas mode/counter/zeroing roles, Odhner US1510100 crank-home locking, Felt US960528 cancel/carry-strain recovery, Turck US1154897 immediate key actuation, and the Pascaline H/R complement boundary; source-specific geometry, uninspected Thomas instructions, partial-stroke correction, and production-revision mapping remain open;
+- `research/key-driven-computation.md` directly anchors Turck 1921 printed pp. 159–162 for incomplete-stroke signaling, other-order blocking and correction-before-continuation, while keeping the Smithsonian 1920-revision book at one-image catalog precision and Science Museum `1921-16` at Model F object identity; exact release procedure/patent/geometry remains open;
+- `research/control-and-zeroing-source-map.md` separates identified Thomas mode/counter/zeroing roles, Odhner US1510100 crank-home locking, Felt US960528 cancel/carry-strain recovery, Turck US1154897 immediate key actuation, and the Pascaline H/R complement boundary; source-specific geometry, uninspected Thomas instructions, and production-revision mapping remain open;
 - `research/output-and-audit-trail.md` and `#/output-contracts` now compare register-only output, identified printing/listing objects, US885202A subtotal/total semantics, and Difference Engine persistent-output roles; direct museum-page access, printer geometry, period office procedure, commercial context, and source-specific production mapping remain open;
 - `research/human-machine-arithmetic-labor.md`, typed adapters, and `#/arithmetic-labor` now synthesize operator versus machine responsibility from existing tested traces; historical productivity/time/effort and source-specific workflows remain explicitly open;
 - `docs/REPRESENTATION_AND_PROTOCOL.md` compares representation, operator protocol, and persistent-output/error-control responsibilities; reliability/torque/tolerance and source-specific geometry remain future work.

@@ -47,13 +47,13 @@ The existing two-cycle direct trace is a P/M count, not historical speed.
 
 ## Priority 2 — Key-driven input and controls
 
-Current state: `research/key-driven-computation.md`, Turck/Felt source anchors, a tested generic key-driven accumulator, carry replay, and the operator-work comparison establish `keypress → accumulate` as a distinct protocol.
+Current state: directly inspected Turck 1921 printed pp. 159–162 establish incomplete-stroke signaling, other-order blocking and correction-before-continuation for the Controlled-key context; tested generic accumulator and key-stroke-integrity models expose `keypress → accumulate` and locked recovery as separate P/M responsibilities.
 
 Remaining gaps:
 
 - exact Model A and later revision geometry/timing;
 - simultaneous multi-column input;
-- sourced incomplete-stroke detection and correction;
+- exact primary operator release procedure and controlled-key patent/figure mapping beyond Turck's functional account;
 - production mapping of carry/cancel/interlock mechanisms;
 - operator manuals and measured training/throughput evidence.
 
@@ -72,13 +72,13 @@ Do not back-fill the generic P/M loop as one universal historical procedure.
 
 ## Priority 4 — Control, correction, and machine safety
 
-Current state: a tested generic setting–crank interlock and typed Thomas/Odhner/Felt/Pascaline profiles show that permission, zeroing, canceling, and mode state are computational.
+Current state: tested generic setting–crank and key-stroke-integrity interlocks plus typed Thomas/Odhner/Felt/Pascaline profiles show that permission, zeroing, canceling, incomplete-stroke recovery, and mode state are computational; Turck 1921 directly anchors the Controlled-key blocking responsibility.
 
 Remaining gaps:
 
 - exact Thomas instruction pages and zeroing linkage;
 - production use of Odhner patented locking embodiments;
-- sourced partial-stroke detection/correction;
+- exact primary release-button procedure, trigger/registration timing, and patent-to-production mapping for Model E/F controlled-key revisions;
 - source-specific overflow, carry inhibition, and recovery geometry.
 
 ## Priority 5 — Representation and human-machine protocol

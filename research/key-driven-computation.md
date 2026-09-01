@@ -121,22 +121,37 @@ multi-column key-driven accumulator
 
 without claiming identical physical timing.
 
-## 4. Human error is part of the mechanism
+## 4. Controlled-key incomplete-stroke boundary
 
-Later Comptometer descriptions include correction keys, subtraction controls, zeroing mechanisms, operator locks, and other controls.
+### Turck 1921 directly inspected
 
-For this repository, those should not be treated as decorative UI details. They define valid and invalid state transitions.
+The public-domain facsimile of J. A. V. Turck, *Origin of Modern Calculating Machines: A Chronicle of the Evolution of the Principles That Form the Generic Make-up of the Modern Calculating Machine* (Chicago, 1921; published under the auspices of the Western Society of Engineers) was directly inspected at viewer pages 179–182 / printed pp. 159–162.
 
-Questions to research:
+<https://upload.wikimedia.org/wikipedia/commons/e/e1/Origin_of_modern_calculating_machines%3B_a_chronicle_of_the_evolution_of_the_principles_that_form_the_generic_make_up_of_the_modern_calculating_machine_%28IA_originofmodernca00turcrich%29.pdf>
 
-- What happens if a key is only partially depressed?
-- Can another key in the same column be pressed before return?
-- Can several columns be struck together?
-- What mechanism detects or prevents an incomplete stroke?
-- How is a mistaken entry corrected without destroying the accumulated total?
-- What does a “locked” operator state actually prevent?
+Turck says incomplete key strokes were a known error problem; describes earlier full-stroke devices as insufficient because an unnoticed partly depressed key could be completed by a later action; and presents Felt's solution as locking keys in the **other orders**, thereby signaling the operator and compelling correction before further manipulation. Printed pp. 161–162 distinguish that error-only lock from cash-register group locking and name the commercial embodiment the “Controlled-key Duplex Comptometer.” Turck further says its means acted directly on the accumulator, locking registration until correction.
 
-These are ideal state-machine questions.
+- Claim type: **H**; evidence: **E1 contemporary technical/historical account** at those pages.
+- Context boundary: Turck was associated with Felt & Tarrant and argues priority/novelty; this is strong contemporary evidence for stated function/responsibility, not neutral proof of every production detail.
+- Procedure boundary: these pages establish detection/signaling, blocking of other orders and correction-before-continuation. They do **not** specify a button-by-button operator release procedure, exact trigger geometry, threshold, timing, or patent number for the controlled-key feature.
+
+### Smithsonian manual/catalog boundary
+
+NMAH `nmah_905178`, ID `1989.3054.01`, identifies *Applied Mechanical Arithmetic As Practiced on the Controlled Key Comptometer* as a Felt & Tarrant 1914 company publication in a 1920 revision. The catalog says it trained users and describes a machine that did not allow imperfect key strokes. Its IIIF manifest `NMAH-AHB2018q019470` exposes one 3000×2382 object image, not a readable page sequence; no page-level recovery procedure is claimed.
+
+<https://americanhistory.si.edu/collections/object/nmah_905178>
+
+### Identified Model F object
+
+Science Museum Group object `1921-16` identifies a section of Model F controlled-key Comptometer, made in Chicago in 1921 by Felt & Tarrant Manufacturing Company. Its catalog and photograph establish identity and visible survival only; they do not by themselves prove internal action.
+
+<https://collection.sciencemuseumgroup.org.uk/objects/co60749/section-of-model-f-controlled-key-comptometer-by-felt-and-tarrant-manufacturing-co-model-calculating-machine>
+
+### Secondary orientation and remaining limits
+
+John Wolff's specialist history describes Model E/F chronology and an operator sequence of completing the errant stroke then clearing a lock with a white button. This remains **E3 orientation** here because that exact release sequence, trigger geometry, interference guards and upstroke ratchet were not independently matched to an inspected primary page/patent in this bounded pass.
+
+Historical sources therefore establish that incomplete strokes were detected/blocked/corrected in particular controlled-key contexts without establishing the repository's event names, commit phases, exact trigger geometry, timing, or one universal Comptometer mechanism.
 
 ## 5. Subtraction is an operator-interface problem too
 
@@ -192,7 +207,7 @@ Use a state such as `...9` and then press a key that forces carry while another 
 
 ### Case D — incomplete stroke / correction
 
-Only after a sourced historical mechanism is understood, model why an interrupted key stroke is dangerous and how a correction/interlock design addresses it.
+Implemented in `src/mechanisms/key-stroke-integrity/` as a tested **P/M generic controller** wrapping the existing accumulator. An interrupted stroke does not mutate arithmetic; detection locks unrelated input; completing the errant stroke commits once through `key-driven-accumulator`; releasing the integrity lock preserves that result and returns to idle. These software phases expose the sourced control responsibility without claiming Model E/F linkage timing.
 
 ## 7. Cross-machine teaching value
 
