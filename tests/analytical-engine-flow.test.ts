@@ -7,6 +7,7 @@ import {
   replayAnalyticalFlow,
   stateAtAnalyticalEvent,
   type AnalyticalFlowEvent,
+  type AnalyticalFlowState,
   type AnalyticalFlowTrace,
 } from '../src/exhibits/analytical-engine-flow';
 
@@ -140,6 +141,30 @@ describe('Analytical Engine P/M information-flow trace', () => {
     trace.fixture.a = value;
 
     expect(() => replayAnalyticalFlow(trace)).toThrow('a must be a safe integer');
+  });
+
+  it.each([Number.NaN, Number.POSITIVE_INFINITY, Number.NEGATIVE_INFINITY])('does not equate non-finite state value %s with null', (value) => {
+    const initial = clone(createAnalyticalFlowTrace());
+    initial.initialState.currentCardRole = value as unknown as AnalyticalFlowState['currentCardRole'];
+    expect(() => replayAnalyticalFlow(initial)).toThrow(/initial state.*fixture-derived trace/);
+
+    const final = clone(createAnalyticalFlowTrace());
+    final.finalState.mill.result = value;
+    expect(() => replayAnalyticalFlow(final)).toThrow(/fixture\/final state mismatch/);
+  });
+
+  it('rejects enumerable undefined and Symbol extensions throughout the trace contract', () => {
+    const initial = clone(createAnalyticalFlowTrace());
+    (initial.initialState as AnalyticalFlowState & { unexpected?: unknown }).unexpected = undefined;
+    expect(() => replayAnalyticalFlow(initial)).toThrow(/initial state.*fixture-derived trace/);
+
+    const event = clone(createAnalyticalFlowTrace());
+    Object.defineProperty(event.events[0], Symbol('unexpected'), { enumerable: true, value: undefined });
+    expect(() => replayAnalyticalFlow(event)).toThrow(/fixture\/event mismatch/);
+
+    const final = clone(createAnalyticalFlowTrace());
+    (final.finalState as AnalyticalFlowState & { unexpected?: unknown }).unexpected = undefined;
+    expect(() => stateAtAnalyticalEvent(final, 0)).toThrow(/fixture\/final state mismatch/);
   });
 
   it('requires two Mill operands before operation selection', () => {

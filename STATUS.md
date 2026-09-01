@@ -13,7 +13,7 @@ This file is the **current-state authority** for the repository. `ROADMAP.md` de
 - GitHub Actions CI and a Pages deployment workflow.
 - Deterministic state/event/replay primitives under `src/core/`.
 - Golden carry fixtures under `fixtures/carry/`.
-- The latest local verification (`docs/VERIFICATION.md`, 2026-09-02 UTC+8) reports typecheck, 305 tests across 21 files, focused and external adversarial replay checks, production build, actionlint, and diff check passing.
+- The latest local verification (`docs/VERIFICATION.md`, 2026-09-02 UTC+8) reports typecheck, 308 tests across 21 files, focused and external adversarial replay checks, production build, actionlint, and diff check passing.
 
 Remote CI run `33437862103` passed for the previous operator-division checkpoint `7bebcea2d187f0ed2411de4098c846963df8b32a`. This status still does **not** substitute for CI on later commits.
 

@@ -1,5 +1,3 @@
-import { canonicalize } from '../../core/trace';
-
 export const ANALYTICAL_FLOW_ID = 'analytical-engine-teaching-flow';
 
 export type StoreLocation = 'V1' | 'V2' | 'V3' | 'V4' | 'V5' | 'V6' | 'V7';
@@ -55,7 +53,22 @@ function calculate(operation: ArithmeticOperation, left: number, right: number):
   return result;
 }
 function semanticallyEqual(left: unknown, right: unknown): boolean {
-  return JSON.stringify(canonicalize(left)) === JSON.stringify(canonicalize(right));
+  if (Object.is(left, right)) return true;
+  if (Array.isArray(left) || Array.isArray(right)) {
+    return Array.isArray(left)
+      && Array.isArray(right)
+      && left.length === right.length
+      && left.every((entry, index) => semanticallyEqual(entry, right[index]));
+  }
+  if (left === null || right === null || typeof left !== 'object' || typeof right !== 'object') return false;
+  if (Object.getPrototypeOf(left) !== Object.getPrototypeOf(right)) return false;
+  const enumerableKeys = (value: object) => Reflect.ownKeys(value)
+    .filter((key) => Object.prototype.propertyIsEnumerable.call(value, key));
+  const leftKeys = enumerableKeys(left);
+  const rightKeys = enumerableKeys(right);
+  return leftKeys.length === rightKeys.length
+    && leftKeys.every((key) => Object.prototype.hasOwnProperty.call(right, key)
+      && semanticallyEqual((left as Record<PropertyKey, unknown>)[key], (right as Record<PropertyKey, unknown>)[key]));
 }
 function normalizeFixture(fixture: Readonly<AnalyticalFixture>): AnalyticalFixture {
   if (fixture === null || typeof fixture !== 'object' || Array.isArray(fixture)) throw new InvalidAnalyticalFlowError('fixture must be an object');
