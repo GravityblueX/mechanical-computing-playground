@@ -1,6 +1,6 @@
 # Current Status
 
-Last reconciled on 2026-09-02 after the bounded Bush 1931 / Shannon 1941 full-text access retry.
+Last reconciled on 2026-09-02 after the bounded Bush 1931 / Shannon 1941 full-text access retry and direct-multiplication action-bound replay hardening.
 
 This file is the **current-state authority** for the repository. `ROADMAP.md` describes where the project should go; `IMPLEMENTATION_PLAN.md` is still useful as a dependency/design specification, but many of its checkboxes predate later implementation and must not be treated as the live task ledger.
 
@@ -13,7 +13,7 @@ This file is the **current-state authority** for the repository. `ROADMAP.md` de
 - GitHub Actions CI and a Pages deployment workflow.
 - Deterministic state/event/replay primitives under `src/core/`.
 - Golden carry fixtures under `fixtures/carry/`.
-- The latest local verification (`docs/VERIFICATION.md`, 2026-09-02 UTC+8) reports typecheck, 292 tests across 21 files, production build, diff check, and bilingual browser smoke passing.
+- The latest local code verification (`docs/VERIFICATION.md`, 2026-09-02 UTC+8) reports typecheck, 302 tests across 21 files, production build, and diff check passing. The most recent bilingual browser smoke was the preceding Bush/Shannon evidence pass; this trace-only slice does not change UI output.
 
 Remote CI run `33437862103` passed for the previous operator-division checkpoint `7bebcea2d187f0ed2411de4098c846963df8b32a`. This status still does **not** substitute for CI on later commits.
 
@@ -28,7 +28,7 @@ Remote CI run `33437862103` passed for the previous operator-division checkpoint
 - stepped-drum conceptual model;
 - pinwheel conceptual model;
 - direction-neutral ordinal rotary-carry scheduler with boundary/conditioning/strictly increasing transfer-slot/carry-out events and fail-closed replay;
-- direct-multiplication functional model with an inspectable encoded-multiple table, digit selection, operation cycles, carriage shifts, and replayable events;
+- direct-multiplication functional model with an inspectable encoded-multiple table, digit selection, operation cycles, carriage shifts, and fail-closed action-derived replay;
 - generic key-driven accumulator with place-value contribution, serialized carry, key-stroke cycles, validated state, and fail-closed action-derived replay that rejects carry/event/final-state tampering;
 - generic key-stroke-integrity controller wrapping that accumulator, with incomplete release/detection/input lock, exactly-once errant-stroke commit, lock release, deterministic trace and action-derived replay;
 - generic operator-driven division with quotient-nine and exact-zero boundary handling, explicit pending/detected/correction phases, per-place quotient counts, mandatory add-back, zero-place shifts, action-derived cycle-bound replay, and undersized-register rejection;

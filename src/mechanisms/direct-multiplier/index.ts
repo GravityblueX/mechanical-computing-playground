@@ -1,3 +1,5 @@
+import { canonicalize } from '../../core/trace';
+
 export interface EncodedMultipleTable {
   multiplicand: number;
   /** Entry index is the represented multiplier digit 0..9. */
@@ -52,8 +54,14 @@ export type DirectMultiplierEvent =
       shiftCountAfter: number;
     };
 
+export interface DirectMultiplicationAction {
+  type: 'DIRECT_MULTIPLY';
+  multiplier: number;
+}
+
 export interface DirectMultiplicationTrace {
   initialState: DirectMultiplierState;
+  action: DirectMultiplicationAction;
   events: DirectMultiplierEvent[];
   finalState: DirectMultiplierState;
 }
@@ -320,6 +328,15 @@ export function reduceDirectMultiplierEvent(
 }
 
 export function replayDirectMultiplication(trace: Readonly<DirectMultiplicationTrace>): DirectMultiplierState {
+  if (trace.action?.type !== 'DIRECT_MULTIPLY') {
+    throw new Error('unsupported direct multiplication action type');
+  }
+  assertNonNegativeInteger(trace.action.multiplier, 'multiplier');
+  assertState(trace.initialState);
+  const expected = traceDirectMultiplication(trace.initialState.multiplicand, trace.action.multiplier);
+  if (!statesMatch(expected.initialState, trace.initialState)) {
+    throw new Error('direct multiplication initial state does not match the recorded action');
+  }
   const replayed = trace.events.reduce<DirectMultiplierState>(
     (state, event, index) => {
       if (event.sequence !== index) throw new Error('direct multiplication event sequence is not contiguous');
@@ -331,12 +348,16 @@ export function replayDirectMultiplication(trace: Readonly<DirectMultiplicationT
   if (!statesMatch(replayed, trace.finalState)) {
     throw new Error('direct multiplication replay did not produce the recorded final state');
   }
+  if (JSON.stringify(canonicalize(expected.events)) !== JSON.stringify(canonicalize(trace.events))) {
+    throw new Error('direct multiplication action/event mismatch');
+  }
   return replayed;
 }
 
 export function traceDirectMultiplication(multiplicand: number, multiplier: number): DirectMultiplicationTrace {
   assertNonNegativeInteger(multiplier, 'multiplier');
   const initialState = createDirectMultiplier(multiplicand);
+  const action: DirectMultiplicationAction = { type: 'DIRECT_MULTIPLY', multiplier };
   let state = initialState;
   const events: DirectMultiplierEvent[] = [];
   const digits = String(multiplier).split('').reverse().map(Number);
@@ -357,5 +378,5 @@ export function traceDirectMultiplication(multiplicand: number, multiplier: numb
     }
   }
 
-  return { initialState, events, finalState: state };
+  return { initialState, action, events, finalState: state };
 }

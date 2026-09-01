@@ -8,8 +8,13 @@ import {
   selectMultiplierDigit,
   shiftDirectMultiplierCarriage,
   traceDirectMultiplication,
+  type DirectMultiplierEvent,
 } from '../src/mechanisms/direct-multiplier';
 import { compare314x27 } from '../src/exhibits/multiplication-compare';
+
+function reverseObjectKeyOrder<T extends object>(value: T): T {
+  return Object.fromEntries(Object.entries(value).reverse()) as T;
+}
 
 describe('direct multiplication functional model', () => {
   it('stores an inspectable immutable table and selects its represented entry', () => {
@@ -60,14 +65,108 @@ describe('direct multiplication functional model', () => {
       { digit: 2, selectedMultiple: 628, carriageOffset: 1, contribution: 6280 },
     ]);
     expect(trace.finalState).toMatchObject({ accumulator: 8478, operationCycleCount: 2, shiftCount: 1 });
+    expect(trace.action).toEqual({ type: 'DIRECT_MULTIPLY', multiplier: 27 });
     expect(operations).toHaveLength(2);
     expect(trace.finalState.operationCycleCount).not.toBe(27);
   });
 
-  it('replays solely from ordered events and is deterministic', () => {
+  it('replays from the recorded action and ordered events and is deterministic', () => {
     const trace = traceDirectMultiplication(314, 27);
     expect(traceDirectMultiplication(314, 27)).toEqual(trace);
     expect(replayDirectMultiplication(trace)).toEqual(trace.finalState);
+  });
+
+  it('accepts semantically identical event objects regardless of member insertion order', () => {
+    const canonical = traceDirectMultiplication(314, 27);
+    const reordered = structuredClone(canonical);
+    reordered.events = reordered.events.map(reverseObjectKeyOrder);
+
+    expect(JSON.stringify(reordered.events[0])).not.toBe(JSON.stringify(canonical.events[0]));
+    expect(replayDirectMultiplication(reordered)).toEqual(canonical.finalState);
+  });
+
+  it('accepts a JSON round trip without weakening event provenance', () => {
+    const trace = traceDirectMultiplication(314, 27);
+    const parsed = JSON.parse(JSON.stringify(trace)) as typeof trace;
+
+    expect(replayDirectMultiplication(parsed)).toEqual(trace.finalState);
+  });
+
+  it('keeps action metadata forward-compatible while treating only serialized event fields as authoritative', () => {
+    const actionMetadata = structuredClone(traceDirectMultiplication(314, 27)) as ReturnType<typeof traceDirectMultiplication> & {
+      action: ReturnType<typeof traceDirectMultiplication>['action'] & { note?: unknown };
+    };
+    actionMetadata.action.note = { source: 'future-extension' };
+    expect(replayDirectMultiplication(actionMetadata)).toEqual(actionMetadata.finalState);
+
+    const undefinedEventField = structuredClone(traceDirectMultiplication(314, 27));
+    (undefinedEventField.events[0] as DirectMultiplierEvent & { note?: unknown }).note = undefined;
+    expect(replayDirectMultiplication(undefinedEventField)).toEqual(undefinedEventField.finalState);
+    const parsed = JSON.parse(JSON.stringify(undefinedEventField)) as typeof undefinedEventField;
+    expect('note' in parsed.events[0]).toBe(false);
+    expect(replayDirectMultiplication(parsed)).toEqual(parsed.finalState);
+
+    const definedEventField = structuredClone(traceDirectMultiplication(314, 27));
+    (definedEventField.events[0] as DirectMultiplierEvent & { note?: unknown }).note = true;
+    expect(() => replayDirectMultiplication(definedEventField)).toThrow(/action\/event mismatch/);
+  });
+
+  it('preserves event array order and rejects real event-value changes', () => {
+    const reordered = structuredClone(traceDirectMultiplication(314, 27));
+    const first = reordered.events[0];
+    const second = reordered.events[1];
+    reordered.events[0] = { ...second, sequence: 0 };
+    reordered.events[1] = { ...first, sequence: 1 };
+    expect(() => replayDirectMultiplication(reordered)).toThrow(/operation-cycle event/);
+
+    const changed = structuredClone(traceDirectMultiplication(314, 27));
+    const selected = changed.events.find((event) => event.type === 'MULTIPLIER_DIGIT_SELECTED');
+    if (!selected || selected.type !== 'MULTIPLIER_DIGIT_SELECTED') throw new Error('missing selection event');
+    selected.selectedMultiple += 1;
+    expect(() => replayDirectMultiplication(changed)).toThrow(/digit-selection event/);
+  });
+
+  it('rejects replacing the events and final state with another multiplier operation', () => {
+    const trace = structuredClone(traceDirectMultiplication(314, 27));
+    const alternate = traceDirectMultiplication(314, 28);
+    trace.events = structuredClone(alternate.events);
+    trace.finalState = structuredClone(alternate.finalState);
+
+    expect(() => replayDirectMultiplication(trace)).toThrow(/action\/event mismatch/);
+  });
+
+  it.each([
+    [314, 0, 0],
+    [1, Number.MAX_SAFE_INTEGER, Number.MAX_SAFE_INTEGER],
+  ])('binds multiplier %i at the supported boundary', (multiplicand, multiplier, expected) => {
+    const trace = traceDirectMultiplication(multiplicand, multiplier);
+    expect(trace.action.multiplier).toBe(multiplier);
+    expect(replayDirectMultiplication(trace).accumulator).toBe(expected);
+  });
+
+  it('rejects missing, unknown, and unsafe recorded actions', () => {
+    const missing = structuredClone(traceDirectMultiplication(314, 27));
+    delete (missing as Partial<typeof missing>).action;
+    (missing.events[0] as { type: string }).type = 'UNKNOWN';
+    expect(() => replayDirectMultiplication(missing)).toThrow(/action type/);
+
+    const unknown = structuredClone(traceDirectMultiplication(314, 27));
+    (unknown.action as { type: string }).type = 'UNKNOWN';
+    expect(() => replayDirectMultiplication(unknown)).toThrow(/action type/);
+
+    const unsafe = structuredClone(traceDirectMultiplication(314, 27));
+    unsafe.action.multiplier = Number.MAX_SAFE_INTEGER + 1;
+    unsafe.initialState.accumulator = -1;
+    expect(() => replayDirectMultiplication(unsafe)).toThrow(
+      'multiplier must be a non-negative safe integer',
+    );
+  });
+
+  it('rejects a valid but non-canonical initial state before consuming events', () => {
+    const trace = structuredClone(traceDirectMultiplication(314, 27));
+    trace.initialState.accumulator = 1;
+
+    expect(() => replayDirectMultiplication(trace)).toThrow(/initial state.*recorded action/);
   });
 
   it('rejects a recorded final state that does not match replayed events', () => {

@@ -66,6 +66,19 @@ Local bilingual browser smoke:
 
 No deployment check was performed for this not-yet-pushed completion commit.
 
+## 2026-09-02 — direct multiplication action-bound replay
+
+The current-main pre-edit baseline passed typecheck and 292 tests across 21 files. Direct-multiplication traces previously retained only the initial state, ordered events and final state, so replacing both events and final state with a valid trace for another multiplier still passed replay. Traces now record the requested multiplier action and replay regenerates the canonical event sequence from that action and the initial multiplicand before accepting it. Event comparison reuses the core trace canonicalizer: recursively sorted object keys make JSON member insertion order semantically irrelevant, while event array order and serialized field values remain authoritative. Missing actions, unknown action discriminators and unsafe multipliers fail closed; additional action metadata remains inert for forward compatibility. Undefined-only object members follow JSON serialization semantics and are ignored, while defined event extensions are rejected. Zero and `Number.MAX_SAFE_INTEGER` multiplier boundaries remain supported.
+
+- `npm run typecheck` — pass
+- `npm test` — pass, 302 tests across 21 files
+- `npm run build` — pass
+- `git diff --check` — pass
+- focused direct-multiplier regression — 22 tests passed
+- `actionlint` — pass
+
+No browser or deployment check was performed because this slice changes only trace provenance, replay validation, tests and project records; UI output is unchanged. No push or PR was performed from this worktree.
+
 ## 2026-09-01 — H. P. Babbage 1889 publication-access boundary
 
 The current-main pre-edit baseline passed typecheck and 291 tests across 21 files. Cambridge Core directly confirmed the 1889-first-published Spon compilation, chapter 32 *Proceedings of the British Association, 1888*, reproduced chapter range pp. 331–338, and DOI `10.1017/CBO9780511694721.033`. Its accessible preview exposed only numbered items 1–5; the PDF route returned the access page rather than printed page images. Library of Congress metadata independently identifies the Tomash 1982 volume as a reprint of the 1889 E. & F. N. Spon edition, but exposes only an illustration.
