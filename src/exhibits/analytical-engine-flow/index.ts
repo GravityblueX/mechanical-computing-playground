@@ -55,10 +55,7 @@ function calculate(operation: ArithmeticOperation, left: number, right: number):
 function semanticallyEqual(left: unknown, right: unknown): boolean {
   if (Object.is(left, right)) return true;
   if (Array.isArray(left) || Array.isArray(right)) {
-    return Array.isArray(left)
-      && Array.isArray(right)
-      && left.length === right.length
-      && left.every((entry, index) => semanticallyEqual(entry, right[index]));
+    if (!Array.isArray(left) || !Array.isArray(right) || left.length !== right.length) return false;
   }
   if (left === null || right === null || typeof left !== 'object' || typeof right !== 'object') return false;
   if (Object.getPrototypeOf(left) !== Object.getPrototypeOf(right)) return false;

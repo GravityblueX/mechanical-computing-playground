@@ -167,6 +167,20 @@ describe('Analytical Engine P/M information-flow trace', () => {
     expect(() => stateAtAnalyticalEvent(final, 0)).toThrow(/fixture\/final state mismatch/);
   });
 
+  it('rejects sparse event arrays and enumerable array extensions in replay and stepping', () => {
+    const sparse = clone(createAnalyticalFlowTrace());
+    Reflect.deleteProperty(sparse.events, '0');
+    expect(() => stateAtAnalyticalEvent(sparse, 0)).toThrow(/fixture\/event mismatch/);
+
+    const stringExtension = clone(createAnalyticalFlowTrace());
+    (stringExtension.events as AnalyticalFlowEvent[] & { note?: unknown }).note = true;
+    expect(() => replayAnalyticalFlow(stringExtension)).toThrow(/fixture\/event mismatch/);
+
+    const symbolExtension = clone(createAnalyticalFlowTrace());
+    Object.defineProperty(symbolExtension.events, Symbol('unexpected'), { enumerable: true, value: undefined });
+    expect(() => stateAtAnalyticalEvent(symbolExtension, 0)).toThrow(/fixture\/event mismatch/);
+  });
+
   it('requires two Mill operands before operation selection', () => {
     const trace = createAnalyticalFlowTrace();
     const selected = trace.events.find((event) => event.type === 'OPERATION_SELECTED')!;

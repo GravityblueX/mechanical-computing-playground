@@ -46,19 +46,19 @@ No deployment check was performed for this not-yet-pushed completion commit.
 
 ## 2026-09-02 — Analytical Engine fixture-derived replay provenance
 
-The exact parent baseline was `816153c3e42a5b570a5a4a9335e8d5771d381cae`. Its Analytical Engine replay reduced the recorded events and compared the recorded final state, but did not bind either to `trace.fixture`: a default-fixture trace still replayed successfully after its events and final state were replaced wholesale by the canonical trace for `{ a: 3, b: 4, c: 5, d: 6 }`. Open PR #10 exact head `9bb54aa0205818441cc961efacc1c80640743f8f` was reviewed as synthesis background and was not modified.
+The exact parent baseline was `e155be76ea08095e57aa06029bdd0aa0f697de06`. Its Analytical Engine replay reduced the recorded events and compared the recorded final state, but did not bind either to `trace.fixture`: a default-fixture trace still replayed successfully after its events and final state were replaced wholesale by the canonical trace for `{ a: 3, b: 4, c: 5, d: 6 }`. Open PR #10 exact head `df1e8c8ea6aa1787d1700368fd64ca8ac9cf28ab` was reviewed as synthesis background and was not modified.
 
-Replay and event stepping now derive the canonical initial state, ordered events and final state from a normalized safe-integer fixture. They reject fixture-only changes, alternate-fixture event/final substitution, non-canonical initial state, extra fixture/event fields, and event-array reordering. Recursive canonicalization keeps object-member insertion order semantically irrelevant without weakening ordered arrays. The adjacent continuous-flow and Difference Engine output paths were audited for scope only and were not changed.
+Replay and event stepping now derive the canonical initial state, ordered events and final state from a normalized safe-integer fixture. They reject fixture-only changes, alternate-fixture event/final substitution, non-canonical initial state, extra fixture/event fields, and event-array reordering. Recursive structural comparison keeps object-member insertion order semantically irrelevant without weakening ordered arrays. The adjacent continuous-flow and Difference Engine output paths were audited for scope only and were not changed.
 
-Follow-up independent review closed the remaining fail-open edges: event stepping now validates the recorded final state before returning any partial state; fixture schema validation inspects enumerable string and Symbol keys; and trace equality compares values and enumerable keys directly instead of conflating `NaN`/infinities with JSON `null` or dropping `undefined` extensions. Regression coverage exercises these boundaries across fixtures, initial state, events and final state.
+Follow-up independent review closed the remaining fail-open edges: event stepping now validates the recorded final state before returning any partial state; fixture schema validation inspects enumerable string and Symbol keys; and trace equality compares values and enumerable own keys directly instead of conflating `NaN`/infinities with JSON `null`, dropping `undefined` extensions, or skipping sparse array positions and array extensions. Regression coverage exercises these boundaries across fixtures, initial state, events and final state.
 
 - `npm run typecheck` under Node 22 — pass
-- `npm test -- --run` under Node 22 — pass, 308 tests across 21 files
+- `npm test -- --run` under Node 22 — pass, 309 tests across 21 files
 - `npm run build` under Node 22 — pass
 - `actionlint 1.7.12` — pass
 - `git diff --check` — pass
-- focused Analytical Engine regression — 29 tests passed
-- external fixture-provenance adversarial harness — 20 checks passed
+- focused Analytical Engine regression — 30 tests passed
+- external fixture-provenance adversarial harness — 23 checks passed
 
 No browser smoke was performed because the generated fixture, displayed trace, route and rendering output are unchanged. No deployment check was performed for this not-yet-pushed candidate commit.
 
