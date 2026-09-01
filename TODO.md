@@ -23,6 +23,7 @@
 - [x] Ground Odhner-family rotary carry scheduling/reliability with three separated patents, a fail-closed ordinal scheduler, and a public comparison.
 - [x] Ground Thomas stepped-drum carry evolution with 1820/1865/1880 revision boundaries and a cross-family public comparison.
 - [x] Map source-separated mechanical error-control responsibilities across Thomas, Odhner/Talamini, and Bush frontlash evidence.
+- [x] Compare human versus machine arithmetic responsibilities using counts derived from existing multiplication, key-driven, division, and persistent-output traces.
 
 ## Repository maintenance
 

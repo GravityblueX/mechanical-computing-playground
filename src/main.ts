@@ -13,6 +13,7 @@ import { CARRY_EVIDENCE_PROFILES } from './exhibits/carry-provenance';
 import { createRotaryCarryScheduleTrace } from './mechanisms/rotary-carry-schedule';
 import { OUTPUT_CONTRACT_PROFILES } from './exhibits/output-contracts';
 import { MECHANICAL_ERROR_CONTROL_PROFILES } from './exhibits/mechanical-error-control';
+import { OPERATOR_WORK_PROFILES } from './exhibits/operator-work';
 import { PRINTING_LEDGER_PRESET, reducePrintingLedgerEvent, tracePrintingLedger, type PrintingLedgerEvent } from './mechanisms/printing-ledger';
 import { evaluate, type StageAState } from './backprop/core/stage-a';
 import { createPhaseMachine, runPhaseCycle, stepPhase, STAGE_A_PHASES, type PhaseMachineState } from './backprop/core/phase-machine';
@@ -65,6 +66,7 @@ const routes: Array<[string, Copy]> = [
   ['/division', { en: 'Division', zh: '除法' }],
   ['/controls', { en: 'Controls', zh: '互锁' }],
   ['/output-contracts', { en: 'Output', zh: '输出' }],
+  ['/arithmetic-labor', { en: 'Operator work', zh: '操作分工' }],
   ['/curta', { en: 'Curta', zh: 'Curta' }],
   ['/analytical-engine', { en: 'Analytical Engine', zh: '分析机' }],
   ['/continuous', { en: 'Integration', zh: '积分' }],
@@ -355,6 +357,27 @@ function mechanicalErrorControl() {
   );
 }
 
+function arithmeticLabor() {
+  const countLabel: Record<string, Copy> = {
+    selection: { en: 'selection/decision markers', zh: '选择/决策标记' },
+    'repetition/cycle': { en: 'repetition/cycles', zh: '重复/周期' },
+    'shift/place management': { en: 'shift/place actions', zh: '移位/位值动作' },
+    correction: { en: 'corrections', zh: '纠正动作' },
+    'output request': { en: 'output requests', zh: '输出请求' },
+    'arithmetic entry': { en: 'arithmetic entries', zh: '算术录入' },
+  };
+  const cards = OPERATOR_WORK_PROFILES.map(profile => {
+    const counts = profile.observedCounts.map(item => `<li><b>${copy(countLabel[item.actionClass])}: ${item.count}</b><br><small>${t('Derived from: ', '推导自：')}${esc(item.derivedFrom)}</small></li>`).join('');
+    const multiplication = profile.multiplicationPaths ? `<details><summary>${t('Four multiplication paths', '四条乘法路径')}</summary><ul>${profile.multiplicationPaths.map(path => `<li><b>${path.id}</b>: ${path.operationCycles} ${t('cycles', '周期')} · ${path.operatorRepetitions} ${t('operator repetitions', '操作者重复')} · ${path.carriageShifts} ${t('shifts', '移位')}<br><small>${esc(path.multiplicationTableWork)}</small></li>`).join('')}</ul></details>` : '';
+    return `<article class="structure-card"><h2>${copy(profile.title)}</h2><p><b>${profile.claimType}</b> · <code>${profile.sourceAnchor}</code> · <a href="${profile.detailRoute}">${t('open detailed lesson', '打开详细课程')}</a></p><div class="comparison"><div class="machine"><b>${t('Operator chooses / repeats / corrects', '操作者选择 / 重复 / 纠正')}</b><ul>${profile.operatorResponsibilities.map(item => `<li>${copy(item)}</li>`).join('')}</ul></div><div class="versus">⇄</div><div class="machine"><b>${t('Machine/control represents / executes / retains', '机器/控制表示 / 执行 / 保留')}</b><ul>${profile.machineResponsibilities.map(item => `<li>${copy(item)}</li>`).join('')}</ul>${profile.persistentOutputResponsibility ? `<p><b>${t('Persistent output:', '持久输出：')}</b> ${copy(profile.persistentOutputResponsibility)}</p>` : ''}</div></div><p class="status">${copy(profile.outcome)}</p><b>${t('Observed P/M counts—categorical, not a ranking', '观察到的 P/M 计数——分类展示，不是排名')}</b><ul>${counts}</ul>${multiplication}<details><summary>${t('Not established', '未确认')}</summary><ul>${profile.notEstablished.map(item => `<li>${copy(item)}</li>`).join('')}</ul></details></article>`;
+  }).join('');
+  shell(
+    { en: 'Which arithmetic work stays with the operator?', zh: '哪些算术工作仍由操作者承担？' },
+    { en: 'Mechanization moves particular responsibilities into represented state, controls, and persistent output—it does not create one scalar “automation level.”', zh: '机械化把特定责任移入机器状态、控制和持久输出，而不是产生一个单一的“自动化程度”。' },
+    `<section>${lesson({ en: 'Compare who selects, repeats, shifts, corrects, and requests output.', zh: '比较由谁选择、重复、移位、纠正和请求输出。' }, { en: 'Read each operator/machine pair and its event-derived counts.', zh: '阅读每组操作者/机器责任和从事件推导出的计数。' }, { en: 'A keypress can be arithmetic; an output request can change legal next state.', zh: '按键本身可以是算术动作；输出请求也能改变合法后续状态。' })}<div class="structure-callout"><b>${t('P/M synthesis—no leaderboard', 'P/M 综合比较——没有排行榜')}</b><p>${t('Counts come from existing deterministic traces. They are not historical seconds, productivity, effort, skill, fatigue, wage/cost, time saved, or universal throughput.', '计数来自现有确定性事件流。它们不是历史秒数、生产率、用力、技能、疲劳、工资/成本、节省时间或普遍吞吐量。')}</p></div>${cards}</section>`
+  );
+}
+
 function outputContracts() {
   const state = printingLedgerTrace.events.slice(0, printingLedgerIndex).reduce(reducePrintingLedgerEvent, structuredClone(printingLedgerTrace.initialState));
   const eventLabel = (event: PrintingLedgerEvent) => event.type === 'ITEM_RECORDED'
@@ -409,6 +432,7 @@ function render() {
   else if (path === '/division') division();
   else if (path === '/controls') controls();
   else if (path === '/output-contracts') outputContracts();
+  else if (path === '/arithmetic-labor') arithmeticLabor();
   else if (path === '/curta') curta();
   else if (path === '/analytical-engine') analytical();
   else if (path === '/continuous') continuous();

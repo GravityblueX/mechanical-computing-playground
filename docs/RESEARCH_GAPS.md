@@ -266,13 +266,15 @@ Do not implement random “gear failure” animations without evidence. A reliab
 
 ## Priority 9 — Commercial and labor context, without turning into a generic social history
 
-A short context layer is useful because mechanical calculators were working tools, not only inventions.
+A bounded context layer now exists in `research/human-machine-arithmetic-labor.md` and `#/arithmetic-labor`: it compares concrete input, repetition, place, stop/correction, machine-control, and output responsibilities without ranking machines. Mechanical calculators were working tools, not only inventions.
 
 Smithsonian's calculating-machine overview notes use by scientists, engineers, statisticians, actuaries, government officials, payroll clerks, and business students, and the eventual displacement of mechanical calculators by inexpensive electronic calculators in the 1970s:
 
 <https://www.si.edu/spotlight/calculating-machines>
 
-Research questions relevant to this repository:
+The Smithsonian overview was directly inspected on 2026-09-01 for its stated user groups and early repeated-crank/carriage-shift workflow. Repository event counts now cover four P/M scenarios, but they establish no historical productivity, speed, training, fatigue, wage/cost, labor-saving, or error-rate effect.
+
+Remaining research questions:
 
 - what operator skill was required by different machine families?
 - which operations were mechanized and which remained procedural knowledge?

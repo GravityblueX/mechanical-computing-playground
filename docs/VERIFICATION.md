@@ -1,5 +1,25 @@
 # Verification record
 
+## 2026-09-01 — human-machine arithmetic-work synthesis
+
+The pre-edit remote-main baseline was 201 tests across 17 files. This slice directly inspected the Smithsonian calculating-machine overview, added a source-separated arithmetic-responsibility note, derived four typed P/M profiles from existing multiplication/key-driven/division/printing traces, and added a bilingual public comparison without an efficiency score or pseudo-historical productivity data.
+
+- `npm run typecheck` — pass
+- `npm test -- --run` — pass, 208 tests across 18 files
+- `npm run build` — pass
+- `git diff --check` — pass
+
+Local browser smoke against Vite:
+
+- `#/arithmetic-labor` rendered all four profiles, operator/machine responsibility pairs, event-derived counts, evidence boundaries, and no-leaderboard warning in English and Chinese;
+- `#/multiplication` still exposed direct multiplication's two cycles and completed its trace to `8478`;
+- `#/division` still exposed overshoot/correction and completed to quotient `27`, remainder `0`;
+- `#/controls` still blocked a setting change during the crank cycle and reset;
+- `#/output-contracts` still completed five operations, retained subtotal `20`, printed total `25`, and cleared the working accumulator;
+- no desktop horizontal overflow was observed on the five checked routes.
+
+No deployment check was performed for this not-yet-pushed commit; no claim that the new route is already live is made.
+
 ## 2026-09-01 — cross-machine mechanical error control
 
 The pre-edit remote-main baseline was 194 tests across 16 files. This slice added a source-separated Thomas/Odhner/Talamini/Bush error-control map, directly inspected and recorded Smithsonian frontlash unit `1983.3002.04` / `nmah_693235`, separated integration/shaft/backlash/torque/tracing responsibilities, added four typed profiles and a bilingual public comparison, and left the ideal continuous-integrator mechanism unchanged.
