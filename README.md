@@ -186,7 +186,7 @@ machines/<name>/
 
 用 `0099 + 1` 看见多级 carry，而不是数字瞬间变成 `0100`。
 
-现在的重点已经从“能不能显示 carry”转向：**不同历史机器究竟怎样实现 carry**。研究入口：[`research/carry-is-the-hard-part.md`](research/carry-is-the-hard-part.md)。
+`#/visible-carry` 在原有 `0099 + 1` 串行 P/M 事件下方新增来源分离比较：Pascal 本人对自动进位/借位的操作主张、Cnam/CMU 的 sautoir 资料、Felt US 366,945 的早期按键进位、US 762,520 的重叠按键延迟进位问题，以及 Smithsonian Model A 量产背景。浏览器事件不是这些机器的历史时序或几何。研究入口：[`research/carry-is-the-hard-part.md`](research/carry-is-the-hard-part.md)、[`research/carry-architecture-source-map.md`](research/carry-architecture-source-map.md)。
 
 ### Finite Difference
 

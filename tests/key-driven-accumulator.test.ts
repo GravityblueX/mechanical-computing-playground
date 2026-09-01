@@ -55,12 +55,39 @@ describe('generic key-driven accumulator', () => {
     ]);
   });
 
-  it('is deterministic and replayable solely from ordered events', () => {
+  it('is deterministic and replayable from initial state plus action and validated events', () => {
     const initial = createKeyDrivenAccumulator(3, 99);
     const left = createKeyStrokeTrace(initial, 0, 7, 'same-action');
     const right = createKeyStrokeTrace(initial, 0, 7, 'same-action');
     expect(left).toEqual(right);
     expect(replayKeyStroke(left)).toEqual(left.finalState);
+  });
+
+  it.each(['pending-from', 'propagated-to', 'omit', 'insert', 'sequence', 'cycle', 'digit', 'final', 'unknown'] as const)('rejects %s trace tampering', kind => {
+    const trace = structuredClone(createKeyStrokeTrace(createKeyDrivenAccumulator(3, 99), 0, 7, 'carry-99-plus-7'));
+    const pending = trace.events.find(event => event.type === 'CARRY_PENDING')!;
+    const propagated = trace.events.find(event => event.type === 'CARRY_PROPAGATED')!;
+    const digit = trace.events.find(event => event.type === 'DIGIT_ADVANCE')!;
+    if (kind === 'pending-from' && pending.type === 'CARRY_PENDING') pending.fromColumn = 1;
+    if (kind === 'propagated-to' && propagated.type === 'CARRY_PROPAGATED') propagated.toColumn = 2;
+    if (kind === 'omit') trace.events.splice(trace.events.indexOf(pending), 1);
+    if (kind === 'insert') trace.events.splice(3, 0, structuredClone(pending));
+    if (kind === 'sequence') trace.events[2].sequence = 9;
+    if (kind === 'cycle') trace.events[2].cycleId = 'other-cycle';
+    if (kind === 'digit' && digit.type === 'DIGIT_ADVANCE') digit.to = 8;
+    if (kind === 'final') trace.finalState.digits[0] = 9;
+    if (kind === 'unknown') trace.events[0] = { ...trace.events[0], type: 'BAD' } as never;
+    expect(() => replayKeyStroke(trace)).toThrow(InvalidKeyDrivenStateError);
+  });
+
+  it.each([
+    { phase: 'IDLE', activeColumn: 0, pressedDigit: 7 },
+    { phase: 'ACCUMULATING', activeColumn: null, pressedDigit: null },
+    { keyStrokeCount: -1 },
+    { digits: [10, 0, 0] },
+  ])('rejects malformed input state %#', patch => {
+    const state = { ...createKeyDrivenAccumulator(3), ...patch } as ReturnType<typeof createKeyDrivenAccumulator>;
+    expect(() => createKeyStrokeTrace(state, 0, 1)).toThrow(InvalidKeyDrivenStateError);
   });
 
   it.each([

@@ -1,5 +1,23 @@
 # Verification record
 
+## 2026-09-01 — carry architecture provenance and replay hardening
+
+The pre-edit remote-main baseline was 150 tests across 14 files. This slice separated Pascal's operational text, Cnam object description, CMU reconstruction, Felt US366945A, Felt US762520A, and Smithsonian Model A catalog roles; hardened key-driven state validation and action-derived replay; and added typed bilingual carry profiles below the unchanged generic visible-carry P/M interaction.
+
+- `npm run typecheck` — pass
+- `npm test -- --run` — pass, 170 tests across 15 files
+- `npm run build` — pass
+- `git diff --check` — pass
+
+Local browser smoke against Vite:
+
+- the existing `0099 + 1` step and complete controls still reached `0100`, exposed two carry propagations, and reset to `0099`;
+- six typed source profiles rendered source/model/date, H/R and E1/E2 labels, documented roles, operator implications, and not-established boundaries;
+- the generic serialized P/M versus historical carry-storage/scheduling boundary was visible;
+- English and Chinese text rendered, and no desktop horizontal overflow was observed.
+
+No deployment check was performed for this not-yet-pushed commit; no claim that this upgraded comparison is already live is made.
+
 ## 2026-09-01 — persistent output contracts and printing ledger
 
 The pre-edit remote-main baseline was 133 tests across 13 files. This slice added a deterministic P/M printing ledger with structured persistent ITEM/SUBTOTAL/TOTAL lines, subtotal retention, total clearing, safe-integer validation, replay and tamper rejection; a typed five-profile output provenance dataset; a source-backed register/listing/Difference Engine comparison; and the bilingual `#/output-contracts` route.

@@ -12,7 +12,7 @@ Why is a multi-digit mechanical register more than a row of ten-position wheels,
 - Claims about Pascaline and Comptometer mechanisms: **H**, with sources below.
 - The repository's `carry pending → carry propagated` event chain: **P/M** (pedagogical model with deterministic computational validation).
 
-See `docs/EVIDENCE_POLICY.md`.
+See `docs/EVIDENCE_POLICY.md`. Exact source/model separation now lives in [`carry-architecture-source-map.md`](carry-architecture-source-map.md).
 
 ## 1. The abstract problem
 
@@ -93,7 +93,7 @@ The Smithsonian Model A record is even more instructive: it describes the Model 
 
 Claim type: **H**.
 
-Evidence: Smithsonian artifact/catalog documentation, **E1–E2** depending on whether the claim is directly observable from the object or supplied by the catalog's historical synthesis.
+Evidence: Smithsonian catalog statement, **H/E2** in this repository pass. No direct measurement was performed, and the page was inaccessible here; the bounded object/model claim is kept separate from US762520A's **H/E1 patented intended design**.
 
 ### Project consequence
 
@@ -149,10 +149,11 @@ Those require machine-specific evidence.
 
 ## 6. Next research tasks
 
-1. Add a Pascaline source excerpt map with exact historical drawing / edition references, not only modern summaries.
-2. Identify a strong primary source for Comptometer carry / duplex design (patent or technical manual) and connect it to the Model A museum description.
+1. Add primary/facsimile Pascaline drawing anchors beyond Pascal's operational `Avis`; that text does not describe sautoir geometry.
+2. Map US762520A to particular Model A production revisions only if manufacturing/object evidence supports it.
 3. Add at least one stepped-drum or pinwheel carry mechanism source so the multiplication track can show how accumulator carry interacts with repeated cranking.
-4. Only after those sources are mapped, decide whether a second carry state machine is warranted.
+4. Measure/source force, spring, wear, tolerance, and safe-rate claims before reliability modeling.
+5. Only after those sources are mapped, decide whether a second carry state machine is warranted.
 
 ## Project decision
 

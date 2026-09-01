@@ -15,7 +15,7 @@ An arrow means “influences” by default, not “these two physical parts are 
 
 ## Visitor route
 
-1. **Carry / 进位** — supermarket total `¥99 → ¥100`; observe the behavior, then distinguish the functional carry arrow from an unknown real linkage.
+1. **Carry / 进位** — supermarket total `¥99 → ¥100`; observe the serialized P/M dependency, then compare Pascaline stored-energy evidence, Felt's distinct 1887 and 1904 carry problems, and Model A catalog context without treating the arrow as any source's linkage.
 2. **Finite differences / 有限差分** — generate square/cubic values, then step a separate P/M path from calculated value to check-copy and master/stereotype output roles; distinguish mathematics, historical drawings/objects, modern reconstruction, and open printer geometry.
 3. **Output contracts / 输出契约** — step `+12, +8, subtotal, +5, total`; observe that subtotal retains the accumulator, total clears it, and the structured paper-like record persists in both cases. Compare identified register/listing objects and Difference Engine output without reading the P/M ledger as Burroughs mechanics.
 4. **Multiplication / 乘法** — decompose a warehouse order into ones, tens, turns, and shifts; do not read the lanes as a cutaway.

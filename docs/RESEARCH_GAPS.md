@@ -12,16 +12,17 @@ This document is a research queue, not a promise that every topic becomes a full
 
 Current state:
 
-- deterministic carry events exist;
-- `0099 + 1` is observable;
-- the research note is mostly a conceptual statement.
+- deterministic `0099 + 1` carry events exist;
+- `research/carry-architecture-source-map.md` now separates Pascal's operational text, Cnam's sautoir description, a CMU reconstruction, Felt US366945A, Felt US762520A, and the Smithsonian Model A catalog context;
+- the visible-carry lesson compares those responsibilities without treating its P/M arrows/events as historical geometry;
+- key-driven carry replay now rejects altered, omitted, inserted, unknown, or final-state-mismatched trace data.
 
-What to add:
+What remains:
 
-1. Pascaline sautoir as a concrete carry architecture;
-2. why the carry mechanism is not simply “all digit gears remain continuously coupled”;
-3. subtraction by complementary representation where reverse carry is not available;
-4. later key-driven carry designs, especially the Comptometer's evolution toward simultaneous add/receive/carry.
+1. primary/facsimile Pascaline drawing anchors beyond the operational `Avis`;
+2. exact production-revision mapping between US762520A and surviving Model A mechanisms;
+3. a sourced stepped-drum or pinwheel accumulator-carry comparison;
+4. source-specific force, spring, tolerance, wear, safe-rate, and failure data before reliability modeling.
 
 Good starting sources:
 
@@ -30,10 +31,11 @@ Good starting sources:
 - Smithsonian Comptometer object group: <https://www.si.edu/spotlight/adding-machines/full-keyboard-hill-to-felt-tarrant>
 - Smithsonian Model A Comptometer record: <https://americanhistory.si.edu/collections/object/nmah_690484>
 
-Deliverable:
+Completed bounded deliverable:
 
-- expand `research/carry-is-the-hard-part.md`;
-- add a carry-architecture comparison to the exhibit only after the source boundaries are explicit.
+- explanatory essay linked to a source-separated carry map;
+- typed provenance and a public carry-architecture comparison;
+- no source-specific linkage drawing.
 
 ### 0.2 Named-machine pages need page/figure-level source anchors
 
