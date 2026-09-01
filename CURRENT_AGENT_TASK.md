@@ -5,11 +5,11 @@ Owner: local coding/research agent
 Target duration: about one useful hour at the agent's observed throughput
 Repository authority: remote `main`
 
-Previous task is complete and archived at `tasks/archive/2026-09-01-thomas-register-lifecycle.md`.
+Previous task is complete and archived at `tasks/archive/2026-09-01-replay-curta-type2.md`.
 
-The previous assignment landed as `540ba69f4bbbba01a417cb709b96732d71fc2e5a` about 43 minutes after assignment, changed 313 lines (`+292/-21`) across 8 files, raised the suite from 264 tests / 20 files to 277 tests / 21 files, and passed push CI run `33516613852`. Recent bounded slices continue to finish materially under one hour, so this assignment combines **two small replay-integrity corrections** with **one bounded named-machine source pass**. Do not broaden beyond these three pieces.
+The previous assignment landed as `c85dd761bda908d528a4f35229bde09c2afb4bfb` about 43 minutes after assignment, changed 159 lines (`+143/-16`) across 11 files, raised the suite from 277 tests / 21 files to 291 tests / 21 files, and passed exact-head push CI `33522772721` plus Deploy Pages `33522772810`. Recent slices continue to finish under one hour, so this assignment is one substantive source pass plus a bounded source-atlas reconciliation. Do not broaden it into an Analytical Engine reconstruction.
 
-> **Question for this slice:** can the repository make two older serialized traces fail closed without losing current semantics, while upgrading Curta Type II source precision from index/identity level to directly inspected service-manual page/figure evidence?
+> **Question for this slice:** can the repository replace its H. P. Babbage 1888 specialist-transcription boundary with directly inspected 1889 printed-page evidence, while preserving the distinction among nineteenth-century publication, later reconstruction, archive drawing metadata, and the repository's P/M `(ab+c)d` teaching trace?
 
 ## Read before work
 
@@ -19,179 +19,153 @@ Fetch/pull remote `main`, then read in order:
 2. `TODO.md`
 3. `AGENTS.md`
 4. `docs/EVIDENCE_POLICY.md`
-5. `docs/RESEARCH_GAPS.md`, especially Priorities 0.2 and 6
+5. `docs/RESEARCH_GAPS.md`, especially Priority 0.2 and the `Files to deepen next` list
 6. `docs/VERIFICATION.md`
-7. `src/mechanism-core.ts` + `tests/mechanism-core.test.ts`
-8. `src/mechanisms/continuous-integrator/index.ts` + `tests/continuous-integrator.test.ts`
-9. `research/curta-source-map.md`
-10. typed source-atlas/source-anchor adapters and the `#/source-atlas` / `#/curta` UI only if the source pass yields a precise new anchor
-11. open PR #8 and PR #9 as **review inputs**, not as branches to merge blindly
+7. `research/analytical-engine-information-flow.md`
+8. `src/exhibits/analytical-engine-flow/` and its tests, only to preserve current P/M boundaries
+9. `src/exhibits/source-atlas/` and `tests/source-atlas.test.ts`
+10. the existing Science Museum Analytical Engine drawing anchors already cited in the research note
 
-Run current-main typecheck/tests before editing and record the actual baseline. Do not infer state from old plan checkboxes or from the old PR verification counts.
+Run the current-main typecheck/tests before editing and record the actual baseline. Do not use old implementation-plan checkboxes as the task source.
 
-# Part A — reconcile the two stale replay-hardening PRs onto current main
+# Part A — directly inspect the 1889 printed compilation
 
-Two external PRs contain narrow correctness fixes that are still absent from current `main`, but both PR branches now report non-mergeable against the advanced documentation/code base. Preserve their **code/test intent**, not their stale `docs/VERIFICATION.md` patches.
+The current research note uses the Fourmilab transcription of H. P. Babbage's paper read at Bath on 12 September 1888 and intentionally keeps it at specialist-transcription precision because a stable printed scan had not been directly inspected.
 
-## A1. Decimal-register unknown-event rejection — PR #8
+Resolve that specific gap if lawful direct access is available.
 
-Review:
+## A1. Preferred source identity
 
-- PR: <https://github.com/tmzncty/mechanical-computing-playground/pull/8>
-- exact reviewed head: `6724e40154151d94bd83c4af2fa457f032927d85`
-- exact-head CI previously passed as run `33505287956`
+Target publication:
 
-Current `reduceDecimalRegisterEvent()` still treats only `WHEEL_STEP` specially and silently lets every other runtime discriminator pass as a no-op. Correct that boundary on **current main**.
+Henry P. Babbage (ed.), *Babbage's Calculating Engines: Being a Collection of Papers Relating to Them; Their History, and Construction*, London: E. and F. N. Spon, 1889.
 
-Required behavior:
+Useful institutional/bibliographic starting points:
 
-- keep the six declared decimal-register event kinds accepted with current semantics;
-- `WHEEL_STEP` continues to derive the digit mutation;
-- legitimate crank/carry marker events remain state no-ops at this reducer layer;
-- any runtime event discriminator outside the declared set must throw/fail closed;
-- do not widen this slice into marker-order validation, marker-metadata derivation, or a full trace-schema rewrite.
+- Cambridge Core / Cambridge Library Collection book contents: <https://www.cambridge.org/core/books/babbages-calculating-engines/contents/F22A776B9D213F4BF3ECBE6DA4D05CB4>
+- DOI/book identity: <https://doi.org/10.1017/CBO9780511694721>
+- Cambridge contents identifies chapter 32 as **“Proceedings of the British Association, 1888”**;
+- Open Library 1889 edition metadata: <https://openlibrary.org/works/OL13198513W/Babbage%27s_Calculating_Engines>
+- Huntington 1889 rare-book record: <https://www.huntington.org/collections/lib-751620>
+- Library of Congress records explicitly identify the later Tomash reproduction as a reprint of the 1889 edition: <https://www.loc.gov/item/2006691797/>
 
-Required focused regressions:
+Use an institutional/public-domain/full-view copy if one can be directly inspected. Cambridge's 2010 reproduction is acceptable as an access surrogate for the 1889 printed pages **only if the displayed/reproduced pages preserve the original printed pagination/content**. Record the access layer separately from the historical publication identity.
 
-1. inserting one unknown event into an otherwise valid trace is rejected;
-2. substituting unknown events for all non-`WHEEL_STEP` markers is rejected;
-3. the canonical `0099 + 1 -> 0100` trace still replays unchanged.
+Do not use an arbitrary rehosted PDF as the only provenance layer. A non-institutional mirror may be used as a temporary locator only when the same page/content is cross-checked against an institutional bibliographic/reproduction source.
 
-Use an exhaustive switch or an equally clear fail-closed discriminator boundary. Do not make TypeScript exhaustiveness the only runtime defense, because serialized JSON is untrusted at runtime.
+## A2. Inspect the H. P. Babbage 1888 paper as printed in the 1889 volume
 
-## A2. Continuous-integrator action-bound replay — PR #9
+Locate chapter 32 / the paper read at Bath in 1888 and record the exact **1889 printed page numbers** actually inspected.
 
-Review:
+At minimum verify, where the printed pages directly support them:
 
-- PR: <https://github.com/tmzncty/mechanical-computing-playground/pull/9>
-- exact reviewed head: `72a0ca0ea0e7dcd2c3b36f3f5da6a624171f2caf`
-- exact-head CI previously passed as run `33506511205`
+- publication/section identity and the Bath/read-date statement;
+- Number Cards, Directive Cards and Operation Cards as distinct card roles;
+- the `(ab+c)d` example and the Store-column assignments for `a,b,c,d`, intermediates `p/q`, and final result;
+- the sequence/role of Directive versus Operation cards;
+- the stated counts of Operation and Directive cards for the example, if present;
+- separate sets/rollers or equivalent organization, if the printed page actually states it;
+- the final printing / stereotype-moulding output statement, if present.
 
-Current `replayIntegrator()` replays only recorded events. The trace also records actions, so deleting/replacing those actions or splitting action/event cycle identities can currently leave a trace that verifies from events alone.
-
-Harden replay on current main so it is **action-derived** in the same spirit as newer mechanisms.
-
-Required behavior:
-
-- require runtime `actions` and `events` arrays;
-- validate both initial and final integrator states even for zero-action traces;
-- require an action cycle id to be a non-empty string at runtime;
-- preserve the semantic distinction between omitted `inputQuantity` and an explicitly invalid/non-number value; `null` must not silently mean “use current input”;
-- starting from the recorded initial state, re-run every recorded action through the existing transition function;
-- require the action-derived ordered events to match the serialized event stream exactly;
-- require the action-derived final state to match the serialized final state;
-- preserve valid zero-action traces;
-- keep the numerical integration rule and UI unchanged.
-
-Required tamper regressions should cover at least:
-
-- missing one action;
-- deleting all actions while events remain;
-- adding an extra action;
-- deleting all events while actions remain;
-- changing an action input;
-- explicit `null`/invalid action input;
-- changing action cycle id;
-- changing event cycle id;
-- unknown action;
-- forged final state;
-- identical invalid initial/final endpoints in an empty trace;
-- valid genuine zero-action trace.
-
-Do not copy PR #8/#9 historical verification sections verbatim: their baselines (`251/253/263` tests) are stale. Record only the current-main baseline and the final result you actually run now.
-
-## A3. PR handling boundary
-
-Do **not** merge the stale fork branches just to preserve their old verification prose. Land patch-equivalent current-main code/tests in this coherent completion commit. Leave PR closure/supersession to the next repository reviewer unless your normal authenticated workflow can close them cleanly after proving current-main patch equivalence; never rewrite the contributor branches.
-
-# Part B — bounded Curta Type II service-manual source pass
-
-`research/curta-source-map.md` directly inspected the Type I 1967 service-manual cover but still leaves Type II service content at index identity. Upgrade only the Type II control/source precision that can be directly inspected within this slice.
-
-## B1. Access layer
-
-Start from the specialist index:
-
-<https://www.mycurta.com/cu.htm>
-
-It identifies original Curta service manuals and credits Museum Mura as the source layer. The current index exposes a 43-page Type II English-green scan at:
-
-<https://www.mycurta.com/Documents/Curta_2_Service_Manual_Curta2_green_e.pdf>
-
-The file is large (~46 MB). Download locally if needed. Treat `mycurta.com` as a **specialist access mirror**, not as institutional provenance. The document itself may be primary manufacturer material if the scanned pages establish that identity.
-
-Fallback identity/reference links from the same index include the 55-page German Type II scan and Type II factory drawings. Use them only if they materially resolve identity/page mapping; do not turn this slice into a 154-drawing geometry audit.
-
-## B2. Direct inspection target
-
-Inspect enough of the Type II English service manual to record defensible, page-specific facts for **control responsibility and model identity**, not full geometry.
-
-At minimum record:
-
-- title/cover identity, model, issuer/manufacturer, language, issue/date/revision if visibly stated;
-- contents/index page(s), if present;
-- exact viewer/PDF pages actually inspected for at least two of these responsibilities if the manual exposes them clearly:
-  - crank/handle home or safety-lock responsibility;
-  - carriage movement/position restriction;
-  - result-counter versus revolution-counter clearing/reset responsibility;
-  - plus/minus / reversing control;
-  - decade-transfer/carry adjustment only if the service page explicitly establishes it;
-- figure/table/part identifiers only where directly readable;
-- any explicit Type II capacity or control difference that can be stated without importing Type I assumptions;
-- what remains unreadable or not established.
-
-If the PDF is image-only, use page rendering/OCR only as a locator and visually verify the exact words/figures before making a page-level claim. If direct access fails or the relevant pages cannot be read confidently, record the access boundary instead of guessing.
-
-## B3. Keep document roles separate
-
-Preserve these distinctions:
-
-- US 2,525,352 = patented embodiment, not automatic proof of every production Curta;
-- *Your CURTA Calculator* = operator guide covering Model I/II at its document precision;
-- 1967 Type I service manual = Type I service document;
-- newly inspected Type II service manual pages = Type II service evidence only at the pages/revision actually inspected;
-- mycurta/vcalc indexes = specialist access/reference layer;
-- repository `#/curta`, `setting-crank-interlock`, `operator-division`, and register-lifecycle traces = P or P/M teaching models unless explicitly source-bound.
-
-Do not claim Type I and Type II hidden linkage identity merely because the operator guide says they are identical except capacity. Conversely, if the Type II service manual visibly documents a different part/control arrangement, record the difference precisely without extrapolating a whole production chronology.
-
-## B4. Deliverable
-
-Deepen `research/curta-source-map.md` with a compact Type II service-manual section containing:
+For every claim added to the repository, distinguish:
 
 ```text
-document identity
-pages/figures directly inspected
-what each inspected page supports
-Type I / Type II boundary
-access/provenance layer
-what remains unestablished
+1888 event/read date
+1889 printed compilation page
+modern access reproduction/mirror
 ```
 
-If this yields a precise new source anchor, update the typed source-atlas/source-anchor data and the existing `#/source-atlas` Curta card minimally. Do not create a new route or source-specific Curta mechanism animation.
+Do not silently call the 1889 printed page the original 1888 proceedings pagination unless the source itself establishes that identity.
 
-# Part C — reconciliation and verification
+## A3. Compare against the existing Fourmilab transcription
 
-After Parts A–B are real:
+Keep <https://www.fourmilab.ch/babbage/hpb.html> as a specialist transcription/research access layer.
 
-- update `STATUS.md` only for replay guarantees/source precision that now genuinely exist;
-- add one concise completed line to `TODO.md` covering this combined slice;
-- update `docs/RESEARCH_GAPS.md` Priority 0.2 only if the Type II gap actually narrowed;
+Compare the exact inspected printed passage with the current repository summary. Record only meaningful differences:
+
+- wording or numbering differences;
+- omitted headings/notes;
+- punctuation/typographic differences only when they affect interpretation;
+- whether the current `items 10–20` references correspond cleanly to printed numbered paragraphs/items.
+
+If the transcription matches materially, say so; do not manufacture discrepancies.
+
+If no direct printed page can be inspected confidently in a bounded attempt, **do not upgrade E3 to E1**. Instead document the attempted access path and retain the current boundary, then proceed to Part B2 below using only metadata-safe work.
+
+# Part B — one bounded drawing/catalog cross-check
+
+The repository already has three Science Museum record anchors:
+
+- `BAB/A/125` — plan of consecutive mill counting apparatus for General Plan 28;
+- `BAB/D/028` — Mill Sheet 28, superseded by Sheet 25;
+- `BAB/P/167` — plan of bolts for store.
+
+The 1889 volume also contains chapters/catalogues for Analytical Engine notations and drawings. If the directly accessible reproduction exposes those catalogue pages, perform **one bounded cross-check**:
+
+- inspect the relevant catalogue/list page(s);
+- determine whether at least one of the modern Science Museum records can be connected to an 1889 printed catalogue description without guessing modern reference-code equivalence;
+- record exact printed page/catalogue wording when a defensible match exists;
+- otherwise record that modern archive identifiers and the 1889 catalogue could not be safely cross-walked in this pass.
+
+This part is about **catalogue identity and design evolution**, not reading gear geometry from thumbnails. Do not infer Store–Mill connections, card-reader timing, bolt function beyond the record/catalogue wording, or a frozen final machine.
+
+# Part C — repository/source-atlas reconciliation
+
+Only after Parts A/B establish real new precision:
+
+## C1. Research note
+
+Update `research/analytical-engine-information-flow.md` so the layers remain explicit:
+
+```text
+Menabrea/Lovelace 1843 printed pages = H/E1 at inspected page precision
+H. P. Babbage paper as printed in 1889 = H/E1 only at directly inspected printed-page precision
+Fourmilab transcription = specialist transcription/access comparison, not primary page authority
+Science Museum drawing records = H/E1 record identity/metadata
+Walker/Fourmilab emulator = R/E2 reconstruction choices
+repository `(ab+c)d` trace = P/M
+```
+
+If direct 1889 inspection fails, retain the H/E3 transcription boundary and make the failed-access boundary more precise instead of pretending completion.
+
+## C2. Source-atlas data
+
+Search the existing typed source-atlas structures rather than creating a parallel system.
+
+If direct 1889 printed-page evidence is obtained:
+
+- add or upgrade a separate Analytical Engine source anchor for the 1889 printed H. P. Babbage paper;
+- include exact printed-page metadata and modern access provenance;
+- preserve `supports` versus `notEstablished` fields;
+- do not delete the reconstruction/transcription distinction merely because the historical paper is now directly inspected.
+
+If no direct printed page is obtained, do not add a fake E1 card. A metadata-only/bibliographic anchor is acceptable only if it adds real clarity and remains below page-claim precision.
+
+## C3. Tests/UI
+
+Update `tests/source-atlas.test.ts` or the existing relevant tests to lock in any new source boundary.
+
+If source-atlas data changes, the existing `#/source-atlas` UI may be updated minimally through its current data path. Do not create a new route or redesign cards.
+
+Do **not** change the Analytical Engine arithmetic/event model in this slice unless direct source inspection reveals an existing historical label that is factually unsafe. The current event sequencing remains P/M and must not be back-filled as nineteenth-century timing.
+
+# Part D — reconciliation and verification
+
+After the source work is real:
+
+- update `STATUS.md` only for source precision actually obtained;
+- add one concise completed line to `TODO.md`;
+- narrow `docs/RESEARCH_GAPS.md` Priority 0.2 / file list only if the 1889 gap genuinely shrank;
 - update `docs/VERIFICATION.md` with current baseline/final test counts and actual checks;
-- do not copy stale PR test counts into current verification;
-- do not claim Pages deployment unless a completed deployment for the final exact commit is actually observed.
+- do not re-date unrelated browser smoke or copy old test counts.
 
-If source-atlas UI data changes, perform bilingual smoke at least for:
+If source-atlas data/rendering changes, perform bilingual smoke at least for:
 
 ```text
 #/source-atlas
-#/curta
+#/analytical-engine
 #/about
 ```
-
-No browser smoke is required solely for the two replay-only code changes if no UI data/rendering changes.
-
-# Acceptance
 
 Before commit/push, run:
 
@@ -204,48 +178,44 @@ git diff --check
 
 All must pass.
 
-Also run focused suites proving:
+The final slice should answer from directly inspectable evidence:
 
-- canonical decimal-register replay still succeeds and unknown discriminators fail closed;
-- continuous-integrator valid traces, action-derived replay, zero-action replay, and all tamper cases pass;
-- current register-lifecycle, revolution-counter, operator-division, setting-crank, key-stroke-integrity, difference-column, and Analytical Engine replay tests remain green.
+> Which exact 1889 printed pages support the Number/Directive/Operation-card roles and `(ab+c)d` example currently summarized from the Fourmilab transcription?
 
-The final slice should answer these questions from code/evidence rather than prose alone:
+> What does that historical page establish, and what still belongs only to Walker's reconstruction or this repository's P/M trace?
 
-> Can a serialized decimal-register trace smuggle an unknown event discriminator through replay?
-
-> Can a continuous-integrator trace change/delete its recorded actions while keeping the recorded events and still verify?
-
-> Which Curta Type II service-manual pages were actually inspected, and exactly what model/control responsibility do they establish?
+> Can any modern Science Museum drawing record be safely cross-walked to the 1889 printed drawing catalogue without inventing an identifier or geometry mapping?
 
 After push:
 
 - confirm remote `main` contains the coherent completion commit;
-- inspect push CI if completed and record only completed outcomes;
+- inspect exact-head push CI / Pages only if completed and record only completed outcomes;
 - stop and wait for the next `CURRENT_AGENT_TASK.md` revision.
 
 Suggested commit subject:
 
 ```text
-fix: bind legacy replay traces and deepen Curta II sources
+research: anchor Analytical Engine 1889 printed evidence
 ```
 
 # Evidence boundaries
 
-- Decimal-register replay correction: software correctness only; no historical claim.
-- Continuous-integrator action-bound replay: **M/P software provenance integrity**; no change to historical Differential Analyzer claims or physical accuracy.
-- Type II service manual: **H/E1 only for primary pages actually inspected**, with specialist mirror access provenance kept explicit.
-- Type I/II comparison: **H/R only where two directly identified documents support the comparison**; no universal production-revision claim.
-- Existing generic controls/division/Curta UI: remain **P/M or P** unless explicitly source-bound.
+- 1889 Spon printed compilation: **H/E1 only for directly inspected printed pages/content**.
+- The paper's 1888 reading/event date is a historical claim that must be supported by the printed paper or another direct source; do not conflate event date with print date.
+- Cambridge 2010 / Tomash 1982 reproductions: access/reproduction layers; they do not change the nineteenth-century claim type but must be named as the inspected surrogate when applicable.
+- Fourmilab H. P. Babbage page: specialist transcription, useful for comparison but not a substitute for printed-page inspection.
+- Science Museum drawing records: **H/E1 at catalog record/visible-document precision only**; archive images are not self-interpreting geometry proof.
+- Walker emulator: **R/E2** reconstruction/executable interpretation.
+- repository Analytical Engine flow: **P/M**; no historical card-hole encoding, reader timing, exact Mill/Store linkage, or frozen final design is claimed.
 
 # Stop conditions
 
-Stop and leave a precise boundary note rather than guessing if:
+Stop and leave a precise access/evidence boundary rather than guessing if:
 
-- either PR's intent conflicts with newer current-main replay semantics rather than applying as a narrow hardening;
-- action-derived integrator replay would require changing the numerical integration rule or public event vocabulary;
-- the Type II manual cannot be downloaded/read at page precision within a bounded attempt;
-- source inspection starts expanding into full factory-drawing geometry, serial-number chronology, lubrication practice, or restoration advice;
-- updating the source atlas would require a large unrelated UI refactor.
+- the 1889 page cannot be directly viewed or its printed pagination cannot be verified;
+- the available copy is only an unverified mirror with no trustworthy reproduction/bibliographic cross-check;
+- matching a Science Museum modern record to the 1889 catalogue would require assuming reference-code equivalence;
+- source inspection starts expanding into full drawing interpretation, card-reader geometry, mechanical notation reconstruction, or a complete Analytical Engine emulator;
+- updating source-atlas UI would require unrelated routing/layout refactors.
 
-If Parts A–B finish substantially before one hour, use remaining time for property/tamper tests, exact Type II page/figure metadata, and accessibility/source-card precision. **Do not start a new machine family, stochastic reliability model, 3D Curta reconstruction, or square-root algorithm in this slice.**
+If the 1889 page work completes substantially before one hour, use remaining time for exact page/catalogue metadata, transcription comparison, source-atlas tests and accessibility/source-card precision. **Do not start Bush/Shannon, Curta chronology, a new machine family, or source-specific Analytical Engine geometry in this slice.**
