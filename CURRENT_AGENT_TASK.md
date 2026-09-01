@@ -5,15 +5,13 @@ Owner: local coding/research agent
 Target duration: about one useful hour at the agent's observed throughput
 Repository authority: remote `main`
 
-Previous task is complete and archived at `tasks/archive/2026-09-01-operator-division-reconciliation.md`.
+Previous task is complete and archived at `tasks/archive/2026-09-01-controlled-key-integrity.md`.
 
-The previous assignment landed its implementation at `eec04b45ed075f52548c0a4a0796000e5104e4d6` about 16 minutes after assignment and its completed research/docs reconciliation at `36550f2fd169151962e30cd9347e9ba9c2795afa` about 33 minutes after assignment. It finished at 251 tests across 19 files with typecheck/build/diff checks passing, retained the 61,845-case fitting arithmetic sweep plus 13,305 explicit undersized-register rejections, and kept Thomas/Curta procedure evidence narrower than the generic P/M division trace. No PR is currently open.
+The previous assignment landed as `d35f4209950b5652b3b3bc3f5535020afaaff434` about 37 minutes after assignment, changed 349 lines (`+326/-23`), raised the suite from 251 tests / 19 files to 264 tests / 20 files, and passed CI run `33510045135`. No PR is open. Several recent slices have finished well under an hour, so this assignment intentionally combines one primary-source precision pass with one small tested control-state increment. Do not broaden beyond this pair.
 
-Several substantial slices have now finished in roughly 30–40 minutes, so this task intentionally combines one bounded primary-source investigation with one closely related tested control mechanism. Do not broaden beyond this pair.
+> **Question for this slice: what does it mean operationally that a stepped-drum calculator can preserve/clear its result register and revolution register independently, and what historical sources actually establish that behavior for identified Thomas arithmometers?**
 
-> **Question for this slice: what changes when a key-driven calculator treats an incomplete keystroke as a control-state error that must be resolved before ordinary arithmetic can continue?**
-
-The historical target is the Felt & Tarrant **Controlled-Key** Comptometer line. The software target remains a generic P/M integrity/interlock model; do not turn secondary descriptions into Model E/F linkage geometry.
+The historical target is the Thomas arithmometer around the 1865–1870 production period. The software target is a generic P/M register-lifecycle/zeroing lesson. Do not turn museum descriptions, later specialist reconstructions, or a teaching state machine into one universal Thomas linkage.
 
 ## Read before work
 
@@ -23,214 +21,218 @@ Fetch/pull remote `main`, then read in order:
 2. `TODO.md`
 3. `AGENTS.md`
 4. `docs/EVIDENCE_POLICY.md`
-5. `docs/RESEARCH_GAPS.md`, especially Priorities 2, 4 and 5
-6. `research/key-driven-computation.md`
-7. `research/control-and-zeroing-source-map.md`
-8. `src/mechanisms/key-driven-accumulator/index.ts`
-9. tests for key-driven accumulator and setting/crank interlock
+5. `docs/RESEARCH_GAPS.md`, especially Priorities 0.1, 3, 4 and 5
+6. `research/control-and-zeroing-source-map.md`
+7. `research/subtraction-and-division.md`
+8. `src/mechanisms/revolution-counter/index.ts`
+9. existing setting/crank interlock, operator-division, output-ledger mechanisms and tests
 10. `src/exhibits/control-provenance/` and the `#/controls` UI in `src/main.ts`
 11. `docs/VERIFICATION.md`
 
-Before editing, run current-main typecheck/tests once and record the actual baseline. `STATUS.md` still has an older headline verification count even though `docs/VERIFICATION.md` records the newer 251-test operator-division checkpoint; treat the actual tree/tests as authoritative and reconcile that stale headline after the slice is green.
+Run current-main typecheck/tests before editing and record the actual baseline. Do not infer state from stale `IMPLEMENTATION_PLAN.md` checkboxes.
 
-Do not use stale `IMPLEMENTATION_PLAN.md` checkboxes as task authority.
+# Part A — Thomas instruction / register-control source pass
 
-# Part A — Controlled-Key source pass
+The repository currently has identified Smithsonian objects supporting mode selection, revolution-register direction and separate zeroing controls, but `research/control-and-zeroing-source-map.md` still says the 1868 Thomas instruction pamphlet pages were not inspected. Resolve that boundary as far as direct access permits.
 
-The repository currently knows that Turck/Felt material supports immediate key actuation and that Felt US960528A supports canceling/carry-strain recovery, but **partial/incomplete-stroke correction is still intentionally unsourced at primary-page precision**. Resolve as much of that boundary as a bounded pass allows.
+## A1. Smithsonian 1868 instruction pamphlet
 
-## A1. Directly inspect J. A. V. Turck's 1921 public-domain account
+Directly inspect the institutional record for:
 
-Locate and directly inspect a lawful facsimile of:
+**_Instructions pour se Servir de l'Arithmomètre_**, 1868, Smithsonian/NMAH `nmah_904757`, related to Thomas arithmometer `MA.335215`.
 
-**J. A. V. Turck, _Origin of Modern Calculating Machines_ (1921).**
+Entry points:
 
-A public-domain scan is available through Internet Archive/Wikimedia; one current entry point is:
+- <https://americanhistory.si.edu/collections/object/nmah_904757>
+- <https://www.si.edu/object/instructions-pour-se-servir-de-larithmometre%3Anmah_904757>
 
-<https://upload.wikimedia.org/wikipedia/commons/e/e1/Origin_of_modern_calculating_machines%3B_a_chronicle_of_the_evolution_of_the_principles_that_form_the_generic_make_up_of_the_modern_calculating_machine_%28IA_originofmodernca00turcrich%29.pdf>
+The catalog identifies it as a 1868 operating-instruction pamphlet and exposes an IIIF/Mirador entry. Follow the IIIF manifest/attachments only if they actually expose readable pages.
 
-Find the exact printed/viewer pages around the **Controlled-key Comptometer**, `full-stroke` safeguarding, incomplete/erroneous key action, blocking/locking of other orders/columns, and the correction/recovery procedure.
+Record exactly:
 
-Record:
+- catalog identity, date, maker/provenance;
+- number of readable canvases/pages actually exposed;
+- printed/page or viewer positions inspected if readable;
+- wording/instructions relevant to mode selection, result register, revolution counter, clearing/zeroing, carriage movement, multiplication/division, or initial/final state;
+- whether separate result/revolution clearing is actually described in the pamphlet or only in identified object records;
+- what is not readable or not established.
 
-- exact title/edition/date visible in the scan;
-- exact printed pages and viewer pages inspected;
-- what Turck actually says the controlled-key function does;
-- whether he describes operator recovery steps or only mechanism purpose;
-- model/revision wording actually present;
-- whether any patent number or inventor attribution is explicitly given there.
+If the manifest exposes only a cover/object image, say so and stop at catalog precision. Do not manufacture page-level claims from the existence of the pamphlet.
 
-Turck is a contemporary insider/technical historical source, but source type and potential retrospective/company framing must still be stated. Do not silently treat every sentence as production geometry proof.
+## A2. Identified Thomas objects
 
-## A2. Smithsonian Controlled-Key manual/object boundary
+Directly inspect and keep separate at least these Smithsonian objects:
 
-Inspect the Smithsonian record:
+- `nmah_690683` — 1867 Thomas arithmometer;
+- `nmah_690686` / `MA.335215` — ca. 1873 object explicitly associated with the separately stored 1868 instruction book.
 
-<https://americanhistory.si.edu/collections/object/nmah_905178>
+Useful entry points:
 
-for **_Applied Mechanical Arithmetic As Practiced on the Controlled Key Comptometer_**, 1920 revision of the 1914 company publication.
+- <https://americanhistory.si.edu/collections/object/nmah_690683>
+- <https://americanhistory.si.edu/collections/object/nmah_690686>
 
-Use IIIF/manifest/attachments only if they actually expose readable pages. If a scan is directly accessible, inspect only a bounded set of pages relevant to:
+Record only what the catalog/object evidence actually supports, especially:
 
-- imperfect/incomplete keystrokes;
-- controlled-key error indication;
-- correction/release procedure;
-- start-from-clear or related operator safeguards if immediately adjacent and model-relevant.
+- add/multiply versus subtract/divide mode selector;
+- revolution-register direction where stated;
+- independent zeroing controls/knobs where stated;
+- carriage/register capacities for the identified object only;
+- object date/serial/provenance boundaries.
 
-If only the catalog description is accessible, keep it at catalog-identity/description precision. Do not convert “the book contains instructions” into invented page-level procedure.
+Do not merge these two objects into one canonical revision.
 
-## A3. Identified surviving controlled-key object
+## A3. 1865 instruction-booklet institutional reconstruction boundary
 
-Directly inspect the Science Museum Group record for the identified Model F controlled-key section:
+Directly inspect the Museum of the History of Science, Oxford page:
 
-<https://collection.sciencemuseumgroup.org.uk/objects/co60749/section-of-model-f-controlled-key-comptometer-by-felt-and-tarrant-manufacturing-co-model-calculating-machine>
+<https://www.mhs.ox.ac.uk/staff/saj/arithmometer/>
 
-Record object number, date/maker/model identity and exactly what the catalog establishes. If IIIF images are available, photographs may establish visible parts only; they are not self-interpreting internal-function proof.
+The institutional account explicitly says its Figure 1 engraving is from an **1865 instruction booklet** and describes two independent carriage-dial zeroing mechanisms operated by knobs at opposite ends of the carriage.
 
-## A4. Secondary orientation is allowed, but stays secondary
+Use this as an **institutional reconstruction/synthesis boundary (H/R or R, normally E2)**, not as if you had directly inspected the 1865 primary booklet unless the page exposes the original scan at sufficient resolution and bibliographic precision.
 
-John Wolff's Comptometer history/technical pages are useful orientation for Model E/F controlled-key behavior:
+Record exactly what the institutional page attributes to the 1865 booklet, and keep it separate from the 1868 Smithsonian pamphlet and identified objects.
 
-<https://www.johnwolff.au/calculators/Comptometer/FT.htm>
+## A4. Specialist production/revision orientation remains secondary
 
-Use them as specialist secondary evidence (**E3**) unless a statement is independently anchored to a directly inspected primary/manual/patent/object source. In particular, do not upgrade trigger geometry, interference guards, release-button sequence, upstroke ratchet behavior, or model chronology solely from this page.
+You may consult `arithmometre.org` for orientation only, especially its bibliography/model chronology and 1865 patent/revision material:
 
-If a primary patent for the controlled-key/full-stroke device can be identified **from a directly inspected source or reliable bibliographic trail**, inspect it and record patent/figure/claim precision. Do not guess a patent number from model dates.
+- <https://arithmometre.org/Bibliotheque/PageBibliothequeA.html>
+- <https://arithmometre.org/Anatomie/NumerosSerieEnglish.html>
 
-### Research deliverable
+Useful orientation includes the bibliographic existence of 1865/1868 instruction editions and model/revision distinctions. Treat these as specialist secondary evidence unless independently anchored to a directly inspected primary/institutional source. Do not upgrade serial-number chronology or clearing-mechanism revision claims to H/E1 merely because they are detailed.
 
-Update `research/key-driven-computation.md` and/or `research/control-and-zeroing-source-map.md` with a compact, model-separated section:
+### Part A deliverable
+
+Deepen `research/control-and-zeroing-source-map.md` with a compact Thomas section that explicitly separates:
 
 ```text
-Turck 1921 directly inspected pages
-Smithsonian manual/object boundary
-Science Museum Model F object identity
-specialist secondary orientation
+1868 pamphlet pages actually inspected (or catalog-only boundary)
+identified 1867 and ca.1873 Smithsonian objects
+Oxford institutional account / 1865 booklet attribution
+specialist revision orientation
 what remains unestablished
 ```
 
-The key boundary to preserve is:
+If the source pass yields useful procedure detail, add only the directly supported parts to `research/subtraction-and-division.md`; do not rewrite its generic P/M division loop as Thomas procedure.
 
-> Historical sources may establish that incomplete strokes were detected/blocked/corrected in particular controlled-key contexts without establishing the repository's event names, exact trigger geometry, timing, or one universal Comptometer mechanism.
+The boundary to preserve is:
 
-# Part B — generic key-stroke integrity/interlock model
+> Separate zeroing controls and operation modes on identified Thomas-family objects do not by themselves establish one linkage, timing, procedure, or revision history for every arithmometer.
 
-After Part A establishes at least the historical **problem/control responsibility** at defensible precision, add a small generic P/M mechanism that makes incomplete-stroke recovery observable.
+# Part B — generic dual-register lifecycle / zeroing control
 
-Prefer **wrapping/reusing** `key-driven-accumulator` for the arithmetic commit rather than creating a second accumulator implementation. Inspect existing architecture first.
+After Part A has established the control responsibility at defensible precision, add one small generic P/M mechanism that makes **independent register lifecycle** visible. This is not a Thomas emulator.
 
-An appropriate module name might be `src/mechanisms/key-stroke-integrity/`, but follow repository conventions and avoid parallel arithmetic logic.
+Prefer a module under `src/mechanisms/` such as `register-lifecycle/` or another repository-consistent name. Reuse the existing `revolution-counter` type/semantics where natural; do not duplicate operator-division or output-ledger arithmetic.
 
 ## B1. Minimum state
 
-Model only the functional control state needed for this lesson:
+Model only the control state needed to explain separate registers:
 
-- underlying key-driven accumulator state;
-- active/errant column and digit when a stroke is in progress;
-- a phase such as `IDLE`, `STROKE_IN_PROGRESS`, `ERROR_LOCKED`, `ERRANT_STROKE_COMPLETED`, or a cleaner equivalent;
-- whether ordinary other-column input is currently permitted;
-- integrity/correction cycle count and human-operation count where meaningful.
+- a result-register value (safe integer within an explicit supported domain);
+- a revolution/cycle register or wrapped existing `RevolutionState`;
+- an operation mode with a neutral generic vocabulary such as `ADD_MULTIPLY` / `SUBTRACT_DIVIDE` if useful to the lesson;
+- zeroing/clearing action count and human-operation count if they add inspectable value;
+- deterministic ordered events and replay.
 
-Do **not** model millimeters of travel, spring force, trigger shape, ratchets, interference guards, or source-specific linkage timing.
+Do not model knob geometry, rack teeth, shaft timing, spring force, register-wheel layout, or source-specific capacities unless a source is cited for an identified object and the software still remains clearly P/M.
 
-## B2. Required actions and causal behavior
+## B2. Required behavior
 
-Use deterministic actions/events equivalent in explanatory power to:
-
-```text
-BEGIN_KEY_STROKE column=... digit=...
-COMPLETE_KEY_STROKE
-```
-
-for an ordinary full stroke, plus an interrupted path such as:
+Expose independent actions equivalent in explanatory power to:
 
 ```text
-BEGIN_KEY_STROKE
-RELEASE_INCOMPLETE
-INCOMPLETE_STROKE_DETECTED
-INPUT_LOCKED
-COMPLETE_ERRANT_STROKE
-ARITHMETIC_COMMIT (reuse key-driven accumulator)
-RELEASE_ERROR_LOCK
-RETURN_TO_IDLE
+SET_MODE ...
+CLEAR_REVOLUTION_REGISTER
+CLEAR_RESULT_REGISTER
 ```
 
-The exact event names are P/M vocabulary. The model must not claim that a historical machine emitted these named phases.
+A combined convenience helper is allowed only if it is clearly a repository P/M composition of two independent actions, not a claimed historical single control.
 
-Important semantic requirement:
+Important semantic requirements:
 
-- the incomplete path must not silently mutate the accumulator before the arithmetic commit point;
-- completing the errant stroke must commit the selected key value **exactly once** through the existing key-driven arithmetic semantics;
-- while error-locked, an unrelated key/column action must fail explicitly;
-- release/reset must not erase or duplicate the corrected arithmetic result.
+- clearing the revolution register must leave the result register unchanged;
+- clearing the result register must leave the revolution register unchanged;
+- mode changes must not silently mutate either register;
+- clearing an already-zero register must have an explicit deterministic policy (recorded no-op event or explicit rejection; choose one and test it);
+- replay must be fail-closed and action-derived or otherwise consistent with the repository's hardened replay style;
+- no source-specific action timing or interlock should be invented.
 
-If directly inspected source evidence supports a different operator-level correction responsibility, adapt the pedagogical action names conservatively while keeping source-specific geometry out.
+Use a simple teaching fixture such as:
+
+```text
+result = 8478
+revolution/cycle register = 27
+clear revolution -> result still 8478
+clear result -> result 0, revolution remains at its current state
+```
+
+This fixture is P/M state hygiene, not a claim that one specific historical multiplication left `27` in a Thomas counter.
 
 ## B3. Required tests
 
 Add focused Vitest coverage for at least:
 
-1. a normal full units-column `7` stroke reaches accumulator `7` and returns to idle without a separate crank;
-2. releasing a started stroke incomplete leaves the accumulator unchanged and enters an explicit locked/error state;
-3. another-column stroke is rejected while locked;
-4. completing the errant stroke commits its value exactly once;
-5. releasing/resetting the integrity lock after correction preserves the corrected accumulator and permits the next ordinary stroke;
-6. a carry case still delegates correctly to the existing accumulator semantics (for example initial `99`, errant/recovered units `7` -> `106`);
-7. identical initial state + action sequence yields identical events/final state;
-8. replay rejects a missing detection/lock event, duplicated arithmetic commit, forged errant key identity, illegal release order, and forged final state;
-9. invalid digit/column/cycle/state is rejected explicitly;
-10. existing key-driven accumulator and setting-crank interlock tests remain green.
+1. valid creation with non-zero result and revolution register state;
+2. independent revolution-register clear preserves result;
+3. independent result-register clear preserves revolution state;
+4. mode selection changes only mode/control state;
+5. deterministic identical state + action gives identical event/result;
+6. replay reproduces final state from a mixed mode/clear sequence;
+7. replay rejects forged `before`, forged target register, wrong sequence/order, impossible counter state, and forged final state;
+8. invalid/unsafe numeric state is rejected explicitly;
+9. existing revolution-counter hardening remains green;
+10. existing operator-division, setting-crank and key-stroke-integrity tests remain green.
 
-Do not simulate simultaneous multi-column Duplex timing in this slice.
+Do not add a stochastic reliability model, zeroing linkage animation, or register-capacity physics.
 
-# Part C — small public control lesson
+# Part C — small control/protocol integration
 
-Integrate the new generic P/M flow into the existing `#/controls` area rather than opening a large new route unless the current UI architecture makes a tiny route genuinely simpler.
+Integrate the new P/M register-lifecycle lesson into the existing `#/controls` area or the smallest existing comparison surface. Do not create route churn unless the current architecture makes it genuinely simpler.
 
-The visitor should be able to inspect one deterministic scenario such as:
+The visitor should be able to inspect one deterministic scenario showing that:
 
 ```text
-begin units-key 7
-→ release early
-→ keyboard/input locked
-→ complete the errant 7 stroke
-→ arithmetic commits once
-→ release integrity lock
-→ ordinary input allowed again
+result register
+revolution/cycle register
+operation mode
 ```
+
+are separate computational/control responsibilities, and that clearing one register does not mean “reset the whole machine.”
 
 Show:
 
-- accumulator before/after;
-- active/errant key identity;
-- current permission/lock state;
+- before/after values;
+- which register was cleared;
+- current mode;
 - ordered events;
-- a concise source/evidence card separating the generic P/M trace from any directly inspected Turck/manual/object facts.
-
-No decorative controlled-key trigger artwork.
+- source/evidence cards that keep identified Thomas object facts separate from the generic P/M trace.
 
 Bilingual text is required if the surrounding route is bilingual. No meaning should depend only on color.
+
+Do not draw a Thomas zeroing knob/linkage beyond a clearly schematic label unless directly supported at the precision shown.
 
 # Part D — reconciliation and verification
 
 After Parts A–C are real:
 
-- reconcile the stale verification headline/top section in `STATUS.md` to the actual current baseline/final state;
-- update the remaining-gap wording for key-driven correction/control only to the strongest evidence actually obtained;
-- add one concise completed line to `TODO.md` rather than another roadmap;
-- update `docs/RESEARCH_GAPS.md` Priorities 2/4 only if the evidence gap genuinely changed;
-- update `docs/VERIFICATION.md` with the actual baseline/final test counts and browser checks;
-- update typed control-provenance adapters only if a directly inspected historical source adds a precise source/model/control responsibility. Do not force every research note into UI metadata.
+- update `STATUS.md` only for what now genuinely exists;
+- add one concise completed line to `TODO.md`;
+- update `docs/RESEARCH_GAPS.md` Priorities 0.1/3/4 only if the source gap genuinely changed;
+- update `docs/VERIFICATION.md` with actual baseline/final test counts and checks;
+- update typed control-provenance adapters only if directly inspected evidence adds a precise Thomas source/model/control responsibility;
+- archive no extra planning files beyond the normal completed-task record generated by the next reviewer.
 
-If the public control UI changes, perform bilingual browser smoke at least for:
+If the public controls UI changes, perform bilingual browser smoke at least for:
 
 ```text
 #/controls
-#/arithmetic-labor
+#/division
 #/about
 ```
 
-Quick-regress the key-driven arithmetic presentation wherever it currently appears. Check desktop and one narrow viewport for horizontal overflow and runtime JS errors.
+Quick-regress the existing controlled-key integrity scenario and check desktop plus one narrow viewport for horizontal overflow/runtime errors.
 
 # Acceptance
 
@@ -247,44 +249,43 @@ All must pass.
 
 Also verify:
 
-- current operator-division quotient-nine/exact-zero regressions remain green;
-- merged revolution-counter replay hardening remains green;
-- no source-atlas/DE2/Differential Analyzer work is lost;
-- the generic integrity controller cannot commit an incomplete stroke twice or accept unrelated input while locked;
-- any historical controlled-key procedure claim has exact inspected source/page/object precision;
-- secondary-only trigger/linkage claims remain secondary or omitted.
+- current 264-test baseline is not silently reduced;
+- key-stroke exactly-once correction still passes;
+- operator-division quotient-nine/exact-zero regressions remain green;
+- revolution-counter replay hardening remains green;
+- any Thomas manual/object claim cites the exact source precision actually inspected;
+- Oxford 1865-booklet attribution stays institutional E2 unless the primary booklet itself is directly inspected;
+- specialist revision claims remain secondary unless independently anchored.
 
 After push:
 
 - confirm remote `main` contains the coherent completion commit;
-- inspect CI/Pages only if completed during the slice and record only completed outcomes;
+- inspect CI only if it has completed and record only completed outcomes;
 - stop and wait for the next `CURRENT_AGENT_TASK.md` revision.
 
 Suggested commit subject:
 
 ```text
-feat: model key-stroke integrity and controlled-key boundary
+feat: model independent register zeroing controls
 ```
 
 # Evidence boundaries
 
-- New key-stroke integrity mechanism/event sequence: **M/P generic teaching/control model**.
-- Turck 1921: historical/technical source only at directly inspected page precision; note author/company context.
-- Smithsonian `nmah_905178`: catalog identity/description unless actual pages are directly inspected.
-- Science Museum Model F section `1921-16`: identified object/model evidence; visible photos are not automatic internal-function proof.
-- John Wolff specialist pages: **E3 orientation**, not primary geometry proof.
-- Existing Turck US1154897A establishes immediate key actuation for its patented design, not controlled-key correction geometry.
-- Existing Felt US960528A establishes cancel/carry-strain recovery for its specified Duplex context, not generic incomplete-stroke correction.
-- Do not generalize Model E/F/J, electric Model K, or later 3D-series controlled-key behavior across revisions.
+- New register-lifecycle/zeroing event sequence: **M/P generic teaching/control model**.
+- Smithsonian identified objects: **H/E1 at catalog/object precision**; do not generalize capacities/control layout across revisions.
+- Smithsonian 1868 pamphlet: **H/E1 only for pages actually inspected**; catalog identity alone does not establish procedure.
+- Oxford institutional account: **H/R or R, E2** for the attributed 1865 instruction-booklet interpretation unless the underlying primary scan is directly inspected.
+- `arithmometre.org`: specialist **E3 orientation** unless independently anchored.
+- Do not infer physical linkage, timing, knob force, register gearing, production adoption, or one universal zeroing mechanism from the generic P/M model.
 
 # Stop conditions
 
-Stop and leave a clear note rather than guessing if:
+Stop and leave a clear boundary note rather than guessing if:
 
-- no directly inspectable source can establish even the controlled-key problem/control responsibility beyond current secondary summaries;
-- implementation would require inventing trigger geometry, stroke thresholds, spring forces, or source-specific timing;
-- wrapping the existing key-driven accumulator would require weakening its fail-closed replay guarantees;
-- the generic incomplete-stroke model cannot preserve a single clear arithmetic commit point;
-- source access turns into a broad patent hunt that threatens to consume the whole slice.
+- Smithsonian IIIF exposes no readable pamphlet pages; record catalog-only precision and continue with identified-object + Oxford evidence rather than inventing the manual contents;
+- implementing register lifecycle would require weakening existing revolution-counter replay guarantees;
+- the existing control UI architecture would require a large unrelated refactor;
+- source access turns into a broad French patent/manual hunt that threatens to consume the whole slice;
+- exact historical mode/zeroing procedure cannot be separated cleanly from the generic P/M control model.
 
-If the direct source pass and integrity model finish substantially before the one-hour target, use remaining time for replay/property tests, provenance precision, and control-route accessibility. **Do not start simultaneous Duplex multi-column timing, Model H start-from-clear mechanics, operator productivity measurement, or a new machine family in this slice.**
+If Parts A–C finish substantially before one hour, use remaining time for replay/property tests, exact source metadata, accessibility, and source-card precision. **Do not start Thomas carry-force physics, Burkhardt bell modeling, square-root procedure, simultaneous Comptometer Duplex timing, or a new machine family in this slice.**
