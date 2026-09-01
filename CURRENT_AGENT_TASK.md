@@ -5,11 +5,15 @@ Owner: local coding/research agent
 Target duration: about one useful hour at the agent's observed throughput
 Repository authority: remote `main`
 
-Previous task is complete and archived at `tasks/archive/2026-09-02-scheutz-patent-operation.md`.
+Previous task is complete and archived at `tasks/archive/2026-09-02-differential-analyzer-primary-source-retry.md`.
 
-The previous assignment landed as `846c912a6140a672e09ed6ecbcb51ac2af7dbafa` about 34 minutes after assignment, changed 7 files (about `+79/-6`), retained 292 tests across 21 files, and passed exact-head CI `33539917100` plus Deploy Pages `33539914118`. Because the agent again completed a real source/atlas slice comfortably under one hour, this assignment is slightly broader: try to close both the **1931 construction-paper** and **1941 mathematical-theory** access gaps for the Differential Analyzer, then reconcile only the evidence relationships actually supported.
+The previous Differential Analyzer assignment landed as `e155be76ea08095e57aa06029bdd0aa0f697de06` about 30 minutes after assignment, changed 7 files (about `+55/-15`), retained 292 tests across 21 files, and passed exact-head CI `33545157498` plus Deploy Pages `33545157546`.
 
-> **Question for this slice:** what can be established directly from Bush's 1931 construction paper and Shannon's 1941 mathematical-theory paper, and how should those sources be separated from the already-inspected Bush–Caldwell application paper, surviving Smithsonian components, later analyzer generations, and the repository's P/M continuous-flow model?
+Since that completion, administrator review merged PR #10 (`Bind direct multiplication replay to recorded actions`) into `main` as squash commit `794f8e1d1ed55b452b6410d11546ba6b636369ca`. PR #11 (`Bind Analytical Engine replay to fixture provenance`) is independently reviewed and exact-head CI-green at `4a98fb186978356af5e860b76d0c15d811a28586`, but became non-mergeable only because PR #10 touched overlapping core/status/verification lines. The PR bodies record a previously tested synthesis of the two changes with 319/319 tests; do not treat that claim as a substitute for re-running verification on current `main`.
+
+This assignment is intentionally broader because the agent has repeatedly completed substantive bounded slices in roughly 30–35 minutes.
+
+> **Question for this slice:** can we integrate the already-reviewed Analytical Engine fixture-provenance hardening cleanly on top of the merged direct-multiplication replay hardening, then use the remaining time to improve one concrete Curta Type II primary-source boundary without inventing production geometry or chronology?
 
 ## Read before work
 
@@ -19,192 +23,157 @@ Fetch/pull remote `main`, then read in order:
 2. `TODO.md`
 3. `AGENTS.md`
 4. `docs/EVIDENCE_POLICY.md`
-5. `docs/RESEARCH_GAPS.md`, especially Priority 0.2, Priority 6, Priority 8 and `Files to deepen next`
+5. `docs/RESEARCH_GAPS.md`, especially Priority 0.2 and `Files to deepen next`
 6. `docs/VERIFICATION.md`
-7. `tasks/archive/2026-09-01-de2-differential-analyzer-publication-precision.md`
-8. `research/differential-analyzer.md`
-9. `research/mechanical-error-control.md` or the current error-control note only where it touches Bush frontlash/torque responsibilities
-10. `src/exhibits/source-atlas/` and `tests/source-atlas.test.ts`
-11. `src/exhibits/continuous-flow/`, `src/mechanisms/continuous-integrator/`, and their tests only to preserve current P/M boundaries
+7. `tasks/archive/2026-09-02-differential-analyzer-primary-source-retry.md`
+8. current `src/core/trace.ts`
+9. current `src/mechanisms/direct-multiplier/` and its tests, only to preserve the just-merged PR #10 semantics
+10. PR #11 exact head/diff (`4a98fb186978356af5e860b76d0c15d811a28586`) and `src/exhibits/analytical-engine-flow/` + tests
+11. `research/curta-source-map.md`
+12. `src/exhibits/source-atlas/` and `tests/source-atlas.test.ts`
 
-Run current-main typecheck/tests before editing and record the actual baseline. Do not use stale `IMPLEMENTATION_PLAN.md` checkboxes as the task source.
+Run current-main typecheck/tests before editing and record the actual baseline. Do not use stale `IMPLEMENTATION_PLAN.md` checkboxes as a task source.
 
-# Part A — retry and directly inspect Shannon 1941 full text
+# Part A — integrate PR #11 on top of current main
 
-The current note records Shannon 1941 as bibliographic-only because the publisher PDF previously returned an access challenge. Retry from the canonical publication route instead of trusting that old access result:
-
-Claude E. Shannon, “Mathematical Theory of the Differential Analyzer,” *Journal of Mathematics and Physics* 20 (April 1941), printed pp. **337–354**.
-
-DOI:
-
-<https://doi.org/10.1002/sapm1941201337>
-
-Publisher PDF route currently discoverable from Wiley:
-
-<https://onlinelibrary.wiley.com/doi/pdf/10.1002/sapm1941201337>
-
-The existence of a URL is not enough. **Actually inspect the full text/page images or rendered text.** If it is still blocked in the local agent environment, preserve the access failure and do not create page claims from snippets/search results.
-
-## A1. If full text is directly inspectable
-
-Record exact printed-page anchors for only the claims directly useful to this repository. Focus on questions such as:
-
-- how Shannon mathematically characterizes the class/capabilities of differential-analyzer systems;
-- what kinds of machine elements/functional relations the paper treats abstractly;
-- what assumptions or restrictions the theory states;
-- whether the theory distinguishes mathematical interconnection/representation from one particular physical geometry;
-- what the paper does **not** provide as construction evidence.
-
-Do not force modern software vocabulary onto Shannon. Do not use this paper as evidence for the exact geometry of Smithsonian parts or the browser's discrete inspection phases.
-
-Evidence boundary:
-
-- directly inspected Shannon text = **H/E1 for what Shannon published in 1941**;
-- mathematical statements proved/derived in the paper may also be discussed as **M**, but keep publication evidence and mathematical truth conceptually separate;
-- interpretation connecting Shannon's theory to modern reconstruction/browser models is **R/P**, not automatically H/E1.
-
-Use minimal quotation; paraphrase with exact pages.
-
-## A2. If full text remains inaccessible
-
-Do not spend the full hour defeating publisher access. Record the exact access result in `research/differential-analyzer.md`, keep Shannon bibliographic-only, and continue Parts B–F. Do not backfill page claims from later citations.
-
-# Part B — try to directly inspect Bush 1931 construction paper
-
-The largest remaining Differential Analyzer source gap is still the primary construction paper:
-
-Vannevar Bush, “The Differential Analyzer. A New Machine for Solving Differential Equations,” *Journal of the Franklin Institute* 212 no. 4 (October 1931), printed pp. **447–488**.
-
-DOI:
-
-<https://doi.org/10.1016/S0016-0032(31)90616-9>
-
-Known bibliographic institutional anchor:
-
-Smithsonian Libraries catalogs the MIT offprint as *Publications of the Massachusetts Institute of Technology* no. 865, October 1931, pp. 447–488.
-
-The task is to find a **lawfully accessible full facsimile or institutional full-text scan** and actually inspect it. Search independently; do not treat commercial rare-book descriptions, later historical summaries, or isolated quotations as substitutes for the paper.
-
-## B1. If a full facsimile is directly inspectable
-
-Extract exact page/figure anchors only for responsibilities relevant to existing repository claims. Candidate questions—not pre-approved answers—include:
-
-- what Bush says about the integrator and its role;
-- what he says about torque/amplification and why it is needed;
-- how units are connected/configured for a problem;
-- what input/output or curve-following/tracing roles are described;
-- what limitations/error/backlash/accuracy issues are explicitly discussed;
-- what generation/configuration the paper actually describes.
-
-Do **not** infer missing dimensions, complete shaft routing, material/tolerance values, safe operating rate, or modern reliability probabilities unless the paper directly provides them.
-
-Keep exact page and figure identifiers. If a figure is used, state what the caption/text establishes rather than reverse-engineering hidden geometry from the image.
-
-Evidence boundary:
-
-- Bush 1931 full paper = **H/E1 for Bush's contemporary published construction/operation account**;
-- it is not automatically direct measurement of every surviving Smithsonian component;
-- it does not apply unchanged to the later Rockefeller/new-type analyzer;
-- if Bush gives estimates/qualitative performance claims, distinguish author report from independently measured benchmark evidence.
-
-## B2. If the full paper cannot be directly inspected
-
-Preserve the bibliographic-only boundary and document which canonical/institutional routes were attempted. Do not freeze any page/figure claim from secondary quotation.
-
-Do not let failure on B stop the whole slice if Shannon or another required reconciliation can still progress.
-
-# Part C — reconcile the source generations and roles
-
-Update `research/differential-analyzer.md` only for evidence actually obtained in Parts A/B.
-
-The note should make these layers visibly distinct:
+PR #11 solves a real fail-open replay boundary in the P/M Analytical Engine teaching trace: the recorded `fixture` could be descriptive while a substituted canonical event/final-state trace for another fixture still replayed successfully. Its exact reviewed head is:
 
 ```text
-ca. 1930 surviving Smithsonian component records = H/E1 object/catalog roles
-Bush 1931 construction paper = H/E1 only if directly inspected; otherwise bibliographic-only
-Bush & Caldwell 1931 Thomas-Fermi application = H/E1 application/checking paper already directly inspected
-Shannon 1941 mathematical theory = H/E1 at inspected page precision if full text is now readable; otherwise bibliographic-only
-later Rockefeller / Bush–Caldwell 1945 machine = separate generation
-modern engineering/history interpretation = R at cited precision
-repository continuous integrator/flow = P/M
+4a98fb186978356af5e860b76d0c15d811a28586
 ```
 
-Required boundary statements:
+Its original base was `e155be76...`; current `main` now also contains PR #10's direct-multiplication action-bound replay hardening.
 
-- an application schematic is not a construction drawing;
-- a mathematical theory paper is not a physical geometry source;
-- surviving component catalogs do not prove the browser's exact interconnection;
-- later analyzer generations do not silently fill gaps in the ca. 1930 machine;
-- frontlash compensation and torque amplification remain separate responsibilities unless a directly inspected source explicitly relates them;
-- repository discrete phases/sample interval remain P/M inspection choices, not historical timing.
+## A1. Preserve both hardening lines
 
-If Bush 1931 becomes directly inspectable, replace only the old “bibliographic-only” statements that are now genuinely obsolete. If Shannon remains blocked, leave its boundary honest.
+Integrate the **behavioral content** of PR #11 onto current `main` without regressing PR #10.
 
-# Part D — typed source-atlas reconciliation
+You may fetch/cherry-pick/rebase the PR branch or reapply its focused patch, but resolve overlaps deliberately. Do not overwrite newer status/evidence records with an older PR copy.
 
-Use the existing `src/exhibits/source-atlas/` data model; do not create a new evidence structure.
+The resulting Analytical Engine trace must retain these reviewed properties:
 
-For the Differential Analyzer track, make visitors able to distinguish, at minimum:
+- exact enumerable fixture contract `{ a, b, c, d }` with safe integers;
+- reject unknown enumerable string or Symbol fixture fields;
+- derive canonical initial state, ordered events and final state from the fixture;
+- reject fixture-only tampering and replacement of events/final state by another valid fixture trace;
+- `stateAtAnalyticalEvent()` must validate full trace provenance/final state before returning a partial state;
+- object member insertion order is not semantic;
+- arrays remain ordered, length/index presence matters, sparse/extended arrays do not collapse into equality;
+- non-finite values, enumerable `undefined` extensions and Symbol/enumerable extensions do not disappear through JSON-style coercion;
+- final-state tampering fails closed.
 
-1. surviving Smithsonian component/object layer;
-2. Bush 1931 construction-publication layer;
-3. Bush–Caldwell 1931 application/checking layer;
-4. Shannon 1941 mathematical-theory layer;
-5. later-generation boundary;
-6. repository P/M continuous-flow behavior.
+At the same time, preserve current direct-multiplication PR #10 behavior:
 
-Only create page/figure metadata for sources actually inspected. If Bush or Shannon remains blocked, encode that limitation rather than pretending inspection happened.
+- recorded `DIRECT_MULTIPLY` action remains authoritative;
+- action/event substitution for another multiplier fails closed;
+- current direct-multiplier tests remain green.
 
-Do not create one card per access mirror. Preserve canonical source identity separately from access host where the existing schema supports it.
+Do not generalize this into a repository-wide trace redesign unless a concrete shared helper is already present and the change is obviously dependency-safe. Minimal integration is preferred.
 
-## Required tests
+## A2. Tests
 
-Update `tests/source-atlas.test.ts` or the nearest existing evidence tests to lock in relationships, not punctuation. At least cover:
+At minimum, after integration ensure the focused Analytical Engine suite covers:
 
-- construction-publication role is distinct from the already-inspected application-paper role;
-- mathematical-theory role is distinct from physical component/construction roles;
-- later analyzer generation is not used to fill original-machine geometry;
-- `supports` / `notEstablished` prohibit exact shaft routing, geometry, timing, torque/error numbers, or browser-phase identity unless directly supported;
-- repository P/M flow remains separate from H/R source anchors;
-- if full-text access remains blocked for either source, no false `fullFacsimileInspected: true` or fake page/figure anchors are introduced.
+- alternate-fixture event/final substitution rejection;
+- fixture-only tampering rejection;
+- non-canonical initial/final state rejection;
+- event stepping cannot bypass provenance validation;
+- unknown enumerable fixture fields including Symbol keys;
+- member insertion order tolerance;
+- event-array order/shape authority;
+- non-finite / enumerable-undefined / sparse-array adversarial cases covered by PR #11's reviewed behavior.
 
-# Part E — bounded continuous-flow/error-control cross-check
-
-Inspect the existing public wording for:
+Run both focused suites:
 
 ```text
-#/continuous
-#/mechanical-error-control
-#/source-atlas
-#/about
+Analytical Engine flow tests
+direct multiplier tests
 ```
 
-Ask only:
+If current-main changes make the old expected combined count `319` obsolete, record the actual count rather than forcing that number.
 
-> Does newly inspected Bush 1931 or Shannon 1941 evidence require a small correction to the existing boundary between integration mathematics, component roles, frontlash, torque amplification, and the P/M browser flow?
+## A3. PR bookkeeping
 
-If yes, make the smallest source-backed correction and add a focused test if semantics change. If no, leave runtime mechanism code alone.
+If PR #11 has become mergeable or already merged by the time this task starts, do not duplicate it; verify current `main` contains the behavior and skip integration.
 
-Do not turn this into a physical Differential Analyzer emulator, torque model, stochastic error simulator, or new 3D route.
+If you integrate equivalent PR #11 behavior directly into `main` because the fork PR remains conflict-blocked, mention PR #11 and exact head in the completion commit/verification note so attribution/provenance is not lost. Do not close or rewrite the contributor's fork history unless repository permissions and normal workflow make that clearly appropriate.
 
-# Part F — reconciliation and verification
+# Part B — Curta Type II primary-source precision
 
-After real source work:
+After Part A is complete and green, use the remaining time for one bounded Curta source-map pass. Do **not** implement Curta geometry.
 
-- update `STATUS.md` only for source precision actually gained;
-- add one concise completed line to `TODO.md`;
-- narrow `docs/RESEARCH_GAPS.md` only where a stated gap genuinely closes;
+Current source state in `research/curta-source-map.md` already includes:
+
+- Herzstark US 2,525,352 patent;
+- directly inspected two-page Contina operator guide (Model I `8×6×11`, Model II `11×8×15`, Model I illustrated);
+- 1967 Type I service-manual cover;
+- Type II 43-page assembled service scan with directly inspected PDF pages 1–2, 6/leaf `N I-a`, 10/leaf `O-1-2`, 34/leaf `S 3`;
+- explicit warning that the Type II service scan contains replacement leaves/latest modifications and may reuse Model I pictures whose details/proportions differ.
+
+The remaining target is **document/revision precision**, not prettier mechanism claims.
+
+## B1. Inspect primary/manufacturer Type II documents exposed by the existing Curta indexes
+
+Start from the already recorded access layers:
+
+- `https://www.mycurta.com/cu.htm`
+- `https://vcalc.org/cu.htm`
+- the currently cited Type II service scan
+
+Look for directly inspectable manufacturer-origin Type II documents such as service leaves, parts lists/BOMs, drawing sets, operator booklets, or cover/index pages.
+
+Priority questions:
+
+1. Can a Type II document directly establish `11×8×15` capacity independently of the dual-model operator guide?
+2. Does any directly inspectable Type II cover/index/leaf expose an issue date, revision date, replacement-leaf date/code, document number, or revision identifier?
+3. Can the replacement-leaf chronology be bounded at all from printed leaf metadata, or must it remain an assembled-undated/latest-modifications warning?
+4. Which document explicitly identifies itself as Type II versus merely being linked under a collector index filename?
+5. Are there directly readable parts-list/drawing document identities that improve source provenance **without** interpreting hidden geometry?
+
+A collector filename or HTML link label is not manufacturer metadata. Record printed/document-internal identity separately from access-host labeling.
+
+## B2. Evidence boundaries
+
+- directly inspected manufacturer document text/cover/leaf = **H/E1 at the exact identity/page/leaf precision inspected**;
+- specialist mirror/index = access provenance only unless the underlying document is actually inspected;
+- production chronology synthesized across documents = **H/R** unless a primary source explicitly states it;
+- patent embodiment is not production revision proof;
+- do not infer part equality across Type I/II from reused illustrations;
+- do not infer tooth profiles, ratios, transfer timing, tolerances, safe speed, or hidden interlock linkage from assembly names or exploded drawings alone.
+
+If the Type II capacity/date/revision question remains unresolved after a bounded search, say exactly what was inspected and preserve the open gap. Do not fill it from unsourced collector prose.
+
+## B3. Source-atlas update only if evidence really improves
+
+If Part B produces a new directly inspected Curta primary document or materially better page/leaf identity:
+
+- update `research/curta-source-map.md`;
+- update the existing Curta typed source-atlas anchor(s), not a parallel evidence model;
+- add/update focused `tests/source-atlas.test.ts` assertions for the new support/not-established boundary.
+
+If no new primary-source precision is gained, leave the atlas unchanged and record the bounded access result only in the research note if it is useful and non-redundant.
+
+Do not change `#/curta` runtime geometry/animation in this slice.
+
+# Part C — reconciliation and verification
+
+After Parts A/B:
+
+- update `STATUS.md` to reflect the Analytical Engine replay hardening and only Curta precision actually gained;
+- add one concise completed line to `TODO.md` for this slice;
+- narrow `docs/RESEARCH_GAPS.md` only where a stated Curta gap genuinely closes;
 - update `docs/VERIFICATION.md` with actual baseline/final test counts and checks;
-- do not re-date unrelated browser checks or copy stale counts.
+- preserve the completed Bush/Shannon, Scheutz, and PR #10 records; do not overwrite them with stale PR status text.
 
-If atlas/UI data changes, perform bilingual browser smoke at least for:
+If Part B changes source-atlas/UI data, perform bilingual browser smoke for:
 
 ```text
 #/source-atlas
-#/continuous
-#/mechanical-error-control
+#/curta
 #/about
 ```
+
+Part A alone changes validation/provenance but not rendering, so do not falsely claim a browser smoke if none was performed.
 
 Before commit/push, run:
 
@@ -215,49 +184,40 @@ npm run build
 git diff --check
 ```
 
+Also run focused Analytical Engine, direct-multiplier, and source-atlas tests for the touched areas.
+
 All must pass.
 
-The finished slice should answer, from directly inspectable evidence or explicit access boundaries:
+The finished slice should answer:
 
-> What does Bush 1931 directly establish about the construction/operation responsibilities of the original Differential Analyzer, and what remains uninspected or unmeasured?
+> Is the Analytical Engine fixture now the authoritative source of the trace, or can a valid trace from another fixture still be substituted?
 
-> What does Shannon 1941 directly establish at the mathematical/system level, and why is that not a geometry source?
+> Did integrating that hardening preserve the just-merged direct-multiplication action-bound replay contract?
 
-> How do Bush construction, Bush–Caldwell application, Shannon theory, surviving components, later generations, and repository P/M flow remain separate in the atlas?
+> What new Type II Curta document identity/revision fact was directly inspected, and what production chronology or geometry still remains unestablished?
 
 After push:
 
 - confirm remote `main` contains the coherent completion commit;
-- inspect exact-head push CI and Deploy Pages when they complete and record only completed outcomes;
+- inspect exact-head push CI and Deploy Pages when they complete and record only completed outcomes if available before stopping;
 - stop and wait for the next `CURRENT_AGENT_TASK.md` revision.
 
 Suggested commit subject:
 
 ```text
-research: deepen differential analyzer primary sources
+fix: integrate analytical replay provenance and deepen Curta sources
 ```
-
-# Evidence boundaries
-
-- directly inspected Bush 1931 full paper: **H/E1 at page/figure precision actually inspected**;
-- Bush 1931 bibliographic record only, if full text remains unavailable: H bibliographic identity only; no page/figure mechanism claims;
-- Bush–Caldwell 1931 application facsimile: existing **H/E1 application/checking evidence**, not construction geometry;
-- directly inspected Shannon 1941 full text: **H/E1 for the published text**, with mathematical claims separately identifiable as M;
-- Shannon bibliographic metadata only, if access remains blocked: no equation/page/figure claims;
-- Smithsonian component records: **H/E1 object/catalog precision**;
-- later Rockefeller/1945 analyzer: separate generation;
-- repository continuous flow/integrator: **P/M**.
 
 # Stop conditions
 
-Stop a source subpart and preserve the boundary instead of guessing if:
+Stop a subpart and preserve the boundary rather than guessing if:
 
-- only snippets, commercial descriptions, or later quotations are accessible;
-- a PDF URL exists but the actual article pages cannot be inspected;
-- page/figure identity cannot be established;
-- a source image invites reverse engineering not supported by caption/text;
-- exact torque, backlash, error, tolerance, speed, or geometry claims would require data not present in the inspected source;
-- source-atlas changes would require broad routing/layout refactors;
-- work starts expanding into the Rockefeller analyzer, electronic analog computing generally, or a physics simulation.
+- PR #11 integration would require discarding or weakening PR #10 semantics;
+- the current trace core has diverged enough that reproducing PR #11 behavior requires a broad redesign;
+- a Curta PDF/index exists but its actual pages cannot be inspected;
+- Type II chronology is available only in collector prose without directly inspected document support;
+- a drawing invites geometric reverse engineering not supported by caption/text;
+- source-atlas changes would require broad route/layout refactors;
+- the task starts expanding into a full Curta emulator, production serial-number census, or 3D/physics model.
 
-If Parts A–D complete substantially before one hour, use remaining time to tighten exact page/figure anchors and boundary-focused tests, or inspect one additional **contemporary, directly readable** source cited by Bush/Shannon that clarifies an existing responsibility. Do not start a new machine family.
+If Part A and a meaningful Part B source improvement both finish substantially before one hour, use remaining time to tighten exact page/leaf anchors and adversarial tests. Do not start another machine family.
