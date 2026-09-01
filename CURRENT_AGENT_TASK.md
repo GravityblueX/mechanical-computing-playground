@@ -5,13 +5,11 @@ Owner: local coding/research agent
 Target duration: about one useful hour at the agent's observed throughput
 Repository authority: remote `main`
 
-Previous task is complete and archived at `tasks/archive/2026-09-01-controlled-key-integrity.md`.
+Previous task is complete and archived at `tasks/archive/2026-09-01-thomas-register-lifecycle.md`.
 
-The previous assignment landed as `d35f4209950b5652b3b3bc3f5535020afaaff434` about 37 minutes after assignment, changed 349 lines (`+326/-23`), raised the suite from 251 tests / 19 files to 264 tests / 20 files, and passed CI run `33510045135`. No PR is open. Several recent slices have finished well under an hour, so this assignment intentionally combines one primary-source precision pass with one small tested control-state increment. Do not broaden beyond this pair.
+The previous assignment landed as `540ba69f4bbbba01a417cb709b96732d71fc2e5a` about 43 minutes after assignment, changed 313 lines (`+292/-21`) across 8 files, raised the suite from 264 tests / 20 files to 277 tests / 21 files, and passed push CI run `33516613852`. Recent bounded slices continue to finish materially under one hour, so this assignment combines **two small replay-integrity corrections** with **one bounded named-machine source pass**. Do not broaden beyond these three pieces.
 
-> **Question for this slice: what does it mean operationally that a stepped-drum calculator can preserve/clear its result register and revolution register independently, and what historical sources actually establish that behavior for identified Thomas arithmometers?**
-
-The historical target is the Thomas arithmometer around the 1865–1870 production period. The software target is a generic P/M register-lifecycle/zeroing lesson. Do not turn museum descriptions, later specialist reconstructions, or a teaching state machine into one universal Thomas linkage.
+> **Question for this slice:** can the repository make two older serialized traces fail closed without losing current semantics, while upgrading Curta Type II source precision from index/identity level to directly inspected service-manual page/figure evidence?
 
 ## Read before work
 
@@ -21,218 +19,177 @@ Fetch/pull remote `main`, then read in order:
 2. `TODO.md`
 3. `AGENTS.md`
 4. `docs/EVIDENCE_POLICY.md`
-5. `docs/RESEARCH_GAPS.md`, especially Priorities 0.1, 3, 4 and 5
-6. `research/control-and-zeroing-source-map.md`
-7. `research/subtraction-and-division.md`
-8. `src/mechanisms/revolution-counter/index.ts`
-9. existing setting/crank interlock, operator-division, output-ledger mechanisms and tests
-10. `src/exhibits/control-provenance/` and the `#/controls` UI in `src/main.ts`
-11. `docs/VERIFICATION.md`
+5. `docs/RESEARCH_GAPS.md`, especially Priorities 0.2 and 6
+6. `docs/VERIFICATION.md`
+7. `src/mechanism-core.ts` + `tests/mechanism-core.test.ts`
+8. `src/mechanisms/continuous-integrator/index.ts` + `tests/continuous-integrator.test.ts`
+9. `research/curta-source-map.md`
+10. typed source-atlas/source-anchor adapters and the `#/source-atlas` / `#/curta` UI only if the source pass yields a precise new anchor
+11. open PR #8 and PR #9 as **review inputs**, not as branches to merge blindly
 
-Run current-main typecheck/tests before editing and record the actual baseline. Do not infer state from stale `IMPLEMENTATION_PLAN.md` checkboxes.
+Run current-main typecheck/tests before editing and record the actual baseline. Do not infer state from old plan checkboxes or from the old PR verification counts.
 
-# Part A — Thomas instruction / register-control source pass
+# Part A — reconcile the two stale replay-hardening PRs onto current main
 
-The repository currently has identified Smithsonian objects supporting mode selection, revolution-register direction and separate zeroing controls, but `research/control-and-zeroing-source-map.md` still says the 1868 Thomas instruction pamphlet pages were not inspected. Resolve that boundary as far as direct access permits.
+Two external PRs contain narrow correctness fixes that are still absent from current `main`, but both PR branches now report non-mergeable against the advanced documentation/code base. Preserve their **code/test intent**, not their stale `docs/VERIFICATION.md` patches.
 
-## A1. Smithsonian 1868 instruction pamphlet
+## A1. Decimal-register unknown-event rejection — PR #8
 
-Directly inspect the institutional record for:
+Review:
 
-**_Instructions pour se Servir de l'Arithmomètre_**, 1868, Smithsonian/NMAH `nmah_904757`, related to Thomas arithmometer `MA.335215`.
+- PR: <https://github.com/tmzncty/mechanical-computing-playground/pull/8>
+- exact reviewed head: `6724e40154151d94bd83c4af2fa457f032927d85`
+- exact-head CI previously passed as run `33505287956`
 
-Entry points:
+Current `reduceDecimalRegisterEvent()` still treats only `WHEEL_STEP` specially and silently lets every other runtime discriminator pass as a no-op. Correct that boundary on **current main**.
 
-- <https://americanhistory.si.edu/collections/object/nmah_904757>
-- <https://www.si.edu/object/instructions-pour-se-servir-de-larithmometre%3Anmah_904757>
+Required behavior:
 
-The catalog identifies it as a 1868 operating-instruction pamphlet and exposes an IIIF/Mirador entry. Follow the IIIF manifest/attachments only if they actually expose readable pages.
+- keep the six declared decimal-register event kinds accepted with current semantics;
+- `WHEEL_STEP` continues to derive the digit mutation;
+- legitimate crank/carry marker events remain state no-ops at this reducer layer;
+- any runtime event discriminator outside the declared set must throw/fail closed;
+- do not widen this slice into marker-order validation, marker-metadata derivation, or a full trace-schema rewrite.
 
-Record exactly:
+Required focused regressions:
 
-- catalog identity, date, maker/provenance;
-- number of readable canvases/pages actually exposed;
-- printed/page or viewer positions inspected if readable;
-- wording/instructions relevant to mode selection, result register, revolution counter, clearing/zeroing, carriage movement, multiplication/division, or initial/final state;
-- whether separate result/revolution clearing is actually described in the pamphlet or only in identified object records;
-- what is not readable or not established.
+1. inserting one unknown event into an otherwise valid trace is rejected;
+2. substituting unknown events for all non-`WHEEL_STEP` markers is rejected;
+3. the canonical `0099 + 1 -> 0100` trace still replays unchanged.
 
-If the manifest exposes only a cover/object image, say so and stop at catalog precision. Do not manufacture page-level claims from the existence of the pamphlet.
+Use an exhaustive switch or an equally clear fail-closed discriminator boundary. Do not make TypeScript exhaustiveness the only runtime defense, because serialized JSON is untrusted at runtime.
 
-## A2. Identified Thomas objects
+## A2. Continuous-integrator action-bound replay — PR #9
 
-Directly inspect and keep separate at least these Smithsonian objects:
+Review:
 
-- `nmah_690683` — 1867 Thomas arithmometer;
-- `nmah_690686` / `MA.335215` — ca. 1873 object explicitly associated with the separately stored 1868 instruction book.
+- PR: <https://github.com/tmzncty/mechanical-computing-playground/pull/9>
+- exact reviewed head: `72a0ca0ea0e7dcd2c3b36f3f5da6a624171f2caf`
+- exact-head CI previously passed as run `33506511205`
 
-Useful entry points:
+Current `replayIntegrator()` replays only recorded events. The trace also records actions, so deleting/replacing those actions or splitting action/event cycle identities can currently leave a trace that verifies from events alone.
 
-- <https://americanhistory.si.edu/collections/object/nmah_690683>
-- <https://americanhistory.si.edu/collections/object/nmah_690686>
+Harden replay on current main so it is **action-derived** in the same spirit as newer mechanisms.
 
-Record only what the catalog/object evidence actually supports, especially:
+Required behavior:
 
-- add/multiply versus subtract/divide mode selector;
-- revolution-register direction where stated;
-- independent zeroing controls/knobs where stated;
-- carriage/register capacities for the identified object only;
-- object date/serial/provenance boundaries.
+- require runtime `actions` and `events` arrays;
+- validate both initial and final integrator states even for zero-action traces;
+- require an action cycle id to be a non-empty string at runtime;
+- preserve the semantic distinction between omitted `inputQuantity` and an explicitly invalid/non-number value; `null` must not silently mean “use current input”;
+- starting from the recorded initial state, re-run every recorded action through the existing transition function;
+- require the action-derived ordered events to match the serialized event stream exactly;
+- require the action-derived final state to match the serialized final state;
+- preserve valid zero-action traces;
+- keep the numerical integration rule and UI unchanged.
 
-Do not merge these two objects into one canonical revision.
+Required tamper regressions should cover at least:
 
-## A3. 1865 instruction-booklet institutional reconstruction boundary
+- missing one action;
+- deleting all actions while events remain;
+- adding an extra action;
+- deleting all events while actions remain;
+- changing an action input;
+- explicit `null`/invalid action input;
+- changing action cycle id;
+- changing event cycle id;
+- unknown action;
+- forged final state;
+- identical invalid initial/final endpoints in an empty trace;
+- valid genuine zero-action trace.
 
-Directly inspect the Museum of the History of Science, Oxford page:
+Do not copy PR #8/#9 historical verification sections verbatim: their baselines (`251/253/263` tests) are stale. Record only the current-main baseline and the final result you actually run now.
 
-<https://www.mhs.ox.ac.uk/staff/saj/arithmometer/>
+## A3. PR handling boundary
 
-The institutional account explicitly says its Figure 1 engraving is from an **1865 instruction booklet** and describes two independent carriage-dial zeroing mechanisms operated by knobs at opposite ends of the carriage.
+Do **not** merge the stale fork branches just to preserve their old verification prose. Land patch-equivalent current-main code/tests in this coherent completion commit. Leave PR closure/supersession to the next repository reviewer unless your normal authenticated workflow can close them cleanly after proving current-main patch equivalence; never rewrite the contributor branches.
 
-Use this as an **institutional reconstruction/synthesis boundary (H/R or R, normally E2)**, not as if you had directly inspected the 1865 primary booklet unless the page exposes the original scan at sufficient resolution and bibliographic precision.
+# Part B — bounded Curta Type II service-manual source pass
 
-Record exactly what the institutional page attributes to the 1865 booklet, and keep it separate from the 1868 Smithsonian pamphlet and identified objects.
+`research/curta-source-map.md` directly inspected the Type I 1967 service-manual cover but still leaves Type II service content at index identity. Upgrade only the Type II control/source precision that can be directly inspected within this slice.
 
-## A4. Specialist production/revision orientation remains secondary
+## B1. Access layer
 
-You may consult `arithmometre.org` for orientation only, especially its bibliography/model chronology and 1865 patent/revision material:
+Start from the specialist index:
 
-- <https://arithmometre.org/Bibliotheque/PageBibliothequeA.html>
-- <https://arithmometre.org/Anatomie/NumerosSerieEnglish.html>
+<https://www.mycurta.com/cu.htm>
 
-Useful orientation includes the bibliographic existence of 1865/1868 instruction editions and model/revision distinctions. Treat these as specialist secondary evidence unless independently anchored to a directly inspected primary/institutional source. Do not upgrade serial-number chronology or clearing-mechanism revision claims to H/E1 merely because they are detailed.
+It identifies original Curta service manuals and credits Museum Mura as the source layer. The current index exposes a 43-page Type II English-green scan at:
 
-### Part A deliverable
+<https://www.mycurta.com/Documents/Curta_2_Service_Manual_Curta2_green_e.pdf>
 
-Deepen `research/control-and-zeroing-source-map.md` with a compact Thomas section that explicitly separates:
+The file is large (~46 MB). Download locally if needed. Treat `mycurta.com` as a **specialist access mirror**, not as institutional provenance. The document itself may be primary manufacturer material if the scanned pages establish that identity.
+
+Fallback identity/reference links from the same index include the 55-page German Type II scan and Type II factory drawings. Use them only if they materially resolve identity/page mapping; do not turn this slice into a 154-drawing geometry audit.
+
+## B2. Direct inspection target
+
+Inspect enough of the Type II English service manual to record defensible, page-specific facts for **control responsibility and model identity**, not full geometry.
+
+At minimum record:
+
+- title/cover identity, model, issuer/manufacturer, language, issue/date/revision if visibly stated;
+- contents/index page(s), if present;
+- exact viewer/PDF pages actually inspected for at least two of these responsibilities if the manual exposes them clearly:
+  - crank/handle home or safety-lock responsibility;
+  - carriage movement/position restriction;
+  - result-counter versus revolution-counter clearing/reset responsibility;
+  - plus/minus / reversing control;
+  - decade-transfer/carry adjustment only if the service page explicitly establishes it;
+- figure/table/part identifiers only where directly readable;
+- any explicit Type II capacity or control difference that can be stated without importing Type I assumptions;
+- what remains unreadable or not established.
+
+If the PDF is image-only, use page rendering/OCR only as a locator and visually verify the exact words/figures before making a page-level claim. If direct access fails or the relevant pages cannot be read confidently, record the access boundary instead of guessing.
+
+## B3. Keep document roles separate
+
+Preserve these distinctions:
+
+- US 2,525,352 = patented embodiment, not automatic proof of every production Curta;
+- *Your CURTA Calculator* = operator guide covering Model I/II at its document precision;
+- 1967 Type I service manual = Type I service document;
+- newly inspected Type II service manual pages = Type II service evidence only at the pages/revision actually inspected;
+- mycurta/vcalc indexes = specialist access/reference layer;
+- repository `#/curta`, `setting-crank-interlock`, `operator-division`, and register-lifecycle traces = P or P/M teaching models unless explicitly source-bound.
+
+Do not claim Type I and Type II hidden linkage identity merely because the operator guide says they are identical except capacity. Conversely, if the Type II service manual visibly documents a different part/control arrangement, record the difference precisely without extrapolating a whole production chronology.
+
+## B4. Deliverable
+
+Deepen `research/curta-source-map.md` with a compact Type II service-manual section containing:
 
 ```text
-1868 pamphlet pages actually inspected (or catalog-only boundary)
-identified 1867 and ca.1873 Smithsonian objects
-Oxford institutional account / 1865 booklet attribution
-specialist revision orientation
+document identity
+pages/figures directly inspected
+what each inspected page supports
+Type I / Type II boundary
+access/provenance layer
 what remains unestablished
 ```
 
-If the source pass yields useful procedure detail, add only the directly supported parts to `research/subtraction-and-division.md`; do not rewrite its generic P/M division loop as Thomas procedure.
+If this yields a precise new source anchor, update the typed source-atlas/source-anchor data and the existing `#/source-atlas` Curta card minimally. Do not create a new route or source-specific Curta mechanism animation.
 
-The boundary to preserve is:
+# Part C — reconciliation and verification
 
-> Separate zeroing controls and operation modes on identified Thomas-family objects do not by themselves establish one linkage, timing, procedure, or revision history for every arithmometer.
+After Parts A–B are real:
 
-# Part B — generic dual-register lifecycle / zeroing control
+- update `STATUS.md` only for replay guarantees/source precision that now genuinely exist;
+- add one concise completed line to `TODO.md` covering this combined slice;
+- update `docs/RESEARCH_GAPS.md` Priority 0.2 only if the Type II gap actually narrowed;
+- update `docs/VERIFICATION.md` with current baseline/final test counts and actual checks;
+- do not copy stale PR test counts into current verification;
+- do not claim Pages deployment unless a completed deployment for the final exact commit is actually observed.
 
-After Part A has established the control responsibility at defensible precision, add one small generic P/M mechanism that makes **independent register lifecycle** visible. This is not a Thomas emulator.
-
-Prefer a module under `src/mechanisms/` such as `register-lifecycle/` or another repository-consistent name. Reuse the existing `revolution-counter` type/semantics where natural; do not duplicate operator-division or output-ledger arithmetic.
-
-## B1. Minimum state
-
-Model only the control state needed to explain separate registers:
-
-- a result-register value (safe integer within an explicit supported domain);
-- a revolution/cycle register or wrapped existing `RevolutionState`;
-- an operation mode with a neutral generic vocabulary such as `ADD_MULTIPLY` / `SUBTRACT_DIVIDE` if useful to the lesson;
-- zeroing/clearing action count and human-operation count if they add inspectable value;
-- deterministic ordered events and replay.
-
-Do not model knob geometry, rack teeth, shaft timing, spring force, register-wheel layout, or source-specific capacities unless a source is cited for an identified object and the software still remains clearly P/M.
-
-## B2. Required behavior
-
-Expose independent actions equivalent in explanatory power to:
+If source-atlas UI data changes, perform bilingual smoke at least for:
 
 ```text
-SET_MODE ...
-CLEAR_REVOLUTION_REGISTER
-CLEAR_RESULT_REGISTER
-```
-
-A combined convenience helper is allowed only if it is clearly a repository P/M composition of two independent actions, not a claimed historical single control.
-
-Important semantic requirements:
-
-- clearing the revolution register must leave the result register unchanged;
-- clearing the result register must leave the revolution register unchanged;
-- mode changes must not silently mutate either register;
-- clearing an already-zero register must have an explicit deterministic policy (recorded no-op event or explicit rejection; choose one and test it);
-- replay must be fail-closed and action-derived or otherwise consistent with the repository's hardened replay style;
-- no source-specific action timing or interlock should be invented.
-
-Use a simple teaching fixture such as:
-
-```text
-result = 8478
-revolution/cycle register = 27
-clear revolution -> result still 8478
-clear result -> result 0, revolution remains at its current state
-```
-
-This fixture is P/M state hygiene, not a claim that one specific historical multiplication left `27` in a Thomas counter.
-
-## B3. Required tests
-
-Add focused Vitest coverage for at least:
-
-1. valid creation with non-zero result and revolution register state;
-2. independent revolution-register clear preserves result;
-3. independent result-register clear preserves revolution state;
-4. mode selection changes only mode/control state;
-5. deterministic identical state + action gives identical event/result;
-6. replay reproduces final state from a mixed mode/clear sequence;
-7. replay rejects forged `before`, forged target register, wrong sequence/order, impossible counter state, and forged final state;
-8. invalid/unsafe numeric state is rejected explicitly;
-9. existing revolution-counter hardening remains green;
-10. existing operator-division, setting-crank and key-stroke-integrity tests remain green.
-
-Do not add a stochastic reliability model, zeroing linkage animation, or register-capacity physics.
-
-# Part C — small control/protocol integration
-
-Integrate the new P/M register-lifecycle lesson into the existing `#/controls` area or the smallest existing comparison surface. Do not create route churn unless the current architecture makes it genuinely simpler.
-
-The visitor should be able to inspect one deterministic scenario showing that:
-
-```text
-result register
-revolution/cycle register
-operation mode
-```
-
-are separate computational/control responsibilities, and that clearing one register does not mean “reset the whole machine.”
-
-Show:
-
-- before/after values;
-- which register was cleared;
-- current mode;
-- ordered events;
-- source/evidence cards that keep identified Thomas object facts separate from the generic P/M trace.
-
-Bilingual text is required if the surrounding route is bilingual. No meaning should depend only on color.
-
-Do not draw a Thomas zeroing knob/linkage beyond a clearly schematic label unless directly supported at the precision shown.
-
-# Part D — reconciliation and verification
-
-After Parts A–C are real:
-
-- update `STATUS.md` only for what now genuinely exists;
-- add one concise completed line to `TODO.md`;
-- update `docs/RESEARCH_GAPS.md` Priorities 0.1/3/4 only if the source gap genuinely changed;
-- update `docs/VERIFICATION.md` with actual baseline/final test counts and checks;
-- update typed control-provenance adapters only if directly inspected evidence adds a precise Thomas source/model/control responsibility;
-- archive no extra planning files beyond the normal completed-task record generated by the next reviewer.
-
-If the public controls UI changes, perform bilingual browser smoke at least for:
-
-```text
-#/controls
-#/division
+#/source-atlas
+#/curta
 #/about
 ```
 
-Quick-regress the existing controlled-key integrity scenario and check desktop plus one narrow viewport for horizontal overflow/runtime errors.
+No browser smoke is required solely for the two replay-only code changes if no UI data/rendering changes.
 
 # Acceptance
 
@@ -247,45 +204,48 @@ git diff --check
 
 All must pass.
 
-Also verify:
+Also run focused suites proving:
 
-- current 264-test baseline is not silently reduced;
-- key-stroke exactly-once correction still passes;
-- operator-division quotient-nine/exact-zero regressions remain green;
-- revolution-counter replay hardening remains green;
-- any Thomas manual/object claim cites the exact source precision actually inspected;
-- Oxford 1865-booklet attribution stays institutional E2 unless the primary booklet itself is directly inspected;
-- specialist revision claims remain secondary unless independently anchored.
+- canonical decimal-register replay still succeeds and unknown discriminators fail closed;
+- continuous-integrator valid traces, action-derived replay, zero-action replay, and all tamper cases pass;
+- current register-lifecycle, revolution-counter, operator-division, setting-crank, key-stroke-integrity, difference-column, and Analytical Engine replay tests remain green.
+
+The final slice should answer these questions from code/evidence rather than prose alone:
+
+> Can a serialized decimal-register trace smuggle an unknown event discriminator through replay?
+
+> Can a continuous-integrator trace change/delete its recorded actions while keeping the recorded events and still verify?
+
+> Which Curta Type II service-manual pages were actually inspected, and exactly what model/control responsibility do they establish?
 
 After push:
 
 - confirm remote `main` contains the coherent completion commit;
-- inspect CI only if it has completed and record only completed outcomes;
+- inspect push CI if completed and record only completed outcomes;
 - stop and wait for the next `CURRENT_AGENT_TASK.md` revision.
 
 Suggested commit subject:
 
 ```text
-feat: model independent register zeroing controls
+fix: bind legacy replay traces and deepen Curta II sources
 ```
 
 # Evidence boundaries
 
-- New register-lifecycle/zeroing event sequence: **M/P generic teaching/control model**.
-- Smithsonian identified objects: **H/E1 at catalog/object precision**; do not generalize capacities/control layout across revisions.
-- Smithsonian 1868 pamphlet: **H/E1 only for pages actually inspected**; catalog identity alone does not establish procedure.
-- Oxford institutional account: **H/R or R, E2** for the attributed 1865 instruction-booklet interpretation unless the underlying primary scan is directly inspected.
-- `arithmometre.org`: specialist **E3 orientation** unless independently anchored.
-- Do not infer physical linkage, timing, knob force, register gearing, production adoption, or one universal zeroing mechanism from the generic P/M model.
+- Decimal-register replay correction: software correctness only; no historical claim.
+- Continuous-integrator action-bound replay: **M/P software provenance integrity**; no change to historical Differential Analyzer claims or physical accuracy.
+- Type II service manual: **H/E1 only for primary pages actually inspected**, with specialist mirror access provenance kept explicit.
+- Type I/II comparison: **H/R only where two directly identified documents support the comparison**; no universal production-revision claim.
+- Existing generic controls/division/Curta UI: remain **P/M or P** unless explicitly source-bound.
 
 # Stop conditions
 
-Stop and leave a clear boundary note rather than guessing if:
+Stop and leave a precise boundary note rather than guessing if:
 
-- Smithsonian IIIF exposes no readable pamphlet pages; record catalog-only precision and continue with identified-object + Oxford evidence rather than inventing the manual contents;
-- implementing register lifecycle would require weakening existing revolution-counter replay guarantees;
-- the existing control UI architecture would require a large unrelated refactor;
-- source access turns into a broad French patent/manual hunt that threatens to consume the whole slice;
-- exact historical mode/zeroing procedure cannot be separated cleanly from the generic P/M control model.
+- either PR's intent conflicts with newer current-main replay semantics rather than applying as a narrow hardening;
+- action-derived integrator replay would require changing the numerical integration rule or public event vocabulary;
+- the Type II manual cannot be downloaded/read at page precision within a bounded attempt;
+- source inspection starts expanding into full factory-drawing geometry, serial-number chronology, lubrication practice, or restoration advice;
+- updating the source atlas would require a large unrelated UI refactor.
 
-If Parts A–C finish substantially before one hour, use remaining time for replay/property tests, exact source metadata, accessibility, and source-card precision. **Do not start Thomas carry-force physics, Burkhardt bell modeling, square-root procedure, simultaneous Comptometer Duplex timing, or a new machine family in this slice.**
+If Parts A–B finish substantially before one hour, use remaining time for property/tamper tests, exact Type II page/figure metadata, and accessibility/source-card precision. **Do not start a new machine family, stochastic reliability model, 3D Curta reconstruction, or square-root algorithm in this slice.**
