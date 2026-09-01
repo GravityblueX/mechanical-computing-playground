@@ -5,15 +5,13 @@ Owner: local coding/research agent
 Target duration: about one useful hour at the agent's observed throughput
 Repository authority: remote `main`
 
-Previous task is complete and archived at `tasks/archive/2026-09-02-differential-analyzer-primary-source-retry.md`.
+Previous task is complete and archived at `tasks/archive/2026-09-02-analytical-replay-curta-type-ii.md`.
 
-The previous Differential Analyzer assignment landed as `e155be76ea08095e57aa06029bdd0aa0f697de06` about 30 minutes after assignment, changed 7 files (about `+55/-15`), retained 292 tests across 21 files, and passed exact-head CI `33545157498` plus Deploy Pages `33545157546`.
+The previous mixed code/research slice was assigned at `d076a061445b6dce498cc92c5a5e890e6b6693ad` and landed as `4ac9dd8c480227e6b4ade51ce5eea24dc51f3935` about 29 minutes 31 seconds later. It changed 9 files (about `+251/-19`), passed 320 tests across 21 files plus build/typecheck/diff check, and exact-head push CI `33550914830` plus Deploy Pages `33550914846` both completed successfully. The administrator accepted the slice.
 
-Since that completion, administrator review merged PR #10 (`Bind direct multiplication replay to recorded actions`) into `main` as squash commit `794f8e1d1ed55b452b6410d11546ba6b636369ca`. PR #11 (`Bind Analytical Engine replay to fixture provenance`) is independently reviewed and exact-head CI-green at `4a98fb186978356af5e860b76d0c15d811a28586`, but became non-mergeable only because PR #10 touched overlapping core/status/verification lines. The PR bodies record a previously tested synthesis of the two changes with 319/319 tests; do not treat that claim as a substitute for re-running verification on current `main`.
+This assignment is intentionally broader than a single source lookup because the agent has repeatedly finished substantive bounded work in roughly half an hour. Keep it coherent: **stay on Curta Type II document/revision provenance for the whole slice.** Do not open another machine family merely to fill time.
 
-This assignment is intentionally broader because the agent has repeatedly completed substantive bounded slices in roughly 30–35 minutes.
-
-> **Question for this slice:** can we integrate the already-reviewed Analytical Engine fixture-provenance hardening cleanly on top of the merged direct-multiplication replay hardening, then use the remaining time to improve one concrete Curta Type II primary-source boundary without inventing production geometry or chronology?
+> **Question for this slice:** can the currently scattered Type II service evidence be turned into a systematic, directly inspected service-leaf/revision map that tells us what document versions and replacement markers actually exist—without converting collector filenames, PDF order, or drawing dates into an invented production chronology?
 
 ## Read before work
 
@@ -25,147 +23,145 @@ Fetch/pull remote `main`, then read in order:
 4. `docs/EVIDENCE_POLICY.md`
 5. `docs/RESEARCH_GAPS.md`, especially Priority 0.2 and `Files to deepen next`
 6. `docs/VERIFICATION.md`
-7. `tasks/archive/2026-09-02-differential-analyzer-primary-source-retry.md`
-8. current `src/core/trace.ts`
-9. current `src/mechanisms/direct-multiplier/` and its tests, only to preserve the just-merged PR #10 semantics
-10. PR #11 exact head/diff (`4a98fb186978356af5e860b76d0c15d811a28586`) and `src/exhibits/analytical-engine-flow/` + tests
-11. `research/curta-source-map.md`
-12. `src/exhibits/source-atlas/` and `tests/source-atlas.test.ts`
+7. `tasks/archive/2026-09-02-analytical-replay-curta-type-ii.md`
+8. `research/curta-source-map.md`
+9. `research/control-and-zeroing-source-map.md`
+10. `src/exhibits/source-atlas/index.ts`
+11. `tests/source-atlas.test.ts`
+12. the existing Curta index/access pages already cited in the research note
 
-Run current-main typecheck/tests before editing and record the actual baseline. Do not use stale `IMPLEMENTATION_PLAN.md` checkboxes as a task source.
+Run the current-main baseline typecheck/tests before editing and record the actual count. Do not use stale `IMPLEMENTATION_PLAN.md` checkboxes as a task source.
 
-# Part A — integrate PR #11 on top of current main
+# Part A — systematic Type II service-document census
 
-PR #11 solves a real fail-open replay boundary in the P/M Analytical Engine teaching trace: the recorded `fixture` could be descriptive while a substituted canonical event/final-state trace for another fixture still replayed successfully. Its exact reviewed head is:
+The current source map already directly inspected selected pages of the 43-page Type II service scan plus the first Type II BOM/drawing sheets. The remaining gap is whether the **service document itself** exposes enough leaf/revision identity to bound replacement chronology or one frozen issue.
 
-```text
-4a98fb186978356af5e860b76d0c15d811a28586
-```
+Perform a bounded but systematic inspection of the Type II service-document variants actually exposed through the existing Curta indexes/mirrors.
 
-Its original base was `e155be76...`; current `main` now also contains PR #10's direct-multiplication action-bound replay hardening.
-
-## A1. Preserve both hardening lines
-
-Integrate the **behavioral content** of PR #11 onto current `main` without regressing PR #10.
-
-You may fetch/cherry-pick/rebase the PR branch or reapply its focused patch, but resolve overlaps deliberately. Do not overwrite newer status/evidence records with an older PR copy.
-
-The resulting Analytical Engine trace must retain these reviewed properties:
-
-- exact enumerable fixture contract `{ a, b, c, d }` with safe integers;
-- reject unknown enumerable string or Symbol fixture fields;
-- derive canonical initial state, ordered events and final state from the fixture;
-- reject fixture-only tampering and replacement of events/final state by another valid fixture trace;
-- `stateAtAnalyticalEvent()` must validate full trace provenance/final state before returning a partial state;
-- object member insertion order is not semantic;
-- arrays remain ordered, length/index presence matters, sparse/extended arrays do not collapse into equality;
-- non-finite values, enumerable `undefined` extensions and Symbol/enumerable extensions do not disappear through JSON-style coercion;
-- final-state tampering fails closed.
-
-At the same time, preserve current direct-multiplication PR #10 behavior:
-
-- recorded `DIRECT_MULTIPLY` action remains authoritative;
-- action/event substitution for another multiplier fails closed;
-- current direct-multiplier tests remain green.
-
-Do not generalize this into a repository-wide trace redesign unless a concrete shared helper is already present and the change is obviously dependency-safe. Minimal integration is preferred.
-
-## A2. Tests
-
-At minimum, after integration ensure the focused Analytical Engine suite covers:
-
-- alternate-fixture event/final substitution rejection;
-- fixture-only tampering rejection;
-- non-canonical initial/final state rejection;
-- event stepping cannot bypass provenance validation;
-- unknown enumerable fixture fields including Symbol keys;
-- member insertion order tolerance;
-- event-array order/shape authority;
-- non-finite / enumerable-undefined / sparse-array adversarial cases covered by PR #11's reviewed behavior.
-
-Run both focused suites:
-
-```text
-Analytical Engine flow tests
-direct multiplier tests
-```
-
-If current-main changes make the old expected combined count `319` obsolete, record the actual count rather than forcing that number.
-
-## A3. PR bookkeeping
-
-If PR #11 has become mergeable or already merged by the time this task starts, do not duplicate it; verify current `main` contains the behavior and skip integration.
-
-If you integrate equivalent PR #11 behavior directly into `main` because the fork PR remains conflict-blocked, mention PR #11 and exact head in the completion commit/verification note so attribution/provenance is not lost. Do not close or rewrite the contributor's fork history unless repository permissions and normal workflow make that clearly appropriate.
-
-# Part B — Curta Type II primary-source precision
-
-After Part A is complete and green, use the remaining time for one bounded Curta source-map pass. Do **not** implement Curta geometry.
-
-Current source state in `research/curta-source-map.md` already includes:
-
-- Herzstark US 2,525,352 patent;
-- directly inspected two-page Contina operator guide (Model I `8×6×11`, Model II `11×8×15`, Model I illustrated);
-- 1967 Type I service-manual cover;
-- Type II 43-page assembled service scan with directly inspected PDF pages 1–2, 6/leaf `N I-a`, 10/leaf `O-1-2`, 34/leaf `S 3`;
-- explicit warning that the Type II service scan contains replacement leaves/latest modifications and may reuse Model I pictures whose details/proportions differ.
-
-The remaining target is **document/revision precision**, not prettier mechanism claims.
-
-## B1. Inspect primary/manufacturer Type II documents exposed by the existing Curta indexes
-
-Start from the already recorded access layers:
+Start from:
 
 - `https://www.mycurta.com/cu.htm`
 - `https://vcalc.org/cu.htm`
-- the currently cited Type II service scan
+- the currently cited 43-page Type II English-green scan
+- any separate Type II German-green / German / English service scan that the index really links to
 
-Look for directly inspectable manufacturer-origin Type II documents such as service leaves, parts lists/BOMs, drawing sets, operator booklets, or cover/index pages.
+Do not trust the visible link label alone. Resolve the actual target, inspect the document, and distinguish mirror/index metadata from document-internal identity.
 
-Priority questions:
+## A1. Create a service-leaf index
 
-1. Can a Type II document directly establish `11×8×15` capacity independently of the dual-model operator guide?
-2. Does any directly inspectable Type II cover/index/leaf expose an issue date, revision date, replacement-leaf date/code, document number, or revision identifier?
-3. Can the replacement-leaf chronology be bounded at all from printed leaf metadata, or must it remain an assembled-undated/latest-modifications warning?
-4. Which document explicitly identifies itself as Type II versus merely being linked under a collector index filename?
-5. Are there directly readable parts-list/drawing document identities that improve source provenance **without** interpreting hidden geometry?
+Create:
 
-A collector filename or HTML link label is not manufacturer metadata. Record printed/document-internal identity separately from access-host labeling.
+```text
+research/curta-type-ii-service-leaf-index.md
+```
 
-## B2. Evidence boundaries
+This should be a source/provenance instrument, not a prose history essay.
 
-- directly inspected manufacturer document text/cover/leaf = **H/E1 at the exact identity/page/leaf precision inspected**;
-- specialist mirror/index = access provenance only unless the underlying document is actually inspected;
-- production chronology synthesized across documents = **H/R** unless a primary source explicitly states it;
-- patent embodiment is not production revision proof;
-- do not infer part equality across Type I/II from reused illustrations;
-- do not infer tooth profiles, ratios, transfer timing, tolerances, safe speed, or hidden interlock linkage from assembly names or exploded drawings alone.
+For each directly inspected Type II service scan, record at least:
 
-If the Type II capacity/date/revision question remains unresolved after a bounded search, say exactly what was inspected and preserve the open gap. Do not fill it from unsourced collector prose.
+- access URL and mirror/index layer;
+- PDF page count;
+- language;
+- document-internal cover/title identity;
+- whether Type II is printed internally or only asserted by the host/index;
+- any printed issue/date/revision statement visible on cover/front matter;
+- replacement-leaf/latest-modification notice wording at summary level;
+- every clearly readable printed leaf code encountered (for example `N I-a`, `O-1-2`, `S 3`), with PDF page number;
+- any directly visible leaf-level date, revision/change code, replacement notation, supersession notation, or red-change marker that can be read reliably;
+- whether a page visibly reuses/labels Model I material or whether that relation is only stated in front matter;
+- unreadable/ambiguous marks as `unreadable` rather than guessed text.
 
-## B3. Source-atlas update only if evidence really improves
+You do **not** need to transcribe service procedures in full. The target is document identity/revision structure.
 
-If Part B produces a new directly inspected Curta primary document or materially better page/leaf identity:
+A compact table is preferred, e.g.:
 
-- update `research/curta-source-map.md`;
-- update the existing Curta typed source-atlas anchor(s), not a parallel evidence model;
-- add/update focused `tests/source-atlas.test.ts` assertions for the new support/not-established boundary.
+```text
+scan | PDF page | printed leaf | printed Type | date/revision marker | replacement/change marker | directly established | unreadable/open
+```
 
-If no new primary-source precision is gained, leave the atlas unchanged and record the bounded access result only in the research note if it is useful and non-redundant.
+If a scan is image-only, visual inspection is authoritative. OCR may be used only as a navigation aid and must not turn uncertain characters into claims.
 
-Do not change `#/curta` runtime geometry/animation in this slice.
+## A2. Compare service variants only on exact printed evidence
 
-# Part C — reconciliation and verification
+After indexing the scans, add a short comparison answering:
 
-After Parts A/B:
+1. Which leaf codes occur in more than one scan?
+2. Are apparently corresponding leaves textually/visually the same, visibly revised, or not comparable at the available resolution?
+3. Does any document itself establish one frozen Type II service issue date?
+4. Can any replacement-leaf sequence be ordered by **printed leaf/date/revision evidence**, rather than PDF ordering or collector filenames?
+5. Does the evidence support only a set of mixed/replacement leaves with latest modifications, with no complete chronology?
 
-- update `STATUS.md` to reflect the Analytical Engine replay hardening and only Curta precision actually gained;
-- add one concise completed line to `TODO.md` for this slice;
-- narrow `docs/RESEARCH_GAPS.md` only where a stated Curta gap genuinely closes;
-- update `docs/VERIFICATION.md` with actual baseline/final test counts and checks;
-- preserve the completed Bush/Shannon, Scheutz, and PR #10 records; do not overwrite them with stale PR status text.
+Important: absence from one mirror PDF is not proof that a leaf never existed. PDF page order is not production chronology. A modern scan assembly date is not a Contina issue date.
 
-If Part B changes source-atlas/UI data, perform bilingual browser smoke for:
+## A3. Keep BOM/drawing dates separate
+
+The prior slice directly established:
+
+- Type II BOM first-table date `3.9.52`;
+- Type II drawing `2'001.-*2` drawn `19.9.51`;
+- a visible `1.4.53` change-table entry.
+
+Use these only as **separate sheet-level context**. Do not use them to order service-manual leaves unless a directly printed cross-reference actually connects the documents.
+
+A same-looking part number or title does not by itself prove service issue chronology, production adoption, interchangeability, or unchanged geometry.
+
+# Part B — bounded control/procedure cross-reference from the indexed leaves
+
+If the service-leaf census is complete, use the remaining time to make one Curta-internal cross-reference that improves the existing control provenance without reverse engineering geometry.
+
+From directly inspected Type II service leaves, identify exact leaf/page anchors for the already named responsibility clusters where readable:
+
+- zero/home-position preconditions;
+- crank removal/home relation;
+- carriage removal/locking responsibility;
+- reversing-lever assembly identity;
+- clearing-plate identity/positioning responsibility;
+- zero-positioner identity;
+- RZ/UZ carry-lever naming if explicitly printed.
+
+Update `research/control-and-zeroing-source-map.md` only to add exact **document/leaf provenance** for responsibilities already supported. Do not derive a new event sequence, linkage path, force path, timing diagram, or operator procedure from assembly names.
+
+If the service documents do not provide clearer anchors than those already recorded, do not pad this section—state that the leaf census improves document chronology only.
+
+# Part C — source map / atlas integration only where evidence improves
+
+## C1. Curta source map
+
+Update `research/curta-source-map.md` to summarize the new service-leaf census and replace the generic “complete chronology not reconstructed” statement with the most precise conclusion actually supported.
+
+Acceptable outcomes include:
+
+- **partial chronology bounded** by explicit printed leaf/revision dates; or
+- **no frozen issue / no complete chronology established**, now supported by a systematic census rather than a few sampled pages.
+
+Both are useful results. Do not force a chronology.
+
+## C2. Source atlas
+
+Update the existing Curta source-atlas anchor(s) only if the census yields a new directly inspectable document identity, leaf/date range, or support/not-established boundary that is useful to public readers.
+
+Do not create a parallel evidence system.
+
+If updated:
+
+- preserve `H`/`R` claim type and E1–E4 semantics from `docs/EVIDENCE_POLICY.md`;
+- make access-host versus manufacturer-document identity explicit;
+- keep `supports` and `notEstablished` balanced;
+- add focused assertions in `tests/source-atlas.test.ts`.
+
+Do not add Curta geometry to `#/curta` in this slice.
+
+# Part D — reconciliation and verification
+
+After the research/integration work:
+
+- update `STATUS.md` with only document/revision precision actually gained;
+- add one concise completed line to `TODO.md`;
+- narrow `docs/RESEARCH_GAPS.md` only if the Type II service-issue/replacement-leaf gap genuinely changes;
+- update `docs/VERIFICATION.md` with baseline/final checks and actual test counts;
+- preserve all prior Analytical Engine, Bush/Shannon, Scheutz, direct-multiplier and control records.
+
+If source-atlas data changes, perform bilingual browser smoke for:
 
 ```text
 #/source-atlas
@@ -173,7 +169,7 @@ If Part B changes source-atlas/UI data, perform bilingual browser smoke for:
 #/about
 ```
 
-Part A alone changes validation/provenance but not rendering, so do not falsely claim a browser smoke if none was performed.
+If only markdown research changes, do not falsely claim a browser smoke.
 
 Before commit/push, run:
 
@@ -184,40 +180,44 @@ npm run build
 git diff --check
 ```
 
-Also run focused Analytical Engine, direct-multiplier, and source-atlas tests for the touched areas.
+If the parallel Vitest run hits the previously observed transient Node multi-worker OOM, repeat with a bounded worker count and record both facts; do not silently delete the failed run from verification history.
 
-All must pass.
+Also run focused source-atlas tests if that area is touched.
 
-The finished slice should answer:
-
-> Is the Analytical Engine fixture now the authoritative source of the trace, or can a valid trace from another fixture still be substituted?
-
-> Did integrating that hardening preserve the just-merged direct-multiplication action-bound replay contract?
-
-> What new Type II Curta document identity/revision fact was directly inspected, and what production chronology or geometry still remains unestablished?
+All final required checks must pass.
 
 After push:
 
-- confirm remote `main` contains the coherent completion commit;
-- inspect exact-head push CI and Deploy Pages when they complete and record only completed outcomes if available before stopping;
+- confirm remote `main` contains the completion commit;
+- inspect exact-head push CI and Deploy Pages when they complete and record only completed outcomes available before stopping;
 - stop and wait for the next `CURRENT_AGENT_TASK.md` revision.
 
 Suggested commit subject:
 
 ```text
-fix: integrate analytical replay provenance and deepen Curta sources
+research: map Curta Type II service leaf revisions
 ```
+
+# Evidence boundaries
+
+- directly inspected manufacturer-origin page/leaf text = **H/E1 at the exact page/leaf precision inspected**;
+- collector/specialist index labels and filenames = access provenance, not manufacturer metadata;
+- comparison of clearly matching printed leaves across scans may be H/R when interpretation is needed;
+- production chronology synthesized from service/BOM/drawing dates is not H/E1 unless a primary document explicitly states that chronology;
+- a patent is not proof of production revision;
+- a drawing title, part number or exploded view does not establish hidden linkage behavior, timing, force, tolerance, wear, interchangeability, or production-wide identity;
+- repository control traces remain P/M unless a separate future task explicitly models a sourced historical procedure.
 
 # Stop conditions
 
 Stop a subpart and preserve the boundary rather than guessing if:
 
-- PR #11 integration would require discarding or weakening PR #10 semantics;
-- the current trace core has diverged enough that reproducing PR #11 behavior requires a broad redesign;
-- a Curta PDF/index exists but its actual pages cannot be inspected;
-- Type II chronology is available only in collector prose without directly inspected document support;
-- a drawing invites geometric reverse engineering not supported by caption/text;
-- source-atlas changes would require broad route/layout refactors;
-- the task starts expanding into a full Curta emulator, production serial-number census, or 3D/physics model.
+- a service PDF exists but its pages cannot actually be rendered/inspected;
+- leaf codes or dates are too blurry to read reliably;
+- two scans appear related but have no exact printed identity allowing a defensible comparison;
+- chronology is available only from collector prose/filenames rather than document-internal evidence;
+- resolving a drawing requires reverse engineering geometry beyond captions/title blocks;
+- source-atlas integration would require broad route/layout refactors;
+- the work starts expanding into a serial-number census, full Curta emulator, repair guide, production-history essay, or 3D/physics reconstruction.
 
-If Part A and a meaningful Part B source improvement both finish substantially before one hour, use remaining time to tighten exact page/leaf anchors and adversarial tests. Do not start another machine family.
+If Parts A–C finish substantially before one hour, spend the remaining time increasing leaf-index completeness, cross-scan comparison precision, and source-atlas/tests where justified. **Do not start Difference Engine, Differential Analyzer, Comptometer, Millionaire, or another family in this slice.**
