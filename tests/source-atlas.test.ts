@@ -31,10 +31,19 @@ describe('named-machine source anchor atlas', () => {
     }
   });
 
-  it('keeps the modern DE2 engine an institutional reconstruction', () => {
-    const anchor = getNamedMachineSourceAnchor('de2-reconstruction-1991-2002');
-    expect(anchor).toMatchObject({ claimType: 'R', evidenceStrength: 'E2', accessKind: 'institutional reconstruction' });
-    expect(anchor.notEstablished.map(item => item.en).join(' ')).toMatch(/Babbage-lifetime artifact/);
+  it('keeps detailed DE2 technical reconstruction separate from Babbage-lifetime evidence', () => {
+    const technical = getNamedMachineSourceAnchor('de2-technical-description-2020');
+    const drawing = getNamedMachineSourceAnchor('bab-b-001');
+    expect(technical).toMatchObject({ claimType: 'R', evidenceStrength: 'E2', accessKind: 'institutional reconstruction', documentRole: 'technical description', fullFacsimileInspected: true });
+    expect(technical.pageFigureAnchors).toEqual(expect.arrayContaining([expect.stringMatching(/p\. i/), expect.stringMatching(/pp\. 187–188/), expect.stringMatching(/pp\. 212–218/)]));
+    expect(technical.notEstablished.map(item => item.en).join(' ')).toMatch(/Babbage-lifetime built artifact.*tolerances.*materials.*lock phasing/);
+    expect(drawing).toMatchObject({ claimType: 'H', evidenceStrength: 'E1', accessKind: 'direct archive record', fullFacsimileInspected: false, pageFigureAnchors: [] });
+    expect(drawing.supports.map(item => item.en).join(' ')).toMatch(/record identity.*catalogued DE2 elevation subject/);
+    expect(drawing.notEstablished.map(item => item.en).join(' ')).toMatch(/every interpretation in the modern technical description/);
+
+    const built = getNamedMachineSourceAnchor('de2-reconstruction-1991-2002');
+    expect(built).toMatchObject({ claimType: 'R', evidenceStrength: 'E2', accessKind: 'institutional reconstruction' });
+    expect(built.notEstablished.map(item => item.en).join(' ')).toMatch(/Babbage-lifetime artifact/);
   });
 
   it('limits frontlash to the catalogued adjacent-shaft compensation role', () => {
@@ -52,10 +61,28 @@ describe('named-machine source anchor atlas', () => {
     for (const id of roles) expect(getNamedMachineSourceAnchor(id).notEstablished.map(item => item.en).join(' ')).toMatch(/repository A\+B/);
   });
 
-  it('allows no Bush page/figure claim without a directly inspected facsimile', () => {
+  it('allows no Bush construction-paper page claim without a directly inspected facsimile', () => {
     const bush = getNamedMachineSourceAnchor('bush-1931-paper');
     expect(bush).toMatchObject({ accessKind: 'bibliographic-only', fullFacsimileInspected: false, pageFigureAnchors: [] });
     if (!bush.fullFacsimileInspected) expect(bush.pageFigureAnchors).toHaveLength(0);
+  });
+
+  it('keeps the directly inspected 1931 application paper at application/schematic precision', () => {
+    const application = getNamedMachineSourceAnchor('bush-caldwell-thomas-fermi-1931');
+    expect(application).toMatchObject({ claimType: 'H', evidenceStrength: 'E1', accessKind: 'direct primary facsimile', documentRole: 'historical publication', fullFacsimileInspected: true });
+    expect(application.pageFigureAnchors).toEqual(expect.arrayContaining([expect.stringMatching(/p\. 1898/), expect.stringMatching(/Figs\. 1–3/), expect.stringMatching(/p\. 1902/)]));
+    expect(application.supports.map(item => item.en).join(' ')).toMatch(/actual 1931.*independent check.*schematic roles/);
+    expect(application.notEstablished.map(item => item.en).join(' ')).toMatch(/not.*construction manual|construction manual/);
+    expect(application.notEstablished.map(item => item.en).join(' ')).toMatch(/exact shaft routing.*scale factors.*gear ratios.*later analyzer geometry/);
+  });
+
+  it('preserves analyzer generation and wiring boundaries across every Bush anchor', () => {
+    const anchors = sourceAnchorsForTrack('bush-differential-analyzer');
+    expect(getNamedMachineSourceAnchor('smithsonian-da-group').supports.map(item => item.en).join(' ')).toMatch(/ca\. 1930 MIT analyzer.*improved.*postwar/);
+    for (const anchor of anchors) {
+      const text = anchor.notEstablished.map(item => item.en).join(' ');
+      expect(text).toMatch(/repository|construction manual|later (?:analyzer geometry|Differential Analyzer construction)|full-machine (?:geometry|wiring)/);
+    }
   });
 
   it('keeps the Curta patent distinct from production models and operator procedure', () => {
@@ -92,8 +119,8 @@ describe('named-machine source anchor atlas', () => {
   });
 
   it('covers all four tracks non-trivially and exposes no pseudo-quality score', () => {
-    expect(sourceAnchorsForTrack('difference-engine-no-2').length).toBeGreaterThanOrEqual(5);
-    expect(sourceAnchorsForTrack('bush-differential-analyzer').length).toBeGreaterThanOrEqual(6);
+    expect(sourceAnchorsForTrack('difference-engine-no-2').length).toBeGreaterThanOrEqual(7);
+    expect(sourceAnchorsForTrack('bush-differential-analyzer').length).toBeGreaterThanOrEqual(7);
     expect(sourceAnchorsForTrack('curta').length).toBeGreaterThanOrEqual(2);
     expect(sourceAnchorsForTrack('analytical-engine').length).toBeGreaterThanOrEqual(4);
     const keys = NAMED_MACHINE_SOURCE_ANCHORS.flatMap(anchor => Object.keys(anchor));

@@ -52,18 +52,30 @@ The record separates the 1847–1849 Babbage design from Science Museum construc
 - Babbage design: **H/E1–E2** at the level established by the design/archive and institutional catalog.
 - modern built engine: **R/E2**, directly documented institutional reconstruction.
 
-### Reconstruction account
+### Directly inspected institutional technical description
 
-Computer History Museum:
+Doron D. Swade, *Charles Babbage's Difference Engine No. 2: Technical Description*, Science Museum, London, March 2020:
 
-- *The Engines*: <https://www.computerhistory.org/babbage/engines>
-- *A Modern Sequel*: <https://www.computerhistory.org/babbage/modernsequel/>
+<https://www.sciencemuseum.org.uk/sites/default/files/2023-09/DE2_Technical_Description.pdf>
 
-The reconstruction account says Babbage's twenty large design drawings did not specify all manufacturing details such as tolerances, materials, finish and manufacturing method; modern manufacturing drawings were therefore required. It dates the calculating section to 1991 and printer/stereotyping completion to 2002.
+The complete 232-page PDF (front matter i–vi, numbered text pp. 1–222) was directly inspected. Its “Scope and Purpose” page `i` explicitly calls the account a detailed interpretation of Babbage's designs and records design/engineering decisions plus precautionary/remedial modifications made during the modern physical realization. It is therefore **R/E2 institutional technical reconstruction**, not H/E1 merely because it is detailed.
 
-The CHM account supports, at institutional-reconstruction level, a printer shared in design lineage with Analytical Engine work that produced an inked checking copy and stereotype impressions for making printing plates, with tabular-format controls. This is evidence for design/reconstruction functions, not exact historical timing in an unbuilt lifetime machine.
+Exact inspected anchors used here:
 
-The central output-contract point is conservative: a persistent checking copy or plate-making path reduces the need to re-copy and typeset computed table values manually, moving the trust boundary beyond arithmetic alone. It does not eliminate every possible human or production error.
+- p. i: scope distinguishes decoding nineteenth-century drawings, modern engineering decisions, and modifications to the operational reconstruction;
+- pp. 4–9: source/editorial discussion; the text states that original drawings omit choices of materials, manufacture, requisite precision and finish, while 219 modern construction drawings specify the reconstructed machine's 8,000 parts;
+- pp. 21–24, Figures 3.2–3.4: interpretation of original Timing Diagram `BAB/F/385/1` and addition/carriage drawing `BAB/A/171`;
+- pp. 33–45, Figures 3.16–3.20: reconstructed account of warning and carriage of tens, restoration and warning-latch reset;
+- pp. 49–54, Figures 4.1–4.3: output apparatus and result transfer from tabular figure wheels to printing/punch-wheel roles;
+- pp. 83–85: omitted paper-loading/securing provisions and modern additions, clearly reconstruction/build decisions;
+- pp. 187–188: original timing diagram lacks exact lock phasing; modern diagram `337 X 21` supplies reconstruction detail;
+- pp. 212–218: appendix mappings for original archive drawings, including `BAB/B/001–003`, `BAB/A/171`, and `BAB/F/385/1`, versus modern construction drawings.
+
+The account supports reconstruction-level interpretation of separate giving-off, warning/carry and restoration phases, and of the calculated-result transfer to inked printing and stereotype mould roles. It does **not** turn modern lock phasing, materials, tolerances, manufacturing drawings, fixes or modifications into Babbage-lifetime specifications.
+
+Computer History Museum's *The Engines* and *A Modern Sequel* remain useful institutional context, but the Science Museum PDF is now the exact technical anchor used here.
+
+The central output-contract point remains conservative: a persistent checking copy or plate-making path reduces re-copying/typesetting of computed table values. It does not eliminate every human or production error, and the repository's three P/M output events are not the reconstruction's physical timing.
 
 ## 4. Babbage Papers drawing and notation anchors
 
@@ -74,8 +86,10 @@ The Science Museum Group archive index was directly inspected:
 
 The catalog describes 11 plan-press drawers plus 8 linear metres of shelving, open access, and three broad material types: notebooks, engineering drawings, and notations describing intended actions. This is H/E1 for archive identity, extent, arrangement and catalogued scope—not a source-specific geometry claim.
 
-### Calculation/addition drive subject
+### General design and calculation/addition-drive subjects
 
+- `BAB/B/001` / `aa110117998`, *Elevation of Difference Engine No.2*: directly inspected record; one sheet, made 1847–1848, Babbage maker attribution, open access. Its archive browser also identifies `BAB/B/002` as the plan tracing of `BAB/A/164` and `BAB/B/003` as the addition-carriage/axis-drive tracing of `BAB/A/171`. This is H/E1 for record identity, date, extent and catalogued subject only; the displayed record does not support tooth counts, timing or manufacturing interpretation.
+  <https://collection.sciencemuseumgroup.org.uk/documents/aa110117998/elevation-of-difference-engine-no-2>
 - `BAB/A/171` / `aa110000314`, *Addition carriage and mode of driving the axes of Difference Engine No. 2*:
   <https://collection.sciencemuseumgroup.org.uk/documents/aa110000314/addition-carriage-and-mode-of-driving-the-axes-of-difference-engine-no-2>
 

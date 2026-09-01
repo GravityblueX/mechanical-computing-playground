@@ -1,5 +1,25 @@
 # Verification record
 
+## 2026-09-01 — DE2 and Differential Analyzer publication precision
+
+The pre-edit remote-main baseline was 221 tests across 19 files. This slice directly inspected the complete 232-page Science Museum *Charles Babbage's Difference Engine No. 2: Technical Description*, exact R/E2 anchors at p. i, pp. 4–9, 21–24, 33–45, 49–54, 83–85, 187–188 and 212–218, and the H/E1 BAB/B/001 record. Bush 1931 and Shannon 1941 remain bibliographic-only after bounded publisher/repository access attempts; the complete APS facsimile of Bush and Caldwell's separate 1931 application paper, printed pp. 1898–1902 and Figures 1–3, was directly inspected instead.
+
+- `npm run typecheck` — pass
+- `npm test -- --run` — pass, 223 tests across 19 files
+- `npm run build` — pass
+- `git diff --check` — pass
+
+Local browser smoke against Vite:
+
+- `#/source-atlas` rendered four track groups and 23 source cards in English and Chinese, including the R/E2-versus-H/E1 detail boundary, exact inspected page/figure anchors, Bush/Shannon access limits and application-versus-construction distinction;
+- `#/finite-difference` retained its calculation/output stepping and Difference Engine atlas cross-link in English and Chinese;
+- `#/continuous` completed the P/M flow to tracer output `1.5`, reset, and retained its Bush atlas cross-link in English and Chinese;
+- `#/about` retained the evidence-policy explanation in English and Chinese;
+- `#/analytical-engine` quick regression retained the `(ab+c)d` lesson and atlas cross-link;
+- no desktop horizontal overflow was observed on the checked routes.
+
+No deployment check was performed for this not-yet-pushed commit; no claim that the new precision is already live is made.
+
 ## 2026-09-01 — Curta and Analytical Engine source hardening
 
 The pre-edit remote-main baseline was 217 tests across 19 files. This slice directly inspected the US 2,525,352 text/PDF, Contina *Your CURTA Calculator* operator-guide page 1/2, the 1967 Model I service-manual cover 1/59, 1843 *Scientific Memoirs* scan pages 677/679/704, three Science Museum Analytical Engine drawing records, and Walker reconstruction documentation. The H. P. Babbage 1888 `(ab+c)d` account remains explicitly transcription-only after a bounded 1889-scan discovery attempt.

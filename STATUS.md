@@ -1,6 +1,6 @@
 # Current Status
 
-Last reconciled on 2026-09-01 after the Curta and Analytical Engine source-hardening slice.
+Last reconciled on 2026-09-01 after the Difference Engine No. 2 and Differential Analyzer publication-precision slice.
 
 This file is the **current-state authority** for the repository. `ROADMAP.md` describes where the project should go; `IMPLEMENTATION_PLAN.md` is still useful as a dependency/design specification, but many of its checkboxes predate later implementation and must not be treated as the live task ledger.
 
@@ -36,7 +36,7 @@ Remote CI run `33437862103` passed for the previous operator-division checkpoint
 - typed carry-provenance profiles separating Pascal/Felt, Odhner/Talamini, and Thomas 1820 patent/object, 1865, 1880 proposal, and R/E3 revision-history contexts;
 - typed mechanical-error-control profiles separating Thomas inertia/load, Odhner/Talamini carry scheduling, and Bush frontlash/backlash-transmission responsibilities without pseudo-quantitative reliability fields;
 - typed P/M operator-work profiles derived from existing multiplication, key-driven, division, and printing-ledger traces, with categorical counts and no scalar efficiency/productivity score;
-- typed four-track named-machine source anchors separating directly inspected Babbage/Smithsonian records, Curta patent/operator/service documents, 1843 Analytical Engine printed pages, specialist transcription boundaries, and later reconstruction choices;
+- typed four-track named-machine source anchors separating Babbage archive records from the directly inspected 2020 DE2 R/E2 technical reconstruction, Smithsonian component records from the directly inspected Bush–Caldwell 1931 application paper, Curta patent/operator/service documents, 1843 Analytical Engine printed pages, specialist transcription boundaries, and later reconstruction choices;
 - generic deterministic printing ledger separating working accumulator state from structured persistent ITEM/SUBTOTAL/TOTAL lines, including subtotal retention, total clearing, replay, and tamper rejection;
 - typed output-contract profiles separating identified register-only/printing objects, primary total/subtotal patent semantics, and Difference Engine persistent-output roles;
 - generic continuous integrator with independent/input/integrated quantities, P/M inspection interval, ordered observation/advance events, safe numeric validation, and hardened replay;
@@ -99,8 +99,8 @@ The most important remaining gaps are:
 - key-driven computation now has a tested generic P/M mechanism model, but simultaneous multi-column operation, correction, interlocks, and source-specific Comptometer geometry remain intentionally unmodeled;
 - `research/curta-source-map.md` now directly inspects US 2,525,352, the two-page Contina operator guide, and the 1967 Model I service-manual cover; full Type I/II production-revision/linkage mapping remains open;
 - `research/analytical-engine-information-flow.md` now directly anchors 1843 printed pp. 677, 679 and 704, rechecks three Science Museum drawing records, keeps H. P. Babbage 1888 transcription-only, and separates Walker reconstruction; exact reader/Store/Mill geometry and an inspected 1889 facsimile remain open;
-- `research/differential-analyzer.md` now directly inspects the Smithsonian object group plus input, adder, integrator, tracer and frontlash records while keeping roles/generations separate; Bush 1931 full facsimile/page/figure inspection, exact placement/wiring, numerical backlash/residual error, and physical geometry remain open;
-- `research/difference-engine-source-map.md` now directly anchors the Babbage Papers index, BAB/A/171, BAB/B/013–014, BAB/A/178 notation records, the 1991/2002 reconstruction, and built Scheutz machines; drawing-level interpretation/geometry/timing and inaccessible Smithsonian detail remain open;
+- `research/differential-analyzer.md` now directly inspects the Smithsonian object group/components and Bush–Caldwell 1931 application facsimile pp. 1898–1902/Figs. 1–3 while keeping application, component, browser-flow and generation roles separate; Bush 1931 construction-paper and Shannon 1941 full text, exact placement/wiring, numerical error, and physical geometry remain open;
+- `research/difference-engine-source-map.md` now directly inspects the complete 232-page 2020 Science Museum Technical Description as R/E2 with exact calculation/output/omission/timing/appendix anchors, alongside H/E1 BAB/B/001, BAB/A/171, printing and notation records; Babbage-primary feature interpretation beyond record precision and lifetime manufacturing/timing proof remain open;
 - `research/simulator-matrix.md` now records a bounded prior-art/reuse matrix, but several third-party license, stepping, and maintenance fields remain explicitly unverified;
 - `research/control-and-zeroing-source-map.md` now separates identified Thomas mode/counter/zeroing roles, Odhner US1510100 crank-home locking, Felt US960528 cancel/carry-strain recovery, Turck US1154897 immediate key actuation, and the Pascaline H/R complement boundary; source-specific geometry, uninspected Thomas instructions, partial-stroke correction, and production-revision mapping remain open;
 - `research/output-and-audit-trail.md` and `#/output-contracts` now compare register-only output, identified printing/listing objects, US885202A subtotal/total semantics, and Difference Engine persistent-output roles; direct museum-page access, printer geometry, period office procedure, commercial context, and source-specific production mapping remain open;

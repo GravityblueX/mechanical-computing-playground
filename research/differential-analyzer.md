@@ -66,14 +66,24 @@ For a represented independent quantity `x`, input quantity/rate `u`, and integra
 
 For a constant input, repeated contributions accumulate to the corresponding integral. This is **M**, validated by calculation and tests. The browser's finite inspection interval is not evidence that a physical analyzer moved in discrete ticks.
 
-### Shannon, 1941
+### Bush and Caldwell, 1931: directly inspected application paper
 
-Claude E. Shannon, “Mathematical Theory of the Differential Analyzer,” 1941, DOI <https://doi.org/10.1002/sapm1941201337>.
+Direct APS facsimile: <https://harvest.aps.org/v2/journals/articles/10.1103/PhysRev.38.1898/fulltext>
 
-- Claim type: **H/R** for a near-contemporary mathematical/system account.
-- Evidence: bibliographic anchor verified; full-paper detail was not inspected in this pass because the publisher route rejected automated access.
+V. Bush and S. H. Caldwell, “Thomas-Fermi Equation Solution by the Differential Analyzer,” *Physical Review* 38 (15 November 1931), printed pp. 1898–1902. The complete five-page facsimile was inspected.
 
-The paper is retained as the correct interpretation path, not used here for unverified equations, page claims, or component geometry.
+- p. 1898 identifies the MIT authors, states that the numerical solution was mechanically obtained by the Differential Analyzer, points to the separate *Journal of the Franklin Institute* construction paper, and says the range was checked by an independent integration;
+- p. 1899 describes splitting the problem, changing variables, running families of solutions, and notes that one solution could be run in a few minutes once the machine was set up;
+- pp. 1900–1902 and Figures 1–3 show problem-specific connection diagrams labelled with multiplier, input table, integrator and output table roles; the text explicitly says scales, signs and gear ratios are disregarded;
+- p. 1902 reports the independent integration check.
+
+This is **H/E1 evidence for an actual 1931 application, its stated checking method, and the published schematic roles**. It is not a construction manual, does not replace the inaccessible Bush 1931 machine paper, and does not establish exact shaft routing, component placement, scale factors, gear ratios, or identity with later analyzer generations.
+
+### Shannon, 1941: bounded access result
+
+Claude E. Shannon, “Mathematical Theory of the Differential Analyzer,” *Journal of Mathematics and Physics* 20 (April 1941), pp. 337–354, DOI <https://doi.org/10.1002/sapm1941201337>.
+
+The publisher landing page and Crossref/OpenAlex metadata were directly inspected. They confirm author, title, date, volume/issue and page range, but the publisher PDF returned an access challenge/403 and OpenAlex/Semantic Scholar report no open full text. Therefore this remains **bibliographic-only H/R**: no Shannon equation, figure or page claim is made, and no atlas facsimile anchor is created.
 
 ## 4. Machine-generation boundary
 
@@ -82,7 +92,9 @@ Do not flatten these into one timeless “Differential Analyzer”:
 | Layer | Safe statement |
 |---|---|
 | original MIT analyzer / ca. 1930 surviving components | catalogued Bush-associated input, adder/differential, integrator, and tracer components survive |
-| Bush 1931 publication | contemporary description of the new Differential Analyzer; exact uninspected page/figure claims remain open here |
+| Bush 1931 construction publication | contemporary description of the new Differential Analyzer; exact uninspected page/figure claims remain open here |
+| Bush & Caldwell 1931 application paper | directly inspected five-page application/checking account with problem-specific Figures 1–3; not a construction manual |
+| Shannon 1941 | near-contemporary mathematical/system paper; bibliographic-only in this environment, so no page/figure claim |
 | later improved MIT/Rockefeller work | later generation; not the default geometry for ca. 1930 objects |
 | Bush & Caldwell, 1945, *A New Type of Differential Analyzer* | later machine publication; not silently merged into the original analyzer |
 | postwar GE/UCLA Smithsonian material | different provenance/generation; not used to fill gaps in original MIT geometry |

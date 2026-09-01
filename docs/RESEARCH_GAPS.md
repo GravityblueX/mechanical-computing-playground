@@ -21,14 +21,14 @@ Do not add random failure or source-specific linkage animation before those sour
 
 ### 0.2 Named-machine source anchors
 
-Current state: the four-track typed atlas now separates directly inspected Difference Engine No. 2, Bush Differential Analyzer, Curta, and Analytical Engine records from later reconstruction/transcription and repository P/M flows. Curta has patent, operator-guide and Model I service-cover anchors; Analytical Engine has direct printed-page anchors at 1843 pp. 677, 679 and 704 plus drawing/reconstruction boundaries.
+Current state: the four-track typed atlas now separates directly inspected Difference Engine No. 2, Bush Differential Analyzer, Curta, and Analytical Engine records from later reconstruction/transcription and repository P/M flows. DE2 now adds the complete 2020 Science Museum Technical Description at exact R/E2 page/figure precision plus BAB/B/001 H/E1 record precision; the Bush track adds the complete Bush–Caldwell 1931 application paper and Figures 1–3 while retaining the construction paper and Shannon 1941 as bibliographic-only. Curta has patent/operator/service anchors; Analytical Engine has direct 1843 pages plus drawing/reconstruction boundaries.
 
 Remaining gaps:
 
 - Curta full operator/service edition mapping, Type II service-page inspection, and production Type I/II revision/linkage mapping;
 - Analytical Engine inspected H. P. Babbage 1889 facsimile, additional exact printed pages, and source-specific reader/Store/Mill geometry;
-- legible Babbage drawing interpretation beyond archive titles, including timing/manufacturing evidence;
-- a stable full facsimile of Bush 1931 before page/figure claims;
+- Babbage-primary drawing interpretation beyond archive titles and the R/E2 reconstruction account, including source-specific lifetime timing/manufacturing evidence;
+- a stable full facsimile of Bush 1931 before construction-paper page/figure claims, and direct Shannon 1941 full-text inspection;
 - exact Bush component interconnection, revision mapping, torque-amplifier construction, and measured error data.
 
 Archive images and object photographs are not self-interpreting geometry proof.
@@ -95,13 +95,13 @@ No scalar automation or efficiency ranking is planned.
 
 ## Priority 6 — Continuous mechanical computing
 
-Current state: a tested ideal continuous integrator and P/M flow expose addition, integration, coordinate advance, and tracing. Smithsonian input, adder, integrator, tracer, and frontlash records are now directly inspected and remain separate source roles.
+Current state: a tested ideal continuous integrator and P/M flow expose addition, integration, coordinate advance, and tracing. Smithsonian input, adder, integrator, tracer, and frontlash records remain separate H/E1 component roles; the directly inspected Bush–Caldwell 1931 pp. 1898–1902 add an H/E1 application/checking layer and problem-specific Figures 1–3 without turning them into construction geometry.
 
 Remaining gaps:
 
 - distinguish planimeters, curve integrators, differential analyzers, and specialized analog machines only when each adds a mechanism lesson;
-- stable Bush 1931 full facsimile/page/figure anchors;
-- disk-and-wheel/contact geometry, torque amplification, shaft routing, scale factors, and real timing;
+- stable Bush 1931 construction-paper full facsimile/page/figure anchors and direct Shannon 1941 full text;
+- disk-and-wheel/contact geometry, torque amplification, shaft routing, scale factors, and real timing beyond the application paper's explicitly scale/ratio-free schematics;
 - numerical backlash, residual error, slip/drift, and measured tolerance evidence;
 - exact original versus improved MIT generation mapping.
 
@@ -120,7 +120,7 @@ Remaining gaps:
 
 ## Priority 8 — Reliability, torque, tolerance, and wear
 
-Current state: Thomas 1865, Odhner US1377269A, Talamini/Marchant US1867603A, and Smithsonian frontlash `1983.3002.04` provide separated H/E1 error-control responsibilities. No reliability probability or physics simulator is claimed.
+Current state: Thomas 1865, Odhner US1377269A, Talamini/Marchant US1867603A, and Smithsonian frontlash `1983.3002.04` provide separated H/E1 error-control responsibilities. The DE2 Technical Description now identifies reconstruction decisions, modifications, omissions and lock-timing interpretation at exact R/E2 pages, but does not upgrade these to Babbage specifications. No reliability probability or physics simulator is claimed.
 
 Remaining gaps:
 
