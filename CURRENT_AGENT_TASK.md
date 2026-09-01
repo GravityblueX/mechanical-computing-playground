@@ -5,300 +5,269 @@ Owner: local coding/research agent
 Target duration: about one useful hour at the agent's observed throughput
 Repository authority: remote `main`
 
-Previous task is complete and archived at `tasks/archive/2026-09-01-carry-architecture-provenance.md`.
+Previous task is complete and archived at `tasks/archive/2026-09-01-rotary-carry-scheduling.md`.
 
-The previous carry-provenance slice landed as `d49b9d8585a99e33fa739b454af1b743519df618` about 31 minutes after assignment. It changed 14 files (roughly 328 additions / 103 deletions), raised the recorded suite from 150 tests in 14 files to 170 tests in 15 files, and CI passed. The prior substantial slices also generally landed in roughly 30–42 minutes. This assignment is therefore deliberately broader, while remaining one coherent question:
+The rotary-carry slice landed as `ea30534b4af542ef2c31d41a325e1de5887a6ab7` about 34 minutes after assignment. It changed 14 files (about 353 additions / 23 deletions), raised the recorded suite from 170 tests in 15 files to 190 tests in 16 files, and recorded passing typecheck/tests/build/diff plus bilingual visible-carry smoke. Several preceding substantial slices also landed in roughly 30–42 minutes. This task is therefore deliberately broader while remaining one coherent question:
 
-> In an Odhner-type rotary accumulator, why must successive carries be scheduled rather than treated as simultaneous arithmetic side effects, what failure modes did later patents explicitly identify, and how can the playground expose that engineering constraint without pretending to know unsourced angles, forces, or production geometry?
+> How did Thomas-family stepped-drum machines solve carry sequencing and carry-load/reliability problems, how did that mechanism change across patents, and what does this add to the repository's new rotary-carry lesson without collapsing distinct machine families into one generic geometry?
 
 Fetch/pull remote `main` before starting. Remote state always wins.
 
 ## Read before work
 
-Read in this order:
+Read, in order:
 
 1. `STATUS.md`
 2. `TODO.md`
 3. `AGENTS.md`
 4. `docs/EVIDENCE_POLICY.md`
-5. `docs/RESEARCH_GAPS.md`, especially remaining carry/reliability gaps
-6. `research/carry-architecture-source-map.md`
-7. `research/carry-is-the-hard-part.md`
-8. `research/multiplication-mechanisms.md`
-9. `src/exhibits/carry-provenance/index.ts` and its tests
-10. current carry-chain / decimal-wheel core and visible-carry UI
-11. `src/mechanisms/pinwheel/index.ts`, current multiplication comparison, and relevant tests
-12. `docs/REPRESENTATION_AND_PROTOCOL.md`, `docs/TEACHING_PATH.md`, `docs/VERIFICATION.md`
+5. `docs/RESEARCH_GAPS.md`, especially carry/reliability and source-specific geometry boundaries
+6. `research/carry-is-the-hard-part.md`
+7. `research/carry-architecture-source-map.md`
+8. `research/rotary-carry-scheduling-source-map.md`
+9. `research/multiplication-mechanisms.md`
+10. `research/subtraction-and-division.md`
+11. `src/mechanisms/rotary-carry-schedule/index.ts`
+12. `src/exhibits/carry-provenance/index.ts` and its tests
+13. current `#/visible-carry` UI in `src/main.ts`
+14. `docs/REPRESENTATION_AND_PROTOCOL.md`, `docs/TEACHING_PATH.md`, and `docs/VERIFICATION.md`
 
-Do not use stale `IMPLEMENTATION_PLAN.md` checkboxes as task authority.
-
-Before editing, run the current full test suite once and record the actual baseline.
+Before editing, run the full test suite once and record the actual baseline. Do not use stale `IMPLEMENTATION_PLAN.md` checkboxes as task authority.
 
 # Objective
 
 Complete four connected parts:
 
-1. build a primary-source map for **rotary / Odhner-family carry scheduling and documented reliability constraints**, distinguishing the 1894 Odhner mechanism, Valentin Odhner's 1921 transfer improvement, and Talamini/Marchant's 1932 carry-spacing improvement;
-2. add a small deterministic **P/M ordinal carry-scheduling model** that demonstrates why a chain of rotary carries needs successively ordered transfer opportunities, without inventing degrees, milliseconds, forces, or exact historical geometry;
-3. extend typed provenance and the public visible-carry lesson so visitors can compare stored-energy/key-overlap carry cases already present with the distinct rotary-actuator scheduling problem;
-4. update tests/status/research gaps/verification, keeping patents as evidence of described/intended mechanisms rather than proof that every production machine used an identical embodiment.
+1. create a source-separated **Thomas/Arithmometer stepped-drum carry evolution map**, centered on the 1820, 1865, and 1880 patent contexts plus surviving-object/reconstruction boundaries;
+2. add typed provenance profiles that preserve those revision contexts separately and expose the documented carry scheduling/reliability problems without claiming universal production geometry;
+3. extend the public carry lesson so a visitor can compare **Thomas 1865 stepped-drum sequential carries** with the already implemented **Odhner/Talamini rotary ordinal scheduling** and see that similar dependency problems were solved in distinct architectures;
+4. add tests and update status/verification/research gaps. Reuse the existing P/M carry-dependency model where it is genuinely source-neutral; do not create a duplicate arithmetic scheduler merely to add another machine name.
 
-Do **not** build an Odhner emulator, source-specific gear animation, random failure simulator, torque model, or production-speed benchmark in this slice.
+Do **not** build a Thomas Arithmometer emulator, source-specific 3D linkage, torque/spring-force model, random failure simulator, or exact angular/timing reconstruction in this slice.
 
 ---
 
-# Part A — rotary carry / reliability source map
+# Part A — stepped-drum carry / revision source map
 
-Create a focused note, preferably:
-
-```text
-research/rotary-carry-scheduling-source-map.md
-```
-
-Use the two-axis evidence policy and keep every patent context separate.
-
-## A1. W. T. Odhner, US 514,725 (1894) — baseline mechanism
-
-Primary source:
-
-- Willgodt Theophil Odhner, US 514,725, *Calculating Apparatus* (1894):
-  <https://patents.google.com/patent/US514725A>
-
-Inspect the patent text and relevant figures directly. At minimum record, at source-supported precision:
-
-- calculating wheels with selectable projecting pins;
-- intermediate wheels transmitting to registering wheels;
-- the patent's statement that the intermediate wheels help ensure exact registering-wheel movement and prevent movement too far during rapid rotation;
-- the tens-transfer relationship in the text around Figs. 9–10: registering-wheel pin/cam movement places a transfer arm/shoulder into position, and a normally displaced carry pin/tooth is deflected so it advances the next higher registering wheel by one tooth;
-- the return of the transfer arm to normal position after the carry relationship has acted;
-- addition/subtraction use opposite crank directions in the described apparatus.
-
-Treat these as **H/E1 patented mechanism claims**. Do not say this patent proves every later Original-Odhner production revision was geometrically identical.
-
-## A2. Valentin Jakob Odhner, US 1,377,269 (1921) — explicit rapid-rotation failure mode
-
-Primary source:
-
-- Valentin Jakob Odhner, US 1,377,269, *Transfer Mechanism of Calculating-Machines* (1921):
-  <https://patents.google.com/patent/US1377269A/en>
-
-This is important because it states an engineering failure mode explicitly. Record only what the patent supports:
-
-- it identifies the earlier US514725-type transfer arm as prior art/context;
-- it says that especially when the calculating wheel is rotated rapidly, the ten-pins can throw the transfer arm back from its adjusted/operative position so the carry pins do not act and **miscalculation takes place**;
-- the proposed arrangement relocates the fulcrum/contact relationship to reduce the turning moment tending to throw the arm out of position;
-- the patent also describes a conical contact surface intended to increase contact area / reduce wear.
-
-This gives the repository a real documented reliability constraint, but **not** a numerical safe RPM, spring force, probability-of-failure curve, or production field-failure rate. Those remain open.
-
-Label the patented intended improvement **H/E1**. If you discuss reliability consequences beyond the text, label the inference separately **R**, not H.
-
-## A3. Louis Talamini / Marchant, US 1,867,603 (1932) — successive carry scheduling, spiral spacing, capacity/speed tradeoff
-
-Primary source:
-
-- Louis Talamini, assigned to Marchant Calculating Machine Company, US 1,867,603, *Calculating Machine* (1932):
-  <https://patents.google.com/patent/US1867603>
-
-This source explicitly describes an Odhner-type carry scheduling problem and later optimization. Record at source-supported precision:
-
-- the patent identifies Odhner US514725 as an example of rotary tens-carrying actuators;
-- additive/subtractive carry teeth are normally inactive and become active when the next-lower numeral wheel crosses `9 ↔ 0` and conditions the carry control;
-- successive carry teeth **cannot all operate simultaneously**: higher-order carry opportunities must be displaced/staggered sufficiently later so a carry-created boundary crossing can condition the next higher order;
-- the patent describes the resulting carry teeth as forming addition/subtraction spirals around the actuator and explains how their spacing constrains machine capacity;
-- it explains the two phases of positioning a carry member and driving the next gear, then proposes overlapping those phases to reduce required peripheral spacing;
-- the specification states that in the described practical experiment the safe peripheral displacement was reduced by about **22 percent** without increased care in manufacture/assembly;
-- it also connects spacing/centralization constraints to attainable operating speed.
-
-Keep the precision honest:
+Create:
 
 ```text
-Talamini/Marchant 1932 description of an Odhner-type architecture
-!=
-proof that every Odhner machine had the exact same later Marchant geometry
+research/stepped-drum-carry-source-map.md
 ```
 
-The `~22%` statement is specific to the patent's described embodiment/experiment. Do not promote it to a universal Odhner performance number.
+Use the two-axis evidence policy. Keep patent text, surviving objects, modern reconstruction, and specialist revision history as different evidence roles.
 
-## A4. Institutional family context
+## A1. Thomas de Colmar, French patent 1420 (1820) — early architecture, not the later commercial machine
 
-Use an institutional source only for bounded family context, not to replace the patents:
+Primary-patent transcription/digital source:
 
-- Smithsonian/NMAH, *Pinwheel Calculating Machines*:
-  <https://www.si.edu/spotlight/calculating-machines/pinwheel-calculating-machines>
+- Charles-Xavier Thomas de Colmar, Brevet No. 1420, 18 Nov 1820:
+  <https://arithmometre.org/Brevets/PageBrevet1820FR.html>
+- Digitized patent PDF if useful:
+  <https://arithmometre.org/Bibliotheque/BibNumerique/Brevet1820/Brevet1820.pdf>
 
-It is suitable for the broad statement that Odhner-style pinwheel machines set a number by exposing pins and transfer the selected digits through crank rotation. Keep detailed carry timing/mechanism claims anchored to the patents above.
+Institutional surviving-object boundary:
 
-## A5. Required source-map conclusion
+- Smithsonian/NMAH, oldest surviving Thomas Arithmometer, ca. 1820:
+  <https://americanhistory.si.edu/collections/object/nmah_690692>
 
-End the note with a compact evolution table, for example:
+Record only what the sources support:
 
-| Source/context | Carry problem exposed | Scheduling / transfer relationship | Evidence | Not established |
+- the 1820 patent explicitly divides the machine into movement systems including a `système des retenues` (carry system), alongside multiplier/multiplicand systems;
+- the patent is a distinct early design and must not be treated as a description of the stabilized later commercial Thomas machine;
+- the Smithsonian explicitly says its oldest surviving example is **not identical to the drawings of Thomas's 1820 patent** and more closely resembles drawings made in 1821 for the 1822 Hoyau report.
+
+This boundary is important. `patent 1820 -> every later Thomas carry` is not acceptable.
+
+If you inspect the patent's detailed carry section, cite section/figure locations in the research note, but do not infer later production use from it.
+
+## A2. 1849 development context — evidence that the design was still changing
+
+Useful source:
+
+- Thomas de Colmar, Patent No. 8282 (1849), French text:
+  <https://arithmometre.org/Brevets/PageBrevet1849FR.html>
+- English translation hosted by the same specialist archive:
+  <https://arithmometre.org/Brevets/PageBrevet1849EN.html>
+
+Use this mainly as a **revision-history boundary**, not as a shortcut to assert a specific later carry linkage. The text presents the contemporary machine as a developed/perfected version of the early design and discusses repeated prototype/workmanship difficulties.
+
+If a carry-specific claim is used, inspect the relevant text directly and record its exact context. Otherwise keep 1849 as evidence that the architecture was not static between 1820 and the later commercial forms.
+
+## A3. Thomas de Colmar, Brevet No. 68923 (1865) — primary carry scheduling and failure evidence
+
+Primary-patent transcription/digital page:
+
+- Brevet No. 68923, 30 Sep 1865:
+  <https://arithmometre.org/Brevets/PageBrevet1865FR.html>
+
+This is the central source for this slice. Inspect the text and figures directly. At minimum record these source-supported claims, with section/figure anchors where possible:
+
+### A3.1 rapid-motion overrun / moderation
+
+The patent says older machines could, under rapid movement, let inertia carry a corresponding dial one or two teeth too far. It describes a `cylindre de modération` and Malta-cross relationship intended to stop that acquired motion when the stepped cylinder's last tooth disengages.
+
+Treat this as **H/E1 for the patented 1865 description**. Do not turn it into a numerical safe crank speed, measured field-failure rate, or universal Thomas-machine performance number.
+
+### A3.2 sequential phasing of the stepped cylinders
+
+The patent states that the stepped cylinders are geared on the transmission shaft with successive phase offsets: the second cylinder's first tooth acts when the first reaches its second, the third begins when the second reaches its second, and so on. It explicitly says this makes the carries (`retenues`) fall **one after another** and thereby avoids errors.
+
+This is the key stepped-drum comparison point. It is a source-specific H/E1 statement of successive carry scheduling in the 1865 patent.
+
+Do not replace it with the existing P/M ordinal schedule and then call that schedule the historical tooth timing. The P/M scheduler may illustrate dependency order only.
+
+### A3.3 older simultaneous-load failure mode
+
+In the `Retenues` section, the patent says an older design used double inclined steel planes pressing carry levers vertically. When several dial inclined planes pressed their respective carry levers at the same time, the combined resistance could make the dial plate lift instead of the levers descending; weakened engagement could then produce **false products/results**.
+
+It also says an attempted hook remedy kept the dial plate down while the crank moved, but created a serviceability problem if the crank stopped mid-cycle because the plate could not be lifted to reach the cause of the stoppage.
+
+Record both failure/problem statements separately.
+
+### A3.4 1865 replacement relationship
+
+The patent describes replacing the older vertical action with a square steel projection on each dial that, when crossing `0 <-> 9`, moves a carry square horizontally; through the carry lever/fork and rod, this lowers the moderation cylinder/carry finger so it takes one tooth on the carry wheel. The text also describes double springs intended to make the carry reach either full down or full returned position rather than remaining halfway.
+
+This is H/E1 for the described patent mechanism. It is **not** permission to draw unsourced exact production geometry beyond the figures/text actually inspected.
+
+## A4. Thomas de Bojano, Brevet No. 138912 (1880) — simplification claim versus production evidence
+
+Primary-patent transcription/digital page:
+
+- Brevet No. 138912, 29 Sep 1880:
+  <https://arithmometre.org/Brevets/PageBrevet1880FR.html>
+
+Record at source-supported precision:
+
+- the patent explicitly recaps the older carry mechanism before describing a new carry arrangement;
+- it enumerates the older carry effect as 20 parts and the proposed new arrangement as 10 parts per carry effect;
+- it describes the new relation in its own patent context and describes all carries made during a crank turn remaining conditioned until a return/reset action at crank home.
+
+Important boundary: a **patented simplification is not proof of production adoption**.
+
+For the adoption/revision question, use a separate specialist secondary source and label it accordingly rather than H/E1:
+
+- Arithmometre.org chronology/revision history:
+  <https://arithmometre.org/Biographie/ChronologieENG.html>
+
+That specialist chronology says the 1880 carry simplification is effectively a "phantom" in the referenced surviving-machine corpus and that the known French/foreign arithmometers largely continued on the T1865 pattern. Treat this as specialist reconstruction/history (**R/E3 or another defensible non-E1 classification under repository policy**), not as primary patent evidence.
+
+Do not write `the 1880 design replaced the 1865 production mechanism` unless an actual production/object source proves it.
+
+## A5. surviving family context
+
+Use Smithsonian stepped-drum object records for broad identified-object context, not detailed carry internals:
+
+- stepped-drum calculating machine group:
+  <https://americanhistory.si.edu/collections/object-groups/calculating-machines/stepped-drum-calculating-machines>
+
+The group supports identified Thomas machines, stepped drums, setting levers, result/revolution registers, carriage and mode controls at object-record precision. It also reinforces that the earliest surviving object is not identical to the 1820 patent drawing.
+
+## A6. required source-map conclusion
+
+End the note with a compact evolution/boundary table, approximately:
+
+| Source/context | Carry/reliability problem | Documented response | Evidence role | Not established |
 |---|---|---|---|---|
-| US514725A (1894) | perform decimal transfer accurately during rotary operation | register crossing conditions arm; carry pin/tooth advances next order | H/E1 | later production universality, force/speed limits |
-| US1377269A (1921) | rapid rotation can knock transfer arm out and cause miscalculation | revised fulcrum/contact relationship reduces destabilizing moment; larger contact reduces wear | H/E1 | safe RPM, field failure rate, all production revisions |
-| US1867603A (1932) | cascaded carries require successive timing; spacing limits capacity | staggered/spiral carry opportunities; phase-overlap improvement | H/E1 for described patent | universal Odhner geometry; universal 22% gain |
-| repository ordinal schedule | explain dependency ordering only | deterministic P/M sequence slots | P/M | angles, time, torque, geometry, failure probability |
+| Thomas 1820 patent | early carry system exists as a distinct movement system | patent-specific early mechanism | H/E1 | later commercial geometry/universality |
+| Smithsonian ca.1820 object | surviving early machine differs from patent drawing | object/revision boundary | H/E2 institutional object record | exact missing transition from patent to object |
+| Thomas 1865 patent | inertia overrun; simultaneous carry load can lift plate / produce false results; cascaded carries need ordered action | moderation/Geneva-stop relation, horizontally conditioned carry, staggered cylinder phasing | H/E1 | measured speed/load/failure envelope; all production revisions |
+| Thomas de Bojano 1880 patent | simplify 1865 carry mechanism | proposed 10-part carry vs recapped 20-part carry | H/E1 patent proposal | production adoption |
+| specialist revision chronology | known machines apparently retain T1865 pattern rather than 1880 carry | production-history interpretation | R / non-E1 | exhaustive artifact census unless source proves it |
+| repository ordinal scheduler | dependency-order teaching only | abstract increasing slots | P/M | Thomas tooth angles/times/forces/geometry |
 
-Also list open evidence explicitly: production-revision mapping, exact materials/tolerances, lubrication/wear data, force/spring data, safe rotation rate, and measured failure envelopes.
-
----
-
-# Part B — deterministic ordinal rotary-carry schedule model
-
-Add a small mechanism module under `src/mechanisms/`, using an explicit name such as:
-
-```text
-src/mechanisms/rotary-carry-schedule/
-```
-
-This is a **P/M explanatory model**, not an Odhner geometric reconstruction.
-
-## B1. Modeling target
-
-Represent only the dependency that a cascade of carries must receive **successively ordered transfer opportunities** within an abstract operation cycle.
-
-Do not encode degrees or milliseconds. Use ordinal phase/slot indices such as:
-
-```text
-order 0 boundary crossed
-→ order 1 carry opportunity slot 0
-→ order 1 boundary crossed by that carry
-→ order 2 carry opportunity slot 1
-→ ...
-```
-
-The model should make it impossible to interpret all carries as one simultaneous arithmetic mutation.
-
-Suggested inspectable state/data:
-
-- register width or carry depth;
-- direction: add / subtract if you can model it without adding unsupported mechanics;
-- current source order;
-- next higher target order;
-- ordinal transfer slot / phase index;
-- conditioned/ready relationship;
-- ordered events;
-- final schedule summary.
-
-If direction adds noise, keep the first model direction-neutral and state explicitly that source patents describe additive/subtractive paths but this P/M slice models only ordering dependency.
-
-## B2. Required events
-
-Choose vocabulary consistent with the repo. The observable logic should be equivalent to:
-
-```text
-BOUNDARY_CROSSED sourceOrder=0
-NEXT_ORDER_CONDITIONED targetOrder=1
-TRANSFER_OPPORTUNITY slot=0 targetOrder=1
-BOUNDARY_CROSSED sourceOrder=1 causedByCarry=true
-NEXT_ORDER_CONDITIONED targetOrder=2
-TRANSFER_OPPORTUNITY slot=1 targetOrder=2
-...
-```
-
-Do not name an event `TOOTH_AT_37_DEGREES`, `SPRING_RELEASE_MS`, or similar unsupported physical detail.
-
-## B3. Replay / validation
-
-Follow the repository's newer fail-closed pattern:
-
-- deterministic state/action -> expected event sequence;
-- replay validates stored events against expected events;
-- final state/schedule is verified;
-- unknown runtime events fail;
-- malformed widths/orders/slot identities fail rather than being coerced.
-
-## B4. Tests
-
-Add focused Vitest coverage for at least:
-
-1. one carry requires one higher-order transfer opportunity;
-2. a 3-stage chain produces strictly increasing ordinal slots and preserves dependency order;
-3. no two dependent carry transfers share the same slot in the P/M schedule;
-4. a full-width carry-out is represented explicitly rather than indexing beyond the register;
-5. deterministic identical input gives identical schedule/events;
-6. replay reproduces final schedule;
-7. changed slot/order/sequence fails replay;
-8. omitted/inserted event fails replay;
-9. unknown runtime event fails;
-10. malformed width/depth/state is rejected.
-
-Do not write a test asserting an exact historical number of degrees, milliseconds, carry teeth, or safe RPM.
+Also list open evidence: exact 1850/1851/1865 production-revision mapping, inspected factory instructions, direct measurement of surviving carry mechanisms, material/spring/contact loads, lubrication/wear, safe crank rate, and measured error/failure envelopes.
 
 ---
 
-# Part C — typed provenance and public carry comparison
+# Part B — typed Thomas carry provenance
 
-Extend the existing carry provenance dataset rather than creating a competing evidence framework.
+Extend the existing carry provenance dataset rather than inventing a second evidence framework.
 
 Add source-separated profiles for at least:
 
-1. Odhner US514725A baseline transfer mechanism;
-2. Valentin Odhner US1377269A rapid-rotation/miscalculation improvement;
-3. Talamini/Marchant US1867603A successive/staggered carry scheduling and phase-overlap improvement;
-4. Smithsonian pinwheel family context only if useful as a separate H/E2 profile.
+1. Thomas 1820 patent context;
+2. Smithsonian ca.1820 surviving object/revision boundary;
+3. Thomas 1865 patent — rapid-motion moderation + successive carry phasing;
+4. Thomas 1865 patent — older simultaneous-load failure and replacement carry relation (may be a separate profile if that keeps claims precise);
+5. Thomas de Bojano 1880 patent — carry simplification proposal;
+6. specialist 1880 production/revision interpretation only if the dataset supports R claims cleanly.
 
-Each profile must keep:
+Each profile must retain:
 
-- stable id;
+- stable unique id;
 - source/model/date context;
-- H/R claim type and E1–E4 strength;
-- source URL;
-- documented relationship/failure constraint;
-- operator/architecture implication;
+- H or R claim type and evidence strength;
+- exact source URL;
+- documented relationship/problem;
+- architecture/operator implication;
 - non-empty `notEstablished` boundary.
 
-Do not merge all three patents into a generic “Odhner carry” profile.
+Do not merge 1820, 1865, and 1880 into one generic `Thomas carry` profile.
 
-## C1. Provenance tests
+## Provenance tests
 
 At minimum verify:
 
 - IDs remain unique;
-- all new H/R profiles have source + strength + `notEstablished`;
-- 1894, 1921, and 1932 patent contexts remain separate;
-- the 1921 profile is the one that records rapid-rotation miscalculation risk;
-- the 1932 profile does not present the ~22% spacing result as a universal Odhner number;
-- the 1932 Marchant patent is not mislabeled as an Odhner-authored patent.
-
-## C2. Visible-carry integration
-
-Keep the existing `#/visible-carry` interactive generic carry lesson unchanged as the P/M arithmetic base. Add a compact bilingual subsection/group for **rotary carry scheduling / reliability**.
-
-It should answer visibly:
-
-```text
-Why can't a rotary carry chain just happen “all at once”?
-What can go wrong if the transfer element is not reliably conditioned at speed?
-Why did later designers care about spacing/phase overlap?
-```
-
-Show the new ordinal P/M schedule for a short 2–3 transfer chain, but label it clearly:
-
-- ordinal dependency only;
-- not historical angular spacing;
-- not timing in milliseconds;
-- not a failure-probability simulator.
-
-Beside it, show the three source contexts with source/model/date, claim/evidence strength, documented point, and `not established` text.
-
-No source-specific gear, arm, cam, spring, or spiral drawing is required. A textual/ordinal timeline is preferable.
+- all H/R entries have source + evidence strength + `notEstablished`;
+- the Smithsonian profile explicitly preserves `surviving object != 1820 patent drawing`;
+- the 1865 profile records both **successive carry phasing** and the documented older simultaneous-load/false-result problem at the correct source context;
+- the 1880 patent profile records a proposed 20 -> 10 part simplification without claiming production adoption;
+- any `phantom/no known surviving implementation` statement is R/specialist-history, not H/E1 patent content;
+- no Thomas profile is mislabeled as Odhner/Talamini evidence and vice versa.
 
 ---
 
-# Part D — docs and verification
+# Part C — public cross-family carry comparison
+
+Extend `#/visible-carry` conservatively. Keep the generic `0099 + 1` P/M lesson and the completed rotary-carry section working.
+
+Add a compact bilingual **stepped-drum / Thomas 1865** subsection that visibly answers:
+
+```text
+Why did Thomas 1865 stagger cylinder action so carries occur one after another?
+What failure did the patent describe when several older carry levers were loaded simultaneously?
+Why is the 1865 solution not the same mechanism as Odhner/Talamini rotary carry scheduling even though both expose an ordering constraint?
+What does the 1880 simplification patent prove, and what does it not prove about manufactured machines?
+```
+
+## Reuse before refactor
+
+The existing ordinal P/M scheduler already teaches carry dependency order. Do not create another scheduler simply to put `Thomas` in a module name.
+
+If the existing `rotary-carry-schedule` presentation can be reused **without implying its slots are Thomas 1865 historical phasing**, reuse only the source-neutral dependency concept in the UI and label it P/M.
+
+If the module name/API makes reuse misleading, make the smallest safe refactor toward a neutral carry-dependency schedule and preserve existing behavior/tests. Do not perform a broad core migration merely for naming aesthetics.
+
+The public comparison should distinguish:
+
+- **Thomas 1865 H/E1:** actual patent text says cylinders are phased so carries fall one after another; it also describes a specific older simultaneous-load failure and replacement mechanism;
+- **Talamini/Marchant 1932 H/E1:** a different Odhner-type rotary actuator architecture with successively displaced carry opportunities and phase-overlap optimization;
+- **repository P/M:** ordinal dependency timeline only.
+
+No source-specific animated linkage is required. Text + typed source cards + a source-neutral ordinal dependency diagram are preferable.
+
+---
+
+# Part D — docs, verification, and bounded cleanup
 
 After Parts A–C are real:
 
-- update `STATUS.md` to record the source-backed rotary carry/reliability map and ordinal P/M scheduler;
-- update `TODO.md` only if this completed slice genuinely belongs in the short queue;
-- update the carry row in `docs/REPRESENTATION_AND_PROTOCOL.md` if the new rotary scheduling evidence materially improves it;
-- update `docs/TEACHING_PATH.md` so visitors can discover the rotary scheduling comparison;
-- update `research/carry-is-the-hard-part.md` with a concise pointer to the new source map and the documented rapid-rotation/staggering problem;
-- update only the relevant carry/reliability portions of `docs/RESEARCH_GAPS.md`;
-- update `docs/VERIFICATION.md` with actual baseline/final test counts and commands run;
+- update `STATUS.md` with the stepped-drum carry provenance/revision boundary;
+- update `TODO.md` only if this completed slice belongs in the short queue;
+- update the carry row in `docs/REPRESENTATION_AND_PROTOCOL.md` to include Thomas 1865 without collapsing it into the Odhner row;
+- update `docs/TEACHING_PATH.md` so visitors can discover the stepped-drum/rotary carry comparison;
+- update `research/carry-is-the-hard-part.md` with a concise pointer and the cross-family lesson;
+- update `research/multiplication-mechanisms.md` only where the stepped-drum carry evidence changes the current mechanism comparison;
+- update only relevant carry/reliability items in `docs/RESEARCH_GAPS.md`;
+- update `docs/VERIFICATION.md` with actual baseline/final counts and commands run;
 - README only if needed for discoverability.
+
+If there is substantial time left after all acceptance criteria pass, improve test/replay/evidence-card accessibility and bilingual text-state visibility. Do **not** start a new machine family or reliability simulation.
+
+# Acceptance
 
 Before commit/push, run:
 
@@ -311,54 +280,54 @@ git diff --check
 
 Perform a local browser smoke check for `#/visible-carry` in English and Chinese if the established tooling makes that practical. Record exactly what was checked; do not claim a browser run you did not perform.
 
-# Acceptance
+The finished slice must let a visitor/test answer all of these:
 
-The finished slice must let a visitor/test answer all of these without unsourced geometry:
-
-1. How does US514725A describe a carry reaching the next registering order?
-2. What exact rapid-operation failure does US1377269A say could cause miscalculation?
-3. Why does US1867603A say successive carries must be staggered rather than simultaneous?
-4. What did the 1932 patent claim to improve by overlapping operation phases, and what does its ~22% experimental statement **not** prove universally?
-5. Can the repository show a carry dependency schedule without pretending ordinal slots are historical angles/times?
-6. Does tampering that schedule fail closed?
+1. Why can't the 1820 patent simply be treated as the geometry of later commercial Thomas machines?
+2. What rapid-motion overrun problem does the 1865 patent describe?
+3. What older simultaneous-carry-load failure does the 1865 `Retenues` section say could produce false results?
+4. What does the 1865 patent explicitly say about successive phasing of stepped cylinders and carries occurring one after another?
+5. How is that source-specific Thomas scheduling evidence similar in dependency shape—but mechanically distinct from—the Odhner/Talamini rotary scheduling evidence already in the repository?
+6. What does the 1880 patent's 20-part -> 10-part carry simplification prove, and why is that not proof of production adoption?
+7. Does the UI keep H/E1 patent claims, institutional object claims, R specialist revision history, and P/M ordinal teaching state visibly separate?
 
 # Evidence boundaries
 
-- decimal carry relation: **M**;
-- repository ordinal schedule/event order: **P/M**;
-- US514725A, US1377269A, US1867603A: **H/E1** for the mechanisms/failure constraints described in those patents;
-- Smithsonian pinwheel family page: **H/E2** for broad identified family context;
-- a patent proves the described/intended embodiment, not universal production implementation;
-- the 1932 ~22% result belongs to the patent's described practical experiment, not all pinwheel calculators;
-- do not infer safe RPM, spring constants, torque, tolerances, wear life, lubrication intervals, field failure frequency, or precise angular timing without additional sources;
-- do not label Talamini/Marchant's later improvement as Odhner's own 1894 design.
+- decimal carry arithmetic: **M**;
+- repository ordinal dependency events/slots: **P/M**;
+- Thomas 1820, 1865, Thomas de Bojano 1880 patent text: **H/E1** for the described patent mechanisms/problems only;
+- Smithsonian identified-object/revision statements: **H/E2** institutional evidence at catalog precision;
+- specialist production/revision interpretation from Arithmometre.org: **R** with a defensible non-E1 strength; do not present it as patent fact;
+- patent proposal != production adoption;
+- earliest surviving object != 1820 patent drawing;
+- Thomas 1865 staggered stepped cylinders != Odhner/Marchant rotary carry spiral geometry;
+- do not infer exact historical tooth angles, timing in milliseconds, crank RPM, torque, spring constants, contact loads, materials, tolerance stack, wear life, lubrication interval, production field-failure rate, or universal performance from these sources.
 
 # Stop conditions
 
-Stop and record a precise blocker rather than guessing if:
+Stop and record a blocker rather than guessing if:
 
-- one of the three primary patent texts cannot actually be inspected and the requested claim depends on it;
-- implementing an ordinal scheduler would require rewriting unrelated shared carry APIs;
-- the current visible-carry page cannot accept another source group without a broad UI redesign; in that case keep the source map + typed profiles + tested scheduler and add only a minimal discoverability link;
-- a source-specific geometry claim becomes necessary to proceed;
-- a conflicting rotary-carry implementation has already landed on remote `main`.
+- a source-specific Thomas claim cannot be located in the cited text/figure context;
+- implementation would require inventing missing linkage geometry or numerical mechanical parameters;
+- reusing/refactoring the ordinal scheduler risks changing existing carry semantics substantially;
+- a conflicting stepped-drum carry implementation/source map already landed on remote `main`;
+- the evidence is insufficient to separate patent proposal from production revision for a claim the UI would otherwise make.
 
-If all required work finishes substantially before the target duration, use remaining time only on this same question: strengthen tamper tests, add more exact figure/claim anchors from the three patents, improve bilingual/accessibility text-state visibility, or inspect a production/manual source that can genuinely narrow one `notEstablished` field. **Do not start a torque/random-failure simulator or another machine family.**
+If one secondary/specialist source is inaccessible, continue with the primary patent + Smithsonian boundary and mark the production-adoption question open rather than blocking the whole slice.
 
 # Git discipline
 
 - remote `main` is authoritative;
 - fetch/pull before work;
-- inspect existing modules/tests before creating parallel abstractions;
-- one coherent implementation checkpoint;
+- inspect current code/tests before creating parallel abstractions;
+- one coherent implementation/research checkpoint;
 - run all acceptance commands;
 - inspect diff for unrelated changes;
 - update status/verification only after tests pass;
-- commit and push;
+- commit and push to the repository's normal remote path;
 - after push, stop and wait for the next `CURRENT_AGENT_TASK.md` revision.
 
 Suggested commit subject:
 
 ```text
-feat: model rotary carry scheduling constraints
+feat: ground stepped-drum carry evolution
 ```
