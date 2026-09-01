@@ -272,6 +272,20 @@ Local browser smoke against Vite:
 
 No deployment check was performed for this not-yet-pushed commit; no claim that this upgraded route is already live is made.
 
+## 2026-09-01 — continuous-integrator action-bound replay
+
+The exact current-main baseline was `36550f2fd169151962e30cd9347e9ba9c2795afa` with 251 tests across 19 files. The serialized continuous-integrator trace previously replayed only its events, so deleting or replacing the recorded actions and changing action/event cycle identities could leave a trace that still verified. Replay now validates both endpoints, re-derives the event stream from every recorded action, and requires that stream and its action-derived final state to match the recorded trace. Runtime cycle identifiers must also be non-empty strings.
+
+- `npm run typecheck` — pass
+- `npm test` — pass, 258 tests across 19 files
+- `npm run build` — pass
+- focused continuous-integrator suite — 19 tests passed
+- four intervals × four action sequences — 16 valid traces replayed; all 12 applicable forged-input variants were rejected
+- `git diff --check` — pass
+- missing/extra/unknown actions, changed action input, split action/event cycle identities, and identical invalid empty endpoints are all rejected
+
+No UI or historical claim is changed, so no browser or deployment claim is made for this replay-only boundary.
+
 ## 2026-09-01 — Analytical Engine flow and Pages reconciliation
 
 Replaced the five-label static flow with a deterministic P/M `(ab+c)d` trace: given values enter named Store locations, two operands enter the Mill, validated operations produce `p=6`, `q=10`, and `result=50`, intermediate results return to Store, and output remains empty until the final output event. Replay validates sequence, role metadata, Store references/transfers, operand readiness, arithmetic, operation order and final state. The route now supports event stepping, reset, ArrowRight stepping, bilingual Store/Mill/card/output state, and an ordered text log.
