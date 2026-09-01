@@ -20,6 +20,17 @@ Local bilingual browser smoke:
 
 No deployment check was performed for this not-yet-pushed completion commit; no claim that the integration is already live is made.
 
+## 2026-09-01 — decimal-register unknown-event rejection
+
+The exact pre-edit current-main baseline was `36550f2fd169151962e30cd9347e9ba9c2795afa` with 251 tests across 19 files. This bounded replay correction snapshots the event discriminator once and fails closed when a runtime trace contains an event type outside the decimal register's six declared event kinds. Regression cases cover both an inserted unknown event and substitution of every non-`WHEEL_STEP` marker, which previously replayed to the recorded final digits because those events were silently ignored.
+
+- `npm run typecheck` — pass
+- `npm test` — pass, 253 tests across 19 files
+- `npm run build` — pass
+- `git diff --check` — pass
+
+No marker ordering, marker metadata, wheel-step field validation, UI behavior, or historical claim is changed. No deployment check was performed for this not-yet-pushed commit.
+
 ## 2026-09-01 — DE2 and Differential Analyzer publication precision
 
 The pre-edit remote-main baseline was 221 tests across 19 files. This slice directly inspected the complete 232-page Science Museum *Charles Babbage's Difference Engine No. 2: Technical Description*, exact R/E2 anchors at p. i, pp. 4–9, 21–24, 33–45, 49–54, 83–85, 187–188 and 212–218, and the H/E1 BAB/B/001 record. Bush 1931 and Shannon 1941 remain bibliographic-only after bounded publisher/repository access attempts; the complete APS facsimile of Bush and Caldwell's separate 1931 application paper, printed pp. 1898–1902 and Figures 1–3, was directly inspected instead.

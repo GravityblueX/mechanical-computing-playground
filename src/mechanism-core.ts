@@ -129,9 +129,22 @@ export function reduceDecimalRegisterEvent(
 ): DecimalRegisterState {
   if (event.mechanismId !== state.mechanismId) throw new Error('event mechanism does not match state');
   const digits = [...state.digits];
-  if (event.type === 'WHEEL_STEP') {
-    if (digits[event.wheel.index] !== event.from) throw new Error(`wheel ${event.wheel.index} trace precondition failed`);
-    digits[event.wheel.index] = event.to;
+  const eventType = event.type;
+  switch (eventType) {
+    case 'WHEEL_STEP':
+      if (digits[event.wheel.index] !== event.from) throw new Error(`wheel ${event.wheel.index} trace precondition failed`);
+      digits[event.wheel.index] = event.to;
+      break;
+    case 'CRANK_BEGIN':
+    case 'CARRY_PENDING':
+    case 'CARRY_PROPAGATED':
+    case 'CARRY_OUT':
+    case 'CRANK_END':
+      break;
+    default: {
+      const unsupportedEventType: never = eventType;
+      throw new Error(`unsupported decimal register event type: ${String(unsupportedEventType)}`);
+    }
   }
   return { mechanismId: state.mechanismId, digits };
 }
