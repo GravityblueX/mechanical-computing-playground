@@ -4,138 +4,110 @@
 
 ## Question
 
-Which Store, Mill, card, and output claims come from nineteenth-century descriptions or drawings; which choices belong to later emulator reconstruction; and which event ordering belongs only to this repository?
+Which Store, Mill, card and output claims are directly anchored in nineteenth-century pages/drawings; which choices belong to a later emulator; and which ordering exists only in this repository?
 
 ## Claim types
 
 - contemporary publications and catalogued drawings: **H**;
-- John Walker/Fourmilab's choices where incomplete designs are made executable: **R**;
+- John Walker/Fourmilab executable choices: **R**;
 - `src/exhibits/analytical-engine-flow/`: **P/M**.
 
-Evidence strength applies separately to H/R claims under `docs/EVIDENCE_POLICY.md`.
+## 1. Menabrea/Lovelace 1843: direct facsimile/page anchors
 
-## 1. Menabrea/Lovelace publication (1842/1843)
+Directly inspected access paths:
 
-### Access path
+- Project Gutenberg #75107, credited from Internet Archive page images: <https://www.gutenberg.org/ebooks/75107>
+- HTML preserving original `[Pg …]` pagination: <https://www.gutenberg.org/files/75107/75107-h/75107-h.htm>
+- scanned *Scientific Memoirs*, vol. III page images: <https://en.wikisource.org/wiki/Index:Scientific_Memoirs,_Vol._3_(1843).djvu>
 
-Fourmilab transcription of L. F. Menabrea's 1842 memoir and Ada Lovelace's translated/expanded 1843 publication:
+Publication identity: L. F. Menabrea, translated with notes by Ada Lovelace, *Sketch of the Analytical Engine invented by Charles Babbage, Esq.*, Richard and John E. Taylor, London, 1843, article XXIX, printed pp. 666–731.
 
-<https://www.fourmilab.ch/babbage/sketch.html>
+Exact inspected printed-page anchors:
 
-This is a later specialist-hosted transcription, not a facsimile/page citation. The nineteenth-century publication is **H**; this URL is the access path. Exact edition typography/page numbering remains open here.
+- **p. 677** (scan leaf `/687`): numbers are transferred to the Mill for operation and results to indicated Variable columns; the text identifies the Mill as the working portion and Variable columns as where results are represented/arranged;
+- **p. 679** (scan leaf `/689`): a table explicitly separates operation-cards, cards of variables, source columns and result columns for an intermediate calculation;
+- **p. 704** (scan leaf `/714`, Lovelace note): Operation cards put the Mill into operation states, while Variable cards supply numbers and locate temporary/ultimate results.
 
-### What the text establishes
-
-The publication distinguishes the Store from the Mill: quantities are retained in columns/variables in the Store and quantities to be operated upon are brought to the Mill. It distinguishes Operation cards from Variable cards, and explains that card groups can be backed/repeated. Its tables and substitutions represent ordered analytical calculations, including intermediate variables.
+The page images themselves were directly visible; no page number was derived merely from a modern heading.
 
 - Claim type: **H**.
-- Evidence: contemporary publication reached through transcription; **E1 for the published text**, with access/provenance limitation stated.
+- Evidence: **E1 for the 1843 published pages**.
 
-It does not supply one complete frozen production specification. This repository does not copy modern slogans or infer card holes, shafts, timing, or exact reader coordination.
+These pages establish published functional roles, not one frozen final machine, exact card holes/readers/synchronisation, Mill–Store linkage geometry, or a complete built Analytical Engine.
 
-## 2. Charles Babbage, *Passages*, Chapter VIII (1864)
+## 2. H. P. Babbage 1888: transcription boundary
 
-### Access path
-
-<https://www.fourmilab.ch/babbage/lpae.html>
-
-Babbage retrospectively describes design work and continuing improvement, Jacquard control, the Store/Mill distinction, operation cards and variable cards. In the transcribed chapter:
-
-- the Store holds variables and quantities arising from operations;
-- the Mill receives quantities to be operated upon;
-- one card set specifies operations and another variables/subjects;
-- operation cards and associated variable cards form an ordered formula procedure;
-- he explicitly says describing successive improvements would require many volumes.
-
-- Claim type: **H** for Babbage's published retrospective account.
-- Evidence: **E1 for what that publication says**, reached through a specialist transcription rather than verified edition/page facsimile.
-
-The chapter is not evidence that one final complete Engine was built. Its own emphasis on successive improvements warns against flattening decades of design into one architecture.
-
-## 3. H. P. Babbage, British Association paper (1888)
-
-### Access path and status
+Fourmilab transcription:
 
 <https://www.fourmilab.ch/babbage/hpb.html>
 
-H. P. Babbage reported and explained Charles Babbage's design after Charles's death. It is direct evidence for H. P. Babbage's published account, not automatically an original Charles Babbage drawing specification.
-
-### Concrete anchors
-
-Items 10–15 distinguish:
-
-- **Number Cards** communicating given constants;
-- **Directive Cards** specifying Store destinations/transfers and general control;
-- **Operation Cards** preparing the Engine for arithmetic operations.
-
-Items 18–20 give `(ab+c)d` as a concrete flow:
-
-1. Number cards associate `a,b,c,d` with Store columns 1–4;
-2. Directive cards bring `a,b` to the Mill;
-3. Operation card 1 multiplies them to `p`;
-4. a directive returns `p` to Store column 5;
-5. `p,c` return to the Mill and operation 2 produces `q`;
-6. `q` goes to Store column 6;
-7. `d,q` enter the Mill and operation 3 produces the final value;
-8. that value goes to Store column 7 and then printing/stereo-moulding output.
-
-Item 20 counts three Operation Cards and fourteen Directive Cards in separate sets/rollers. This is the historical formula shape used by the software; the fixture values `2,3,4,5` are not historical.
-
-- Claim type: **H**.
-- Evidence: historical published report, **E1 for what H. P. Babbage reported**.
-
-## 4. Science Museum Babbage Papers: design records, not one frozen machine
-
-Collection records establish the existence/title/date or description of design sheets:
-
-- `BAB/A/125`, *Plan of consecutive mill counting apparatus for General Plan 28*, December 1843: <https://collection.sciencemuseumgroup.org.uk/documents/aa110000267/plan-of-consecutive-mill-counting-apparatus-for-general-plan-28-plan-note>
-- `BAB/D/028`, *Mill. Sheet 28. Superseded by Sheet 25*, 12 June 1858: <https://collection.sciencemuseumgroup.org.uk/documents/aa110000376>
-- `BAB/P/167`, *Plan of bolts for store*, with additional figures and an elevation dated 12 August 1859: <https://collection.sciencemuseumgroup.org.uk/documents/aa110000439>
-
-- Claim type: **H**.
-- Evidence: institutional records for catalogued historical documents, **E1 for record existence/metadata**.
-
-The word “superseded,” dates spanning phases, and separate Store/Mill records demonstrate design evolution. The minimal catalog text does not establish every mechanical relationship shown on an image, nor a complete built Engine. The repository links records and does not reproduce images or infer geometry from titles.
-
-## 5. Walker/Fourmilab: reconstruction and emulator conventions
-
-### Sources inspected
-
-- authenticity rationale: <https://www.fourmilab.ch/babbage/authentic.html>
-- programming-card conventions: <https://www.fourmilab.ch/babbage/cards.html>
-- web emulator and stepping: <https://www.fourmilab.ch/babbage/emulator.html>
-
-Walker explicitly discusses the difficulty of emulating a machine never completed and differences among historical descriptions. The emulator chooses fifty-digit capacity from Babbage's later publication and states criteria for authenticity.
-
-Its card manual distinguishes Operation, Number, and Variable cards, but also explicitly says the emulator **unifies historically separate card streams into one stream**, because their coordination was not precisely specified and one merged program is easier to prepare/read. It introduces textual card syntax and emulator behavior; these are reconstruction/emulator conventions, not nineteenth-century punched-card notation.
-
-The web emulator provides Reset/Start/Step, an Annunciator panel exposing Mill, Store and current card, and trace output. Its Step processes the current card, advances and halts. These are directly verified features of that later emulator documentation.
-
-- Claim type: **R** for reconstruction choices and emulator interpretation.
-- Evidence: emulator author's own documentation, **E1 for what the emulator claims/does**, not historical E1 for the unfinished Engine.
-
-No Fourmilab syntax or code is copied. A URL is not a reuse license.
-
-## 6. Ambiguity resolved
-
-These layers must not be merged:
-
-| Layer | What it supports |
-|---|---|
-| Menabrea/Lovelace and Charles Babbage publications | Historical Store/Mill, operation/variable card concepts, repetition, analytical procedure |
-| H. P. Babbage 1888 | A concrete reported Number/Directive/Operation-card flow for `(ab+c)d` |
-| Science Museum records | Existence and evolution of particular Store/Mill design sheets |
-| Walker/Fourmilab | A later executable interpretation, unified text-card stream, step/trace UI |
-| This repository | A deliberately small deterministic P/M event trace |
-
-The categories differ: Menabrea/Lovelace and Charles Babbage emphasize Operation/Variable roles, H. P. Babbage uses Number/Directive/Operation terminology, while Walker documents its own Number/Variable/Operation syntax and merged stream. The repository therefore labels events by explanatory **role** rather than claiming one exact historical reader order.
-
-## 7. Software abstraction decision
-
-`src/exhibits/analytical-engine-flow/` models only:
+The transcription identifies a paper read at Bath on 12 September 1888. Items 10–15 distinguish Number, Directive and Operation cards. Items 18–20 report `(ab+c)d`:
 
 ```text
-given values → named teaching Store locations
+Number cards associate a,b,c,d with Store columns 1–4
+Directive cards bring operands to the Mill
+three Operation cards produce p=ab, q=p+c, then d×q
+Directive cards retain p/q in Store columns 5/6
+final result goes to Store column 7 and printing/stereo-moulding
+```
+
+Item 20 reports three Operation Cards and fourteen Directive Cards in separate sets/rollers.
+
+A bounded Open Library/Internet Archive discovery attempt did not yield a stable directly inspectable 1889 scan in this environment. Therefore:
+
+- historical publication claim type: **H**;
+- current access strength in the typed atlas: **E3 specialist transcription**;
+- no historical printed page number, facsimile typography or figure claim is made.
+
+This is the historical formula shape used by the repository; values `2,3,4,5` and repository event serialization are P/M.
+
+## 3. Science Museum drawing records
+
+Directly re-inspected:
+
+- `BAB/A/125` / `aa110000267`, *Plan of consecutive mill counting apparatus for General Plan 28*, December 1843, one sheet, 65×94 cm:
+  <https://collection.sciencemuseumgroup.org.uk/documents/aa110000267/plan-of-consecutive-mill-counting-apparatus-for-general-plan-28-plan-note>
+- `BAB/D/028` / `aa110000376`, *Mill. Sheet 28. Superseded by Sheet 25*, 12 June 1858, 63×98 cm:
+  <https://collection.sciencemuseumgroup.org.uk/documents/aa110000376>
+- `BAB/P/167` / `aa110000439`, *Plan of bolts for store*, made 8 June–12 August 1858, with additional figures/elevation dated 12 August 1859:
+  <https://collection.sciencemuseumgroup.org.uk/documents/aa110000439>
+
+- Claim type: **H**.
+- Evidence: **E1 for record identity, metadata and catalogued subject**.
+
+“Superseded” and the separated dates/phases demonstrate design evolution. Titles/images do not prove exact Store–Mill connections, card-reader timing, every depicted geometry, or a completed machine.
+
+## 4. Walker/Fourmilab reconstruction boundary
+
+Directly inspected:
+
+- authenticity rationale: <https://www.fourmilab.ch/babbage/authentic.html>
+- programming-card documentation: <https://www.fourmilab.ch/babbage/cards.html>
+- emulator documentation: <https://www.fourmilab.ch/babbage/emulator.html>
+
+Walker explicitly documents that the Engine was never completed and historical descriptions changed. The emulator chooses an executable interpretation. Its card documentation says historically separate card streams are abstracted into one textual stream because coordination was not precisely specified and a merged representation is easier to prepare/read.
+
+- Claim type: **R**.
+- Evidence: **E2 for documented reconstruction choices**; the pages are direct evidence of what the emulator chooses, not nineteenth-century machine syntax.
+
+The textual `N/L/Z/S/+/-/*//` forms, unified stream, Step control and software state are not historical punched-card encodings or exact reader order.
+
+## 5. Layers that must remain separate
+
+| Layer | Safe use |
+|---|---|
+| Menabrea/Lovelace 1843 pages | H/E1 Store/Mill and operation/variable-card functional roles at printed pp. 677, 679, 704 |
+| H. P. Babbage 1888 transcription | `(ab+c)d` Number/Directive/Operation shape without printed-page precision |
+| Science Museum records | H/E1 design-record identity, date, dimensions and subject |
+| Walker/Fourmilab | R/E2 executable interpretation and merged text-card convention |
+| This repository | tested P/M small-value event trace |
+
+## 6. Repository abstraction
+
+`src/exhibits/analytical-engine-flow/` models:
+
+```text
+given values → teaching Store locations
 Store → two Mill inputs
 operation selection → validated arithmetic result
 Mill → intermediate Store location
@@ -143,20 +115,6 @@ repeat for p, q, final result
 Store → output
 ```
 
-Every event is marked **P/M**. Reducer/replay validates sequence, Store sources/destinations, operand availability, arithmetic results, output timing and final state. The flow uses H. P. Babbage's `(ab+c)d` shape but small P/M values:
+All events remain **P/M**. Reducer/replay validates ordering and arithmetic for `a=2,b=3,c=4,d=5 → 50`. It does not claim historical event timing, card holes, reader synchronization, exact Mill/Store geometry, one frozen design, or CPU/memory identity.
 
-```text
-a=2, b=3, c=4, d=5
-p=6, q=10, result=50
-```
-
-It refuses to claim:
-
-- complete Analytical Engine emulation;
-- exact card holes, reader synchronisation, text syntax or instruction encoding;
-- historical JavaScript object/Store geometry;
-- exact Mill shafts, timing, capacities or carry mechanism;
-- one design frozen across 1830s–1850s drawings and later publications;
-- identity between Store/Mill and modern memory/CPU.
-
-The exhibit's explanatory increment is evidence-aware, inspectable intermediate-value flow—not a replacement for Walker's emulator.
+This slice changes evidence anchors and discoverability only; mechanism-core semantics remain unchanged.

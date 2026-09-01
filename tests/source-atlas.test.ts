@@ -7,7 +7,7 @@ describe('named-machine source anchor atlas', () => {
     expect(new Set(ids).size).toBe(ids.length);
     for (const anchor of NAMED_MACHINE_SOURCE_ANCHORS) {
       expect(['H', 'R']).toContain(anchor.claimType);
-      expect(['E1', 'E2']).toContain(anchor.evidenceStrength);
+      expect(['E1', 'E2', 'E3']).toContain(anchor.evidenceStrength);
       expect(anchor.institution.trim()).not.toBe('');
       expect(anchor.recordIdentifier.trim()).not.toBe('');
       expect(() => new URL(anchor.sourceUrl)).not.toThrow();
@@ -58,9 +58,44 @@ describe('named-machine source anchor atlas', () => {
     if (!bush.fullFacsimileInspected) expect(bush.pageFigureAnchors).toHaveLength(0);
   });
 
-  it('covers both tracks non-trivially and exposes no pseudo-quality score', () => {
+  it('keeps the Curta patent distinct from production models and operator procedure', () => {
+    const patent = getNamedMachineSourceAnchor('curta-us2525352');
+    expect(patent).toMatchObject({ documentRole: 'patent', accessKind: 'direct primary facsimile', fullFacsimileInspected: true });
+    expect(patent.notEstablished.map(item => item.en).join(' ')).toMatch(/every production Type I or Type II.*operator procedure/);
+  });
+
+  it('keeps Curta operator and service documents in their actual roles', () => {
+    const operator = getNamedMachineSourceAnchor('curta-operator-guide');
+    const service = getNamedMachineSourceAnchor('curta-type1-service-1967');
+    expect(operator).toMatchObject({ documentRole: 'operator manual', accessKind: 'specialist-hosted primary facsimile' });
+    expect(operator.notEstablished.map(item => item.en).join(' ')).toMatch(/service linkage geometry/);
+    expect(service).toMatchObject({ documentRole: 'service manual', generation: { en: expect.stringMatching(/Model I/) } });
+    expect(service.supports.map(item => item.en).join(' ')).not.toMatch(/operator instructions/);
+    expect(service.notEstablished.map(item => item.en).join(' ')).toMatch(/operator instructions.*Type II/);
+  });
+
+  it('requires facsimile inspection before Analytical Engine page claims', () => {
+    const primary = getNamedMachineSourceAnchor('ae-menabrea-lovelace-1843');
+    const transcription = getNamedMachineSourceAnchor('ae-hpb-1888-transcription');
+    expect(primary).toMatchObject({ fullFacsimileInspected: true, accessKind: 'direct primary facsimile' });
+    expect(primary.pageFigureAnchors).toEqual(expect.arrayContaining([expect.stringMatching(/printed p\. 677/), expect.stringMatching(/printed p\. 679/), expect.stringMatching(/printed p\. 704/)]));
+    expect(transcription).toMatchObject({ fullFacsimileInspected: false, accessKind: 'specialist transcription', pageFigureAnchors: [] });
+  });
+
+  it('keeps Analytical Engine design, reconstruction, and repository timing separate', () => {
+    const drawing = getNamedMachineSourceAnchor('ae-bab-a-125');
+    const walker = getNamedMachineSourceAnchor('ae-walker-fourmilab');
+    expect(drawing.notEstablished.map(item => item.en).join(' ')).toMatch(/complete built Analytical Engine.*repository event sequence/);
+    expect(walker).toMatchObject({ claimType: 'R', accessKind: 'reconstruction documentation' });
+    expect(walker.notEstablished.map(item => item.en).join(' ')).toMatch(/nineteenth-century punched-card syntax.*historical reader order/);
+    for (const anchor of sourceAnchorsForTrack('analytical-engine')) expect(anchor.notEstablished.map(item => item.en).join(' ')).toMatch(/repository|this repository|本站/);
+  });
+
+  it('covers all four tracks non-trivially and exposes no pseudo-quality score', () => {
     expect(sourceAnchorsForTrack('difference-engine-no-2').length).toBeGreaterThanOrEqual(5);
     expect(sourceAnchorsForTrack('bush-differential-analyzer').length).toBeGreaterThanOrEqual(6);
+    expect(sourceAnchorsForTrack('curta').length).toBeGreaterThanOrEqual(2);
+    expect(sourceAnchorsForTrack('analytical-engine').length).toBeGreaterThanOrEqual(4);
     const keys = NAMED_MACHINE_SOURCE_ANCHORS.flatMap(anchor => Object.keys(anchor));
     expect(keys).not.toEqual(expect.arrayContaining(['reliabilityScore', 'efficiencyScore', 'fidelityScore', 'confidenceScore', 'sourceQualityScore']));
   });

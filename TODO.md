@@ -25,6 +25,7 @@
 - [x] Map source-separated mechanical error-control responsibilities across Thomas, Odhner/Talamini, and Bush frontlash evidence.
 - [x] Compare human versus machine arithmetic responsibilities using counts derived from existing multiplication, key-driven, division, and persistent-output traces.
 - [x] Add a named-machine source atlas for directly inspected Difference Engine No. 2 and Bush Differential Analyzer records, preserving supports/not-established boundaries.
+- [x] Extend the source atlas with directly inspected Curta patent/manual and Analytical Engine facsimile/drawing anchors while preserving production, transcription, reconstruction, and P/M boundaries.
 
 ## Repository maintenance
 

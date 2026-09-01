@@ -1,5 +1,25 @@
 # Verification record
 
+## 2026-09-01 — Curta and Analytical Engine source hardening
+
+The pre-edit remote-main baseline was 217 tests across 19 files. This slice directly inspected the US 2,525,352 text/PDF, Contina *Your CURTA Calculator* operator-guide page 1/2, the 1967 Model I service-manual cover 1/59, 1843 *Scientific Memoirs* scan pages 677/679/704, three Science Museum Analytical Engine drawing records, and Walker reconstruction documentation. The H. P. Babbage 1888 `(ab+c)d` account remains explicitly transcription-only after a bounded 1889-scan discovery attempt.
+
+- `npm run typecheck` — pass
+- `npm test -- --run` — pass, 221 tests across 19 files
+- `npm run build` — pass
+- `git diff --check` — pass
+
+Local browser smoke against Vite:
+
+- `#/source-atlas` rendered four track groups and 20 source cards in English and Chinese, including document role, access host, inspected page/figure anchors, partial-facsimile boundaries, and no scalar quality score;
+- `#/curta` retained its operational P diagram and exposed the source-atlas cross-link;
+- `#/analytical-engine` stepped the existing P/M `(ab+c)d` trace to output `50`, reset, and exposed the source-atlas cross-link;
+- `#/about` still rendered the evidence-policy explanation;
+- `#/finite-difference` still advanced its arithmetic/output trace and retained its source-atlas cross-link;
+- no desktop horizontal overflow was observed on the five checked routes.
+
+No deployment check was performed for this not-yet-pushed commit; no claim that the four-track atlas is already live is made.
+
 ## 2026-09-01 — named-machine source-anchor atlas
 
 The pre-edit remote-main baseline was 208 tests across 18 files. This slice directly inspected Babbage Papers archive/index, calculation-drive, printing/stereotype, motion-notation and 1991/2002 reconstruction records; directly inspected the Smithsonian Differential Analyzer group plus five component records; retained Bush 1931 as bibliographic-only after a bounded facsimile attempt; and added typed supports/not-established anchors with a bilingual public atlas.

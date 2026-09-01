@@ -21,12 +21,12 @@ Do not add random failure or source-specific linkage animation before those sour
 
 ### 0.2 Named-machine source anchors
 
-Current state: Curta and Analytical Engine source maps exist. `research/difference-engine-source-map.md`, `research/differential-analyzer.md`, typed `src/exhibits/source-atlas/` anchors, and `#/source-atlas` now separate directly inspected Difference Engine No. 2 and Bush Differential Analyzer records from repository P/M flows.
+Current state: the four-track typed atlas now separates directly inspected Difference Engine No. 2, Bush Differential Analyzer, Curta, and Analytical Engine records from later reconstruction/transcription and repository P/M flows. Curta has patent, operator-guide and Model I service-cover anchors; Analytical Engine has direct printed-page anchors at 1843 pp. 677, 679 and 704 plus drawing/reconstruction boundaries.
 
 Remaining gaps:
 
-- Curta manual edition/page/facsimile and Type I/II production mapping;
-- Analytical Engine exact facsimile/page mapping and source-specific geometry;
+- Curta full operator/service edition mapping, Type II service-page inspection, and production Type I/II revision/linkage mapping;
+- Analytical Engine inspected H. P. Babbage 1889 facsimile, additional exact printed pages, and source-specific reader/Store/Mill geometry;
 - legible Babbage drawing interpretation beyond archive titles, including timing/manufacturing evidence;
 - a stable full facsimile of Bush 1931 before page/figure claims;
 - exact Bush component interconnection, revision mapping, torque-amplifier construction, and measured error data.
@@ -147,8 +147,8 @@ Keep this bounded to human-machine arithmetic responsibility, not a generic soci
 
 Only files with real remaining evidence work are listed:
 
-1. `research/curta-source-map.md` — exact manual edition/page/facsimile and Type I/II mapping;
-2. `research/analytical-engine-information-flow.md` — exact facsimile/page and drawing-level coordination anchors;
+1. `research/curta-source-map.md` — Type II service pages and production revision/linkage mapping beyond the inspected operator page and Model I service cover;
+2. `research/analytical-engine-information-flow.md` — an inspected H. P. Babbage 1889 facsimile and drawing-level reader/Store/Mill coordination evidence;
 3. `research/differential-analyzer.md` — Bush 1931 facsimile plus component interconnection/error evidence;
 4. `research/difference-engine-source-map.md` — drawing interpretation, timing and manufacturing evidence beyond catalog titles;
 5. `research/control-and-zeroing-source-map.md` — Thomas instructions, partial-stroke correction and production mapping;
