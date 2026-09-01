@@ -1,15 +1,15 @@
 # Current Agent Task
 
-Issued: 2026-09-01
+Issued: 2026-09-02
 Owner: local coding/research agent
 Target duration: about one useful hour at the agent's observed throughput
 Repository authority: remote `main`
 
-Previous task is complete and archived at `tasks/archive/2026-09-01-replay-curta-type2.md`.
+Previous task is complete and archived at `tasks/archive/2026-09-01-analytical-engine-1889-boundary.md`.
 
-The previous assignment landed as `c85dd761bda908d528a4f35229bde09c2afb4bfb` about 43 minutes after assignment, changed 159 lines (`+143/-16`) across 11 files, raised the suite from 277 tests / 21 files to 291 tests / 21 files, and passed exact-head push CI `33522772721` plus Deploy Pages `33522772810`. Recent slices continue to finish under one hour, so this assignment is one substantive source pass plus a bounded source-atlas reconciliation. Do not broaden it into an Analytical Engine reconstruction.
+The previous assignment landed as `67c83087777d277c342ee8f1ada5780aafb34818` about 37 minutes after assignment, changed 78 lines (`+60/-18`) across 7 files, retained 291 tests across 21 files, and passed exact-head push CI `33528641107` plus Deploy Pages `33528641115`. The agent correctly stopped at an access boundary instead of fabricating 1889 page claims. Because recent slices continue to finish well under one hour, this assignment is deliberately a little larger: one directly inspectable institutional object/drawing pass, one bounded Smithsonian publication/patent-provenance pass, and typed source-atlas reconciliation. Do not broaden it into a Scheutz emulator.
 
-> **Question for this slice:** can the repository replace its H. P. Babbage 1888 specialist-transcription boundary with directly inspected 1889 printed-page evidence, while preserving the distinction among nineteenth-century publication, later reconstruction, archive drawing metadata, and the repository's P/M `(ab+c)d` teaching trace?
+> **Question for this slice:** can the repository replace its previously inaccessible Smithsonian Scheutz boundary with directly inspected evidence for the actually built 1853 printing difference engine and its ca. 1857 operational drawing set, while keeping object provenance, operating instructions, patent specification, later historical synthesis, Babbage designs, and the repository's P/M Difference Engine/output lessons separate?
 
 ## Read before work
 
@@ -19,151 +19,196 @@ Fetch/pull remote `main`, then read in order:
 2. `TODO.md`
 3. `AGENTS.md`
 4. `docs/EVIDENCE_POLICY.md`
-5. `docs/RESEARCH_GAPS.md`, especially Priority 0.2 and the `Files to deepen next` list
+5. `docs/RESEARCH_GAPS.md`, especially Priority 0.2, Priority 7, and `Files to deepen next`
 6. `docs/VERIFICATION.md`
-7. `research/analytical-engine-information-flow.md`
-8. `src/exhibits/analytical-engine-flow/` and its tests, only to preserve current P/M boundaries
+7. `research/difference-engine-source-map.md`
+8. `research/output-and-audit-trail.md` only to preserve the existing persistent-output boundary
 9. `src/exhibits/source-atlas/` and `tests/source-atlas.test.ts`
-10. the existing Science Museum Analytical Engine drawing anchors already cited in the research note
+10. the existing Difference Engine / persistent-output exhibit code and tests only as needed to avoid historical over-claiming
 
-Run the current-main typecheck/tests before editing and record the actual baseline. Do not use old implementation-plan checkboxes as the task source.
+Run current-main typecheck/tests before editing and record the actual baseline. Do not use old implementation-plan checkboxes as the task source.
 
-# Part A — directly inspect the 1889 printed compilation
+# Part A — directly inspect the Smithsonian Scheutz object and drawing records
 
-The current research note uses the Fourmilab transcription of H. P. Babbage's paper read at Bath on 12 September 1888 and intentionally keeps it at specialist-transcription precision because a stable printed scan had not been directly inspected.
+The previous Difference Engine source pass recorded the Smithsonian Scheutz object as inaccessible in that environment. Public Smithsonian/NMAH records are now directly discoverable and should be re-checked by the agent rather than relying on this assignment text.
 
-Resolve that specific gap if lawful direct access is available.
+## A1. 1853 built machine
 
-## A1. Preferred source identity
+Inspect both institutional access routes when available:
 
-Target publication:
+- National Museum of American History, *Scheutz Difference Engine*, record `nmah_997042`, ID `MA.323659`:
+  <https://americanhistory.si.edu/collections/object/nmah_997042>
+- Smithsonian Institution mirror:
+  <https://www.si.edu/object/scheutz-difference-engine%3Anmah_997042>
 
-Henry P. Babbage (ed.), *Babbage's Calculating Engines: Being a Collection of Papers Relating to Them; Their History, and Construction*, London: E. and F. N. Spon, 1889.
+Record only what the directly rendered institutional record supports, including where available:
 
-Useful institutional/bibliographic starting points:
+- object identity, maker, date made, place, materials and dimensions;
+- the record's description of the machine as a printing calculator;
+- Paris exhibition / Dudley Observatory / U.S. government-contract context exactly as the record states it;
+- related-object pointer to the operational drawing sheet.
 
-- Cambridge Core / Cambridge Library Collection book contents: <https://www.cambridge.org/core/books/babbages-calculating-engines/contents/F22A776B9D213F4BF3ECBE6DA4D05CB4>
-- DOI/book identity: <https://doi.org/10.1017/CBO9780511694721>
-- Cambridge contents identifies chapter 32 as **“Proceedings of the British Association, 1888”**;
-- Open Library 1889 edition metadata: <https://openlibrary.org/works/OL13198513W/Babbage%27s_Calculating_Engines>
-- Huntington 1889 rare-book record: <https://www.huntington.org/collections/lib-751620>
-- Library of Congress records explicitly identify the later Tomash reproduction as a reprint of the 1889 edition: <https://www.loc.gov/item/2006691797/>
+Do not silently resolve spelling/location/date differences across catalog prose and later sources. If one record says Albany and another says Schenectady, or sale/shipping dates differ, record the source wording and reconcile only with stronger evidence.
 
-Use an institutional/public-domain/full-view copy if one can be directly inspected. Cambridge's 2010 reproduction is acceptable as an access surrogate for the 1889 printed pages **only if the displayed/reproduced pages preserve the original printed pagination/content**. Record the access layer separately from the historical publication identity.
+Claim boundary:
 
-Do not use an arbitrary rehosted PDF as the only provenance layer. A non-institutional mirror may be used as a temporary locator only when the same page/content is cross-checked against an institutional bibliographic/reproduction source.
+- surviving/catalogued 1853 machine and Smithsonian object metadata: **H/E1 at object-record precision**;
+- institutional descriptive prose about use/significance: H at institutional catalog precision, not proof of every mechanical detail or performance claim.
 
-## A2. Inspect the H. P. Babbage 1888 paper as printed in the 1889 volume
+Do not infer internal gearing, printer timing, tooth counts, operating speed, reliability, error rates, or government-contract workflow from object photographs.
 
-Locate chapter 32 / the paper read at Bath in 1888 and record the exact **1889 printed page numbers** actually inspected.
+## A2. ca. 1857 operational drawing set
 
-At minimum verify, where the printed pages directly support them:
+Inspect:
 
-- publication/section identity and the Bath/read-date statement;
-- Number Cards, Directive Cards and Operation Cards as distinct card roles;
-- the `(ab+c)d` example and the Store-column assignments for `a,b,c,d`, intermediates `p/q`, and final result;
-- the sequence/role of Directive versus Operation cards;
-- the stated counts of Operation and Directive cards for the example, if present;
-- separate sets/rollers or equivalent organization, if the printed page actually states it;
-- the final printing / stereotype-moulding output statement, if present.
+- National Museum of American History, *Sheet of Drawings of the Scheutz Difference Engine*, record `nmah_1005138`, ID `1988.0798.01`:
+  <https://americanhistory.si.edu/collections/object/nmah_1005138>
+- Smithsonian Institution mirror:
+  <https://www.si.edu/object/sheet-drawings-scheutz-difference-engine%3Anmah_1005138>
 
-For every claim added to the repository, distinguish:
+The task is to verify the record itself, not to reverse-engineer the machine from images.
+
+Record at exact catalog precision:
+
+- object/drawing-set identity and ca. 1857 date;
+- number of figures if directly stated;
+- the catalog statement about the drawings being supplied with the engine and their operating-instruction role;
+- the catalog's statement that the figures are similar to but not identical with the final specifications for British Patent A.D. 1854, No. 2214, including any numbering caveat;
+- the existence of the related letter only at the level the catalog establishes.
+
+**Do not claim to have inspected the letter's content unless the letter itself is separately and directly accessible.** Do not turn a catalog statement that a letter explained number-system conversion into a verbatim or complete operating procedure.
+
+Images may be inspected for record identity/figure labels if lawful, but do not copy them into the repository and do not infer geometry beyond what the catalog or an independently inspected specification supports.
+
+## A3. Difference-engine group context
+
+Directly inspect the NMAH difference-engine group if available:
+
+<https://americanhistory.si.edu/collections/object-groups/calculating-machines/difference-engines>
+
+Use it only for institutional grouping/context and for separating Babbage proposals/fragments, Scheutz built machines, and later replicas. Do not let a group-page summary overwrite more precise object records.
+
+# Part B — Smithsonian publication / patent-provenance cross-check
+
+A U.S. Government / Smithsonian-hosted scan appears to exist for Uta C. Merzbach's institutional study *Georg Scheutz and the First Printing Calculator* (Smithsonian Studies in History and Technology, no. 36, 1977):
+
+<https://www.govinfo.gov/content/pkg/GOVPUB-SI-PURL-gpo20587/pdf/GOVPUB-SI-PURL-gpo20587.pdf>
+
+First verify the PDF's own title page/publication identity before using it.
+
+## B1. Bounded inspection goals
+
+Within a bounded search of the institutional PDF, locate exact printed PDF/page anchors for as many of these as the source directly supports:
+
+- construction/completion of the 1853 machine;
+- 1854 patent petition/provisional specification and later full/sealed patent chronology;
+- British Patent A.D. 1854, No. 2214 identity;
+- Paris 1855 demonstration/exhibition;
+- Dudley Observatory acquisition/shipment/use chronology;
+- the operational drawings / letter provenance;
+- actual table-making or printing use, if documented precisely;
+- any reproduced primary letter/patent appendix that can be distinguished from Merzbach's narrative.
+
+Do not quote long passages. Record exact pages/appendix identifiers and paraphrase conservatively.
+
+## B2. Evidence-layer rules
+
+Merzbach 1977 is an institutional historical study, normally **H/E2** as a later synthesis.
+
+If the PDF reproduces a clearly identified patent specification, letter, table specimen, or other primary document and the agent directly inspects that reproduced primary material, record the two layers separately:
 
 ```text
-1888 event/read date
-1889 printed compilation page
-modern access reproduction/mirror
+historical primary item / date / identity
+→ reproduced or transcribed in Merzbach 1977 at exact page/appendix
+→ modern govinfo access layer
 ```
 
-Do not silently call the 1889 printed page the original 1888 proceedings pagination unless the source itself establishes that identity.
+Do not automatically upgrade Merzbach's prose to E1. A reproduced transcription can support a primary claim only to the precision of the identified reproduced source and its provenance.
 
-## A3. Compare against the existing Fourmilab transcription
+If the patent itself cannot be directly inspected outside the study, keep geometry/mechanism claims at Merzbach/reproduction precision. The Smithsonian drawing-sheet catalog says its 14 figures are similar to but not identical with the final patent specifications; preserve that distinction instead of treating the 1857 sheet as the patent drawings.
 
-Keep <https://www.fourmilab.ch/babbage/hpb.html> as a specialist transcription/research access layer.
-
-Compare the exact inspected printed passage with the current repository summary. Record only meaningful differences:
-
-- wording or numbering differences;
-- omitted headings/notes;
-- punctuation/typographic differences only when they affect interpretation;
-- whether the current `items 10–20` references correspond cleanly to printed numbered paragraphs/items.
-
-If the transcription matches materially, say so; do not manufacture discrepancies.
-
-If no direct printed page can be inspected confidently in a bounded attempt, **do not upgrade E3 to E1**. Instead document the attempted access path and retain the current boundary, then proceed to Part B2 below using only metadata-safe work.
-
-# Part B — one bounded drawing/catalog cross-check
-
-The repository already has three Science Museum record anchors:
-
-- `BAB/A/125` — plan of consecutive mill counting apparatus for General Plan 28;
-- `BAB/D/028` — Mill Sheet 28, superseded by Sheet 25;
-- `BAB/P/167` — plan of bolts for store.
-
-The 1889 volume also contains chapters/catalogues for Analytical Engine notations and drawings. If the directly accessible reproduction exposes those catalogue pages, perform **one bounded cross-check**:
-
-- inspect the relevant catalogue/list page(s);
-- determine whether at least one of the modern Science Museum records can be connected to an 1889 printed catalogue description without guessing modern reference-code equivalence;
-- record exact printed page/catalogue wording when a defensible match exists;
-- otherwise record that modern archive identifiers and the 1889 catalogue could not be safely cross-walked in this pass.
-
-This part is about **catalogue identity and design evolution**, not reading gear geometry from thumbnails. Do not infer Store–Mill connections, card-reader timing, bolt function beyond the record/catalogue wording, or a frozen final machine.
-
-# Part C — repository/source-atlas reconciliation
+# Part C — source-map and source-atlas reconciliation
 
 Only after Parts A/B establish real new precision:
 
-## C1. Research note
+## C1. `research/difference-engine-source-map.md`
 
-Update `research/analytical-engine-information-flow.md` so the layers remain explicit:
+Replace the old "Smithsonian returned 403" boundary with directly inspected evidence.
+
+Create a clearly separated Scheutz subsection that distinguishes:
 
 ```text
-Menabrea/Lovelace 1843 printed pages = H/E1 at inspected page precision
-H. P. Babbage paper as printed in 1889 = H/E1 only at directly inspected printed-page precision
-Fourmilab transcription = specialist transcription/access comparison, not primary page authority
-Science Museum drawing records = H/E1 record identity/metadata
-Walker/Fourmilab emulator = R/E2 reconstruction choices
-repository `(ab+c)d` trace = P/M
+1853 surviving/catalogued Scheutz engine = H/E1 object record
+ca. 1857 operational drawing set = H/E1 drawing-object/catalog record
+British Patent A.D. 1854 No. 2214 = primary patent identity only at the precision directly inspected
+Merzbach 1977 = H/E2 institutional historical study / access to reproduced primary material where identified
+Babbage DE1/DE2 designs = separate historical line
+Science Museum DE2 1991/2002 build = R/E2 reconstruction
+repository finite-difference/output trace = P/M
 ```
 
-If direct 1889 inspection fails, retain the H/E3 transcription boundary and make the failed-access boundary more precise instead of pretending completion.
+Explicitly state what remains **not established**:
 
-## C2. Source-atlas data
+- exact internal geometry from object photos;
+- equivalence between the 1857 14-figure sheet and patent figures;
+- content of the related letter unless directly inspected;
+- printer synchronization/timing;
+- measured reliability/error/throughput;
+- a claim that Scheutz architecture is Babbage's printer architecture.
 
-Search the existing typed source-atlas structures rather than creating a parallel system.
+## C2. Typed source atlas
 
-If direct 1889 printed-page evidence is obtained:
+Use the existing `src/exhibits/source-atlas/` data model. Do not create a parallel source system.
 
-- add or upgrade a separate Analytical Engine source anchor for the 1889 printed H. P. Babbage paper;
-- include exact printed-page metadata and modern access provenance;
-- preserve `supports` versus `notEstablished` fields;
-- do not delete the reconstruction/transcription distinction merely because the historical paper is now directly inspected.
+Add or upgrade bounded Scheutz anchors under the Difference Engine track so a visitor can inspect at least:
 
-If no direct printed page is obtained, do not add a fake E1 card. A metadata-only/bibliographic anchor is acceptable only if it adds real clarity and remains below page-claim precision.
+- the 1853 built machine object anchor;
+- the ca. 1857 drawing/instruction-set anchor;
+- if genuinely useful and directly anchored, one separate Merzbach/patent-provenance entry or metadata field.
 
-## C3. Tests/UI
+Preserve `supports` / `notEstablished`, claim type, evidence strength, access host, record identifier, inspected date, and generation/source role.
 
-Update `tests/source-atlas.test.ts` or the existing relevant tests to lock in any new source boundary.
+Do not overcrowd the atlas with one card per URL if two mirrors represent the same institutional record. Prefer one canonical record plus an alternate access note if the current type supports it.
 
-If source-atlas data changes, the existing `#/source-atlas` UI may be updated minimally through its current data path. Do not create a new route or redesign cards.
+## C3. Tests and UI
 
-Do **not** change the Analytical Engine arithmetic/event model in this slice unless direct source inspection reveals an existing historical label that is factually unsafe. The current event sequencing remains P/M and must not be back-filled as nineteenth-century timing.
+Update `tests/source-atlas.test.ts` (or the existing relevant tests) to lock in the separation among:
 
-# Part D — reconciliation and verification
+- Scheutz surviving machine;
+- Scheutz operational drawing set;
+- Babbage design/reconstruction anchors;
+- repository P/M Difference Engine/output behavior.
+
+At minimum test that the new Scheutz anchors do **not** claim source-specific geometry, patent-figure identity, or Babbage-printer equivalence.
+
+The `#/source-atlas` UI may change only through the existing typed data/rendering path. No new route or card redesign.
+
+Do **not** modify finite-difference arithmetic, output-ledger state machines, or printer simulation in this slice. The source work is the product here.
+
+# Part D — bounded output-contract cross-check
+
+After the source map is corrected, inspect `research/output-and-audit-trail.md` and `#/output-contracts` only for one narrow question:
+
+> Does the newly direct Smithsonian evidence require correcting an existing sentence about Scheutz as an actually built printing difference engine or persistent-output example?
+
+If yes, make the smallest source-backed correction. If no, leave the output lesson unchanged. Do not expand into office-procedure history or printer geometry here.
+
+# Part E — reconciliation and verification
 
 After the source work is real:
 
-- update `STATUS.md` only for source precision actually obtained;
+- update `STATUS.md` only for the Smithsonian/Scheutz precision actually obtained;
 - add one concise completed line to `TODO.md`;
-- narrow `docs/RESEARCH_GAPS.md` Priority 0.2 / file list only if the 1889 gap genuinely shrank;
-- update `docs/VERIFICATION.md` with current baseline/final test counts and actual checks;
+- narrow `docs/RESEARCH_GAPS.md` Difference Engine/output gaps only where this slice genuinely closes them;
+- update `docs/VERIFICATION.md` with the actual baseline/final test counts and checks;
 - do not re-date unrelated browser smoke or copy old test counts.
 
-If source-atlas data/rendering changes, perform bilingual smoke at least for:
+If source-atlas data/rendering changes, perform bilingual browser smoke at least for:
 
 ```text
 #/source-atlas
-#/analytical-engine
+#/finite-difference
+#/output-contracts
 #/about
 ```
 
@@ -178,44 +223,49 @@ git diff --check
 
 All must pass.
 
-The final slice should answer from directly inspectable evidence:
+The finished slice should answer from directly inspectable evidence:
 
-> Which exact 1889 printed pages support the Number/Directive/Operation-card roles and `(ab+c)d` example currently summarized from the Fourmilab transcription?
+> What exactly survives at Smithsonian as the 1853 Scheutz engine, and what does its object record establish?
 
-> What does that historical page establish, and what still belongs only to Walker's reconstruction or this repository's P/M trace?
+> What exactly is the ca. 1857 14-figure drawing set, what operating/instruction provenance does its catalog establish, and what does it **not** establish about the 1854 patent or internal geometry?
 
-> Can any modern Science Museum drawing record be safely cross-walked to the 1889 printed drawing catalogue without inventing an identifier or geometry mapping?
+> Which chronology or primary-document identities can be tightened from the govinfo/Smithsonian Merzbach scan without confusing later historical synthesis with primary evidence?
+
+> How is this actually built nineteenth-century printing difference engine kept separate from Babbage's designs, the Science Museum DE2 reconstruction, and this repository's P/M output trace?
 
 After push:
 
 - confirm remote `main` contains the coherent completion commit;
-- inspect exact-head push CI / Pages only if completed and record only completed outcomes;
+- inspect exact-head push CI and Deploy Pages when they complete and record only completed outcomes;
 - stop and wait for the next `CURRENT_AGENT_TASK.md` revision.
 
 Suggested commit subject:
 
 ```text
-research: anchor Analytical Engine 1889 printed evidence
+research: anchor Scheutz built-engine evidence
 ```
 
 # Evidence boundaries
 
-- 1889 Spon printed compilation: **H/E1 only for directly inspected printed pages/content**.
-- The paper's 1888 reading/event date is a historical claim that must be supported by the printed paper or another direct source; do not conflate event date with print date.
-- Cambridge 2010 / Tomash 1982 reproductions: access/reproduction layers; they do not change the nineteenth-century claim type but must be named as the inspected surrogate when applicable.
-- Fourmilab H. P. Babbage page: specialist transcription, useful for comparison but not a substitute for printed-page inspection.
-- Science Museum drawing records: **H/E1 at catalog record/visible-document precision only**; archive images are not self-interpreting geometry proof.
-- Walker emulator: **R/E2** reconstruction/executable interpretation.
-- repository Analytical Engine flow: **P/M**; no historical card-hole encoding, reader timing, exact Mill/Store linkage, or frozen final design is claimed.
+- Smithsonian `MA.323659` / `nmah_997042`: **H/E1 at surviving-object/catalog-record precision**.
+- Smithsonian `1988.0798.01` / `nmah_1005138`: **H/E1 at drawing-object/catalog-record precision**.
+- Smithsonian/NMAH descriptive prose: institutional historical description; do not convert prose into unobserved geometry or measured performance.
+- Merzbach 1977 Smithsonian study: **H/E2 historical synthesis** unless a clearly identified reproduced primary document is separately described at its own provenance/precision.
+- British Patent A.D. 1854 No. 2214: H/primary identity only to the precision directly inspected; do not claim patent figures/mechanisms if only a later description was seen.
+- Babbage DE1/DE2 drawings/design: separate historical lineage; no geometry is borrowed from Scheutz.
+- Science Museum 1991/2002 DE2: **R/E2** reconstruction.
+- repository Difference Engine/output traces: **P/M**.
 
 # Stop conditions
 
-Stop and leave a precise access/evidence boundary rather than guessing if:
+Stop and leave a precise boundary rather than guessing if:
 
-- the 1889 page cannot be directly viewed or its printed pagination cannot be verified;
-- the available copy is only an unverified mirror with no trustworthy reproduction/bibliographic cross-check;
-- matching a Science Museum modern record to the 1889 catalogue would require assuming reference-code equivalence;
-- source inspection starts expanding into full drawing interpretation, card-reader geometry, mechanical notation reconstruction, or a complete Analytical Engine emulator;
-- updating source-atlas UI would require unrelated routing/layout refactors.
+- Smithsonian object pages become inaccessible and only search snippets remain;
+- the govinfo PDF identity cannot be verified from its own pages;
+- the patent specification cannot be directly inspected and a geometry claim would depend only on a secondary summary;
+- the related 1857 letter is mentioned but not directly accessible;
+- comparing drawing images starts turning into unsourced reverse engineering;
+- source-atlas changes would require routing/layout refactors;
+- the work starts expanding into a full Scheutz emulator, printer simulation, or general nineteenth-century table-making history.
 
-If the 1889 page work completes substantially before one hour, use remaining time for exact page/catalogue metadata, transcription comparison, source-atlas tests and accessibility/source-card precision. **Do not start Bush/Shannon, Curta chronology, a new machine family, or source-specific Analytical Engine geometry in this slice.**
+If Parts A–C complete substantially before one hour, use remaining time for exact Merzbach page/appendix anchors, bilingual source-card precision, and focused atlas tests. **Do not start a new machine family or source-specific Scheutz geometry in this slice.**
