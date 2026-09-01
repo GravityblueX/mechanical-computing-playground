@@ -89,8 +89,9 @@ export function transitionIntegrator(
 ): { state: IntegratorState; events: IntegratorEvent[] } {
   assertIntegratorState(state);
   if (action.type !== 'OBSERVE_AND_INTEGRATE') throw new InvalidIntegratorStateError(`unknown integrator action: ${String((action as { type?: unknown }).type)}`);
-  if (!action.cycleId) throw new InvalidIntegratorStateError('cycle id is required');
-  const observed = action.inputQuantity ?? state.inputQuantity;
+  if (typeof action.cycleId !== 'string' || action.cycleId.length === 0) throw new InvalidIntegratorStateError('cycle id is required');
+  const suppliedInput = action.inputQuantity;
+  const observed = suppliedInput === undefined ? state.inputQuantity : suppliedInput;
   finite(observed, 'observed input quantity');
   const independentAfter = add(state.independentQuantity, state.inspectionInterval, 'independent quantity');
   const contribution = multiply(observed, state.inspectionInterval, 'integrated contribution');
@@ -145,7 +146,19 @@ export function traceIntegratorActions(initialState: Readonly<IntegratorState>, 
 }
 
 export function replayIntegrator(trace: Readonly<IntegratorTrace>): IntegratorState {
+  if (!Array.isArray(trace.actions) || !Array.isArray(trace.events)) throw new InvalidIntegratorStateError('integrator trace requires action and event arrays');
+  assertIntegratorState(trace.initialState);
+  assertIntegratorState(trace.finalState);
   const replayed = trace.events.reduce(reduceIntegratorEvent, structuredClone(trace.initialState));
   if (JSON.stringify(replayed) !== JSON.stringify(trace.finalState)) throw new InvalidIntegratorStateError('integrator replay final state mismatch');
+  let actionDerived = structuredClone(trace.initialState);
+  const expectedEvents: IntegratorEvent[] = [];
+  for (const action of trace.actions) {
+    const expected = transitionIntegrator(actionDerived, action);
+    actionDerived = expected.state;
+    expectedEvents.push(...expected.events);
+  }
+  if (JSON.stringify(expectedEvents) !== JSON.stringify(trace.events)) throw new InvalidIntegratorStateError('integrator action/event mismatch');
+  if (JSON.stringify(actionDerived) !== JSON.stringify(trace.finalState)) throw new InvalidIntegratorStateError('integrator action-derived final state mismatch');
   return replayed;
 }

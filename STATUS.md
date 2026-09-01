@@ -1,6 +1,6 @@
 # Current Status
 
-Last reconciled on 2026-09-01 after the Thomas register-control and dual-register lifecycle slice.
+Last reconciled on 2026-09-01 after decimal/integrator replay hardening and Curta Type II service-page inspection.
 
 This file is the **current-state authority** for the repository. `ROADMAP.md` describes where the project should go; `IMPLEMENTATION_PLAN.md` is still useful as a dependency/design specification, but many of its checkboxes predate later implementation and must not be treated as the live task ledger.
 
@@ -13,13 +13,13 @@ This file is the **current-state authority** for the repository. `ROADMAP.md` de
 - GitHub Actions CI and a Pages deployment workflow.
 - Deterministic state/event/replay primitives under `src/core/`.
 - Golden carry fixtures under `fixtures/carry/`.
-- The latest local verification (`docs/VERIFICATION.md`, 2026-09-01 UTC+8) reports typecheck, 277 tests across 21 files, production build, diff check, and bilingual browser smoke passing.
+- The latest local verification (`docs/VERIFICATION.md`, 2026-09-01 UTC+8) reports typecheck, 291 tests across 21 files, production build, diff check, and bilingual browser smoke passing.
 
 Remote CI run `33437862103` passed for the previous operator-division checkpoint `7bebcea2d187f0ed2411de4098c846963df8b32a`. This status still does **not** substitute for CI on later commits.
 
 ### Mechanism models already present
 
-- decimal wheel;
+- decimal wheel/register replay with runtime fail-closed rejection of unknown serialized event discriminators while retaining declared crank/carry markers as reducer-level no-ops;
 - carry chain;
 - carriage shift;
 - hardened difference-column / finite-difference stepping with state validation, derived arithmetic checks, fail-closed event replay, and row/output consistency;
@@ -41,7 +41,7 @@ Remote CI run `33437862103` passed for the previous operator-division checkpoint
 - typed four-track named-machine source anchors separating Babbage archive records from the directly inspected 2020 DE2 R/E2 technical reconstruction, Smithsonian component records from the directly inspected Bush–Caldwell 1931 application paper, Curta patent/operator/service documents, 1843 Analytical Engine printed pages, specialist transcription boundaries, and later reconstruction choices;
 - generic deterministic printing ledger separating working accumulator state from structured persistent ITEM/SUBTOTAL/TOTAL lines, including subtotal retention, total clearing, replay, and tamper rejection;
 - typed output-contract profiles separating identified register-only/printing objects, primary total/subtotal patent semantics, and Difference Engine persistent-output roles;
-- generic continuous integrator with independent/input/integrated quantities, P/M inspection interval, ordered observation/advance events, safe numeric validation, and hardened replay;
+- generic continuous integrator with independent/input/integrated quantities, P/M inspection interval, ordered observation/advance events, safe numeric validation, and action-derived replay binding actions, cycle ownership, ordered events and final state;
 - continuous-flow teaching chain with explicit adder relation and tracer-output boundary;
 - shared mechanism core and trace/replay support.
 
@@ -99,7 +99,7 @@ The most important remaining gaps are:
 - carry maps now add Thomas 1820 patent/object separation, 1865 rapid overrun/sequential phasing/simultaneous-load false-result evidence, and the 1880 proposal versus R/E3 adoption boundary; exact Thomas and rotary production mapping, factory instructions/direct measurement, force/contact-load/material/lubrication/tolerance/wear/safe-rate/failure envelopes, and source-specific geometry remain open;
 - direct multiplication now has a tested pedagogical functional state/event model and a fourth comparison path, but no source-specific Millionaire geometry is claimed;
 - key-driven computation now has tested accumulator and incomplete-stroke integrity/interlock P/M models; simultaneous multi-column operation, exact Model E/F trigger/release geometry/timing, primary patent mapping, and universal production claims remain intentionally unmodeled;
-- `research/curta-source-map.md` now directly inspects US 2,525,352, the two-page Contina operator guide, and the 1967 Model I service-manual cover; full Type I/II production-revision/linkage mapping remains open;
+- `research/curta-source-map.md` now directly inspects US 2,525,352, the two-page Contina operator guide, the 1967 Model I service-manual cover, and Type II service PDF pp. 1–2, 6/leaf N I-a, 10/leaf O-1-2 and 34/leaf S 3 for document/replacement-leaf, zero-position, carriage, reversing, clearing and zero-positioner responsibilities; Type II capacity/date and full production-revision/linkage mapping remain open;
 - `research/analytical-engine-information-flow.md` now directly anchors 1843 printed pp. 677, 679 and 704, rechecks three Science Museum drawing records, keeps H. P. Babbage 1888 transcription-only, and separates Walker reconstruction; exact reader/Store/Mill geometry and an inspected 1889 facsimile remain open;
 - `research/subtraction-and-division.md` now separates the directly inspected Curta operator-guide viewer-page-1 controls (H/E1 via specialist mirror) from the E3 division transcription; exact Curta division-example edition/pages and the Thomas 1868 instruction facsimile remain open;
 - `research/differential-analyzer.md` now directly inspects the Smithsonian object group/components and Bush–Caldwell 1931 application facsimile pp. 1898–1902/Figs. 1–3 while keeping application, component, browser-flow and generation roles separate; Bush 1931 construction-paper and Shannon 1941 full text, exact placement/wiring, numerical error, and physical geometry remain open;

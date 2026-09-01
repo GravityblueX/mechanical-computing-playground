@@ -100,4 +100,22 @@ describe('canonical JSON trace and UI-independent replay', () => {
     expect(replayTrace(parsed, reduceDecimalRegisterEvent)).toEqual(parsed.finalState);
     expect(digitsToString(parsed.finalState.digits)).toBe('0100');
   });
+
+  it.each(['inserted', 'substituted'] as const)('rejects an unknown event type when it is %s', (mutation) => {
+    const trace = createCrankTrace([9, 9, 0, 0], 7);
+    const unknownEvent = {
+      ...trace.events[0],
+      type: 'UNKNOWN_DECIMAL_EVENT',
+    } as unknown as MechanismEvent;
+    const events = mutation === 'inserted'
+      ? [unknownEvent, ...trace.events]
+      : trace.events.map((event) => event.type === 'WHEEL_STEP' ? event : {
+        ...event,
+        type: 'UNKNOWN_DECIMAL_EVENT',
+      } as unknown as MechanismEvent);
+
+    expect(() => replayTrace({ ...trace, events }, reduceDecimalRegisterEvent)).toThrow(
+      'unsupported decimal register event type: UNKNOWN_DECIMAL_EVENT',
+    );
+  });
 });

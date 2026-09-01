@@ -1,5 +1,26 @@
 # Verification record
 
+## 2026-09-01 — decimal/integrator replay integrity and Curta Type II service precision
+
+The current-main pre-edit baseline passed typecheck and 277 tests across 21 files. Reviewed PR #8 exact head `6724e40154151d94bd83c4af2fa457f032927d85` and PR #9 exact head `72a0ca0ea0e7dcd2c3b36f3f5da6a624171f2caf` were used as code/test inputs without importing stale verification prose. The current-main patch now rejects unknown decimal-register event discriminators at runtime and makes integrator replay action-derived, including strict non-empty cycle ids, explicit-null input rejection, endpoint validation and genuine zero-action traces.
+
+The 43-page image-only Curta Model II service PDF was downloaded from the mycurta specialist mirror, rendered locally and visually inspected. Direct anchors were recorded at PDF pp. 1–2, p. 6 / leaf `N I-a`, p. 10 / leaf `O-1-2`, and p. 34 / leaf `S 3`. The manual's replacement-leaf notice and warning that reused Model I pictures may differ in detail/proportion from actual Type II remain explicit; no cover capacity/date/revision was visible.
+
+- `npm run typecheck` — pass
+- `npm test -- --run` — pass, 291 tests across 21 files
+- `npm run build` — pass
+- `git diff --check` — pass
+- focused decimal-register, continuous-integrator and source-atlas regression — 55 tests passed
+- canonical `0099 + 1 → 0100` replay remained unchanged; integrator numerical/UI semantics remained unchanged
+
+Local bilingual browser smoke:
+
+- `#/source-atlas` rendered four Curta source cards, including the Type II replacement-leaf service card and exact leaf anchors, in English and Chinese with no desktop horizontal overflow;
+- `#/curta` retained its existing P operational diagram and source-atlas link;
+- `#/about` retained the evidence-policy boundary.
+
+No deployment check was performed for this not-yet-pushed completion commit. PR closure/supersession is left to repository review; contributor branches were not rewritten.
+
 ## 2026-09-01 — Thomas register controls and independent lifecycle
 
 The current-main pre-edit baseline passed typecheck and 264 tests across 20 files. The Smithsonian `nmah_904757` IIIF manifest was directly inspected: its sole 3000×1846 canvas is one readable open spread of the 1868 pamphlet, with result windows `C`, multiplier/quotient windows `D`, right knob `O` clearing `D`, and left knob `P` clearing `C`. The 1867 `MA.327900` and ca.1873 `MA.335215` catalog/object descriptions were kept separate, and Oxford's attribution of independent carriage zeroing to an 1865 booklet engraving remains R/E2 rather than a directly inspected primary booklet.

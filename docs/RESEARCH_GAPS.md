@@ -21,11 +21,11 @@ Do not add random failure or source-specific linkage animation before those sour
 
 ### 0.2 Named-machine source anchors
 
-Current state: the four-track typed atlas now separates directly inspected Difference Engine No. 2, Bush Differential Analyzer, Curta, and Analytical Engine records from later reconstruction/transcription and repository P/M flows. DE2 now adds the complete 2020 Science Museum Technical Description at exact R/E2 page/figure precision plus BAB/B/001 H/E1 record precision; the Bush track adds the complete Bush–Caldwell 1931 application paper and Figures 1–3 while retaining the construction paper and Shannon 1941 as bibliographic-only. Curta has patent/operator/service anchors; Analytical Engine has direct 1843 pages plus drawing/reconstruction boundaries.
+Current state: the four-track typed atlas separates directly inspected Difference Engine No. 2, Bush Differential Analyzer, Curta, and Analytical Engine records from later reconstruction/transcription and repository P/M flows. Curta now includes direct Type II service precision at PDF pp. 1–2, 6/leaf N I-a, 10/leaf O-1-2 and 34/leaf S 3, while preserving its replacement-leaf and reused-Type-I-picture warnings.
 
 Remaining gaps:
 
-- Curta full operator/service edition mapping, Type II service-page inspection, and production Type I/II revision/linkage mapping;
+- Curta full operator/service edition mapping, Type II capacity/date/replacement-leaf chronology, and production Type I/II revision/linkage mapping;
 - Analytical Engine inspected H. P. Babbage 1889 facsimile, additional exact printed pages, and source-specific reader/Store/Mill geometry;
 - Babbage-primary drawing interpretation beyond archive titles and the R/E2 reconstruction account, including source-specific lifetime timing/manufacturing evidence;
 - a stable full facsimile of Bush 1931 before construction-paper page/figure claims, and direct Shannon 1941 full-text inspection;
@@ -147,7 +147,7 @@ Keep this bounded to human-machine arithmetic responsibility, not a generic soci
 
 Only files with real remaining evidence work are listed:
 
-1. `research/curta-source-map.md` — Type II service pages and production revision/linkage mapping beyond the inspected operator page and Model I service cover;
+1. `research/curta-source-map.md` — Type II capacity/date/replacement-leaf chronology and production revision/linkage mapping beyond the inspected service leaves;
 2. `research/analytical-engine-information-flow.md` — an inspected H. P. Babbage 1889 facsimile and drawing-level reader/Store/Mill coordination evidence;
 3. `research/differential-analyzer.md` — Bush 1931 facsimile plus component interconnection/error evidence;
 4. `research/difference-engine-source-map.md` — drawing interpretation, timing and manufacturing evidence beyond catalog titles;

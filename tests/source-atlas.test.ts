@@ -99,6 +99,11 @@ describe('named-machine source anchor atlas', () => {
     expect(service).toMatchObject({ documentRole: 'service manual', generation: { en: expect.stringMatching(/Model I/) } });
     expect(service.supports.map(item => item.en).join(' ')).not.toMatch(/operator instructions/);
     expect(service.notEstablished.map(item => item.en).join(' ')).toMatch(/operator instructions.*Type II/);
+    const type2 = getNamedMachineSourceAnchor('curta-type2-service');
+    expect(type2).toMatchObject({ documentRole: 'service manual', generation: { en: expect.stringMatching(/Model II/) }, fullFacsimileInspected: false });
+    expect(type2.pageFigureAnchors).toEqual(expect.arrayContaining([expect.stringMatching(/leaf N I-a/), expect.stringMatching(/leaf O-1-2/), expect.stringMatching(/leaf S 3/)]));
+    expect(type2.supports.map(item => item.en).join(' ')).toMatch(/mainshaft zero position.*reversing-lever.*clearing plate/);
+    expect(type2.notEstablished.map(item => item.en).join(' ')).toMatch(/dated frozen revision.*reused Model I pictures.*repository/);
   });
 
   it('requires facsimile inspection before Analytical Engine page claims', () => {

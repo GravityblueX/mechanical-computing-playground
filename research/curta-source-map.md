@@ -80,7 +80,29 @@ The cover (viewer page 1/59) identifies:
 
 Only the cover was used here. No hidden linkage, adjustment procedure, production-change chronology, or Type II construction is inferred from uninspected pages.
 
-### 2.3 Mirror/index boundary
+### 2.3 Type II service manual
+
+Directly inspected specialist-hosted primary scan:
+
+<https://www.mycurta.com/Documents/Curta_2_Service_Manual_Curta2_green_e.pdf>
+
+The 43-page image-only scan was rendered locally and visually checked. PDF page 1 identifies *Servicehandbuch – Service Manual*, `CURTA Mod. II`, and `CONTINA AG. VADUZ FL`; the cover shows no capacity, issue date, or revision number. PDF page 2 says replacement leaves contain the latest modifications, with changes/additions in red, and warns that Model I service-manual pictures are reused where convenient because Model II is “in principle very similar,” while details and especially size proportions may deviate from the actual Curta II.
+
+Directly inspected control/service anchors:
+
+- PDF page 6, printed leaf `N I-a`: crank-removal instructions say “Pull crank up and turn backwards”; the retaining-bush step requires “Mainshaft in zero position”; carriage removal warns the operator to cover the housing so spring/bush parts are not lost, and identifies locking pin `21223-1`;
+- PDF page 10, printed leaf `O-1-2`: dismantling step 11 identifies the `reversing lever complete`, part `2531`, and gives its removal sequence; the same leaf separately identifies RZ/UZ tens-carry levers and their spring, without establishing an operator carry procedure;
+- PDF page 34, printed leaf `S 3`: assembly groups separately identify `complete reversing lever`, `complete clearing plate`, `complete crank`, and `complete zero positioner`; clearing-plate remarks require its positioning plunger to snap into the lever hole.
+
+- Claim type: **H**.
+- Evidence: **E1 for this scanned Type II service document at the listed page/leaf precision**.
+- Access provenance: manufacturer document accessed through the `mycurta.com` specialist mirror; Museum Mura is credited by the index as source layer.
+- Revision boundary: the replacement-leaf notice means this 43-page assembled scan is not safely treated as one dated frozen issue. Red additions and retained older leaves are mentioned, but no complete leaf-version chronology was reconstructed.
+- Model boundary: the manual itself warns that reused Model I pictures can differ in detail and proportion from actual Type II. Therefore neither the Type I cover nor the dual-model operator guide is used to assert hidden-part identity.
+
+These pages establish Type II service responsibilities and named assemblies, not exact historical operator timing, every linkage, production-wide part identity, capacity, serial range, or equality with repository P/M controls.
+
+### 2.4 Mirror/index boundary
 
 The mycurta/vcalc index exposes distinct Type I and Type II English/German service-manual, BOM and drawing links. Curta.org separately lists operator-manual transcriptions. These indexes are access/reference layers; filenames or collector descriptions are not silently promoted into manufacturer provenance.
 
@@ -109,9 +131,9 @@ patent: one identified patented embodiment
 Still open:
 
 - serial/revision mapping from patent embodiment to production machines;
-- Type II service-document content beyond index identity;
+- Type II capacity/date and replacement-leaf version chronology;
 - whether hidden parts/linkages changed across all production revisions;
-- exact handle, clearing, carriage and safety-lock geometry/timing;
+- exact handle, clearing, carriage and safety-lock geometry/timing beyond the inspected Type II service responsibilities;
 - tooth profiles, ratios, decade-transfer sequence, tolerances and measured performance.
 
 ## 5. Repository boundary

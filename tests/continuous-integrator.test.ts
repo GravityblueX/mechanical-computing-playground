@@ -46,10 +46,39 @@ describe('continuous integrator P/M inspection model', () => {
     expect(() => replayIntegrator(arithmetic)).toThrow(InvalidIntegratorStateError);
   });
 
+  it.each(['missing-action', 'all-actions', 'extra-action', 'all-events', 'action-input', 'null-input', 'action-cycle', 'event-cycle', 'unknown-action', 'final'] as const)('rejects %s provenance tampering', (kind) => {
+    const trace = clone(traceIntegratorActions(createIntegrator(3, 0.5), [
+      { type: 'OBSERVE_AND_INTEGRATE', cycleId: 'a' },
+      { type: 'OBSERVE_AND_INTEGRATE', cycleId: 'b', inputQuantity: 4 },
+    ]));
+    if (kind === 'missing-action') trace.actions.pop();
+    if (kind === 'all-actions') trace.actions = [];
+    if (kind === 'extra-action') trace.actions.push({ type: 'OBSERVE_AND_INTEGRATE', cycleId: 'c', inputQuantity: 5 });
+    if (kind === 'all-events') trace.events = [];
+    if (kind === 'action-input') trace.actions[0].inputQuantity = 9;
+    if (kind === 'null-input') trace.actions[0].inputQuantity = null as unknown as number;
+    if (kind === 'action-cycle') trace.actions[0].cycleId = 'forged-action-cycle';
+    if (kind === 'event-cycle') trace.events[0].cycleId = 'forged-event-cycle';
+    if (kind === 'unknown-action') trace.actions[0] = { type: 'BAD', cycleId: 'a' } as never;
+    if (kind === 'final') trace.finalState.integratedQuantity += 1;
+    expect(() => replayIntegrator(trace)).toThrow(InvalidIntegratorStateError);
+  });
+
+  it('accepts a valid zero-action trace without weakening eventful replay', () => {
+    const trace = traceIntegratorActions(createIntegrator(3, 0.5), []);
+    expect(replayIntegrator(trace)).toEqual(trace.initialState);
+  });
+
+  it('rejects an empty trace that forges identical invalid endpoints', () => {
+    const invalid = { ...createIntegrator(), inspectionInterval: 0 };
+    expect(() => replayIntegrator({ initialState: invalid, actions: [], events: [], finalState: clone(invalid) })).toThrow(InvalidIntegratorStateError);
+  });
+
   it('rejects invalid numbers, intervals, unknown actions, and unknown events', () => {
     expect(() => createIntegrator(Number.NaN, 0.5)).toThrow(InvalidIntegratorStateError);
     expect(() => createIntegrator(1, 0)).toThrow(InvalidIntegratorStateError);
     expect(() => transitionIntegrator(createIntegrator(), { type: 'BAD' } as never)).toThrow(/unknown integrator action/);
+    expect(() => transitionIntegrator(createIntegrator(), { type: 'OBSERVE_AND_INTEGRATE', cycleId: 1 as unknown as string })).toThrow(/cycle id/);
     expect(() => replayIntegrator({ initialState: createIntegrator(), actions: [], events: [{ mechanismId: 'continuous-integrator', cycleId: 'x', sequence: 0, claimType: 'P\/M', type: 'BAD' } as unknown as IntegratorEvent], finalState: createIntegrator() })).toThrow(/unknown integrator event/);
   });
 });

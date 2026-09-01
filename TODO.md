@@ -30,6 +30,7 @@
 - [x] Harden operator-division quotient-nine/exact-zero causality and replay, then separate Curta facsimile controls from E3 division transcription without back-filling named-machine states.
 - [x] Ground Controlled-key incomplete-stroke responsibility in Turck 1921 and add a tested generic exactly-once key-stroke integrity/interlock lesson.
 - [x] Directly inspect the exposed Thomas 1868 register legend and add a tested generic independent result/revolution-register lifecycle lesson.
+- [x] Harden decimal/integrator replay against serialized provenance tampering and inspect Curta Type II service controls at exact page/leaf precision.
 
 ## Repository maintenance
 
