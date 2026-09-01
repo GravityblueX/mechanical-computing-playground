@@ -277,12 +277,12 @@ No deployment check was performed for this not-yet-pushed commit; no claim that 
 The exact current-main baseline was `36550f2fd169151962e30cd9347e9ba9c2795afa` with 251 tests across 19 files. The serialized continuous-integrator trace previously replayed only its events, so deleting or replacing the recorded actions and changing action/event cycle identities could leave a trace that still verified. Replay now validates both endpoints, re-derives the event stream from every recorded action, and requires that stream and its action-derived final state to match the recorded trace. Runtime cycle identifiers must also be non-empty strings.
 
 - `npm run typecheck` — pass
-- `npm test` — pass, 258 tests across 19 files
+- `npm test` — pass, 263 tests across 19 files
 - `npm run build` — pass
-- focused continuous-integrator suite — 19 tests passed
+- focused continuous-integrator suite — 24 tests passed
 - four intervals × four action sequences — 16 valid traces replayed; all 12 applicable forged-input variants were rejected
 - `git diff --check` — pass
-- missing/extra/unknown actions, changed action input, split action/event cycle identities, and identical invalid empty endpoints are all rejected
+- missing/all/extra/unknown actions, absent events, changed or null action input, split action/event cycle identities, forged final state, and identical invalid empty endpoints are all rejected; a genuine zero-action trace remains valid
 
 No UI or historical claim is changed, so no browser or deployment claim is made for this replay-only boundary.
 

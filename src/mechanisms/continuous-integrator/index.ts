@@ -90,7 +90,8 @@ export function transitionIntegrator(
   assertIntegratorState(state);
   if (action.type !== 'OBSERVE_AND_INTEGRATE') throw new InvalidIntegratorStateError(`unknown integrator action: ${String((action as { type?: unknown }).type)}`);
   if (typeof action.cycleId !== 'string' || action.cycleId.length === 0) throw new InvalidIntegratorStateError('cycle id is required');
-  const observed = action.inputQuantity ?? state.inputQuantity;
+  const suppliedInput = action.inputQuantity;
+  const observed = suppliedInput === undefined ? state.inputQuantity : suppliedInput;
   finite(observed, 'observed input quantity');
   const independentAfter = add(state.independentQuantity, state.inspectionInterval, 'independent quantity');
   const contribution = multiply(observed, state.inspectionInterval, 'integrated contribution');
