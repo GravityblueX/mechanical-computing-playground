@@ -204,7 +204,7 @@ machines/<name>/
 
 ### Controls and Interlocks
 
-`#/controls` 展示一个不承担数值运算、却保护运算正确性的 P/M 机制：原位允许设定；开始曲柄周期时先锁住设定，再释放曲柄；运转中修改设定会被拒绝；完成后曲柄回到原位并重新开放设定。研究入口：[`research/control-and-interlocks.md`](research/control-and-interlocks.md)。
+`#/controls` 展示一个不承担数值运算、却保护运算正确性的 P/M 机制：原位允许设定；开始曲柄周期时先锁住设定，再释放曲柄；运转中修改设定会被拒绝；完成后曲柄回到原位并重新开放设定。页面下方另以带来源边界的资料卡比较 Thomas 模式/计数/归零、Odhner 曲柄原位锁、Felt 取消与进位张力释放、Turck 按键即时驱动及 Pascaline 补数边界；这些资料不把通用事件顺序冒充为历史复原。来源地图：[`research/control-and-zeroing-source-map.md`](research/control-and-zeroing-source-map.md)。
 
 ### Continuous Mechanical Integration
 

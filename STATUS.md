@@ -1,6 +1,6 @@
 # Current Status
 
-Last reconciled on 2026-09-01 after the Difference Engine provenance, hardened replay, and tabular-output slice.
+Last reconciled on 2026-09-01 after the source-specific subtraction, zeroing, and control-provenance slice.
 
 This file is the **current-state authority** for the repository. `ROADMAP.md` describes where the project should go; `IMPLEMENTATION_PLAN.md` is still useful as a dependency/design specification, but many of its checkboxes predate later implementation and must not be treated as the live task ledger.
 
@@ -13,7 +13,7 @@ This file is the **current-state authority** for the repository. `ROADMAP.md` de
 - GitHub Actions CI and a Pages deployment workflow.
 - Deterministic state/event/replay primitives under `src/core/`.
 - Golden carry fixtures under `fixtures/carry/`.
-- The latest local verification (`docs/VERIFICATION.md`, 2026-09-01 UTC+8) reports typecheck, 128 tests across 12 files, production build, diff check, and a local finite-difference/output-route smoke check passing.
+- The latest local verification (`docs/VERIFICATION.md`, 2026-09-01 UTC+8) reports typecheck, 133 tests across 13 files, production build, diff check, and a local controls-route smoke check passing.
 
 Remote CI run `33437862103` passed for the previous operator-division checkpoint `7bebcea2d187f0ed2411de4098c846963df8b32a`. This status still does **not** substitute for CI on later commits.
 
@@ -31,6 +31,7 @@ Remote CI run `33437862103` passed for the previous operator-division checkpoint
 - generic key-driven accumulator with place-value contribution, serialized carry, key-stroke cycles, and replayable events;
 - generic operator-driven division with repeated subtraction, per-place quotient counts, overshoot, mandatory correction, carriage shift, and hardened replay;
 - generic setting–crank interlock with explicit lock/phase transitions, invalid-action rejection, and hardened replay;
+- typed control-provenance profiles preserving source/model, H/R claim type, E1–E4 strength, documented roles, and explicit not-established boundaries;
 - generic continuous integrator with independent/input/integrated quantities, P/M inspection interval, ordered observation/advance events, safe numeric validation, and hardened replay;
 - continuous-flow teaching chain with explicit adder relation and tracer-output boundary;
 - shared mechanism core and trace/replay support.
@@ -45,7 +46,7 @@ The current browser shell contains non-empty routes or views for:
 - interactive finite differences plus a separately stepped calculation→persistent-output responsibility flow;
 - interactive multiplication comparison with event/cycle stepping for direct multiplication;
 - interactive operator-division procedure for `8478 ÷ 314` with visible overshoot/correction;
-- interactive setting–crank interlock lesson with a visible blocked setting attempt;
+- interactive setting–crank interlock lesson with a visible blocked setting attempt and typed source-comparison cards for Thomas, Odhner, Felt/Tarrant, and Pascaline controls;
 - Curta;
 - interactive Analytical Engine P/M information flow for `(ab+c)d`, with Store/Mill/card roles, intermediate `p/q`, output, stepping, and hardened replay;
 - interactive continuous mechanical integration workbench with A/B inputs, explicit sum, coordinate/integral phases, tracer output, stepping, reset, and evidence-layer text;
@@ -90,7 +91,7 @@ The most important remaining gaps are:
 - `research/differential-analyzer.md` now separates Bush 1931 publication metadata, Smithsonian surviving component roles, Shannon's interpretation path, later machine generations, and the repository P/M chain; full facsimile/page/figure inspection and physical geometry remain open;
 - `research/difference-engine-source-map.md` now separates Difference Engine No. 1 design/fragment, No. 2 design and 1991/2002 reconstruction, BAB/A/173–176 drawing records, and built Scheutz printing engines; drawing-level geometry/timing and inaccessible Smithsonian detail remain open;
 - `research/simulator-matrix.md` now records a bounded prior-art/reuse matrix, but several third-party license, stepping, and maintenance fields remain explicitly unverified;
-- operator-driven division, generic correction, and a generic setting–crank interlock now exist, while source-specific subtraction geometry, complement procedures, zeroing, and machine-specific interlocks/operator-error prevention remain underdeveloped;
+- `research/control-and-zeroing-source-map.md` now separates identified Thomas mode/counter/zeroing roles, Odhner US1510100 crank-home locking, Felt US960528 cancel/carry-strain recovery, Turck US1154897 immediate key actuation, and the Pascaline H/R complement boundary; source-specific geometry, uninspected Thomas instructions, partial-stroke correction, and production-revision mapping remain open;
 - `docs/REPRESENTATION_AND_PROTOCOL.md` now compares representation and operator protocol across six implemented lessons; output/audit-trail depth, commercial context, reliability/torque/tolerance, and source-specific geometry remain future work.
 
 See `docs/RESEARCH_GAPS.md` for the full queue.
@@ -117,7 +118,7 @@ Historical/reconstruction claims then receive `E1–E4` evidence strength separa
 
 ## Current highest-priority work
 
-1. **Deepen subtraction/control provenance**: complement arithmetic, source-specific mode/counter behavior, zeroing, correction, and machine-specific interlocks without generalizing across families.
+1. **Deepen control sources only where exact evidence is available**: Thomas instruction pages, production mapping of patented embodiments, partial-stroke correction, and source-specific geometry remain open after the completed family-separated provenance map.
 2. **Deepen Difference Engine and Differential Analyzer facsimile/page/figure anchors** before any source-specific geometry; the generation/source maps now exist.
 3. **Deepen cross-machine comparison layers** beyond representation/protocol and the new Difference Engine output case: broader output/audit trail and eventually reliability/torque/tolerance when evidence supports it.
 4. **Only then deepen source-specific geometry/animation.** Do not reward visual detail unsupported by source detail.

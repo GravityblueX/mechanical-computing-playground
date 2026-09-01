@@ -1,5 +1,24 @@
 # Verification record
 
+## 2026-09-01 — subtraction, zeroing, and control provenance
+
+The pre-edit remote-main baseline was 128 tests across 12 files. This slice added a family-separated source map for Thomas, Odhner, Felt/Tarrant and Pascaline controls; a typed evidence dataset with source/model, two-axis evidence labels, documented roles and explicit open boundaries; and source-driven comparison cards below the unchanged generic P/M interlock lesson. It also tightened the operator-division evidence boundary without changing its mechanism.
+
+- `npm run typecheck` — pass
+- `npm test -- --run` — pass, 133 tests across 13 files
+- `npm run build` — pass
+- `git diff --check` — pass
+
+Local browser smoke against Vite:
+
+- setting change, cycle begin, blocked active-phase setting attempt, completion/home return, and reset still worked;
+- the generic P/M event log remained distinct from all historical profiles;
+- five typed profiles rendered with visible model/date, source ID/link, claim type, evidence strength, documented roles and not-established boundaries;
+- Thomas, Odhner US1510100, Felt US960528, Turck US1154897 and Pascaline H/R entries were readable in English and Chinese;
+- no desktop horizontal overflow was observed.
+
+No deployment check was performed for this not-yet-pushed commit; no claim that this upgraded route is already live is made.
+
 ## 2026-09-01 — Difference Engine provenance and output contract
 
 The pre-edit remote-main baseline was 108 tests across 12 files. This slice hardened difference-column state/event/replay validation, added a tested P/M flow from generated table value to persistent check-copy and master/stereotype output roles, and mapped Difference Engine No. 1, Difference Engine No. 2 design/reconstruction, BAB/A/173–176 drawing records, and built Scheutz engines without claiming printer geometry.

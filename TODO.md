@@ -17,7 +17,7 @@
 - [x] Re-run typecheck/tests/build for the control/interlock code change and update `docs/VERIFICATION.md`.
 - [x] Add `docs/REPRESENTATION_AND_PROTOCOL.md` across the six currently supported machine/lesson families.
 - [x] Ground Difference Engine provenance/output contracts: add the Babbage/Scheutz source map, harden difference-column replay, and connect persistent output roles to `#/finite-difference` without claiming printer geometry.
-- [ ] Deepen subtraction/control provenance after the current Difference Engine slice: source-specific complement/mode/zeroing/correction/interlock evidence without generalizing across machine families.
+- [x] Deepen subtraction/control provenance: separate Thomas, Odhner, Felt/Tarrant, and Pascaline source roles; add typed evidence profiles and the controls comparison without generalizing across families.
 - [ ] Deepen output/audit-trail comparison beyond Difference Engines only after source-backed printing-machine material is available.
 
 ## Repository maintenance

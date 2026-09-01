@@ -17,7 +17,8 @@ Historical evidence strength is stated separately under `docs/EVIDENCE_POLICY.md
 ## Sources and provenance
 
 - Smithsonian, *Stepped Drum Calculating Machines*: <https://americanhistory.si.edu/it/collections/object-groups/calculating-machines/stepped-drum-calculating-machines>
-- Smithsonian Thomas Arithmometer object `nmah_690684`: <https://americanhistory.si.edu/collections/object/nmah_690684>
+- Smithsonian Thomas Arithmometer object `nmah_690683` (identified 1867 control/counter anchor): <https://americanhistory.si.edu/collections/object/nmah_690683>
+- Smithsonian Thomas Arithmometer object `nmah_690684` (separate object; do not merge revisions): <https://americanhistory.si.edu/collections/object/nmah_690684>
 - Smithsonian Burkhardt Arithmometer object `nmah_690681`: <https://www.americanhistory.si.edu/collections/object/nmah_690681>
 - Smithsonian record for Thomas operating instructions (1868), `nmah_904757`: <https://www.americanhistory.si.edu/collections/object/nmah_904757>
 - Curta.org manual archive and transcription: <https://curta.org/wiki/CurtaManuals>
@@ -29,12 +30,18 @@ The Smithsonian pages are museum catalog/institutional synthesis, generally **H/
 
 ## 1. Stepped-drum / arithmometer family
 
-Smithsonian's family and object records identify the functional roles relevant here: setting/input mechanism, operating crank, movable carriage, result register, revolution counter, and a control separating addition/multiplication from subtraction/division. The documented Burkhardt example also describes a bell when subtraction passes through zero, especially for division. Some object descriptions associate revolution-counter direction with subtraction/division.
+Keep the control responsibilities separate rather than treating them as one bundle:
+
+- identified Thomas object `nmah_690683` (1867): a lever selects addition/multiplication versus subtraction/division, and its catalog description associates opposite revolution-register direction with those mode groups;
+- identified later Thomas examples: separate controls/knobs are documented for zeroing result and revolution registers; these must remain attached to their own object/date records;
+- Burkhardt object `nmah_690681`: the catalog describes a bell when subtraction passes through zero, especially for division—an **overshoot indication**, not proof of a universal correction linkage;
+- Thomas instruction pamphlet `nmah_904757` (1868): catalog existence/date/provenance is established, but its uninspected pages are not evidence for an operator sequence here;
+- operator correction/add-back: supported at generic procedure level and by separately identified Curta material below, not inferred from the Thomas mode lever or Burkhardt bell.
 
 - Claim type: **H**.
-- Evidence: museum objects and institutional catalog synthesis, **E1–E2**.
+- Evidence: identified museum objects/catalog descriptions, **E1–E2** at the precision stated.
 
-These records support an operator workflow involving registers, repeated operations, carriage position, and an overshoot signal. They do **not** establish one universal gear train, timing sequence, correction path, or signed internal representation for all arithmometers.
+These records support a workflow involving modes, registers, repeated operations, carriage place and sometimes an overshoot indication. They do **not** establish one universal gear train, counter sign convention, zeroing geometry, bell timing, or add-back path for all arithmometers. Detailed control provenance is mapped in [`control-and-zeroing-source-map.md`](control-and-zeroing-source-map.md).
 
 ## 2. Curta operator procedure
 
@@ -94,4 +101,6 @@ The model refuses to claim:
 - automatic division;
 - simultaneous mechanisms or source-specific correction paths.
 
-Its arithmetic and replay integrity are computationally tested. Historical interpretation remains in this note rather than being smuggled into generic geometry.
+Its signed residual, negative overshoot state, quotient-digit convention, serialized detection/correction events, and mandatory add-back-before-shift rule are all **P/M operator-procedure choices**. They do not reproduce a Thomas/Burkhardt bell, crank direction, counter direction/sign, Curta dial motion, or machine-specific add-back linkage.
+
+Its arithmetic and replay integrity are computationally tested. Historical interpretation remains in this note and [`control-and-zeroing-source-map.md`](control-and-zeroing-source-map.md) rather than being smuggled into generic geometry.
