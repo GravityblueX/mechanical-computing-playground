@@ -5,11 +5,13 @@ Owner: local coding/research agent
 Target duration: about one useful hour at the agent's observed throughput
 Repository authority: remote `main`
 
-Previous task is complete and archived at `tasks/archive/2026-09-01-stepped-drum-carry-evolution.md`.
+Previous task is complete and archived at `tasks/archive/2026-09-01-mechanical-error-control.md`.
 
-The Thomas stepped-drum carry slice landed as `9245861d1817c3494e6553ed8a91fa0334ea1963` about 30 minutes after assignment. It changed 13 files (about 214 additions / 21 deletions), raised the recorded suite from 190 to 194 tests across 16 files, passed typecheck/tests/build/diff plus bilingual visible-carry smoke, and GitHub Actions CI run `33474770551` passed on the pushed commit. No open PR remained. Several substantial slices have now repeatedly landed in roughly 30–42 minutes, so this task is deliberately broader while remaining one coherent question:
+The mechanical-error-control slice landed as `99f296e36bc72b485d64c7b2b507722817f424bb` about 34 minutes after assignment. It changed 12 files (about 277 additions / 17 deletions), raised the recorded suite from 194 tests across 16 files to 201 tests across 17 files, passed typecheck/tests/build/diff and bilingual browser smoke, and GitHub Actions CI run `33479403704` passed. No open PR remained. Several consecutive broad slices have now landed in roughly 30–42 minutes, so this task increases synthesis scope again while keeping one coherent question:
 
-> **How do different mechanical-computing architectures keep a mathematically valid operation from becoming a physically wrong result, and how can the playground expose those documented error-control responsibilities without inventing numerical reliability models?**
+> **Which parts of arithmetic remain operator work, and which parts move into machine state/control, across the mechanisms the playground already implements?**
+
+This is a mechanism/operator-protocol question, **not** a productivity ranking and not a social-history survey.
 
 Fetch/pull remote `main` before starting. Remote state always wins.
 
@@ -21,240 +23,287 @@ Read, in order:
 2. `TODO.md`
 3. `AGENTS.md`
 4. `docs/EVIDENCE_POLICY.md`
-5. `docs/RESEARCH_GAPS.md`, especially Priority 8 reliability/torque/tolerance/wear
-6. `research/stepped-drum-carry-source-map.md`
-7. `research/rotary-carry-scheduling-source-map.md`
-8. `research/differential-analyzer.md`
-9. `research/control-and-zeroing-source-map.md`
-10. `docs/REPRESENTATION_AND_PROTOCOL.md`
-11. existing typed provenance modules/tests under `src/exhibits/`
-12. current `#/visible-carry`, `#/continuous`, `#/about`, navigation, and evidence-card UI in `src/main.ts`
-13. `docs/TEACHING_PATH.md` and `docs/VERIFICATION.md`
+5. `docs/RESEARCH_GAPS.md`, especially Priority 3, Priority 5, Priority 7, and Priority 9
+6. `docs/REPRESENTATION_AND_PROTOCOL.md`
+7. `research/multiplication-mechanisms.md`
+8. `research/key-driven-computation.md`
+9. `research/subtraction-and-division.md`
+10. `research/control-and-zeroing-source-map.md`
+11. `research/output-and-audit-trail.md`
+12. existing multiplication comparison, direct-multiplier, key-driven accumulator, operator-division, interlock, and printing-ledger code/tests
+13. current public routes for multiplication, division, controls, output contracts, about/navigation
+14. `docs/TEACHING_PATH.md` and `docs/VERIFICATION.md`
 
-Before editing, run the full test suite once and record the actual baseline. The current ledger says 194 tests across 16 files, but actual local/remote state wins.
+Before editing, run the full test suite once and record the actual baseline. The current ledger says 201 tests across 17 files, but actual repository state wins.
 
 Do not use stale `IMPLEMENTATION_PLAN.md` checkboxes as task authority.
 
 # Objective
 
-Complete four connected parts:
+Complete five connected parts:
 
-1. create a source-separated cross-machine **mechanical error-control** research note, centered on three already evidenced failure/control families: Thomas 1865 stepped-drum carry, Odhner-family rotary carry, and Bush Differential Analyzer backlash/frontlash;
-2. deepen the Differential Analyzer source boundary with directly identified Smithsonian frontlash objects and their documented role, without pretending this supplies a full Bush 1931 geometry map;
-3. add typed provenance/comparison data and a compact public teaching surface showing that `carry sequencing`, `inertia/load`, and `backlash compensation` are distinct physical correctness problems rather than one generic "mechanical error";
-4. add tests and reconcile STATUS/TODO/research gaps/teaching/verification.
+1. write a source-separated research/synthesis note on **human-machine division of arithmetic work**;
+2. create typed P/M operation-responsibility profiles derived from existing tested mechanisms/traces rather than hand-written marketing counts;
+3. add a compact bilingual public comparison where a visitor can inspect what the operator chooses/repeats/corrects versus what the machine represents/executes/persists;
+4. test the profiles against existing mechanism outputs and preserve evidence boundaries;
+5. reconcile STATUS/TODO/research gaps/representation/teaching/verification.
 
-Do **not** implement random failures, probability, RPM limits, torque/friction simulation, tolerance microns, wear curves, or source-specific animated linkages in this slice.
+Do **not** create a new whole-machine emulator. Reuse the mechanisms that already exist.
 
 ---
 
-# Part A — research: mechanical error-control matrix
+# Part A — research: arithmetic work and operator protocol
 
 Create:
 
 ```text
-research/mechanical-error-control.md
+research/human-machine-arithmetic-labor.md
 ```
 
-Use the two-axis evidence policy. The note must keep each machine/source context separate.
+Use the repository's two-axis evidence policy. In this note, the word **labor** means the concrete arithmetic responsibilities performed by a human operator versus delegated to a mechanism/control/output system. It does not mean employment conditions, labor-market effects, gender history, wages, or productivity unless a source directly supports a narrow statement.
 
-## A1. Thomas 1865 — inertia/load/carry-position problems
+## A1. Required contexts
 
-Reuse and cite the exact source boundary already established in:
+Cover at least these already-supported contexts, while keeping H/R and P/M claims separate:
+
+### 1. Repeated-crank multiplication — stepped drum / pinwheel teaching paths
+
+Use existing research and models to distinguish:
+
+- setting the multiplicand;
+- operator-supplied repeated crank count for each multiplier digit;
+- carriage/place shift;
+- result/revolution-register roles where source-backed;
+- what the repository's `314 × 27` P/M comparison counts and what it does **not** establish historically.
+
+Do not call the repository's `9` repetitions a measured historical time/cost for every stepped-drum or pinwheel machine.
+
+### 2. Direct multiplication — Millionaire-informed path
+
+Preserve the central distinction already established:
+
+- multiplier-digit selection chooses a represented multiple;
+- multiplication-table work is present in the machine/control model rather than supplied solely by repeated operator cranking;
+- carriage/place handling still remains part of the operation path.
+
+Use Steiger/Millionaire evidence only at the functional precision already supported. No control-plate/cam geometry claims beyond sources.
+
+### 3. Key-driven accumulation — Comptometer-informed path
+
+Preserve the supported operation-protocol distinction:
 
 ```text
-research/stepped-drum-carry-source-map.md
+press key -> arithmetic state changes
 ```
 
-At minimum preserve these distinct H/E1 patent-described problems/responses:
-
-- rapid motion could let a dial travel one or two teeth too far by acquired motion; moderation/Malta-cross relation is described as the response;
-- simultaneous loading of older vertical carry levers could redirect resistance into plate lift and weaken engagement, producing false results;
-- successive stepped-cylinder phasing makes carries fall one after another;
-- double-spring/full-position conditioning is described so the carry relation does not remain halfway.
-
-Do not convert any of this into measured field failure rates, safe crank speeds, force values, or universal Thomas production behavior.
-
-## A2. Odhner-family rotary carry — scheduling under rapid rotation
-
-Reuse and cite:
+rather than:
 
 ```text
-research/rotary-carry-scheduling-source-map.md
+set value -> separate crank
 ```
 
-Keep at least these source contexts separate:
+Keep the generic key-driven accumulator P/M. Historical statements about actual Felt/Tarrant/Turck mechanisms must remain tied to their existing patent/object contexts.
 
-- Odhner US514725A baseline transfer relation;
-- Valentin Odhner US1377269A rapid-rotation transfer-arm displacement/miscalculation problem and its patented response;
-- Talamini/Marchant US1867603A displaced carry opportunities / phase-overlap improvement.
+### 4. Operator-controlled division
 
-Do not merge these with Thomas stepped-cylinder phasing. Similar dependency problem != same geometry.
+Use the existing generic P/M division trace to expose responsibilities such as:
 
-## A3. Bush Differential Analyzer — backlash/frontlash as a different error-control problem
+- choose/maintain carriage place;
+- repeat subtraction;
+- detect overshoot in the teaching algorithm;
+- perform correction;
+- advance to the next place;
+- read quotient/revolution state.
 
-Use direct Smithsonian/NMAH object records. Inspect the pages directly before writing claims.
+Historical procedure claims require an identified manual/patent/source. If no exact operator manual page is already available, state that the repository's `8478 ÷ 314` loop is P/M and do not back-fill a fake historical procedure.
 
-Required starting anchors:
+### 5. Persistent output / printing
 
-- Differential Analyzer Parts and Documentation group:
-  <https://americanhistory.si.edu/collections/object-groups/mechanical-integrators/differential-analyzers>
-- Frontlash Unit from the Bush Differential Analyzer, catalog `1983.3002.04`, record `nmah_693235`:
-  <https://americanhistory.si.edu/collections/object/nmah_693235>
-- Smithsonian mirror if useful:
-  <https://www.si.edu/object/frontlash-unit-bush-differential-analyzer%3Anmah_693235>
-- related frontlash units / incomplete units for artifact-family context only:
-  - `1983.3002.09` / `nmah_693240`
-  - `1983.3002.10` / `nmah_693241`
-  - `1983.3002.11` / `nmah_693242`
-- Adder or Differential Gear, `1983.3002.02` / `nmah_693233`:
-  <https://www.si.edu/object/nmah_693233>
-- existing integrator/input/output object anchors already listed in `research/differential-analyzer.md`.
+Use `research/output-and-audit-trail.md` to distinguish:
 
-The key bounded institutional statement from `1983.3002.04` is that the **frontlash unit compensated for backlash in a drive between the output shaft of the unit and the input shaft of an adjacent unit**. Record that at object-catalog precision.
+- calculating a value;
+- retaining a live accumulator/register;
+- producing a persistent listing/subtotal/total record;
+- Difference Engine persistent-output ambitions where already source-backed.
 
-Important boundaries:
+Do not claim quantified labor savings, error-rate reduction, office throughput, or bookkeeping productivity unless a directly inspected source supplies the claim.
 
-- use the museum's term `frontlash unit` and its stated compensation role;
-- do not claim the museum record proves a numerical backlash magnitude, residual error, tolerance, efficiency, response time, or complete analyzer wiring;
-- do not infer that a specific surviving frontlash unit sat between the specific surviving adder/integrator/tracer objects unless a source establishes that connection;
-- do not silently equate frontlash compensation with a torque amplifier. They are different responsibilities. Only add torque-amplifier claims if an authoritative/primary source is actually inspected and cited separately.
+## A2. Bounded commercial/use context
 
-## A4. Bush 1931 facsimile/page search — bounded, non-blocking
+Directly inspect the Smithsonian calculating-machine overview already identified in `docs/RESEARCH_GAPS.md`:
 
-Existing note has the bibliographic anchor:
+<https://www.si.edu/spotlight/calculating-machines>
 
-Vannevar Bush, “The Differential Analyzer. A New Machine for Solving Differential Equations,” *Journal of the Franklin Institute* 212(4), October 1931, 447–488.
+Use it only for a concise institutional context on who used calculating machines / the kinds of work they supported, at the precision the page actually states.
 
-Spend a bounded amount of time looking for a legally accessible stable facsimile/full text through institutional/library/archive routes. If you obtain and actually inspect it, add precise page/figure anchors only for claims you can verify.
+If the page is inaccessible, retain the existing source pointer and explicitly mark the claim unverified in this pass. Do not replace it with unsourced generalizations.
 
-If you cannot obtain a stable full text, **do not block the slice and do not manufacture page/figure claims**. Record the access boundary and proceed with the Smithsonian object evidence.
+Do not turn this section into a general history of office labor.
 
-## A5. Required comparison table
+## A3. Required responsibility matrix
 
-End `research/mechanical-error-control.md` with a compact table approximately like:
-
-| Source/context | Documented physical correctness problem | Documented response/control | Evidence role | Not established |
-|---|---|---|---|---|
-| Thomas 1865 | inertia overrun; simultaneous carry load; dependent carry order | moderation/full-position carry relation/successive phasing | H/E1 patent | measured speed/load/failure envelope; universal production geometry |
-| Odhner 1921 | rapid-rotation transfer-arm displacement/miscalculation | patent-specific transfer control | H/E1 patent | production failure rate/safe RPM/universal Odhner geometry |
-| Talamini/Marchant 1932 | carry-created crossings need later rotary opportunities | displaced/overlapped carry opportunities | H/E1 patent | Thomas geometry; universal production implementation |
-| Bush ca.1930 frontlash unit | backlash in a drive between adjacent unit shafts | frontlash compensation unit | H/E1 surviving/catalogued object | numerical backlash, residual error, exact full-machine placement/wiring |
-| repository comparison | make error-control responsibility inspectable | typed source-separated cards/table only | P | reliability probability or physics simulation |
-
-The conclusion should make the conceptual distinction explicit:
+End the note with a compact matrix that distinguishes at least:
 
 ```text
-mathematically correct relation
-!=
-physically guaranteed transmission
+input/selection
+operator repetition
+place-value management
+stop/decision responsibility
+correction/recovery
+machine-encoded arithmetic/control
+result persistence/output
 ```
 
-but must not imply all mechanical computers share one failure mechanism.
+For each row/context, include:
+
+- source/lesson context;
+- claim type / evidence role;
+- operator responsibility;
+- machine responsibility;
+- explicit `not established` boundary.
+
+The conclusion must make this point without ranking machines:
+
+> Mechanization does not simply replace “manual calculation” with “automatic calculation”; it moves particular arithmetic responsibilities between operator procedure, represented machine state, control mechanisms, and output systems.
 
 ---
 
-# Part B — deepen `research/differential-analyzer.md`
+# Part B — typed operation-responsibility profiles derived from existing models
 
-Update the existing note rather than creating a competing Differential Analyzer source map.
+Create an appropriately named typed module under `src/exhibits/`, for example:
 
-Required changes:
+```text
+src/exhibits/operator-work/
+```
 
-- add the identified frontlash unit(s) with catalog/record IDs and the museum-described backlash-compensation role;
-- distinguish **integration mathematics**, **shaft transmission**, **backlash compensation**, and **output tracing** as separate responsibilities;
-- correct any stale blanket statement that Smithsonian pages are inaccessible if they are now directly inspectable in your environment; if only some routes fail, record the exact route limitation instead;
-- preserve the current P/M serialized browser phases as inspection order only;
-- keep torque amplification, physical error magnitude, slip/drift, exact shaft routing, scale factors, and timing open unless actually sourced.
+Prefer adapters/inspection helpers around existing mechanisms over duplicating arithmetic logic.
 
-Do not modify the numerical continuous-integrator mechanism merely because physical backlash exists. The current integrator is an ideal P/M mathematical/functional model; this slice is about evidence and responsibility boundaries, not injecting fake error.
+## B1. Required scenarios
+
+Expose at least four P/M scenario profiles, each tied to the actual tested model/trace that already exists:
+
+1. **`314 × 27` multiplication comparison**
+   - repeated-addition baseline;
+   - stepped-drum conceptual path;
+   - pinwheel conceptual path;
+   - direct-multiplication path.
+
+   Reuse `compare314x27()` or its underlying typed results. Do not recalculate counts independently in UI code.
+
+2. **key-driven place-value entry**
+   - use an existing deterministic case such as tens `3` + units `4` -> `34`;
+   - derive the number of key-stroke cycles and carry/place-value responsibilities from the tested model.
+
+3. **operator division**
+   - use the existing `8478 ÷ 314` P/M trace;
+   - derive repeated subtraction / overshoot / correction / place-shift responsibilities from actual events rather than prose-only counters.
+
+4. **persistent output contract**
+   - reuse the existing `+12, +8, SUBTOTAL, +5, TOTAL` teaching ledger;
+   - distinguish arithmetic entry actions from subtotal/total/output-record actions and accumulator clearing/retention semantics.
+
+If one scenario API is awkward, add a small typed inspection helper near that mechanism. Do not redesign core state unless a real correctness issue is found.
+
+## B2. Profile shape
+
+Choose names that fit the repository, but each scenario/profile must expose in text/state form concepts equivalent to:
+
+```text
+scenario id
+claim type
+source/research anchor
+operator actions / responsibilities
+machine/control responsibilities
+persistent-output responsibility if applicable
+observed P/M event counts grouped by action class
+notEstablished[]
+```
+
+Do **not** collapse everything into one scalar “efficiency score.” Different operations are not commensurate simply because event counts exist.
+
+Do **not** label P/M operation counts as historical productivity, speed, effort, skill, fatigue, or economic cost.
+
+A useful breakdown is categorical, for example:
+
+```text
+selection
+repetition/cycle
+shift/place management
+correction
+output request
+```
+
+but adapt to existing event vocabulary rather than forcing one abstraction onto every machine.
 
 ---
 
-# Part C — typed provenance + public comparison
+# Part C — tests
 
-## C1. Typed data
+Add focused Vitest coverage proving at least:
 
-Create an appropriately named typed source/comparison module under `src/exhibits/`, for example:
+1. scenario/profile IDs are unique;
+2. every P/M profile has a source/research anchor and non-empty `notEstablished` boundary;
+3. multiplication operator/cycle counts are derived from the existing comparison result, including direct multiplication's existing two operation cycles for multiplier `27`;
+4. key-driven `34` responsibility data comes from exactly two key-stroke cycles and contains no separate crank action;
+5. division responsibility data exposes at least one overshoot/correction relation from the existing trace rather than hiding division behind a final quotient;
+6. printing-ledger responsibility data distinguishes subtotal/total/output-record actions from ordinary item entry and preserves the existing subtotal-retain / total-clear semantics;
+7. no profile exposes or claims a generic productivity/efficiency score, historical seconds-per-operation, wage/cost figure, failure probability, or universal machine-family throughput;
+8. if any H/R context is represented in typed data, it carries evidence strength/source and is not silently merged with the P/M scenario counts.
 
-```text
-src/exhibits/mechanical-error-control/
-```
-
-Reuse existing evidence/provenance interfaces where practical instead of inventing a parallel evidence system.
-
-Include at least separate profiles for:
-
-1. Thomas 1865 rapid-motion / carry-load / sequential-phasing context;
-2. Valentin Odhner US1377269A rapid-rotation transfer context;
-3. Talamini/Marchant US1867603A scheduling context if needed to keep rotary improvement separate;
-4. Bush Differential Analyzer frontlash unit `1983.3002.04` / `nmah_693235`.
-
-Each profile must expose in text/state form:
-
-- stable unique id;
-- machine/source/date context;
-- claim type and evidence strength;
-- exact source URL;
-- **error/failure class** (for example `inertia/load`, `carry scheduling`, `backlash/transmission` — names are yours but keep distinctions);
-- documented problem;
-- documented control responsibility;
-- explicit `notEstablished` boundary.
-
-Do not add pseudo-quantitative reliability fields.
-
-## C2. Tests
-
-Add focused tests proving at least:
-
-- IDs are unique;
-- all H/R profiles have source, evidence strength, documented problem/control, and non-empty `notEstablished`;
-- the Bush profile contains the exact Smithsonian catalog/record context and identifies **backlash compensation** rather than torque amplification;
-- Thomas and Odhner/Talamini profiles retain their own source URLs and are not relabeled as one mechanism family;
-- at least three distinct error/failure classes remain visible in the comparison;
-- no profile claims measured probability, safe RPM, tolerance magnitude, or residual error;
-- any P comparison layer is not mislabeled H/E1.
-
-## C3. Public teaching surface
-
-Add a compact bilingual public comparison that a visitor can discover without reading research Markdown.
-
-Preferred option if routing/nav changes are small:
-
-```text
-#/mechanical-error-control
-```
-
-If a new route creates disproportionate churn, integrate a clearly discoverable section into `#/about` or `#/continuous` and cross-link from the carry lesson. Do not spend the slice redesigning navigation.
-
-The public view should let the visitor answer:
-
-```text
-Thomas: what could go physically wrong with carry/load/order?
-Odhner/Talamini: what could go wrong under rotary carry timing/scheduling?
-Bush: what does backlash between mechanical transmission stages require?
-Why does none of this justify a random “gear failure probability” animation?
-```
-
-Prefer source cards + a simple responsibility matrix over decorative machinery.
-
-No motion is required. No meaning may depend only on color.
+Do not weaken existing mechanism tests to make the synthesis layer pass.
 
 ---
 
-# Part D — documentation and verification
+# Part D — public teaching surface
 
-After Parts A–C are real:
+Add a compact bilingual public surface, preferably:
 
-- update `STATUS.md` with the new mechanical-error-control provenance/comparison and the Bush frontlash boundary;
-- update `TODO.md` only if the short queue benefits from a completed line / next evidence target;
-- update Priority 8 and related Differential Analyzer items in `docs/RESEARCH_GAPS.md` so already-completed evidence is not still listed as missing;
-- add a concise error-control/responsibility row or section to `docs/REPRESENTATION_AND_PROTOCOL.md` without flattening distinct machine families;
-- update `docs/TEACHING_PATH.md` so the public comparison is discoverable;
+```text
+#/arithmetic-labor
+```
+
+If that route name conflicts with current naming, choose a concise equivalent such as `#/operator-work` and keep navigation/README/teaching-path wording consistent.
+
+The visitor should be able to answer, without opening Markdown:
+
+```text
+Who repeats the multiplier digit: operator or machine/control representation?
+Does a keypress merely set input, or is it already the arithmetic cycle?
+Who decides when division has overshot and needs correction in the P/M lesson?
+What changes when output becomes a persistent record instead of only a live register?
+```
+
+Required presentation:
+
+- source/lesson context;
+- operator responsibilities;
+- machine/control responsibilities;
+- P/M observed action/event counts where meaningful;
+- explicit not-established/evidence boundary;
+- links to the existing detailed routes/research context where practical.
+
+Prefer responsibility cards/matrix/event summaries. No decorative machinery is required.
+
+No meaning may depend only on color.
+
+Do not show a leaderboard, fastest-machine ranking, “automation percentage,” efficiency score, or fake time saved.
+
+---
+
+# Part E — documentation and verification
+
+After Parts A–D are real:
+
+- update `STATUS.md` with the new cross-machine arithmetic-work synthesis;
+- update `TODO.md` with one completed bounded line and remove/clarify any stale short-queue wording if useful;
+- update Priority 9 and any directly affected sections in `docs/RESEARCH_GAPS.md` so completed work is not still framed as entirely missing;
+- add a concise responsibility/labor interpretation paragraph or cross-link to `docs/REPRESENTATION_AND_PROTOCOL.md` rather than duplicating its whole table;
+- update `docs/TEACHING_PATH.md` so the new route is discoverable;
 - update `docs/VERIFICATION.md` with actual baseline/final test counts and commands run;
-- README only if needed for route/discoverability;
-- do not broaden this into a general history of reliability engineering.
+- update README/navigation only as needed for discoverability;
+- do not rewrite `IMPLEMENTATION_PLAN.md` as a live ledger.
 
-If substantial time remains after all acceptance criteria pass, use it to improve source-location precision, test coverage, accessibility, bilingual text-state visibility, or to inspect a legitimate Bush 1931 facsimile. Do **not** start a stochastic reliability model or a new machine family.
+If substantial time remains after all acceptance criteria pass, spend it on source precision, typed derivation from actual events, accessibility, bilingual text-state clarity, browser regression coverage, or one additional institutional/manual anchor that clarifies operator procedure. Do **not** start a new machine family or a general labor-history essay.
 
 # Acceptance
 
@@ -267,34 +316,52 @@ npm run build
 git diff --check
 ```
 
-If public UI changes, perform local browser smoke in English and Chinese for the new/changed surface plus a quick regression check of `#/visible-carry` and `#/continuous`. Record exactly what was checked.
+If public UI changes, perform local browser smoke in English and Chinese for the new route plus quick regression checks of:
+
+```text
+#/multiplication
+#/division
+#/controls
+#/output-contracts
+```
+
+Record exactly what was checked.
 
 After push:
 
-- confirm remote `main` contains your commit;
-- if CI completes during the run, record its result; otherwise do not claim it passed yet;
-- if Pages deployment completes during the run, you may record the live route; otherwise do not claim the new route is already deployed;
+- confirm remote `main` contains the commit;
+- if CI completes during the run, record its result; otherwise do not claim it passed;
+- if Pages deployment completes during the run, record the live route only after the deployment actually succeeds;
 - stop after the coherent commit/push. Do not self-assign the next task.
+
+# Evidence boundaries
+
+- Counts produced by repository mechanism/event traces are **P/M observations about this software model**.
+- Historical machine/operator claims remain H/R and must retain source/model/revision precision already established in the research notes.
+- A patent can establish a described control/operation relation; it does not establish universal production practice or measured operator workflow.
+- Do not infer speed, productivity, ease of use, training time, fatigue, labor savings, employment effects, or error-rate reduction from event counts.
+- Do not infer social categories of operators beyond directly inspected sources.
+- Do not turn “fewer modeled operation cycles” into “historically faster” without appropriate evidence.
 
 # Stop conditions
 
 Stop and leave a clear blocker note rather than guessing if:
 
-- a source is inaccessible and the claim would require uninspected detail;
-- the Smithsonian frontlash record cannot be verified and no equivalent institutional source is available;
-- implementation would require inventing full-machine shaft placement/wiring;
-- a proposed UI would imply that Thomas, Odhner, and Bush used one shared physical error-control mechanism;
-- meaningful progress would require numerical friction/torque/backlash parameters that are not sourced;
-- a conflicting implementation lands on remote `main`.
+- producing the synthesis requires changing multiple core mechanism semantics rather than inspecting existing traces;
+- historical workflow claims require a manual/source you cannot actually inspect;
+- the public comparison cannot avoid presenting unlike operation counts as a fake efficiency ranking;
+- a conflicting operator-work implementation lands on remote `main`;
+- meaningful progress would require unsourced productivity/time/cost data.
 
-The lack of a Bush 1931 full facsimile is **not** by itself a blocker; preserve that as an open evidence boundary and proceed with directly inspected object records.
+An inaccessible Smithsonian overview is **not** by itself a blocker; keep that institutional context open and complete the P/M responsibility synthesis from existing tested models and already-verified research.
 
 # Git discipline
 
 - remote `main` is authoritative;
 - fetch/pull before work;
-- inspect current modules/tests before creating parallel abstractions;
-- one coherent implementation/research checkpoint;
+- inspect existing typed modules/tests before creating parallel abstractions;
+- reuse current traces and mechanism outputs;
+- one coherent research/implementation checkpoint;
 - run all acceptance commands;
 - inspect diff for unrelated changes;
 - update status/verification only after checks pass;
@@ -304,5 +371,5 @@ The lack of a Bush 1931 full facsimile is **not** by itself a blocker; preserve 
 Suggested commit subject:
 
 ```text
-feat: map mechanical error-control responsibilities
+feat: compare operator and machine arithmetic work
 ```
