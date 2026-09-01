@@ -1,5 +1,19 @@
 # Verification record
 
+## 2026-09-02 — decimal-register action-derived replay provenance
+
+The exact current-main baseline `e19485647ee0dd02dee52d98b050e3adbe44379f` passed typecheck, 320 tests across 21 files, and a production build before the PR was rebased. The shared replay helper previously reconstructed only the recorded final state: a decimal trace could omit every reducer-level no-op `CRANK_BEGIN`, `CARRY_*`, and `CRANK_END` marker, reorder independent wheel steps, or detach action/cycle metadata while still being accepted whenever the retained wheel updates reached the recorded digits.
+
+Replay now requires the deterministic transition alongside the event reducer. The reducer remains the source of the returned replayed state, while the transition independently re-derives the action-authorized envelope, complete ordered events, warnings, errors, and final state. Decimal state/action and the trace envelope reject unsupported enumerable string/Symbol fields. Digit arrays require an ordinary Array prototype plus every canonical index as an own enumerable slot, so an inherited value cannot conceal a sparse hole behind a non-canonical key. Comparison preserves object-member insertion-order tolerance without JSON's lossy treatment of enumerable `undefined`, Symbol keys, sparse arrays, or non-finite values. A transition with no event available to bind the mechanism/cycle envelope fails closed. Focused regressions cover omitted control markers, commutative wheel-step reordering, sequence/action/envelope-cycle changes, warning and error tampering, unknown event types, sparse/prototype-inherited arrays, zero-event transitions, faulty reducer/transition final states, and unsupported fields on the trace, state, action, event, and final state.
+
+- `npm run typecheck` — pass
+- `npx vitest run --maxWorkers=1` — pass, 360 tests across 21 files
+- `npm run build` — pass
+- `git diff --check` — pass
+- focused mechanism-core and canonical-fixture tests — 59 tests passed
+
+No browser or deployment check was performed because this slice changes trace provenance, replay validation, tests, and project records only; UI output is unchanged.
+
 ## 2026-09-02 — Scheutz British-patent 2214/2216 identity audit
 
 The current-main baseline at `0ecd9f9f6671f687c525cba0d9146e29eea99922` passed typecheck and 320 tests across 21 files. Direct page-image inspection of *The Mechanics' Magazine* printed pp. 167 and 426 establishes No. 2214 as Lionel John Wetherell and Augustus Johann Hoffstaedt's improved pump patent, dated 16 October 1854; the p. 426 sequence places Wain No. 2213 immediately before it and George/Edward Scheutz's calculating-and-printing No. 2216, dated 17 October, immediately after. This independently agrees with the already inspected *Journal of the Society of Arts* p. 393 Scheutz 2216 entry.

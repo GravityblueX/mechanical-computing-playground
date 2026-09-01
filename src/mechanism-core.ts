@@ -23,15 +23,94 @@ export class InvalidWheelStateError extends Error {
   }
 }
 
-function assertDigits(digits: readonly number[]): void {
+function normalizeDigits(digits: unknown): number[] {
   if (!Array.isArray(digits) || digits.length === 0) {
     throw new InvalidWheelStateError('wheel state must be a non-empty array');
   }
-  digits.forEach((digit, index) => {
+  const digitKeys = Reflect.ownKeys(digits)
+    .filter((key) => Object.prototype.propertyIsEnumerable.call(digits, key));
+  if (
+    Object.getPrototypeOf(digits) !== Array.prototype
+    || digitKeys.length !== digits.length
+  ) {
+    throw new InvalidWheelStateError('wheel state contains sparse or unsupported fields');
+  }
+  const normalized: number[] = [];
+  for (let index = 0; index < digits.length; index += 1) {
+    const descriptor = Object.getOwnPropertyDescriptor(digits, String(index));
+    if (!descriptor || !descriptor.enumerable || !('value' in descriptor)) {
+      throw new InvalidWheelStateError('wheel state contains sparse or unsupported fields');
+    }
+    const digit = descriptor.value;
     if (!Number.isInteger(digit) || digit < 0 || digit > 9) {
       throw new InvalidWheelStateError(`wheel ${index} must be an integer in 0..9`);
     }
-  });
+    normalized.push(digit);
+  }
+  return normalized;
+}
+
+function assertExactEnumerableKeys(
+  value: object,
+  expected: readonly PropertyKey[],
+  label: string,
+): void {
+  const expectedKeys = new Set(expected);
+  const actualKeys = Reflect.ownKeys(value)
+    .filter((key) => Object.prototype.propertyIsEnumerable.call(value, key));
+  if (
+    actualKeys.length !== expectedKeys.size
+    || actualKeys.some((key) => !expectedKeys.has(key))
+  ) {
+    throw new InvalidWheelStateError(`${label} contains unsupported fields`);
+  }
+}
+
+function ownEnumerableDataValue(
+  value: object,
+  key: PropertyKey,
+  label: string,
+): unknown {
+  const descriptor = Object.getOwnPropertyDescriptor(value, key);
+  if (!descriptor || !descriptor.enumerable || !('value' in descriptor)) {
+    throw new InvalidWheelStateError(`${label} contains unsupported fields`);
+  }
+  return descriptor.value;
+}
+
+function normalizeDecimalRegisterState(
+  state: Readonly<DecimalRegisterState>,
+): DecimalRegisterState {
+  if (state === null || typeof state !== 'object' || Array.isArray(state)) {
+    throw new InvalidWheelStateError('decimal register state must be an object');
+  }
+  assertExactEnumerableKeys(state, ['mechanismId', 'digits'], 'decimal register state');
+  const mechanismId = ownEnumerableDataValue(state, 'mechanismId', 'decimal register state');
+  const digits = ownEnumerableDataValue(state, 'digits', 'decimal register state');
+  if (mechanismId !== DECIMAL_REGISTER_MECHANISM_ID) {
+    throw new InvalidWheelStateError('unsupported decimal register state');
+  }
+  return {
+    mechanismId,
+    digits: normalizeDigits(digits),
+  };
+}
+
+function normalizeCrankAction(action: Readonly<CrankAction>): CrankAction {
+  if (action === null || typeof action !== 'object' || Array.isArray(action)) {
+    throw new InvalidWheelStateError('decimal register action must be an object');
+  }
+  assertExactEnumerableKeys(action, ['type', 'cycleId'], 'decimal register action');
+  const type = ownEnumerableDataValue(action, 'type', 'decimal register action');
+  const cycleId = ownEnumerableDataValue(action, 'cycleId', 'decimal register action');
+  if (
+    type !== 'CRANK_PLUS_ONE'
+    || typeof cycleId !== 'string'
+    || cycleId.length === 0
+  ) {
+    throw new InvalidWheelStateError('unsupported decimal register action');
+  }
+  return { type, cycleId };
 }
 
 function wheel(index: number): WheelIdentity {
@@ -39,8 +118,7 @@ function wheel(index: number): WheelIdentity {
 }
 
 export function createDecimalRegister(digits: readonly number[]): DecimalRegisterState {
-  assertDigits(digits);
-  return { mechanismId: DECIMAL_REGISTER_MECHANISM_ID, digits: [...digits] };
+  return { mechanismId: DECIMAL_REGISTER_MECHANISM_ID, digits: normalizeDigits(digits) };
 }
 
 /** Increment one validated decimal wheel. */
@@ -58,17 +136,15 @@ export function transitionDecimalRegister(
   state: Readonly<DecimalRegisterState>,
   action: Readonly<CrankAction>,
 ): TransitionResult<DecimalRegisterState> {
-  assertDigits(state.digits);
-  if (state.mechanismId !== DECIMAL_REGISTER_MECHANISM_ID || action.type !== 'CRANK_PLUS_ONE') {
-    throw new InvalidWheelStateError('unsupported decimal register state or action');
-  }
+  const normalizedState = normalizeDecimalRegisterState(state);
+  const normalizedAction = normalizeCrankAction(action);
 
-  const digits = [...state.digits];
+  const digits = [...normalizedState.digits];
   const events: MechanismEvent[] = [];
   let sequence = 0;
   const base = () => ({
-    mechanismId: state.mechanismId,
-    cycleId: action.cycleId,
+    mechanismId: normalizedState.mechanismId,
+    cycleId: normalizedAction.cycleId,
     sequence: sequence++,
   });
 
@@ -183,8 +259,7 @@ export function crankPlusOne(digits: readonly number[], crank = 0) {
 }
 
 export function digitsToString(digits: readonly number[]): string {
-  assertDigits(digits);
-  return [...digits].reverse().join('');
+  return normalizeDigits(digits).reverse().join('');
 }
 
 export function replay(result: ReturnType<typeof crankPlusOne>): number[] {
