@@ -5,11 +5,11 @@ Owner: local coding/research agent
 Target duration: about one useful hour at the agent's observed throughput
 Repository authority: remote `main`
 
-Previous task is complete and archived at `tasks/archive/2026-09-01-rotary-carry-scheduling.md`.
+Previous task is complete and archived at `tasks/archive/2026-09-01-stepped-drum-carry-evolution.md`.
 
-The rotary-carry slice landed as `ea30534b4af542ef2c31d41a325e1de5887a6ab7` about 34 minutes after assignment. It changed 14 files (about 353 additions / 23 deletions), raised the recorded suite from 170 tests in 15 files to 190 tests in 16 files, and recorded passing typecheck/tests/build/diff plus bilingual visible-carry smoke. Several preceding substantial slices also landed in roughly 30–42 minutes. This task is therefore deliberately broader while remaining one coherent question:
+The Thomas stepped-drum carry slice landed as `9245861d1817c3494e6553ed8a91fa0334ea1963` about 30 minutes after assignment. It changed 13 files (about 214 additions / 21 deletions), raised the recorded suite from 190 to 194 tests across 16 files, passed typecheck/tests/build/diff plus bilingual visible-carry smoke, and GitHub Actions CI run `33474770551` passed on the pushed commit. No open PR remained. Several substantial slices have now repeatedly landed in roughly 30–42 minutes, so this task is deliberately broader while remaining one coherent question:
 
-> How did Thomas-family stepped-drum machines solve carry sequencing and carry-load/reliability problems, how did that mechanism change across patents, and what does this add to the repository's new rotary-carry lesson without collapsing distinct machine families into one generic geometry?
+> **How do different mechanical-computing architectures keep a mathematically valid operation from becoming a physically wrong result, and how can the playground expose those documented error-control responsibilities without inventing numerical reliability models?**
 
 Fetch/pull remote `main` before starting. Remote state always wins.
 
@@ -21,251 +21,240 @@ Read, in order:
 2. `TODO.md`
 3. `AGENTS.md`
 4. `docs/EVIDENCE_POLICY.md`
-5. `docs/RESEARCH_GAPS.md`, especially carry/reliability and source-specific geometry boundaries
-6. `research/carry-is-the-hard-part.md`
-7. `research/carry-architecture-source-map.md`
-8. `research/rotary-carry-scheduling-source-map.md`
-9. `research/multiplication-mechanisms.md`
-10. `research/subtraction-and-division.md`
-11. `src/mechanisms/rotary-carry-schedule/index.ts`
-12. `src/exhibits/carry-provenance/index.ts` and its tests
-13. current `#/visible-carry` UI in `src/main.ts`
-14. `docs/REPRESENTATION_AND_PROTOCOL.md`, `docs/TEACHING_PATH.md`, and `docs/VERIFICATION.md`
+5. `docs/RESEARCH_GAPS.md`, especially Priority 8 reliability/torque/tolerance/wear
+6. `research/stepped-drum-carry-source-map.md`
+7. `research/rotary-carry-scheduling-source-map.md`
+8. `research/differential-analyzer.md`
+9. `research/control-and-zeroing-source-map.md`
+10. `docs/REPRESENTATION_AND_PROTOCOL.md`
+11. existing typed provenance modules/tests under `src/exhibits/`
+12. current `#/visible-carry`, `#/continuous`, `#/about`, navigation, and evidence-card UI in `src/main.ts`
+13. `docs/TEACHING_PATH.md` and `docs/VERIFICATION.md`
 
-Before editing, run the full test suite once and record the actual baseline. Do not use stale `IMPLEMENTATION_PLAN.md` checkboxes as task authority.
+Before editing, run the full test suite once and record the actual baseline. The current ledger says 194 tests across 16 files, but actual local/remote state wins.
+
+Do not use stale `IMPLEMENTATION_PLAN.md` checkboxes as task authority.
 
 # Objective
 
 Complete four connected parts:
 
-1. create a source-separated **Thomas/Arithmometer stepped-drum carry evolution map**, centered on the 1820, 1865, and 1880 patent contexts plus surviving-object/reconstruction boundaries;
-2. add typed provenance profiles that preserve those revision contexts separately and expose the documented carry scheduling/reliability problems without claiming universal production geometry;
-3. extend the public carry lesson so a visitor can compare **Thomas 1865 stepped-drum sequential carries** with the already implemented **Odhner/Talamini rotary ordinal scheduling** and see that similar dependency problems were solved in distinct architectures;
-4. add tests and update status/verification/research gaps. Reuse the existing P/M carry-dependency model where it is genuinely source-neutral; do not create a duplicate arithmetic scheduler merely to add another machine name.
+1. create a source-separated cross-machine **mechanical error-control** research note, centered on three already evidenced failure/control families: Thomas 1865 stepped-drum carry, Odhner-family rotary carry, and Bush Differential Analyzer backlash/frontlash;
+2. deepen the Differential Analyzer source boundary with directly identified Smithsonian frontlash objects and their documented role, without pretending this supplies a full Bush 1931 geometry map;
+3. add typed provenance/comparison data and a compact public teaching surface showing that `carry sequencing`, `inertia/load`, and `backlash compensation` are distinct physical correctness problems rather than one generic "mechanical error";
+4. add tests and reconcile STATUS/TODO/research gaps/teaching/verification.
 
-Do **not** build a Thomas Arithmometer emulator, source-specific 3D linkage, torque/spring-force model, random failure simulator, or exact angular/timing reconstruction in this slice.
+Do **not** implement random failures, probability, RPM limits, torque/friction simulation, tolerance microns, wear curves, or source-specific animated linkages in this slice.
 
 ---
 
-# Part A — stepped-drum carry / revision source map
+# Part A — research: mechanical error-control matrix
 
 Create:
+
+```text
+research/mechanical-error-control.md
+```
+
+Use the two-axis evidence policy. The note must keep each machine/source context separate.
+
+## A1. Thomas 1865 — inertia/load/carry-position problems
+
+Reuse and cite the exact source boundary already established in:
 
 ```text
 research/stepped-drum-carry-source-map.md
 ```
 
-Use the two-axis evidence policy. Keep patent text, surviving objects, modern reconstruction, and specialist revision history as different evidence roles.
+At minimum preserve these distinct H/E1 patent-described problems/responses:
 
-## A1. Thomas de Colmar, French patent 1420 (1820) — early architecture, not the later commercial machine
+- rapid motion could let a dial travel one or two teeth too far by acquired motion; moderation/Malta-cross relation is described as the response;
+- simultaneous loading of older vertical carry levers could redirect resistance into plate lift and weaken engagement, producing false results;
+- successive stepped-cylinder phasing makes carries fall one after another;
+- double-spring/full-position conditioning is described so the carry relation does not remain halfway.
 
-Primary-patent transcription/digital source:
+Do not convert any of this into measured field failure rates, safe crank speeds, force values, or universal Thomas production behavior.
 
-- Charles-Xavier Thomas de Colmar, Brevet No. 1420, 18 Nov 1820:
-  <https://arithmometre.org/Brevets/PageBrevet1820FR.html>
-- Digitized patent PDF if useful:
-  <https://arithmometre.org/Bibliotheque/BibNumerique/Brevet1820/Brevet1820.pdf>
+## A2. Odhner-family rotary carry — scheduling under rapid rotation
 
-Institutional surviving-object boundary:
-
-- Smithsonian/NMAH, oldest surviving Thomas Arithmometer, ca. 1820:
-  <https://americanhistory.si.edu/collections/object/nmah_690692>
-
-Record only what the sources support:
-
-- the 1820 patent explicitly divides the machine into movement systems including a `système des retenues` (carry system), alongside multiplier/multiplicand systems;
-- the patent is a distinct early design and must not be treated as a description of the stabilized later commercial Thomas machine;
-- the Smithsonian explicitly says its oldest surviving example is **not identical to the drawings of Thomas's 1820 patent** and more closely resembles drawings made in 1821 for the 1822 Hoyau report.
-
-This boundary is important. `patent 1820 -> every later Thomas carry` is not acceptable.
-
-If you inspect the patent's detailed carry section, cite section/figure locations in the research note, but do not infer later production use from it.
-
-## A2. 1849 development context — evidence that the design was still changing
-
-Useful source:
-
-- Thomas de Colmar, Patent No. 8282 (1849), French text:
-  <https://arithmometre.org/Brevets/PageBrevet1849FR.html>
-- English translation hosted by the same specialist archive:
-  <https://arithmometre.org/Brevets/PageBrevet1849EN.html>
-
-Use this mainly as a **revision-history boundary**, not as a shortcut to assert a specific later carry linkage. The text presents the contemporary machine as a developed/perfected version of the early design and discusses repeated prototype/workmanship difficulties.
-
-If a carry-specific claim is used, inspect the relevant text directly and record its exact context. Otherwise keep 1849 as evidence that the architecture was not static between 1820 and the later commercial forms.
-
-## A3. Thomas de Colmar, Brevet No. 68923 (1865) — primary carry scheduling and failure evidence
-
-Primary-patent transcription/digital page:
-
-- Brevet No. 68923, 30 Sep 1865:
-  <https://arithmometre.org/Brevets/PageBrevet1865FR.html>
-
-This is the central source for this slice. Inspect the text and figures directly. At minimum record these source-supported claims, with section/figure anchors where possible:
-
-### A3.1 rapid-motion overrun / moderation
-
-The patent says older machines could, under rapid movement, let inertia carry a corresponding dial one or two teeth too far. It describes a `cylindre de modération` and Malta-cross relationship intended to stop that acquired motion when the stepped cylinder's last tooth disengages.
-
-Treat this as **H/E1 for the patented 1865 description**. Do not turn it into a numerical safe crank speed, measured field-failure rate, or universal Thomas-machine performance number.
-
-### A3.2 sequential phasing of the stepped cylinders
-
-The patent states that the stepped cylinders are geared on the transmission shaft with successive phase offsets: the second cylinder's first tooth acts when the first reaches its second, the third begins when the second reaches its second, and so on. It explicitly says this makes the carries (`retenues`) fall **one after another** and thereby avoids errors.
-
-This is the key stepped-drum comparison point. It is a source-specific H/E1 statement of successive carry scheduling in the 1865 patent.
-
-Do not replace it with the existing P/M ordinal schedule and then call that schedule the historical tooth timing. The P/M scheduler may illustrate dependency order only.
-
-### A3.3 older simultaneous-load failure mode
-
-In the `Retenues` section, the patent says an older design used double inclined steel planes pressing carry levers vertically. When several dial inclined planes pressed their respective carry levers at the same time, the combined resistance could make the dial plate lift instead of the levers descending; weakened engagement could then produce **false products/results**.
-
-It also says an attempted hook remedy kept the dial plate down while the crank moved, but created a serviceability problem if the crank stopped mid-cycle because the plate could not be lifted to reach the cause of the stoppage.
-
-Record both failure/problem statements separately.
-
-### A3.4 1865 replacement relationship
-
-The patent describes replacing the older vertical action with a square steel projection on each dial that, when crossing `0 <-> 9`, moves a carry square horizontally; through the carry lever/fork and rod, this lowers the moderation cylinder/carry finger so it takes one tooth on the carry wheel. The text also describes double springs intended to make the carry reach either full down or full returned position rather than remaining halfway.
-
-This is H/E1 for the described patent mechanism. It is **not** permission to draw unsourced exact production geometry beyond the figures/text actually inspected.
-
-## A4. Thomas de Bojano, Brevet No. 138912 (1880) — simplification claim versus production evidence
-
-Primary-patent transcription/digital page:
-
-- Brevet No. 138912, 29 Sep 1880:
-  <https://arithmometre.org/Brevets/PageBrevet1880FR.html>
-
-Record at source-supported precision:
-
-- the patent explicitly recaps the older carry mechanism before describing a new carry arrangement;
-- it enumerates the older carry effect as 20 parts and the proposed new arrangement as 10 parts per carry effect;
-- it describes the new relation in its own patent context and describes all carries made during a crank turn remaining conditioned until a return/reset action at crank home.
-
-Important boundary: a **patented simplification is not proof of production adoption**.
-
-For the adoption/revision question, use a separate specialist secondary source and label it accordingly rather than H/E1:
-
-- Arithmometre.org chronology/revision history:
-  <https://arithmometre.org/Biographie/ChronologieENG.html>
-
-That specialist chronology says the 1880 carry simplification is effectively a "phantom" in the referenced surviving-machine corpus and that the known French/foreign arithmometers largely continued on the T1865 pattern. Treat this as specialist reconstruction/history (**R/E3 or another defensible non-E1 classification under repository policy**), not as primary patent evidence.
-
-Do not write `the 1880 design replaced the 1865 production mechanism` unless an actual production/object source proves it.
-
-## A5. surviving family context
-
-Use Smithsonian stepped-drum object records for broad identified-object context, not detailed carry internals:
-
-- stepped-drum calculating machine group:
-  <https://americanhistory.si.edu/collections/object-groups/calculating-machines/stepped-drum-calculating-machines>
-
-The group supports identified Thomas machines, stepped drums, setting levers, result/revolution registers, carriage and mode controls at object-record precision. It also reinforces that the earliest surviving object is not identical to the 1820 patent drawing.
-
-## A6. required source-map conclusion
-
-End the note with a compact evolution/boundary table, approximately:
-
-| Source/context | Carry/reliability problem | Documented response | Evidence role | Not established |
-|---|---|---|---|---|
-| Thomas 1820 patent | early carry system exists as a distinct movement system | patent-specific early mechanism | H/E1 | later commercial geometry/universality |
-| Smithsonian ca.1820 object | surviving early machine differs from patent drawing | object/revision boundary | H/E2 institutional object record | exact missing transition from patent to object |
-| Thomas 1865 patent | inertia overrun; simultaneous carry load can lift plate / produce false results; cascaded carries need ordered action | moderation/Geneva-stop relation, horizontally conditioned carry, staggered cylinder phasing | H/E1 | measured speed/load/failure envelope; all production revisions |
-| Thomas de Bojano 1880 patent | simplify 1865 carry mechanism | proposed 10-part carry vs recapped 20-part carry | H/E1 patent proposal | production adoption |
-| specialist revision chronology | known machines apparently retain T1865 pattern rather than 1880 carry | production-history interpretation | R / non-E1 | exhaustive artifact census unless source proves it |
-| repository ordinal scheduler | dependency-order teaching only | abstract increasing slots | P/M | Thomas tooth angles/times/forces/geometry |
-
-Also list open evidence: exact 1850/1851/1865 production-revision mapping, inspected factory instructions, direct measurement of surviving carry mechanisms, material/spring/contact loads, lubrication/wear, safe crank rate, and measured error/failure envelopes.
-
----
-
-# Part B — typed Thomas carry provenance
-
-Extend the existing carry provenance dataset rather than inventing a second evidence framework.
-
-Add source-separated profiles for at least:
-
-1. Thomas 1820 patent context;
-2. Smithsonian ca.1820 surviving object/revision boundary;
-3. Thomas 1865 patent — rapid-motion moderation + successive carry phasing;
-4. Thomas 1865 patent — older simultaneous-load failure and replacement carry relation (may be a separate profile if that keeps claims precise);
-5. Thomas de Bojano 1880 patent — carry simplification proposal;
-6. specialist 1880 production/revision interpretation only if the dataset supports R claims cleanly.
-
-Each profile must retain:
-
-- stable unique id;
-- source/model/date context;
-- H or R claim type and evidence strength;
-- exact source URL;
-- documented relationship/problem;
-- architecture/operator implication;
-- non-empty `notEstablished` boundary.
-
-Do not merge 1820, 1865, and 1880 into one generic `Thomas carry` profile.
-
-## Provenance tests
-
-At minimum verify:
-
-- IDs remain unique;
-- all H/R entries have source + evidence strength + `notEstablished`;
-- the Smithsonian profile explicitly preserves `surviving object != 1820 patent drawing`;
-- the 1865 profile records both **successive carry phasing** and the documented older simultaneous-load/false-result problem at the correct source context;
-- the 1880 patent profile records a proposed 20 -> 10 part simplification without claiming production adoption;
-- any `phantom/no known surviving implementation` statement is R/specialist-history, not H/E1 patent content;
-- no Thomas profile is mislabeled as Odhner/Talamini evidence and vice versa.
-
----
-
-# Part C — public cross-family carry comparison
-
-Extend `#/visible-carry` conservatively. Keep the generic `0099 + 1` P/M lesson and the completed rotary-carry section working.
-
-Add a compact bilingual **stepped-drum / Thomas 1865** subsection that visibly answers:
+Reuse and cite:
 
 ```text
-Why did Thomas 1865 stagger cylinder action so carries occur one after another?
-What failure did the patent describe when several older carry levers were loaded simultaneously?
-Why is the 1865 solution not the same mechanism as Odhner/Talamini rotary carry scheduling even though both expose an ordering constraint?
-What does the 1880 simplification patent prove, and what does it not prove about manufactured machines?
+research/rotary-carry-scheduling-source-map.md
 ```
 
-## Reuse before refactor
+Keep at least these source contexts separate:
 
-The existing ordinal P/M scheduler already teaches carry dependency order. Do not create another scheduler simply to put `Thomas` in a module name.
+- Odhner US514725A baseline transfer relation;
+- Valentin Odhner US1377269A rapid-rotation transfer-arm displacement/miscalculation problem and its patented response;
+- Talamini/Marchant US1867603A displaced carry opportunities / phase-overlap improvement.
 
-If the existing `rotary-carry-schedule` presentation can be reused **without implying its slots are Thomas 1865 historical phasing**, reuse only the source-neutral dependency concept in the UI and label it P/M.
+Do not merge these with Thomas stepped-cylinder phasing. Similar dependency problem != same geometry.
 
-If the module name/API makes reuse misleading, make the smallest safe refactor toward a neutral carry-dependency schedule and preserve existing behavior/tests. Do not perform a broad core migration merely for naming aesthetics.
+## A3. Bush Differential Analyzer — backlash/frontlash as a different error-control problem
 
-The public comparison should distinguish:
+Use direct Smithsonian/NMAH object records. Inspect the pages directly before writing claims.
 
-- **Thomas 1865 H/E1:** actual patent text says cylinders are phased so carries fall one after another; it also describes a specific older simultaneous-load failure and replacement mechanism;
-- **Talamini/Marchant 1932 H/E1:** a different Odhner-type rotary actuator architecture with successively displaced carry opportunities and phase-overlap optimization;
-- **repository P/M:** ordinal dependency timeline only.
+Required starting anchors:
 
-No source-specific animated linkage is required. Text + typed source cards + a source-neutral ordinal dependency diagram are preferable.
+- Differential Analyzer Parts and Documentation group:
+  <https://americanhistory.si.edu/collections/object-groups/mechanical-integrators/differential-analyzers>
+- Frontlash Unit from the Bush Differential Analyzer, catalog `1983.3002.04`, record `nmah_693235`:
+  <https://americanhistory.si.edu/collections/object/nmah_693235>
+- Smithsonian mirror if useful:
+  <https://www.si.edu/object/frontlash-unit-bush-differential-analyzer%3Anmah_693235>
+- related frontlash units / incomplete units for artifact-family context only:
+  - `1983.3002.09` / `nmah_693240`
+  - `1983.3002.10` / `nmah_693241`
+  - `1983.3002.11` / `nmah_693242`
+- Adder or Differential Gear, `1983.3002.02` / `nmah_693233`:
+  <https://www.si.edu/object/nmah_693233>
+- existing integrator/input/output object anchors already listed in `research/differential-analyzer.md`.
+
+The key bounded institutional statement from `1983.3002.04` is that the **frontlash unit compensated for backlash in a drive between the output shaft of the unit and the input shaft of an adjacent unit**. Record that at object-catalog precision.
+
+Important boundaries:
+
+- use the museum's term `frontlash unit` and its stated compensation role;
+- do not claim the museum record proves a numerical backlash magnitude, residual error, tolerance, efficiency, response time, or complete analyzer wiring;
+- do not infer that a specific surviving frontlash unit sat between the specific surviving adder/integrator/tracer objects unless a source establishes that connection;
+- do not silently equate frontlash compensation with a torque amplifier. They are different responsibilities. Only add torque-amplifier claims if an authoritative/primary source is actually inspected and cited separately.
+
+## A4. Bush 1931 facsimile/page search — bounded, non-blocking
+
+Existing note has the bibliographic anchor:
+
+Vannevar Bush, “The Differential Analyzer. A New Machine for Solving Differential Equations,” *Journal of the Franklin Institute* 212(4), October 1931, 447–488.
+
+Spend a bounded amount of time looking for a legally accessible stable facsimile/full text through institutional/library/archive routes. If you obtain and actually inspect it, add precise page/figure anchors only for claims you can verify.
+
+If you cannot obtain a stable full text, **do not block the slice and do not manufacture page/figure claims**. Record the access boundary and proceed with the Smithsonian object evidence.
+
+## A5. Required comparison table
+
+End `research/mechanical-error-control.md` with a compact table approximately like:
+
+| Source/context | Documented physical correctness problem | Documented response/control | Evidence role | Not established |
+|---|---|---|---|---|
+| Thomas 1865 | inertia overrun; simultaneous carry load; dependent carry order | moderation/full-position carry relation/successive phasing | H/E1 patent | measured speed/load/failure envelope; universal production geometry |
+| Odhner 1921 | rapid-rotation transfer-arm displacement/miscalculation | patent-specific transfer control | H/E1 patent | production failure rate/safe RPM/universal Odhner geometry |
+| Talamini/Marchant 1932 | carry-created crossings need later rotary opportunities | displaced/overlapped carry opportunities | H/E1 patent | Thomas geometry; universal production implementation |
+| Bush ca.1930 frontlash unit | backlash in a drive between adjacent unit shafts | frontlash compensation unit | H/E1 surviving/catalogued object | numerical backlash, residual error, exact full-machine placement/wiring |
+| repository comparison | make error-control responsibility inspectable | typed source-separated cards/table only | P | reliability probability or physics simulation |
+
+The conclusion should make the conceptual distinction explicit:
+
+```text
+mathematically correct relation
+!=
+physically guaranteed transmission
+```
+
+but must not imply all mechanical computers share one failure mechanism.
 
 ---
 
-# Part D — docs, verification, and bounded cleanup
+# Part B — deepen `research/differential-analyzer.md`
+
+Update the existing note rather than creating a competing Differential Analyzer source map.
+
+Required changes:
+
+- add the identified frontlash unit(s) with catalog/record IDs and the museum-described backlash-compensation role;
+- distinguish **integration mathematics**, **shaft transmission**, **backlash compensation**, and **output tracing** as separate responsibilities;
+- correct any stale blanket statement that Smithsonian pages are inaccessible if they are now directly inspectable in your environment; if only some routes fail, record the exact route limitation instead;
+- preserve the current P/M serialized browser phases as inspection order only;
+- keep torque amplification, physical error magnitude, slip/drift, exact shaft routing, scale factors, and timing open unless actually sourced.
+
+Do not modify the numerical continuous-integrator mechanism merely because physical backlash exists. The current integrator is an ideal P/M mathematical/functional model; this slice is about evidence and responsibility boundaries, not injecting fake error.
+
+---
+
+# Part C — typed provenance + public comparison
+
+## C1. Typed data
+
+Create an appropriately named typed source/comparison module under `src/exhibits/`, for example:
+
+```text
+src/exhibits/mechanical-error-control/
+```
+
+Reuse existing evidence/provenance interfaces where practical instead of inventing a parallel evidence system.
+
+Include at least separate profiles for:
+
+1. Thomas 1865 rapid-motion / carry-load / sequential-phasing context;
+2. Valentin Odhner US1377269A rapid-rotation transfer context;
+3. Talamini/Marchant US1867603A scheduling context if needed to keep rotary improvement separate;
+4. Bush Differential Analyzer frontlash unit `1983.3002.04` / `nmah_693235`.
+
+Each profile must expose in text/state form:
+
+- stable unique id;
+- machine/source/date context;
+- claim type and evidence strength;
+- exact source URL;
+- **error/failure class** (for example `inertia/load`, `carry scheduling`, `backlash/transmission` — names are yours but keep distinctions);
+- documented problem;
+- documented control responsibility;
+- explicit `notEstablished` boundary.
+
+Do not add pseudo-quantitative reliability fields.
+
+## C2. Tests
+
+Add focused tests proving at least:
+
+- IDs are unique;
+- all H/R profiles have source, evidence strength, documented problem/control, and non-empty `notEstablished`;
+- the Bush profile contains the exact Smithsonian catalog/record context and identifies **backlash compensation** rather than torque amplification;
+- Thomas and Odhner/Talamini profiles retain their own source URLs and are not relabeled as one mechanism family;
+- at least three distinct error/failure classes remain visible in the comparison;
+- no profile claims measured probability, safe RPM, tolerance magnitude, or residual error;
+- any P comparison layer is not mislabeled H/E1.
+
+## C3. Public teaching surface
+
+Add a compact bilingual public comparison that a visitor can discover without reading research Markdown.
+
+Preferred option if routing/nav changes are small:
+
+```text
+#/mechanical-error-control
+```
+
+If a new route creates disproportionate churn, integrate a clearly discoverable section into `#/about` or `#/continuous` and cross-link from the carry lesson. Do not spend the slice redesigning navigation.
+
+The public view should let the visitor answer:
+
+```text
+Thomas: what could go physically wrong with carry/load/order?
+Odhner/Talamini: what could go wrong under rotary carry timing/scheduling?
+Bush: what does backlash between mechanical transmission stages require?
+Why does none of this justify a random “gear failure probability” animation?
+```
+
+Prefer source cards + a simple responsibility matrix over decorative machinery.
+
+No motion is required. No meaning may depend only on color.
+
+---
+
+# Part D — documentation and verification
 
 After Parts A–C are real:
 
-- update `STATUS.md` with the stepped-drum carry provenance/revision boundary;
-- update `TODO.md` only if this completed slice belongs in the short queue;
-- update the carry row in `docs/REPRESENTATION_AND_PROTOCOL.md` to include Thomas 1865 without collapsing it into the Odhner row;
-- update `docs/TEACHING_PATH.md` so visitors can discover the stepped-drum/rotary carry comparison;
-- update `research/carry-is-the-hard-part.md` with a concise pointer and the cross-family lesson;
-- update `research/multiplication-mechanisms.md` only where the stepped-drum carry evidence changes the current mechanism comparison;
-- update only relevant carry/reliability items in `docs/RESEARCH_GAPS.md`;
-- update `docs/VERIFICATION.md` with actual baseline/final counts and commands run;
-- README only if needed for discoverability.
+- update `STATUS.md` with the new mechanical-error-control provenance/comparison and the Bush frontlash boundary;
+- update `TODO.md` only if the short queue benefits from a completed line / next evidence target;
+- update Priority 8 and related Differential Analyzer items in `docs/RESEARCH_GAPS.md` so already-completed evidence is not still listed as missing;
+- add a concise error-control/responsibility row or section to `docs/REPRESENTATION_AND_PROTOCOL.md` without flattening distinct machine families;
+- update `docs/TEACHING_PATH.md` so the public comparison is discoverable;
+- update `docs/VERIFICATION.md` with actual baseline/final test counts and commands run;
+- README only if needed for route/discoverability;
+- do not broaden this into a general history of reliability engineering.
 
-If there is substantial time left after all acceptance criteria pass, improve test/replay/evidence-card accessibility and bilingual text-state visibility. Do **not** start a new machine family or reliability simulation.
+If substantial time remains after all acceptance criteria pass, use it to improve source-location precision, test coverage, accessibility, bilingual text-state visibility, or to inspect a legitimate Bush 1931 facsimile. Do **not** start a stochastic reliability model or a new machine family.
 
 # Acceptance
 
@@ -278,56 +267,42 @@ npm run build
 git diff --check
 ```
 
-Perform a local browser smoke check for `#/visible-carry` in English and Chinese if the established tooling makes that practical. Record exactly what was checked; do not claim a browser run you did not perform.
+If public UI changes, perform local browser smoke in English and Chinese for the new/changed surface plus a quick regression check of `#/visible-carry` and `#/continuous`. Record exactly what was checked.
 
-The finished slice must let a visitor/test answer all of these:
+After push:
 
-1. Why can't the 1820 patent simply be treated as the geometry of later commercial Thomas machines?
-2. What rapid-motion overrun problem does the 1865 patent describe?
-3. What older simultaneous-carry-load failure does the 1865 `Retenues` section say could produce false results?
-4. What does the 1865 patent explicitly say about successive phasing of stepped cylinders and carries occurring one after another?
-5. How is that source-specific Thomas scheduling evidence similar in dependency shape—but mechanically distinct from—the Odhner/Talamini rotary scheduling evidence already in the repository?
-6. What does the 1880 patent's 20-part -> 10-part carry simplification prove, and why is that not proof of production adoption?
-7. Does the UI keep H/E1 patent claims, institutional object claims, R specialist revision history, and P/M ordinal teaching state visibly separate?
-
-# Evidence boundaries
-
-- decimal carry arithmetic: **M**;
-- repository ordinal dependency events/slots: **P/M**;
-- Thomas 1820, 1865, Thomas de Bojano 1880 patent text: **H/E1** for the described patent mechanisms/problems only;
-- Smithsonian identified-object/revision statements: **H/E2** institutional evidence at catalog precision;
-- specialist production/revision interpretation from Arithmometre.org: **R** with a defensible non-E1 strength; do not present it as patent fact;
-- patent proposal != production adoption;
-- earliest surviving object != 1820 patent drawing;
-- Thomas 1865 staggered stepped cylinders != Odhner/Marchant rotary carry spiral geometry;
-- do not infer exact historical tooth angles, timing in milliseconds, crank RPM, torque, spring constants, contact loads, materials, tolerance stack, wear life, lubrication interval, production field-failure rate, or universal performance from these sources.
+- confirm remote `main` contains your commit;
+- if CI completes during the run, record its result; otherwise do not claim it passed yet;
+- if Pages deployment completes during the run, you may record the live route; otherwise do not claim the new route is already deployed;
+- stop after the coherent commit/push. Do not self-assign the next task.
 
 # Stop conditions
 
-Stop and record a blocker rather than guessing if:
+Stop and leave a clear blocker note rather than guessing if:
 
-- a source-specific Thomas claim cannot be located in the cited text/figure context;
-- implementation would require inventing missing linkage geometry or numerical mechanical parameters;
-- reusing/refactoring the ordinal scheduler risks changing existing carry semantics substantially;
-- a conflicting stepped-drum carry implementation/source map already landed on remote `main`;
-- the evidence is insufficient to separate patent proposal from production revision for a claim the UI would otherwise make.
+- a source is inaccessible and the claim would require uninspected detail;
+- the Smithsonian frontlash record cannot be verified and no equivalent institutional source is available;
+- implementation would require inventing full-machine shaft placement/wiring;
+- a proposed UI would imply that Thomas, Odhner, and Bush used one shared physical error-control mechanism;
+- meaningful progress would require numerical friction/torque/backlash parameters that are not sourced;
+- a conflicting implementation lands on remote `main`.
 
-If one secondary/specialist source is inaccessible, continue with the primary patent + Smithsonian boundary and mark the production-adoption question open rather than blocking the whole slice.
+The lack of a Bush 1931 full facsimile is **not** by itself a blocker; preserve that as an open evidence boundary and proceed with directly inspected object records.
 
 # Git discipline
 
 - remote `main` is authoritative;
 - fetch/pull before work;
-- inspect current code/tests before creating parallel abstractions;
+- inspect current modules/tests before creating parallel abstractions;
 - one coherent implementation/research checkpoint;
 - run all acceptance commands;
 - inspect diff for unrelated changes;
-- update status/verification only after tests pass;
-- commit and push to the repository's normal remote path;
+- update status/verification only after checks pass;
+- commit and push;
 - after push, stop and wait for the next `CURRENT_AGENT_TASK.md` revision.
 
 Suggested commit subject:
 
 ```text
-feat: ground stepped-drum carry evolution
+feat: map mechanical error-control responsibilities
 ```
