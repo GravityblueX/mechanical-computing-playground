@@ -16,7 +16,7 @@ An arrow means “influences” by default, not “these two physical parts are 
 ## Visitor route
 
 1. **Carry / 进位** — supermarket total `¥99 → ¥100`; observe the behavior, then distinguish the functional carry arrow from an unknown real linkage.
-2. **Finite differences / 有限差分** — predict square-display box counts; distinguish the mathematical column update from Difference Engine hardware.
+2. **Finite differences / 有限差分** — generate square/cubic values, then step a separate P/M path from calculated value to check-copy and master/stereotype output roles; distinguish mathematics, historical drawings/objects, modern reconstruction, and open printer geometry.
 3. **Multiplication / 乘法** — decompose a warehouse order into ones, tens, turns, and shifts; do not read the lanes as a cutaway.
 4. **Operator division / 操作者除法** — build `8478 ÷ 314 = 27` from repeated subtraction, an overshoot, add-back correction, quotient counting, and carriage shift; the P/M events are not historical machine geometry.
 5. **Controls and interlocks / 控制与互锁** — change a setting, begin a crank cycle, observe setting lockout, attempt an invalid change, and return home; the P/M lock state is not Odhner or Curta geometry.

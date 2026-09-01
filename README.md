@@ -190,9 +190,9 @@ machines/<name>/
 
 ### Finite Difference
 
-通过平方数/立方数 preset 展示恒定高阶差分如何把多项式制表变成重复加法。
+通过平方数/立方数 preset 展示恒定高阶差分如何把多项式制表变成重复加法；`#/finite-difference` 还把“数值已计算”与“检查副本/母版输出角色”分开单步呈现。
 
-数学模型与 Babbage 具体机械时序必须分开描述。
+数学模型、Babbage 设计、1991/2002 现代复原、Scheutz 实际建成的打印差分机与本仓 P/M 输出流必须分开。来源地图：[`research/difference-engine-source-map.md`](research/difference-engine-source-map.md)。
 
 ### Multiplication Compare
 

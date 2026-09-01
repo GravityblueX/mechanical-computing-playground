@@ -1,6 +1,6 @@
 # Current Status
 
-Last reconciled on 2026-09-01 after the continuous-mechanics provenance, replay, and cross-machine representation slice.
+Last reconciled on 2026-09-01 after the Difference Engine provenance, hardened replay, and tabular-output slice.
 
 This file is the **current-state authority** for the repository. `ROADMAP.md` describes where the project should go; `IMPLEMENTATION_PLAN.md` is still useful as a dependency/design specification, but many of its checkboxes predate later implementation and must not be treated as the live task ledger.
 
@@ -13,7 +13,7 @@ This file is the **current-state authority** for the repository. `ROADMAP.md` de
 - GitHub Actions CI and a Pages deployment workflow.
 - Deterministic state/event/replay primitives under `src/core/`.
 - Golden carry fixtures under `fixtures/carry/`.
-- The latest local verification (`docs/VERIFICATION.md`, 2026-09-01 UTC+8) reports typecheck, 108 tests across 12 files, production build, diff check, and a local continuous-route smoke check passing.
+- The latest local verification (`docs/VERIFICATION.md`, 2026-09-01 UTC+8) reports typecheck, 128 tests across 12 files, production build, diff check, and a local finite-difference/output-route smoke check passing.
 
 Remote CI run `33437862103` passed for the previous operator-division checkpoint `7bebcea2d187f0ed2411de4098c846963df8b32a`. This status still does **not** substitute for CI on later commits.
 
@@ -22,7 +22,8 @@ Remote CI run `33437862103` passed for the previous operator-division checkpoint
 - decimal wheel;
 - carry chain;
 - carriage shift;
-- difference-column / finite-difference stepping;
+- hardened difference-column / finite-difference stepping with state validation, derived arithmetic checks, fail-closed event replay, and row/output consistency;
+- deterministic Difference Engine tabular-output teaching flow separating calculated values, persistent check-copy, and master/stereotype output roles;
 - revolution counter;
 - stepped-drum conceptual model;
 - pinwheel conceptual model;
@@ -41,7 +42,7 @@ These are not all historical geometric reconstructions. Several intentionally mo
 The current browser shell contains non-empty routes or views for:
 
 - visible carry;
-- finite differences;
+- interactive finite differences plus a separately stepped calculation→persistent-output responsibility flow;
 - interactive multiplication comparison with event/cycle stepping for direct multiplication;
 - interactive operator-division procedure for `8478 ÷ 314` with visible overshoot/correction;
 - interactive setting–crank interlock lesson with a visible blocked setting attempt;
@@ -87,6 +88,7 @@ The most important remaining gaps are:
 - `research/curta-source-map.md` now maps US 2,525,352 figures/architecture and specialist-hosted operator material, while exact manual edition/page/facsimile and production Type I/II revision mapping remain open;
 - `research/analytical-engine-information-flow.md` now maps Menabrea/Lovelace, Charles and H. P. Babbage publications, catalogued Babbage Papers drawings, Walker reconstruction choices, and the repository's P/M boundary; exact facsimile/page mapping and source-specific geometry remain open;
 - `research/differential-analyzer.md` now separates Bush 1931 publication metadata, Smithsonian surviving component roles, Shannon's interpretation path, later machine generations, and the repository P/M chain; full facsimile/page/figure inspection and physical geometry remain open;
+- `research/difference-engine-source-map.md` now separates Difference Engine No. 1 design/fragment, No. 2 design and 1991/2002 reconstruction, BAB/A/173–176 drawing records, and built Scheutz printing engines; drawing-level geometry/timing and inaccessible Smithsonian detail remain open;
 - `research/simulator-matrix.md` now records a bounded prior-art/reuse matrix, but several third-party license, stepping, and maintenance fields remain explicitly unverified;
 - operator-driven division, generic correction, and a generic setting–crank interlock now exist, while source-specific subtraction geometry, complement procedures, zeroing, and machine-specific interlocks/operator-error prevention remain underdeveloped;
 - `docs/REPRESENTATION_AND_PROTOCOL.md` now compares representation and operator protocol across six implemented lessons; output/audit-trail depth, commercial context, reliability/torque/tolerance, and source-specific geometry remain future work.
@@ -116,8 +118,8 @@ Historical/reconstruction claims then receive `E1–E4` evidence strength separa
 ## Current highest-priority work
 
 1. **Deepen subtraction/control provenance**: complement arithmetic, source-specific mode/counter behavior, zeroing, correction, and machine-specific interlocks without generalizing across families.
-2. **Upgrade the remaining Difference Engine source map**, and deepen Differential Analyzer facsimile/page/figure anchors before any source-specific geometry.
-3. **Deepen cross-machine comparison layers** beyond the completed representation/protocol table: output/audit trail and eventually reliability/torque/tolerance when evidence supports it.
+2. **Deepen Difference Engine and Differential Analyzer facsimile/page/figure anchors** before any source-specific geometry; the generation/source maps now exist.
+3. **Deepen cross-machine comparison layers** beyond representation/protocol and the new Difference Engine output case: broader output/audit trail and eventually reliability/torque/tolerance when evidence supports it.
 4. **Only then deepen source-specific geometry/animation.** Do not reward visual detail unsupported by source detail.
 
 ## External publishing state

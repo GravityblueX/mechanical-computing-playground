@@ -1,5 +1,26 @@
 # Verification record
 
+## 2026-09-01 — Difference Engine provenance and output contract
+
+The pre-edit remote-main baseline was 108 tests across 12 files. This slice hardened difference-column state/event/replay validation, added a tested P/M flow from generated table value to persistent check-copy and master/stereotype output roles, and mapped Difference Engine No. 1, Difference Engine No. 2 design/reconstruction, BAB/A/173–176 drawing records, and built Scheutz engines without claiming printer geometry.
+
+- `npm run typecheck` — pass
+- `npm test -- --run` — pass, 128 tests across 12 files
+- `npm run build` — pass
+- `git diff --check` — pass
+
+Local browser smoke against Vite:
+
+- square preset remained at `0,1,2` columns and generated `1` after one arithmetic crank;
+- the new output state started with no calculation-ready/check-copy/master state;
+- stepping exposed calculation-ready first, then persistent check-copy `1`, then master/stereotype role `1`;
+- reset removed all derived output artifacts without changing the arithmetic result;
+- square/cubic preset controls rebuilt the output source coherently;
+- M, H/E1, R, H, P/M and open boundaries remained readable in Chinese and English;
+- no desktop horizontal overflow was observed.
+
+No deployment check was performed for this not-yet-pushed commit; no claim that this upgraded route is already live is made.
+
 ## 2026-09-01 — continuous mechanics provenance and replay
 
 The post-hardening-PR baseline was 96 tests across 11 files. This slice replaced the minimal Euler helper with a validated P/M independent/input/integrated-quantity model, ordered observation/coordinate/integration events, fail-closed action/event boundaries, and hardened replay. It added an explicit A+B→integrator→tracer teaching flow, a source/generation map for Differential Analyzer evidence, and the required six-family representation/protocol comparison.
