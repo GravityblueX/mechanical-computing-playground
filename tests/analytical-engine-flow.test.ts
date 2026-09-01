@@ -74,9 +74,13 @@ describe('Analytical Engine P/M information-flow trace', () => {
     changed.fixture.a = 3;
     expect(() => replayAnalyticalFlow(changed)).toThrow(/fixture\/event mismatch/);
 
-    const extra = clone(createAnalyticalFlowTrace()) as AnalyticalFlowTrace & { fixture: AnalyticalFlowTrace['fixture'] & { note: string } };
-    extra.fixture.note = 'not part of the fixture contract';
+    const extra = clone(createAnalyticalFlowTrace()) as AnalyticalFlowTrace & { fixture: AnalyticalFlowTrace['fixture'] & { note?: string } };
+    extra.fixture.note = undefined;
     expect(() => replayAnalyticalFlow(extra)).toThrow(/unsupported fields/);
+
+    const symbol = clone(createAnalyticalFlowTrace());
+    Object.defineProperty(symbol.fixture, Symbol('unknown'), { enumerable: true, value: undefined });
+    expect(() => replayAnalyticalFlow(symbol)).toThrow(/unsupported fields/);
   });
 
   it('validates the fixture before unrelated event and final-state corruption', () => {
@@ -118,6 +122,24 @@ describe('Analytical Engine P/M information-flow trace', () => {
     trace.fixture.d = 6;
 
     expect(() => stateAtAnalyticalEvent(trace, 0)).toThrow(/fixture\/event mismatch/);
+
+    const finalState = clone(createAnalyticalFlowTrace());
+    finalState.finalState.output = 49;
+    expect(() => stateAtAnalyticalEvent(finalState, 0)).toThrow(/fixture\/final state mismatch/);
+  });
+
+  it('rejects a null fixture before consuming the trace', () => {
+    const trace = clone(createAnalyticalFlowTrace());
+    (trace as unknown as { fixture: null }).fixture = null;
+
+    expect(() => replayAnalyticalFlow(trace)).toThrow('fixture must be an object');
+  });
+
+  it.each([Number.NaN, Number.POSITIVE_INFINITY, Number.NEGATIVE_INFINITY])('rejects non-finite fixture value %s', (value) => {
+    const trace = clone(createAnalyticalFlowTrace());
+    trace.fixture.a = value;
+
+    expect(() => replayAnalyticalFlow(trace)).toThrow('a must be a safe integer');
   });
 
   it('requires two Mill operands before operation selection', () => {

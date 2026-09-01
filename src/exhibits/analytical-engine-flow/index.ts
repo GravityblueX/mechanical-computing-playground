@@ -58,7 +58,12 @@ function semanticallyEqual(left: unknown, right: unknown): boolean {
   return JSON.stringify(canonicalize(left)) === JSON.stringify(canonicalize(right));
 }
 function normalizeFixture(fixture: Readonly<AnalyticalFixture>): AnalyticalFixture {
-  if (fixture === null || typeof fixture !== 'object') throw new InvalidAnalyticalFlowError('fixture must be an object');
+  if (fixture === null || typeof fixture !== 'object' || Array.isArray(fixture)) throw new InvalidAnalyticalFlowError('fixture must be an object');
+  const supportedKeys = new Set<PropertyKey>(['a', 'b', 'c', 'd']);
+  const hasUnknownEnumerableKey = Reflect.ownKeys(fixture).some(
+    (key) => Object.prototype.propertyIsEnumerable.call(fixture, key) && !supportedKeys.has(key),
+  );
+  if (hasUnknownEnumerableKey) throw new InvalidAnalyticalFlowError('fixture contains unsupported fields');
   const normalized = { a: fixture.a, b: fixture.b, c: fixture.c, d: fixture.d };
   safe(normalized.a, 'a'); safe(normalized.b, 'b'); safe(normalized.c, 'c'); safe(normalized.d, 'd');
   return normalized;
@@ -159,14 +164,14 @@ function fixtureDerivedTrace(trace: Readonly<AnalyticalFlowTrace>): AnalyticalFl
   if (!semanticallyEqual(trace.fixture, canonical.fixture)) throw new InvalidAnalyticalFlowError('fixture contains unsupported fields');
   if (!semanticallyEqual(trace.initialState, canonical.initialState)) throw new InvalidAnalyticalFlowError('initial state does not match fixture-derived trace');
   if (!semanticallyEqual(trace.events, canonical.events)) throw new InvalidAnalyticalFlowError('fixture/event mismatch');
+  if (!semanticallyEqual(trace.finalState, canonical.finalState)) throw new InvalidAnalyticalFlowError('fixture/final state mismatch');
   return canonical;
 }
 
 export function replayAnalyticalFlow(trace: Readonly<AnalyticalFlowTrace>): AnalyticalFlowState {
-  const canonical = fixtureDerivedTrace(trace);
+  fixtureDerivedTrace(trace);
   const replayed = trace.events.reduce(reduceAnalyticalFlowEvent, structuredClone(trace.initialState));
   if (!semanticallyEqual(replayed, trace.finalState)) throw new InvalidAnalyticalFlowError('replay final state mismatch');
-  if (!semanticallyEqual(trace.finalState, canonical.finalState)) throw new InvalidAnalyticalFlowError('fixture/final state mismatch');
   return replayed;
 }
 

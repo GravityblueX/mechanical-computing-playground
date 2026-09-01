@@ -13,7 +13,7 @@ This file is the **current-state authority** for the repository. `ROADMAP.md` de
 - GitHub Actions CI and a Pages deployment workflow.
 - Deterministic state/event/replay primitives under `src/core/`.
 - Golden carry fixtures under `fixtures/carry/`.
-- The latest local verification (`docs/VERIFICATION.md`, 2026-09-02 UTC+8) reports typecheck, 301 tests across 21 files, focused and external adversarial replay checks, production build, actionlint, and diff check passing.
+- The latest local verification (`docs/VERIFICATION.md`, 2026-09-02 UTC+8) reports typecheck, 305 tests across 21 files, focused and external adversarial replay checks, production build, actionlint, and diff check passing.
 
 Remote CI run `33437862103` passed for the previous operator-division checkpoint `7bebcea2d187f0ed2411de4098c846963df8b32a`. This status still does **not** substitute for CI on later commits.
 
@@ -43,7 +43,7 @@ Remote CI run `33437862103` passed for the previous operator-division checkpoint
 - typed output-contract profiles separating identified register-only/printing objects, primary total/subtotal patent semantics, and Difference Engine persistent-output roles;
 - generic continuous integrator with independent/input/integrated quantities, P/M inspection interval, ordered observation/advance events, safe numeric validation, and action-derived replay binding actions, cycle ownership, ordered events and final state;
 - continuous-flow teaching chain with explicit adder relation and tracer-output boundary;
-- Analytical Engine P/M information-flow trace with fixture-derived initial/event/final provenance, semantic object-key handling, strict event-array order, and the same validation in full replay and event stepping;
+- Analytical Engine P/M information-flow trace with strict enumerable fixture fields, fixture-derived initial/event/final provenance, semantic object-key handling, strict event-array order, and the same final-state validation in full replay and event stepping;
 - shared mechanism core and trace/replay support.
 
 These are not all historical geometric reconstructions. Several intentionally model functional behavior only.

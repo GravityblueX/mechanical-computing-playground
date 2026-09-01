@@ -50,12 +50,14 @@ The exact parent baseline was `846c912a6140a672e09ed6ecbcb51ac2af7dbafa`. Its An
 
 Replay and event stepping now derive the canonical initial state, ordered events and final state from a normalized safe-integer fixture. They reject fixture-only changes, alternate-fixture event/final substitution, non-canonical initial state, extra fixture/event fields, and event-array reordering. Recursive canonicalization keeps object-member insertion order semantically irrelevant without weakening ordered arrays. The adjacent continuous-flow and Difference Engine output paths were audited for scope only and were not changed.
 
+Follow-up independent review closed two remaining fail-open edges: event stepping now validates the recorded final state before returning any partial state, and fixture schema validation inspects enumerable string and Symbol keys before canonical comparison, so an unknown field with value `undefined` cannot disappear during canonicalization. Regression coverage also rejects null fixtures and `NaN`/positive-infinity/negative-infinity fixture values.
+
 - `npm run typecheck` under Node 22 — pass
-- `npm test -- --run` under Node 22 — pass, 301 tests across 21 files
+- `npm test -- --run` under Node 22 — pass, 305 tests across 21 files
 - `npm run build` under Node 22 — pass
 - `actionlint 1.7.12` — pass
 - `git diff --check` — pass
-- focused Analytical Engine regression — 21 tests passed
+- focused Analytical Engine regression — 25 tests passed
 - external fixture-provenance adversarial harness — 8 checks passed
 
 No browser smoke was performed because the generated fixture, displayed trace, route and rendering output are unchanged. No deployment check was performed for this not-yet-pushed candidate commit.
