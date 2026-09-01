@@ -1,6 +1,6 @@
 # Current Status
 
-Last reconciled on 2026-09-02 after binding decimal-register replay to its recorded action and complete trace, following the Scheutz British-patent 2214/2216 identity audit.
+Last reconciled on 2026-09-02 after grounding the Millionaire operator/control protocol while preserving the direct trace as P/M.
 
 This file is the **current-state authority** for the repository. `ROADMAP.md` describes where the project should go; `IMPLEMENTATION_PLAN.md` is still useful as a dependency/design specification, but many of its checkboxes predate later implementation and must not be treated as the live task ledger.
 
@@ -85,7 +85,7 @@ This remains a **counterfactual pedagogical machine**, not a historical reconstr
 - `docs/EVIDENCE_POLICY.md` now separates claim type (`M/H/R/P`) from historical evidence strength (`E1–E4`).
 - `docs/RESEARCH_GAPS.md` provides a prioritized mechanism/research queue.
 - `research/carry-is-the-hard-part.md` now uses Pascaline sautoir and Comptometer/key-driven carry as concrete comparison cases.
-- `research/multiplication-mechanisms.md` now covers repeated addition, stepped drum, pinwheel, and Otto Steiger / Millionaire direct multiplication.
+- `research/multiplication-mechanisms.md` now directly anchors Steiger US558,913's multiplier-lever/table-control and one-complete-turn-per-multiplier-figure protocol, the patent's non-universal left-starting convenience, and identified NMAH lever-set controls/registers; it separately preserves the repository's `7 → shift → 2` order and generated lookup table as P/M.
 - `research/key-driven-computation.md` opens the Comptometer-style `keypress → accumulate` track.
 - `research/finite-difference-design.md` now separates mathematical facts from Babbage-specific historical claims.
 - `docs/PRIOR_ART.md`, `docs/STRUCTURE_EVIDENCE.md`, README, ROADMAP, TODO, and AGENTS have been reconciled with the current implementation and evidence policy.

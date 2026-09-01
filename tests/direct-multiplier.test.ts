@@ -229,6 +229,14 @@ describe('direct multiplication functional model', () => {
       claimType: 'P',
     });
     expect(comparison.paths.directMultiplication.multiplicationTableWork).toContain('pre-encoded multiple');
+    expect(comparison.historicalProtocolEvidence.patent).toMatchObject({ claimType: 'H', evidenceStrength: 'E1', source: expect.stringMatching(/US 558,913.*pp\. 1–2, 5–6, 9/) });
+    expect(comparison.historicalProtocolEvidence.patent.supports).toMatch(/multiplier lever\/scale.*one complete crank rotation.*left-starting.*convenience/);
+    expect(comparison.historicalProtocolEvidence.patent.notEstablished).toMatch(/production-wide geometry.*timing.*universal multiplier-digit direction\/carriage protocol/);
+    expect(comparison.historicalProtocolEvidence.survivingControls).toMatchObject({ claimType: 'H', evidenceStrength: 'E1', source: expect.stringMatching(/MA\.328619.*MA\.323594.*MA\.333940/) });
+    expect(comparison.historicalProtocolEvidence.survivingControls.supports).toMatch(/0–9 multiplier control.*A\/M\/D\/S selector.*multiplier-or-quotient.*carriage-shift control/);
+    expect(comparison.historicalProtocolEvidence.repositoryModel).toMatchObject({ claimType: 'P/M' });
+    expect(comparison.historicalProtocolEvidence.repositoryModel.supports).toMatch(/select 7, operate, shift one decimal place, select 2, operate/);
+    expect(comparison.historicalProtocolEvidence.repositoryModel.notEstablished).toMatch(/historical production digit order.*automatic\/manual shift.*physical timing.*lookup table.*control plates/);
     expect(comparison.paths.steppedDrum.operatorRepetitions).toBe(9);
     expect(comparison.paths.pinwheel.operatorRepetitions).toBe(9);
   });

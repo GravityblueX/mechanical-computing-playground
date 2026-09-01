@@ -1,5 +1,23 @@
 # Verification record
 
+## 2026-09-02 — Millionaire operator/control protocol grounding
+
+The current-main baseline at `86700edf0b3613f9f8f34f7c5fbf9d1d5c929c27` passed typecheck and 360 tests across 21 files after the merged decimal-register replay hardening. Direct inspection of US 558,913 anchors the patented-design distinction: multiplication-table controlling plates, multiplier lever/scale selection, multiplicand setting/indication, and one complete crank rotation repeated for each multiplier figure. The patent's described form starts at the left of the multiplier but explicitly calls that arrangement a convenience and describes an alternate right-starting units/shift/tens ordering; it therefore does not historicalize the repository's right-to-left `7 → shift → 2` trace.
+
+Smithsonian API records for identified lever-set manual examples `MA.328619`, `MA.323594`, and `MA.333940` anchor the visible 0–9 multiplier control, A/M/D/S selector, operating crank, three register/window responsibilities, zeroing knobs, and carriage-shift button at object/catalog precision. Accession documentation `.03`–`.07` was resolved by role: `.03` operating instructions and `.04` descriptive leaflet have no exposed pages, `.05` is disassembly instructions, `.06` is a 1906 article, and `.07` is a later NBS newsletter. Powerhouse `263911` independently identifies the 1907 nine-page-plus-figures booklet as directions for taking the machine apart, not an operator manual. No readable primary lid instruction sheet was found in the bounded access check.
+
+The multiplication exhibit now visibly separates H/E1 patent/object evidence from the P/M deterministic trace. Its exact digit order, generated lookup table, shift semantics and event timing remain explicit non-claims.
+
+- `npm run typecheck` — pass
+- `npm test -- --run` — pass, 360 tests across 21 files
+- `npm run build` — pass
+- `git diff --check` — pass
+- focused direct-multiplier tests — 22 tests passed
+
+Bilingual browser smoke for `#/multiplication` and `#/about` was attempted, but the browser extension remained disconnected; no successful browser smoke is claimed.
+
+No deployment check was performed for this not-yet-pushed completion commit.
+
 ## 2026-09-02 — decimal-register action-derived replay provenance
 
 The exact current-main baseline `e19485647ee0dd02dee52d98b050e3adbe44379f` passed typecheck, 320 tests across 21 files, and a production build before the PR was rebased. The shared replay helper previously reconstructed only the recorded final state: a decimal trace could omit every reducer-level no-op `CRANK_BEGIN`, `CARRY_*`, and `CRANK_END` marker, reorder independent wheel steps, or detach action/cycle metadata while still being accepted whenever the retained wheel updates reached the recorded digits.

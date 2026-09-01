@@ -31,6 +31,7 @@
 - [x] Integrate PR #11 fixture-derived Analytical Engine replay atop action-bound direct multiplication and add bounded Type II BOM/drawing sheet identity.
 - [x] Systematically census Curta Type II service variants and map readable leaf/revision/control provenance without inventing replacement or production chronology.
 - [x] Reconcile Scheutz patent identity: period pages establish 2214 as an unrelated pump and 2216 as Scheutz while preserving the unexplained Smithsonian catalog wording.
+- [x] Ground Millionaire operator/control provenance from Steiger and identified NMAH objects while keeping the two-cycle `314 × 27` trace P/M.
 - [x] Harden operator-division quotient-nine/exact-zero causality and replay, then separate Curta facsimile controls from E3 division transcription without back-filling named-machine states.
 - [x] Ground Controlled-key incomplete-stroke responsibility in Turck 1921 and add a tested generic exactly-once key-stroke integrity/interlock lesson.
 - [x] Directly inspect the exposed Thomas 1868 register legend and add a tested generic independent result/revolution-register lifecycle lesson.

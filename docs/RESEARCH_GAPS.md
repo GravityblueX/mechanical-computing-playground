@@ -35,12 +35,12 @@ Archive images and object photographs are not self-interpreting geometry proof.
 
 ## Priority 1 — Multiplication architecture
 
-Current state: repeated addition, conceptual stepped-drum and pinwheel paths, and a tested Steiger/Millionaire-informed direct-multiplication P/M model now compare operator repetition with represented multiple selection for `314 × 27`.
+Current state: repeated addition, conceptual stepped-drum and pinwheel paths, and a tested direct-multiplication P/M model compare operator repetition with represented multiple selection for `314 × 27`; directly inspected US558,913 now anchors multiplier-figure selection plus one complete crank turn per figure and treats its left-starting order as a convenience, while identified NMAH lever-set objects anchor visible multiplier/mode/crank/register/zeroing/carriage controls.
 
 Remaining gaps:
 
 - source-specific Millionaire control-plate/cam/gearing geometry and model/revision mapping;
-- primary operating instructions;
+- readable primary operating-sheet/manual pages beyond the patent protocol and catalog-only lid-sheet/`.03` document identities;
 - measured torque, speed, wear, reliability, or comparative performance evidence.
 
 The existing two-cycle direct trace is a P/M count, not historical speed.

@@ -1,6 +1,6 @@
 # Multiplication mechanisms: repeated addition, stepped drum, pinwheel, and direct multiplication
 
-**Checked: 2026-09-01**
+**Checked: 2026-09-02**
 
 ## Question
 
@@ -145,6 +145,51 @@ Evidence:
 - Steiger patents: **E1** for the patented design language;
 - Smithsonian surviving-object / institutional description: **E1–E2**.
 
+### 5.1 US 558,913 operator protocol at patent precision
+
+Directly inspected patent facsimile: <https://patents.google.com/patent/US558913A/en>.
+
+- specification p. 1, lines 58–69 describes the essential controlling mechanism as a mechanical representative of the `0×0` through `9×9` multiplication table; paired recessed plates separately represent tens and units;
+- p. 2, lines 126–144 distinguishes product-registering from factor-indicating mechanisms and says multiplier lever `D` moves over multiplier scale `A²` to the desired figure; the factor indicator checks successive lever positions;
+- p. 5, lines 151–175 sets the multiplicand with the sliding studs and exposes it for checking;
+- p. 5, lines 176 onward says that after arranging the multiplicand, the multiplier lever is set to the **first figure at the left of the multiplier**, crank `K` is turned **one complete rotation**, and the process is repeated for each multiplier figure;
+- pp. 5–6 describes primary transfer of tens, a one-place relation before secondary transfer of units, and the register carriage/indicator dials;
+- p. 9, lines 40–64 says the carriage is shifted during each partial multiplication and explicitly calls starting from the left a convenience: a right-starting arrangement could instead transfer units first and shift one place right before tens.
+
+Thus “one operation per multiplier digit” has an H/E1 **operator-protocol analogue** in this patented design: one complete crank rotation follows each digit selection. The repository's `OPERATION_CYCLE` remains P/M: it is not a claim about elapsed time, effort, production speed, or every Egli revision. The patent itself also prevents one universal digit direction from being inferred—its left-starting arrangement is expressly described as a convenience.
+
+### 5.2 Identified surviving controls and documentation roles
+
+Smithsonian records directly describe these lever-set manual Millionaires:
+
+- `MA.328619` / `nmah_694184`, ca. 1904, ten setting levers;
+- `MA.323594` / `nmah_694169`, ca. 1909, eight setting levers;
+- `MA.333940` / `nmah_694185`, ca. 1909, ten setting levers.
+
+At catalog/object precision they expose a multiplier control selectable `0–9`, A/M/D/S operation selector, operating crank, set-number/`DIVISOR` windows, multiplier-or-quotient and result-or-dividend registers, zeroing knobs, decimal-marker positions, and a carriage-shift button. The records also identify an operating-instruction/table sheet inside the lid, but no readable sheet image was exposed in the API/catalog during this pass.
+
+Accession-linked documentation was resolved without conflating roles:
+
+- `MA.319929.03`: undated English Zurich/Fretz Brothers instructions for the four simple rules; identity/catalog description only because pages are not exposed;
+- `.04`: Morschhauser leaflet describing/illustrating a manual Millionaire; identity only;
+- `.05`: disassembly instructions, not an operator manual;
+- `.06`: *American Machinist*, 1 November 1906 article;
+- `.07`: later NBS newsletter/obituary, not an operating source.
+
+The Powerhouse `263911` object independently exposes the title **Directions to Follow When the Machine Is to Be Taken Apart**, nine pages plus five figure pages, written by Egli and printed by Fretz Brothers in 1907. Its visible identity confirms a disassembly booklet; it does not establish the multiplication procedure.
+
+### 5.3 Historical/P–M protocol crosswalk
+
+| Claim / step | Source/model | Direct support | Claim/evidence | Repository consequence | Not established |
+|---|---|---|---|---|---|
+| select multiplier digit | US 558,913, pp. 2, 5 | lever `D` and scale select the desired multiplication-table factor | H/E1 patented design | analogous to `MULTIPLIER_DIGIT_SELECTED` | exact production detent/control-plate geometry |
+| one complete operation per digit | US 558,913 p. 5 | complete crank rotation, repeated for every multiplier figure | H/E1 patented protocol | supports the conceptual one-cycle-per-digit contrast | speed, duration, torque, every Egli revision |
+| digit direction/place handling | US 558,913 pp. 5, 9 | described form starts left; patent calls this a convenience and describes an alternate right-starting transfer/shift ordering | H/E1 patented alternatives | repository may keep place shift explicit | repository's right-to-left `7`, shift, `2` order as historical production protocol |
+| visible controls/registers | NMAH `MA.328619`, `MA.323594`, `MA.333940` | identified object records list controls/windows/registers/shift/zeroing | H/E1 catalog/object precision | public comparison can name historical controls separately | hidden linkage, control timing, universal revision identity |
+| instruction/disassembly documents | NMAH `.03`–`.07`; Powerhouse `263911` | document identities/roles; no readable operating pages exposed | H/E1 catalog identity only | preserve operating-sheet content as open | procedure text not inspected |
+| `314 × 27`: select 7, operate, shift, select 2, operate | repository deterministic trace | selected multiples `2198`, `628`, shifted contribution `6280`, result `8478` | P/M | tested teaching state/transition/event model | exact historic digit direction, automatic/manual shift semantics, physical timing |
+| encoded lookup `0..9` | repository `multiplicationTable` | mathematical table generated in code | P/M informed by patent distinction | explains where table work lives | identity with recess depths, plates, cams or any production control block |
+
 ### Why this matters conceptually
 
 The information burden changes.
@@ -220,7 +265,7 @@ The current repository does not yet justify claims about:
 
 - exact stepped-drum tooth profiles for a particular Arithmometer revision;
 - exact Odhner pin geometry/timing for a particular serial/model;
-- Millionaire control-plate geometry as rendered in a future UI;
+- Millionaire control-plate geometry as rendered in a future UI, exact production correspondence to the patent's paired recess plates, or one universal multiplier-digit direction/carriage protocol;
 - comparative torque, speed, wear, or reliability from the simplified state models;
 - which architecture is universally “better.”
 
