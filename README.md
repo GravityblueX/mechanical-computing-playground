@@ -186,7 +186,7 @@ machines/<name>/
 
 用 `0099 + 1` 看见多级 carry，而不是数字瞬间变成 `0100`。
 
-`#/visible-carry` 在原有 `0099 + 1` 串行 P/M 事件下方新增来源分离比较：Pascal/Cnam/CMU、Felt 1887/1904、Smithsonian Model A，以及 Odhner US 514,725、Valentin Odhner US 1,377,269、Talamini/Marchant US 1,867,603。页面另显示三段严格递增的 P/M 序数进位槽；这些槽不是历史角度、毫秒、齿位、安全转速或失效概率。研究入口：[`research/carry-is-the-hard-part.md`](research/carry-is-the-hard-part.md)、[`research/carry-architecture-source-map.md`](research/carry-architecture-source-map.md)、[`research/rotary-carry-scheduling-source-map.md`](research/rotary-carry-scheduling-source-map.md)。
+`#/visible-carry` 在原有 `0099 + 1` 串行 P/M 事件下方比较 Pascal/Felt、Odhner/Talamini 与 Thomas 1820/1865/1880 的来源边界。页面用同一组三段递增 P/M 序数槽说明依赖顺序，同时明确 Thomas 1865 阶梯鼓错相不等于 Odhner/Marchant 旋转进位螺旋；这些槽不是历史角度、毫秒、齿位、安全转速或失效概率。研究入口：[`research/carry-is-the-hard-part.md`](research/carry-is-the-hard-part.md)、[`research/carry-architecture-source-map.md`](research/carry-architecture-source-map.md)、[`research/rotary-carry-scheduling-source-map.md`](research/rotary-carry-scheduling-source-map.md)、[`research/stepped-drum-carry-source-map.md`](research/stepped-drum-carry-source-map.md)。
 
 ### Finite Difference
 

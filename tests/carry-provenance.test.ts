@@ -5,7 +5,7 @@ describe('typed carry provenance dataset', () => {
   it('has unique IDs and all source-separated required profiles', () => {
     const ids = CARRY_EVIDENCE_PROFILES.map(profile => profile.id);
     expect(new Set(ids).size).toBe(ids.length);
-    expect(ids).toEqual(expect.arrayContaining(['pascal-avis', 'pascaline-cnam', 'pascaline-cmu-reconstruction', 'felt-us366945', 'felt-us762520', 'comptometer-model-a', 'odhner-us514725', 'odhner-us1377269', 'talamini-marchant-us1867603']));
+    expect(ids).toEqual(expect.arrayContaining(['pascal-avis', 'pascaline-cnam', 'pascaline-cmu-reconstruction', 'felt-us366945', 'felt-us762520', 'comptometer-model-a', 'odhner-us514725', 'odhner-us1377269', 'talamini-marchant-us1867603', 'thomas-1820-patent', 'thomas-1820-smithsonian', 'thomas-1865', 'thomas-de-bojano-1880', 'thomas-1880-revision-history']));
   });
   it('requires current two-axis evidence, source identity, roles, and open boundaries', () => {
     for (const profile of CARRY_EVIDENCE_PROFILES) {
@@ -48,6 +48,30 @@ describe('typed carry provenance dataset', () => {
     expect(profile.sourceLabel).toContain('Louis Talamini / Marchant');
     expect(profile.notEstablished.some(item => item.en.includes('universal 22 percent'))).toBe(true);
     expect(profile.notEstablished.some(item => item.en.includes('authorship by Odhner'))).toBe(true);
+  });
+  it('keeps the 1820 patent distinct from the earliest surviving object', () => {
+    expect(getCarryEvidenceProfile('thomas-1820-patent')).toMatchObject({ claimType: 'H', evidenceStrength: 'E1' });
+    const object = getCarryEvidenceProfile('thomas-1820-smithsonian');
+    expect(object).toMatchObject({ claimType: 'H', evidenceStrength: 'E2' });
+    expect(object.documentedRoles.some(item => item.en.includes('not identical to the 1820 patent drawings'))).toBe(true);
+  });
+  it('assigns successive phasing, rapid overrun, and older false results to Thomas 1865', () => {
+    const roles = getCarryEvidenceProfile('thomas-1865').documentedRoles.map(item => item.en).join(' ');
+    expect(roles).toContain('one after another'); expect(roles).toContain('one or two teeth'); expect(roles).toContain('false results');
+    expect(roles).not.toContain('spiral');
+  });
+  it('keeps the 1880 proposal separate from production interpretation', () => {
+    const patent = getCarryEvidenceProfile('thomas-de-bojano-1880'); const history = getCarryEvidenceProfile('thomas-1880-revision-history');
+    expect(patent).toMatchObject({ claimType: 'H', evidenceStrength: 'E1' });
+    expect(patent.documentedRoles.some(item => item.en.includes('20-part') && item.en.includes('10-part'))).toBe(true);
+    expect(patent.notEstablished.some(item => item.en.includes('production adoption'))).toBe(true);
+    expect(history).toMatchObject({ claimType: 'R', evidenceStrength: 'E3' });
+    expect(history.documentedRoles.some(item => item.en.includes('phantom'))).toBe(true);
+  });
+  it('does not collapse Thomas and Odhner/Talamini source identities', () => {
+    const thomas = CARRY_EVIDENCE_PROFILES.filter(profile => profile.id.startsWith('thomas'));
+    expect(thomas.every(profile => !/Odhner|Talamini|Marchant/.test(profile.sourceLabel))).toBe(true);
+    expect(getCarryEvidenceProfile('talamini-marchant-us1867603').sourceLabel).not.toContain('Thomas');
   });
   it('fails closed for unknown profile IDs', () => { expect(() => getCarryEvidenceProfile('bad' as never)).toThrow(/unknown carry evidence profile/); });
 });

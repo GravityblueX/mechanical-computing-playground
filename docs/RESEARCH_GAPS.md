@@ -17,13 +17,14 @@ Current state:
 - the visible-carry lesson compares those responsibilities without treating its P/M arrows/events as historical geometry;
 - key-driven carry replay now rejects altered, omitted, inserted, unknown, or final-state-mismatched trace data;
 - `research/rotary-carry-scheduling-source-map.md` separates Odhner US514725A baseline transfer, US1377269A's explicit rapid-rotation miscalculation risk, and Talamini/Marchant US1867603A staggered/phase-overlap improvement;
-- a tested direction-neutral P/M scheduler exposes strictly ordered transfer slots and fails closed on trace tampering.
+- a tested direction-neutral P/M scheduler exposes strictly ordered transfer slots and fails closed on trace tampering;
+- `research/stepped-drum-carry-source-map.md` now separates Thomas 1820 patent/object boundaries, 1865 overrun/sequential-phasing/simultaneous-load evidence, the 1880 simplification proposal, and non-E1 production interpretation.
 
 What remains:
 
 1. primary/facsimile Pascaline drawing anchors beyond the operational `Avis`;
 2. exact production-revision mapping between US762520A and surviving Model A mechanisms;
-3. stepped-drum accumulator-carry evidence distinct from the completed pinwheel/rotary patent chain;
+3. exact Thomas 1850/1851/1865 production mapping, factory instructions, direct mechanism measurements, and stronger 1880 adoption census;
 4. production-revision mapping for the rotary patents;
 5. source-specific force/contact-load, material, lubrication, tolerance, wear, safe-rate, and measured failure-envelope data before reliability modeling.
 
@@ -247,7 +248,7 @@ A useful exhibit would show that “output” is not always a number on a displa
 
 ## Priority 8 — Reliability, torque, tolerance, and wear
 
-This is a high-value but source-sensitive future line. US1377269A now provides one explicit H/E1 rapid-rotation/transfer-arm miscalculation risk and a wear-reduction design claim; US1867603A provides H/E1 spacing/capacity/speed reasoning plus a bounded ~22% experiment. The repository models only ordinal dependency—not reliability probability.
+This is a high-value but source-sensitive future line. US1377269A provides one explicit H/E1 rapid-rotation/transfer-arm miscalculation risk and a wear-reduction design claim; US1867603A provides H/E1 spacing/capacity/speed reasoning plus a bounded ~22% experiment. Thomas 1865 adds H/E1 dial overrun, simultaneous-load/plate-lift false-result, moderation and full-position conditioning claims. The repository models only ordinal dependency—not reliability probability.
 
 Questions:
 

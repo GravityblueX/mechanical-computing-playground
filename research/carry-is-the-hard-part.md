@@ -12,7 +12,7 @@ Why is a multi-digit mechanical register more than a row of ten-position wheels,
 - Claims about Pascaline and Comptometer mechanisms: **H**, with sources below.
 - The repository's `carry pending → carry propagated` event chain: **P/M** (pedagogical model with deterministic computational validation).
 
-See `docs/EVIDENCE_POLICY.md`. Exact Pascaline/Felt source separation lives in [`carry-architecture-source-map.md`](carry-architecture-source-map.md); Odhner-family rotary conditioning, rapid-rotation failure, and staggered opportunity evidence lives in [`rotary-carry-scheduling-source-map.md`](rotary-carry-scheduling-source-map.md).
+See `docs/EVIDENCE_POLICY.md`. Exact Pascaline/Felt source separation lives in [`carry-architecture-source-map.md`](carry-architecture-source-map.md); Odhner-family evidence lives in [`rotary-carry-scheduling-source-map.md`](rotary-carry-scheduling-source-map.md); Thomas revision, stepped-cylinder phasing, and simultaneous-load evidence lives in [`stepped-drum-carry-source-map.md`](stepped-drum-carry-source-map.md).
 
 ## 1. The abstract problem
 
@@ -120,7 +120,13 @@ The Odhner-family patent chain exposes a third problem distinct from Pascaline s
 
 The repository models only that last dependency with strictly increasing ordinal slots. Those slots are P/M—not historical angles, milliseconds, speeds, tooth locations, or failure probabilities.
 
-## 5. Carry and subtraction are coupled design choices
+## 5. Thomas stepped-drum carry: similar dependency, different mechanics
+
+Thomas's 1865 patent states that successively phased stepped cylinders make carries fall one after another and avoid errors. It separately identifies an older simultaneous-load failure: several vertical carry-lever loads could lift the dial plate, weaken engagement, and produce false results. The replacement uses horizontal conditioning, a moderation/Malta-cross relation, and springs intended to reach full positions.
+
+This resembles Talamini/Marchant only at the dependency level. Thomas describes stepped-cylinder phasing; Talamini describes displaced opportunities around an Odhner-type rotary actuator. The repository's integer slots are P/M and reproduce neither geometry. The 1880 Thomas de Bojano 20→10-part proposal is likewise a patent proposal, not evidence of production adoption.
+
+## 6. Carry and subtraction are coupled design choices
 
 The Pascaline example shows why subtraction belongs next to carry research. If the transfer mechanism is naturally one-directional, subtraction may be expressed using complements rather than by reversing the whole transfer train.
 
@@ -134,7 +140,7 @@ subtract = run add mechanism backward
 
 until a specific machine's mechanism/manual supports it.
 
-## 6. What the current code proves — and what it does not
+## 7. What the current code proves — and what it does not
 
 The current exhibit can prove that its own deterministic model:
 
@@ -153,12 +159,12 @@ It does **not** prove:
 
 Those require machine-specific evidence.
 
-## 7. Next research tasks
+## 8. Next research tasks
 
 1. Add primary/facsimile Pascaline drawing anchors beyond Pascal's operational `Avis`; that text does not describe sautoir geometry.
 2. Map US762520A to particular Model A production revisions only if manufacturing/object evidence supports it.
 3. Map US514725A/US1377269A/US1867603A to identified production revisions only with object/manufacturing evidence.
-4. Add a stepped-drum accumulator-carry comparison distinct from the now-sourced pinwheel/rotary path.
+4. Map Thomas 1850/1851/1865 production revisions and inspect factory instructions/direct measurements before source-specific geometry.
 5. Measure/source force, spring/contact load, wear, tolerance, lubrication and safe-rate/failure-envelope claims before reliability modeling.
 
 ## Project decision

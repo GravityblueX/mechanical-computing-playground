@@ -64,7 +64,7 @@ A multiplication still requires repeated cranks according to multiplier digits a
 
 Claim type: **H**.
 
-Evidence: museum object + institutional mechanism overview, **E1–E2**.
+Evidence: museum object + institutional mechanism overview, **E1–E2**. Carry is separately revision-sensitive: [`stepped-drum-carry-source-map.md`](stepped-drum-carry-source-map.md) records Thomas 1865's H/E1 successive cylinder phasing and simultaneous-load failure without treating those details as universal stepped-drum geometry.
 
 ### Repository abstraction
 

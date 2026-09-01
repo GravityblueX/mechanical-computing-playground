@@ -1,6 +1,6 @@
 # Current Status
 
-Last reconciled on 2026-09-01 after the rotary carry scheduling and reliability-evidence slice.
+Last reconciled on 2026-09-01 after the Thomas stepped-drum carry evolution slice.
 
 This file is the **current-state authority** for the repository. `ROADMAP.md` describes where the project should go; `IMPLEMENTATION_PLAN.md` is still useful as a dependency/design specification, but many of its checkboxes predate later implementation and must not be treated as the live task ledger.
 
@@ -13,7 +13,7 @@ This file is the **current-state authority** for the repository. `ROADMAP.md` de
 - GitHub Actions CI and a Pages deployment workflow.
 - Deterministic state/event/replay primitives under `src/core/`.
 - Golden carry fixtures under `fixtures/carry/`.
-- The latest local verification (`docs/VERIFICATION.md`, 2026-09-01 UTC+8) reports typecheck, 190 tests across 16 files, production build, diff check, and a bilingual visible-carry browser smoke check passing.
+- The latest local verification (`docs/VERIFICATION.md`, 2026-09-01 UTC+8) reports typecheck, 194 tests across 16 files, production build, diff check, and a bilingual visible-carry browser smoke check passing.
 
 Remote CI run `33437862103` passed for the previous operator-division checkpoint `7bebcea2d187f0ed2411de4098c846963df8b32a`. This status still does **not** substitute for CI on later commits.
 
@@ -33,7 +33,7 @@ Remote CI run `33437862103` passed for the previous operator-division checkpoint
 - generic operator-driven division with repeated subtraction, per-place quotient counts, overshoot, mandatory correction, carriage shift, and hardened replay;
 - generic setting–crank interlock with explicit lock/phase transitions, invalid-action rejection, and hardened replay;
 - typed control-provenance profiles preserving source/model, H/R claim type, E1–E4 strength, documented roles, and explicit not-established boundaries;
-- typed carry-provenance profiles separating Pascal/Cnam/CMU, Felt 1887/1904, Smithsonian Model A, Odhner US514725A, Valentin Odhner US1377269A, and Talamini/Marchant US1867603A contexts;
+- typed carry-provenance profiles separating Pascal/Felt, Odhner/Talamini, and Thomas 1820 patent/object, 1865, 1880 proposal, and R/E3 revision-history contexts;
 - generic deterministic printing ledger separating working accumulator state from structured persistent ITEM/SUBTOTAL/TOTAL lines, including subtotal retention, total clearing, replay, and tamper rejection;
 - typed output-contract profiles separating identified register-only/printing objects, primary total/subtotal patent semantics, and Difference Engine persistent-output roles;
 - generic continuous integrator with independent/input/integrated quantities, P/M inspection interval, ordered observation/advance events, safe numeric validation, and hardened replay;
@@ -46,7 +46,7 @@ These are not all historical geometric reconstructions. Several intentionally mo
 
 The current browser shell contains non-empty routes or views for:
 
-- visible carry with the existing interactive P/M chain, Pascaline/Felt/Model A profiles, and a separate bilingual rotary-carry section showing a three-slot ordinal P/M dependency beside three patent contexts;
+- visible carry with the existing interactive P/M chain, Pascaline/Felt profiles, one ordinal P/M schedule, and source-separated rotary versus Thomas stepped-drum carry/reliability sections;
 - interactive finite differences plus a separately stepped calculation→persistent-output responsibility flow;
 - interactive multiplication comparison with event/cycle stepping for direct multiplication;
 - interactive operator-division procedure for `8478 ÷ 314` with visible overshoot/correction;
@@ -88,7 +88,7 @@ The main weakness is no longer “there is no code.” It is that **historical/m
 
 The most important remaining gaps are:
 
-- carry maps now supply Pascal/Felt boundaries plus Odhner US514725A baseline transfer, US1377269A's explicit rapid-rotation miscalculation constraint, and Talamini/Marchant US1867603A staggered scheduling/phase-overlap evidence; production mapping, measured force/contact-load/material/lubrication/tolerance/wear/safe-rate/failure envelopes, stepped-drum carry, and source-specific geometry remain open;
+- carry maps now add Thomas 1820 patent/object separation, 1865 rapid overrun/sequential phasing/simultaneous-load false-result evidence, and the 1880 proposal versus R/E3 adoption boundary; exact Thomas and rotary production mapping, factory instructions/direct measurement, force/contact-load/material/lubrication/tolerance/wear/safe-rate/failure envelopes, and source-specific geometry remain open;
 - direct multiplication now has a tested pedagogical functional state/event model and a fourth comparison path, but no source-specific Millionaire geometry is claimed;
 - key-driven computation now has a tested generic P/M mechanism model, but simultaneous multi-column operation, correction, interlocks, and source-specific Comptometer geometry remain intentionally unmodeled;
 - `research/curta-source-map.md` now maps US 2,525,352 figures/architecture and specialist-hosted operator material, while exact manual edition/page/facsimile and production Type I/II revision mapping remain open;

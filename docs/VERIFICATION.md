@@ -1,5 +1,24 @@
 # Verification record
 
+## 2026-09-01 — Thomas stepped-drum carry evolution
+
+The pre-edit remote-main baseline was 190 tests across 16 files. This slice separated Thomas 1820 patent and surviving-object contexts, mapped Thomas 1865 rapid overrun, successive stepped-cylinder phasing, older simultaneous-load/false-result and replacement relationships, separated the Thomas de Bojano 1880 20→10-part proposal from R/E3 production interpretation, and reused the existing source-neutral ordinal P/M timeline for a cross-family visible-carry comparison.
+
+- `npm run typecheck` — pass
+- `npm test -- --run` — pass, 194 tests across 16 files
+- `npm run build` — pass
+- `git diff --check` — pass
+
+Local browser smoke against Vite:
+
+- the existing `0099 + 1` controls still stepped, completed to `0100`, exposed two carries, and reset;
+- the ordinal slots remained `0,1,2`, with explicit text that they are neither Thomas tooth phasing nor Odhner/Marchant spiral geometry;
+- Thomas 1820 patent, ca.1820 Smithsonian object, 1865 patent, 1880 patent proposal, and R/E3 revision interpretation rendered as separate cards;
+- the Thomas 1865 versus Talamini/Marchant 1932 distinction, older simultaneous-load false-result statement, and proposal-not-adoption boundary rendered in English and Chinese;
+- no desktop horizontal overflow was observed.
+
+No deployment check was performed for this not-yet-pushed commit; no claim that this upgraded comparison is already live is made.
+
 ## 2026-09-01 — rotary carry scheduling constraints
 
 The pre-edit remote-main baseline was 170 tests across 15 files. This slice separated US514725A baseline rotary transfer, US1377269A's rapid-rotation transfer-arm/miscalculation constraint, and Talamini/Marchant US1867603A's staggered opportunities/phase-overlap experiment; added a direction-neutral ordinal P/M scheduler with fail-closed replay; and exposed the scheduler plus three typed patent profiles below the existing visible-carry comparison.
