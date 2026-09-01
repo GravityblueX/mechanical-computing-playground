@@ -1,6 +1,6 @@
 export const OPERATOR_DIVISION_ID = 'operator-division';
 
-export type DivisionPhase = 'READY' | 'CORRECTION_REQUIRED' | 'COMPLETE';
+export type DivisionPhase = 'READY' | 'OVERSHOOT_PENDING' | 'CORRECTION_REQUIRED' | 'COMPLETE';
 
 export interface PendingOvershoot {
   offset: number;
@@ -21,7 +21,7 @@ export interface OperatorDivisionState {
   humanOperationCount: number;
   phase: DivisionPhase;
   currentContribution: number;
-  /** True after correction proves the current quotient place is complete. */
+  /** True after correction or exact zero proves the current quotient place is complete. */
   placeExhausted: boolean;
   pendingOvershoot: PendingOvershoot | null;
 }
@@ -82,7 +82,7 @@ export function createOperatorDivision(dividend: number, divisor: number, carria
     humanOperationCount: 0,
     phase: 'READY',
     currentContribution,
-    placeExhausted: false,
+    placeExhausted: dividend === 0,
     pendingOvershoot: null,
   };
 }
@@ -90,18 +90,24 @@ export function createOperatorDivision(dividend: number, divisor: number, carria
 function assertState(state: Readonly<OperatorDivisionState>): void {
   if (state.mechanismId !== OPERATOR_DIVISION_ID || state.divisor <= 0 || state.carriageOffset < 0 || !Number.isInteger(state.carriageOffset)) throw new InvalidDivisionStateError('invalid operator-division state');
   if (state.currentContribution !== contribution(state.divisor, state.carriageOffset)) throw new InvalidDivisionStateError('current contribution does not match divisor and offset');
-  if (state.quotientDigits.length <= state.carriageOffset || state.quotientDigits.some((digit) => !Number.isInteger(digit) || digit < 0 || digit > 9)) throw new InvalidDivisionStateError('invalid quotient register');
+  const correctionInFlight = state.phase === 'OVERSHOOT_PENDING' || state.phase === 'CORRECTION_REQUIRED';
+  const invalidDigit = state.quotientDigits.some((digit, offset) => {
+    const temporaryOvershootDigit = digit === 10 && correctionInFlight && offset === state.carriageOffset;
+    return !Number.isInteger(digit) || digit < 0 || (digit > 9 && !temporaryOvershootDigit);
+  });
+  if (state.quotientDigits.length <= state.carriageOffset || invalidDigit) throw new InvalidDivisionStateError('invalid quotient register');
 }
 
 export function transitionOperatorDivision(state: Readonly<OperatorDivisionState>, action: Readonly<DivisionAction>): { state: OperatorDivisionState; events: DivisionEvent[] } {
   assertState(state);
+  if (typeof action.cycleId !== 'string' || action.cycleId.length === 0) throw new InvalidDivisionStateError('division action requires a non-empty cycle id');
   const base = (sequence: number): BaseEvent => ({ mechanismId: OPERATOR_DIVISION_ID, cycleId: action.cycleId, sequence });
   let events: DivisionEvent[];
   if (action.type === 'SUBTRACT_ONCE') {
     if (state.phase !== 'READY' || state.placeExhausted) throw new InvalidDivisionStateError('subtraction requires an unfinished READY place');
     const qBefore = state.quotientDigits[state.carriageOffset];
-    if (qBefore >= 9) throw new InvalidDivisionStateError('quotient digit cannot exceed 9');
     const residualAfter = state.residual - state.currentContribution;
+    if (qBefore >= 9 && residualAfter >= 0) throw new InvalidDivisionStateError('quotient capacity is too small for this division');
     events = [{ ...base(0), type: 'SUBTRACT_ONCE', offset: state.carriageOffset, contribution: state.currentContribution, residualBefore: state.residual, residualAfter, quotientBefore: qBefore, quotientAfter: qBefore + 1, operationBefore: state.operationCount, operationAfter: state.operationCount + 1, humanBefore: state.humanOperationCount, humanAfter: state.humanOperationCount + 1 }];
     if (residualAfter < 0) events.push({ ...base(1), type: 'OVERSHOOT_DETECTED', offset: state.carriageOffset, residual: residualAfter, contribution: state.currentContribution });
   } else if (action.type === 'CORRECT_ADD_BACK') {
@@ -126,14 +132,14 @@ export function reduceDivisionEvent(state: Readonly<OperatorDivisionState>, even
   if (event.type === 'SUBTRACT_ONCE') {
     const expected = contribution(state.divisor, state.carriageOffset);
     const q = state.quotientDigits[state.carriageOffset];
-    if (state.phase !== 'READY' || event.offset !== state.carriageOffset || event.contribution !== expected || event.residualBefore !== state.residual || event.residualAfter !== state.residual - expected || event.quotientBefore !== q || event.quotientAfter !== q + 1 || event.operationBefore !== state.operationCount || event.operationAfter !== state.operationCount + 1 || event.humanBefore !== state.humanOperationCount || event.humanAfter !== state.humanOperationCount + 1) throw new Error('invalid subtraction event');
+    if (state.phase !== 'READY' || state.placeExhausted || (q >= 9 && event.residualAfter >= 0) || event.offset !== state.carriageOffset || event.contribution !== expected || event.residualBefore !== state.residual || event.residualAfter !== state.residual - expected || event.quotientBefore !== q || event.quotientAfter !== q + 1 || event.operationBefore !== state.operationCount || event.operationAfter !== state.operationCount + 1 || event.humanBefore !== state.humanOperationCount || event.humanAfter !== state.humanOperationCount + 1) throw new Error('invalid subtraction event');
     const quotientDigits = [...state.quotientDigits]; quotientDigits[event.offset] = event.quotientAfter;
     const overshot = event.residualAfter < 0;
-    return { ...state, residual: event.residualAfter, quotientDigits, operationCount: event.operationAfter, humanOperationCount: event.humanAfter, phase: overshot ? 'CORRECTION_REQUIRED' : 'READY', placeExhausted: false, pendingOvershoot: overshot ? { offset: event.offset, contribution: event.contribution, residualBefore: event.residualBefore, quotientBefore: event.quotientBefore } : null };
+    return { ...state, residual: event.residualAfter, quotientDigits, operationCount: event.operationAfter, humanOperationCount: event.humanAfter, phase: overshot ? 'OVERSHOOT_PENDING' : 'READY', placeExhausted: !overshot && event.residualAfter === 0, pendingOvershoot: overshot ? { offset: event.offset, contribution: event.contribution, residualBefore: event.residualBefore, quotientBefore: event.quotientBefore } : null };
   }
   if (event.type === 'OVERSHOOT_DETECTED') {
-    if (state.phase !== 'CORRECTION_REQUIRED' || !state.pendingOvershoot || event.offset !== state.pendingOvershoot.offset || event.contribution !== state.pendingOvershoot.contribution || event.residual !== state.residual || event.residual >= 0) throw new Error('invalid overshoot event');
-    return structuredClone(state);
+    if (state.phase !== 'OVERSHOOT_PENDING' || !state.pendingOvershoot || event.offset !== state.pendingOvershoot.offset || event.contribution !== state.pendingOvershoot.contribution || event.residual !== state.residual || event.residual >= 0) throw new Error('invalid overshoot event');
+    return { ...structuredClone(state), phase: 'CORRECTION_REQUIRED' };
   }
   if (event.type === 'CORRECT_ADD_BACK') {
     const pending = state.pendingOvershoot;
@@ -143,7 +149,7 @@ export function reduceDivisionEvent(state: Readonly<OperatorDivisionState>, even
   }
   if (event.type === 'SHIFT_CARRIAGE_DOWN') {
     if (state.phase !== 'READY' || !state.placeExhausted || event.offsetBefore !== state.carriageOffset || event.offsetAfter !== state.carriageOffset - 1 || event.contributionBefore !== state.currentContribution || event.contributionAfter !== contribution(state.divisor, event.offsetAfter) || event.humanBefore !== state.humanOperationCount || event.humanAfter !== state.humanOperationCount + 1) throw new Error('invalid carriage-shift event');
-    return { ...state, carriageOffset: event.offsetAfter, currentContribution: event.contributionAfter, humanOperationCount: event.humanAfter, placeExhausted: false };
+    return { ...state, carriageOffset: event.offsetAfter, currentContribution: event.contributionAfter, humanOperationCount: event.humanAfter, placeExhausted: state.residual === 0 };
   }
   if (event.type === 'DIVISION_COMPLETE') {
     if (state.phase !== 'READY' || state.carriageOffset !== 0 || (!state.placeExhausted && state.residual !== 0) || state.residual >= state.divisor || event.quotient !== quotientValue(state) || event.remainder !== state.residual || event.humanOperations !== state.humanOperationCount || event.operations !== state.operationCount) throw new Error('invalid completion event');
@@ -153,6 +159,17 @@ export function reduceDivisionEvent(state: Readonly<OperatorDivisionState>, even
 }
 
 export function replayOperatorDivision(trace: Readonly<OperatorDivisionTrace>): OperatorDivisionState {
+  if (!Array.isArray(trace.actions) || !Array.isArray(trace.events)) throw new Error('division trace requires action and event arrays');
+
+  const canonicalInitial = createOperatorDivision(
+    trace.initialState.dividend,
+    trace.initialState.divisor,
+    trace.initialState.carriageOffset,
+  );
+  if (JSON.stringify(canonicalInitial) !== JSON.stringify(trace.initialState)) throw new Error('division initial state mismatch');
+  assertState(trace.finalState);
+  if (trace.finalState.phase !== 'COMPLETE') throw new Error('division final state is not complete');
+
   let expectedSequence = 0;
   const replayed = trace.events.reduce<OperatorDivisionState>((state, event) => {
     if (event.sequence !== expectedSequence) throw new Error('division event sequence is not contiguous');
@@ -160,6 +177,20 @@ export function replayOperatorDivision(trace: Readonly<OperatorDivisionTrace>): 
     return reduceDivisionEvent(state, event);
   }, structuredClone(trace.initialState));
   if (JSON.stringify(replayed) !== JSON.stringify(trace.finalState)) throw new Error('division replay final state mismatch');
+
+  let actionDerived = structuredClone(trace.initialState);
+  const expectedEvents: DivisionEvent[] = [];
+  const cycleIds = new Set<string>();
+  for (const action of trace.actions) {
+    if (typeof action.cycleId !== 'string' || action.cycleId.length === 0 || cycleIds.has(action.cycleId)) throw new Error('division action cycle ids must be non-empty and unique');
+    cycleIds.add(action.cycleId);
+    const result = transitionOperatorDivision(actionDerived, action);
+    const shifted = result.events.map((event) => ({ ...event, sequence: event.sequence + expectedEvents.length } as DivisionEvent));
+    actionDerived = shifted.reduce(reduceDivisionEvent, actionDerived);
+    expectedEvents.push(...shifted);
+  }
+  if (JSON.stringify(expectedEvents) !== JSON.stringify(trace.events)) throw new Error('division action/event mismatch');
+  if (JSON.stringify(actionDerived) !== JSON.stringify(trace.finalState)) throw new Error('division action-derived final state mismatch');
   return replayed;
 }
 
@@ -177,8 +208,8 @@ export function traceOperatorDivision(dividend: number, divisor: number, initial
   while (state.phase !== 'COMPLETE') {
     const cycleId = `division-${actions.length}`;
     if (state.phase === 'CORRECTION_REQUIRED') apply({ type: 'CORRECT_ADD_BACK', cycleId });
-    else if (state.residual === 0 || (state.carriageOffset === 0 && state.placeExhausted)) apply({ type: 'DIVISION_COMPLETE', cycleId });
     else if (state.placeExhausted && state.carriageOffset > 0) apply({ type: 'SHIFT_CARRIAGE_DOWN', cycleId });
+    else if (state.carriageOffset === 0 && state.placeExhausted) apply({ type: 'DIVISION_COMPLETE', cycleId });
     else apply({ type: 'SUBTRACT_ONCE', cycleId });
   }
   return { initialState, actions, events, finalState: state };
