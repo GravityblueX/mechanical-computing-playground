@@ -5,11 +5,11 @@ Owner: local coding/research agent
 Target duration: about one useful hour at the agent's observed throughput
 Repository authority: remote `main`
 
-Previous task is complete and archived at `tasks/archive/2026-09-02-scheutz-built-engine.md`.
+Previous task is complete and archived at `tasks/archive/2026-09-02-scheutz-patent-operation.md`.
 
-The previous assignment landed as `a894f8f1e24afb91837dafed30ea2bc1e546add4` about 35 minutes after assignment, changed 7 files (about `+106/-13`), raised the suite to 292 tests across 21 files, and passed exact-head push CI `33533826721` plus Deploy Pages `33533826754`. Because the agent again completed a substantial evidence slice well under one hour, this assignment is deliberately a little larger: resolve one source conflict with independent contemporary evidence, add one contemporary-operation source layer, and reconcile the typed atlas/tests without expanding into source-specific geometry.
+The previous assignment landed as `846c912a6140a672e09ed6ecbcb51ac2af7dbafa` about 34 minutes after assignment, changed 7 files (about `+79/-6`), retained 292 tests across 21 files, and passed exact-head CI `33539917100` plus Deploy Pages `33539914118`. Because the agent again completed a real source/atlas slice comfortably under one hour, this assignment is slightly broader: try to close both the **1931 construction-paper** and **1941 mathematical-theory** access gaps for the Differential Analyzer, then reconcile only the evidence relationships actually supported.
 
-> **Question for this slice:** can the repository independently establish the Scheutz British patent identity and directly anchor a contemporary operational/committee account, while keeping patent intent, observed/built-machine behavior, later synthesis, Babbage lineage, and repository P/M behavior separate?
+> **Question for this slice:** what can be established directly from Bush's 1931 construction paper and Shannon's 1941 mathematical-theory paper, and how should those sources be separated from the already-inspected Bush–Caldwell application paper, surviving Smithsonian components, later analyzer generations, and the repository's P/M continuous-flow model?
 
 ## Read before work
 
@@ -19,183 +19,190 @@ Fetch/pull remote `main`, then read in order:
 2. `TODO.md`
 3. `AGENTS.md`
 4. `docs/EVIDENCE_POLICY.md`
-5. `docs/RESEARCH_GAPS.md`, especially Priority 0.2, Priority 7, and `Files to deepen next`
+5. `docs/RESEARCH_GAPS.md`, especially Priority 0.2, Priority 6, Priority 8 and `Files to deepen next`
 6. `docs/VERIFICATION.md`
-7. `tasks/archive/2026-09-02-scheutz-built-engine.md`
-8. `research/difference-engine-source-map.md`
-9. `research/output-and-audit-trail.md` only to preserve existing output claims
+7. `tasks/archive/2026-09-01-de2-differential-analyzer-publication-precision.md`
+8. `research/differential-analyzer.md`
+9. `research/mechanical-error-control.md` or the current error-control note only where it touches Bush frontlash/torque responsibilities
 10. `src/exhibits/source-atlas/` and `tests/source-atlas.test.ts`
+11. `src/exhibits/continuous-flow/`, `src/mechanisms/continuous-integrator/`, and their tests only to preserve current P/M boundaries
 
 Run current-main typecheck/tests before editing and record the actual baseline. Do not use stale `IMPLEMENTATION_PLAN.md` checkboxes as the task source.
 
-# Part A — reconcile the 2214 / 2216 patent-number conflict with independent evidence
+# Part A — retry and directly inspect Shannon 1941 full text
 
-The completed slice correctly preserved a real source discrepancy:
+The current note records Shannon 1941 as bibliographic-only because the publisher PDF previously returned an access challenge. Retry from the canonical publication route instead of trusting that old access result:
 
-- Smithsonian drawing-set catalog `1988.0798.01` says British Patent A.D. 1854, **No. 2214**;
-- Merzbach 1977 Appendix I reproduces/transcribes British Patent A.D. 1854, **No. 2216**.
+Claude E. Shannon, “Mathematical Theory of the Differential Analyzer,” *Journal of Mathematics and Physics* 20 (April 1941), printed pp. **337–354**.
 
-Do not silently change the Smithsonian wording. Instead, independently inspect contemporary or primary patent evidence and determine what can be stated safely.
+DOI:
 
-## A1. Contemporary patent-list check
+<https://doi.org/10.1002/sapm1941201337>
 
-Directly inspect a period issue of the *Journal of the Society of Arts* / patent list that includes the patents sealed in April 1855. A discoverable scan currently appears at Wikimedia/Internet Archive-derived access and should be re-found independently by the agent rather than trusted from this task text.
+Publisher PDF route currently discoverable from Wiley:
 
-Target evidence to verify:
+<https://onlinelibrary.wiley.com/doi/pdf/10.1002/sapm1941201337>
 
-- the issue identity/date;
-- the actual list entry for George Scheutz and Edward Scheutz;
-- the patent number attached to their calculating/printing-machine entry;
-- wording sufficient to distinguish the Scheutz entry from adjacent patent numbers.
+The existence of a URL is not enough. **Actually inspect the full text/page images or rendered text.** If it is still blocked in the local agent environment, preserve the access failure and do not create page claims from snippets/search results.
 
-If the period list directly shows **2216**, record that as **H/E1 contemporary publication evidence for the patent identity**. Record exact scanned/printed page or image position. Do not infer patent geometry from the list.
+## A1. If full text is directly inspectable
 
-## A2. Patent-specification identity
+Record exact printed-page anchors for only the claims directly useful to this repository. Focus on questions such as:
 
-Re-open the directly inspectable GovInfo/Smithsonian Merzbach PDF:
+- how Shannon mathematically characterizes the class/capabilities of differential-analyzer systems;
+- what kinds of machine elements/functional relations the paper treats abstractly;
+- what assumptions or restrictions the theory states;
+- whether the theory distinguishes mathematical interconnection/representation from one particular physical geometry;
+- what the paper does **not** provide as construction evidence.
 
-<https://www.govinfo.gov/content/pkg/GOVPUB-SI-PURL-gpo20587/pdf/GOVPUB-SI-PURL-gpo20587.pdf>
-
-Reconfirm Appendix I printed pp. 43–55 and the reproduced header/identity for British Patent A.D. 1854 **No. 2216**.
-
-If a more direct lawful scan/catalog of the Patent Office specification can be inspected within the time box, record it as an additional access layer. Otherwise do not spend the hour hunting indefinitely: the period patent list plus the identified reproduced specification are enough to state a bounded reconciliation.
-
-### Required reconciliation wording
-
-If the independent contemporary evidence supports 2216, the repository may say approximately:
-
-```text
-Independent contemporary patent-list evidence and the reproduced Patent Office specification identify the Scheutz patent as No. 2216. The Smithsonian drawing-set catalog currently says No. 2214; that catalog wording is retained as a documented discrepancy and not silently rewritten.
-```
-
-Do **not** call the Smithsonian value a typo as a historical fact unless an institutional correction or stronger catalog-history source explicitly establishes that.
-
-# Part B — directly inspect a contemporary operation / examination account
-
-The next missing layer is actual nineteenth-century examination/operation evidence, not more later summaries.
-
-## B1. Royal Society committee report
-
-Find and directly inspect the contemporary report:
-
-*Report of a Committee appointed by the Council to examine the Calculating Machine of M. Scheutz*, *Proceedings of the Royal Society of London*, vol. 7, report beginning around printed p. 499 (bibliographies give pp. 499–509; verify the actual range from the source).
-
-Prefer an original-period scan when lawfully accessible. If the only complete readable text is the 1889 H. P. Babbage compilation reprinting the report, record the provenance explicitly:
-
-```text
-1855 Royal Society committee report
-→ reproduced in 1889 Babbage compilation at exact printed pages
-→ modern access host
-```
-
-A modern Cambridge page or bookseller summary is not itself evidence for details that were not directly visible in the report text.
-
-Extract only source-backed responsibilities/claims useful to this repository, for example if directly stated:
-
-- what problem/table-making role the committee says the machine addresses;
-- orders/digits/capacity only at the exact values printed in the report;
-- how the report describes difference calculation or operation at functional level;
-- what it says about calculation plus printing/type-setting, if directly stated;
-- any limitations or conditions the committee explicitly identifies.
-
-Record exact printed pages. Quote minimally; paraphrase conservatively.
+Do not force modern software vocabulary onto Shannon. Do not use this paper as evidence for the exact geometry of Smithsonian parts or the browser's discrete inspection phases.
 
 Evidence boundary:
 
-- the committee report is **H/E1 for what the committee reported/observed in 1855**;
-- it is not direct measurement of every surviving Smithsonian mechanism and not proof of every later production machine;
-- a committee statement about speed, utility, accuracy, or printing is a reported contemporary claim unless the report provides an explicit measurement protocol.
+- directly inspected Shannon text = **H/E1 for what Shannon published in 1941**;
+- mathematical statements proved/derived in the paper may also be discussed as **M**, but keep publication evidence and mathematical truth conceptually separate;
+- interpretation connecting Shannon's theory to modern reconstruction/browser models is **R/P**, not automatically H/E1.
 
-## B2. Optional Gravatt anchor if the main report finishes early
+Use minimal quotation; paraphrase with exact pages.
 
-Only after B1 is complete, try to directly inspect William Gravatt's 1854 Royal Society letter (bibliographies identify *Proceedings*, vol. 7, p. 166) or another clearly contemporary operational text reproduced in a stable institutional/primary scan.
+## A2. If full text remains inaccessible
 
-Use it only if the actual text is visible. Do not rely on later paraphrases merely to add another citation.
+Do not spend the full hour defeating publisher access. Record the exact access result in `research/differential-analyzer.md`, keep Shannon bibliographic-only, and continue Parts B–F. Do not backfill page claims from later citations.
 
-This is optional; do not let it displace Parts A, B1, and C.
+# Part B — try to directly inspect Bush 1931 construction paper
 
-# Part C — separate patent intent from built/observed operation in the source map
+The largest remaining Differential Analyzer source gap is still the primary construction paper:
 
-Update `research/difference-engine-source-map.md` only after Parts A/B establish real new precision.
+Vannevar Bush, “The Differential Analyzer. A New Machine for Solving Differential Equations,” *Journal of the Franklin Institute* 212 no. 4 (October 1931), printed pp. **447–488**.
 
-The Scheutz section should now visibly distinguish at least these layers:
+DOI:
+
+<https://doi.org/10.1016/S0016-0032(31)90616-9>
+
+Known bibliographic institutional anchor:
+
+Smithsonian Libraries catalogs the MIT offprint as *Publications of the Massachusetts Institute of Technology* no. 865, October 1931, pp. 447–488.
+
+The task is to find a **lawfully accessible full facsimile or institutional full-text scan** and actually inspect it. Search independently; do not treat commercial rare-book descriptions, later historical summaries, or isolated quotations as substitutes for the paper.
+
+## B1. If a full facsimile is directly inspectable
+
+Extract exact page/figure anchors only for responsibilities relevant to existing repository claims. Candidate questions—not pre-approved answers—include:
+
+- what Bush says about the integrator and its role;
+- what he says about torque/amplification and why it is needed;
+- how units are connected/configured for a problem;
+- what input/output or curve-following/tracing roles are described;
+- what limitations/error/backlash/accuracy issues are explicitly discussed;
+- what generation/configuration the paper actually describes.
+
+Do **not** infer missing dimensions, complete shaft routing, material/tolerance values, safe operating rate, or modern reliability probabilities unless the paper directly provides them.
+
+Keep exact page and figure identifiers. If a figure is used, state what the caption/text establishes rather than reverse-engineering hidden geometry from the image.
+
+Evidence boundary:
+
+- Bush 1931 full paper = **H/E1 for Bush's contemporary published construction/operation account**;
+- it is not automatically direct measurement of every surviving Smithsonian component;
+- it does not apply unchanged to the later Rockefeller/new-type analyzer;
+- if Bush gives estimates/qualitative performance claims, distinguish author report from independently measured benchmark evidence.
+
+## B2. If the full paper cannot be directly inspected
+
+Preserve the bibliographic-only boundary and document which canonical/institutional routes were attempted. Do not freeze any page/figure claim from secondary quotation.
+
+Do not let failure on B stop the whole slice if Shannon or another required reconciliation can still progress.
+
+# Part C — reconcile the source generations and roles
+
+Update `research/differential-analyzer.md` only for evidence actually obtained in Parts A/B.
+
+The note should make these layers visibly distinct:
 
 ```text
-1853 surviving Smithsonian engine = H/E1 object/catalog record
-ca. 1857 Smithsonian instruction drawing set = H/E1 drawing-object/catalog record
-1854/1855 British patent identity/specification = H/E1 primary/contemporary patent layer at inspected precision
-1855 Royal Society committee examination = H/E1 contemporary observation/report layer
-Merzbach 1977 = H/E2 institutional historical synthesis, plus clearly identified reproduced-primary access where applicable
-Babbage DE1/DE2 = separate design lineage
-Science Museum DE2 1991/2002 = R/E2 reconstruction
-repository finite-difference/output behavior = P/M
+ca. 1930 surviving Smithsonian component records = H/E1 object/catalog roles
+Bush 1931 construction paper = H/E1 only if directly inspected; otherwise bibliographic-only
+Bush & Caldwell 1931 Thomas-Fermi application = H/E1 application/checking paper already directly inspected
+Shannon 1941 mathematical theory = H/E1 at inspected page precision if full text is now readable; otherwise bibliographic-only
+later Rockefeller / Bush–Caldwell 1945 machine = separate generation
+modern engineering/history interpretation = R at cited precision
+repository continuous integrator/flow = P/M
 ```
 
 Required boundary statements:
 
-- patent specification describes intended/patented design; it is not automatically the exact as-built geometry of Smithsonian `MA.323659`;
-- the Smithsonian ca. 1857 14-figure sheet is similar to but not identical with the patent figures according to its catalog;
-- the Royal Society report establishes what that committee reported/examined, not universal lifetime performance;
-- the repository P/M difference/output model does not inherit Scheutz geometry;
-- the No. 2214 catalog value remains visible as a source discrepancy even if independent evidence supports No. 2216.
+- an application schematic is not a construction drawing;
+- a mathematical theory paper is not a physical geometry source;
+- surviving component catalogs do not prove the browser's exact interconnection;
+- later analyzer generations do not silently fill gaps in the ca. 1930 machine;
+- frontlash compensation and torque amplification remain separate responsibilities unless a directly inspected source explicitly relates them;
+- repository discrete phases/sample interval remain P/M inspection choices, not historical timing.
 
-Do not add source-specific gear/linkage animation, tooth counts, printer timing, force, tolerance, reliability probabilities, or performance benchmarks in this slice.
+If Bush 1931 becomes directly inspectable, replace only the old “bibliographic-only” statements that are now genuinely obsolete. If Shannon remains blocked, leave its boundary honest.
 
 # Part D — typed source-atlas reconciliation
 
-Use the existing `src/exhibits/source-atlas/` data model. Do not create a parallel evidence system.
+Use the existing `src/exhibits/source-atlas/` data model; do not create a new evidence structure.
 
-Upgrade the Difference Engine/Scheutz track so visitors can distinguish:
+For the Differential Analyzer track, make visitors able to distinguish, at minimum:
 
-1. surviving built object;
-2. instruction drawing set;
-3. patent identity/specification layer;
-4. contemporary Royal Society examination/operation layer;
-5. later Merzbach synthesis/reproduction layer;
-6. Babbage/DE2 reconstruction and repository P/M layers already present.
+1. surviving Smithsonian component/object layer;
+2. Bush 1931 construction-publication layer;
+3. Bush–Caldwell 1931 application/checking layer;
+4. Shannon 1941 mathematical-theory layer;
+5. later-generation boundary;
+6. repository P/M continuous-flow behavior.
 
-Prefer concise anchors over one card per mirror URL. Reuse metadata fields and `supports` / `notEstablished` boundaries.
+Only create page/figure metadata for sources actually inspected. If Bush or Shannon remains blocked, encode that limitation rather than pretending inspection happened.
 
-The atlas must not visually imply that the patent and the Smithsonian drawing sheet are identical, or that the committee report proves exact internal geometry.
+Do not create one card per access mirror. Preserve canonical source identity separately from access host where the existing schema supports it.
 
 ## Required tests
 
-Update `tests/source-atlas.test.ts` or the existing relevant tests to lock in at least:
+Update `tests/source-atlas.test.ts` or the nearest existing evidence tests to lock in relationships, not punctuation. At least cover:
 
-- contemporary independent evidence identifies the Scheutz patent as 2216 while the Smithsonian 2214 wording remains recorded as a discrepancy;
-- patent layer and built-object layer are separate entries/roles;
-- committee-report layer is distinct from Merzbach synthesis;
-- `supports` / `notEstablished` prohibit source-specific geometry/timing/performance inflation;
-- Babbage DE2 reconstruction and repository P/M behavior remain separate from Scheutz evidence.
+- construction-publication role is distinct from the already-inspected application-paper role;
+- mathematical-theory role is distinct from physical component/construction roles;
+- later analyzer generation is not used to fill original-machine geometry;
+- `supports` / `notEstablished` prohibit exact shaft routing, geometry, timing, torque/error numbers, or browser-phase identity unless directly supported;
+- repository P/M flow remains separate from H/R source anchors;
+- if full-text access remains blocked for either source, no false `fullFacsimileInspected: true` or fake page/figure anchors are introduced.
 
-Do not write a test whose only purpose is to freeze prose punctuation. Test evidence relationships and boundaries.
+# Part E — bounded continuous-flow/error-control cross-check
 
-# Part E — bounded output-contract cross-check
+Inspect the existing public wording for:
 
-Inspect `research/output-and-audit-trail.md` and the existing `#/output-contracts` / finite-difference wording for one question only:
+```text
+#/continuous
+#/mechanical-error-control
+#/source-atlas
+#/about
+```
 
-> Does the directly inspected 1855 committee report require correcting or sharpening an existing claim about calculation plus printing/persistent output?
+Ask only:
 
-If yes, make the smallest source-backed correction. Distinguish a committee statement from measured performance. If no correction is needed, leave those files alone.
+> Does newly inspected Bush 1931 or Shannon 1941 evidence require a small correction to the existing boundary between integration mathematics, component roles, frontlash, torque amplification, and the P/M browser flow?
 
-Do not expand into period office procedure, printer geometry, or commercial productivity history.
+If yes, make the smallest source-backed correction and add a focused test if semantics change. If no, leave runtime mechanism code alone.
+
+Do not turn this into a physical Differential Analyzer emulator, torque model, stochastic error simulator, or new 3D route.
 
 # Part F — reconciliation and verification
 
-After the source work is real:
+After real source work:
 
-- update `STATUS.md` only for the patent/committee precision actually obtained;
+- update `STATUS.md` only for source precision actually gained;
 - add one concise completed line to `TODO.md`;
-- narrow `docs/RESEARCH_GAPS.md` only where this slice genuinely closes an open item;
-- update `docs/VERIFICATION.md` with actual baseline/final counts and checks;
-- do not re-date unrelated smoke checks or copy stale test counts.
+- narrow `docs/RESEARCH_GAPS.md` only where a stated gap genuinely closes;
+- update `docs/VERIFICATION.md` with actual baseline/final test counts and checks;
+- do not re-date unrelated browser checks or copy stale counts.
 
-If source-atlas data changes, perform bilingual browser smoke at least for:
+If atlas/UI data changes, perform bilingual browser smoke at least for:
 
 ```text
 #/source-atlas
-#/finite-difference
-#/output-contracts
+#/continuous
+#/mechanical-error-control
 #/about
 ```
 
@@ -210,13 +217,13 @@ git diff --check
 
 All must pass.
 
-The finished slice should answer from directly inspectable evidence:
+The finished slice should answer, from directly inspectable evidence or explicit access boundaries:
 
-> What independent contemporary evidence identifies the Scheutz British patent number, and how should the Smithsonian catalog's conflicting 2214 value be presented?
+> What does Bush 1931 directly establish about the construction/operation responsibilities of the original Differential Analyzer, and what remains uninspected or unmeasured?
 
-> What does the 1855 Royal Society committee report directly say about the machine's operation, table-making role, printing, and limitations—and what does it not establish?
+> What does Shannon 1941 directly establish at the mathematical/system level, and why is that not a geometry source?
 
-> How are patent intent, surviving built object, contemporary examination, later historical synthesis, Babbage lineage, reconstruction, and repository P/M behavior kept separate in the atlas?
+> How do Bush construction, Bush–Caldwell application, Shannon theory, surviving components, later generations, and repository P/M flow remain separate in the atlas?
 
 After push:
 
@@ -227,31 +234,30 @@ After push:
 Suggested commit subject:
 
 ```text
-research: reconcile Scheutz patent and operation evidence
+research: deepen differential analyzer primary sources
 ```
 
 # Evidence boundaries
 
-- period patent list / official specification when directly inspected: **H/E1 at document precision**;
-- Smithsonian `MA.323659`: **H/E1 at surviving-object/catalog precision**;
-- Smithsonian `1988.0798.01`: **H/E1 at drawing-object/catalog precision**, including its current `No. 2214` wording;
-- 1855 Royal Society committee report: **H/E1 for the report's contemporary statements/observations**;
-- 1889 reprint of that report, if used as access layer: preserve original-report date and reprint provenance separately;
-- Merzbach 1977 narrative: **H/E2 synthesis**; identified reproduced primary items remain separate provenance layers;
-- Babbage designs: separate historical lineage;
-- Science Museum DE2: **R/E2** reconstruction;
-- repository Difference Engine/output traces: **P/M**.
+- directly inspected Bush 1931 full paper: **H/E1 at page/figure precision actually inspected**;
+- Bush 1931 bibliographic record only, if full text remains unavailable: H bibliographic identity only; no page/figure mechanism claims;
+- Bush–Caldwell 1931 application facsimile: existing **H/E1 application/checking evidence**, not construction geometry;
+- directly inspected Shannon 1941 full text: **H/E1 for the published text**, with mathematical claims separately identifiable as M;
+- Shannon bibliographic metadata only, if access remains blocked: no equation/page/figure claims;
+- Smithsonian component records: **H/E1 object/catalog precision**;
+- later Rockefeller/1945 analyzer: separate generation;
+- repository continuous flow/integrator: **P/M**.
 
 # Stop conditions
 
-Stop and leave a precise boundary instead of guessing if:
+Stop a source subpart and preserve the boundary instead of guessing if:
 
-- the period patent list cannot be directly inspected and only modern snippets remain;
-- the Royal Society report cannot be directly read in an original or clearly identified historical reprint;
-- a source gives a number/claim but its issue/page identity cannot be established;
-- resolving 2214/2216 would require asserting an undocumented Smithsonian catalog error;
-- source images invite unsourced reverse engineering of the machine;
-- atlas changes would require routing/layout refactors;
-- work starts expanding into a Scheutz emulator, printer simulation, full patent geometry reconstruction, or general nineteenth-century table-making history.
+- only snippets, commercial descriptions, or later quotations are accessible;
+- a PDF URL exists but the actual article pages cannot be inspected;
+- page/figure identity cannot be established;
+- a source image invites reverse engineering not supported by caption/text;
+- exact torque, backlash, error, tolerance, speed, or geometry claims would require data not present in the inspected source;
+- source-atlas changes would require broad routing/layout refactors;
+- work starts expanding into the Rockefeller analyzer, electronic analog computing generally, or a physics simulation.
 
-If Parts A–D complete substantially before one hour, use remaining time to tighten exact page/issue anchors, add one directly inspected Gravatt contemporary source, and improve boundary-focused tests. **Do not start another machine family in this slice.**
+If Parts A–D complete substantially before one hour, use remaining time to tighten exact page/figure anchors and boundary-focused tests, or inspect one additional **contemporary, directly readable** source cited by Bush/Shannon that clarifies an existing responsibility. Do not start a new machine family.
