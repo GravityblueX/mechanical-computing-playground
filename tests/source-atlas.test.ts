@@ -111,7 +111,10 @@ describe('named-machine source anchor atlas', () => {
     const transcription = getNamedMachineSourceAnchor('ae-hpb-1888-transcription');
     expect(primary).toMatchObject({ fullFacsimileInspected: true, accessKind: 'direct primary facsimile' });
     expect(primary.pageFigureAnchors).toEqual(expect.arrayContaining([expect.stringMatching(/printed p\. 677/), expect.stringMatching(/printed p\. 679/), expect.stringMatching(/printed p\. 704/)]));
-    expect(transcription).toMatchObject({ fullFacsimileInspected: false, accessKind: 'specialist transcription', pageFigureAnchors: [] });
+    expect(transcription).toMatchObject({ fullFacsimileInspected: false, accessKind: 'specialist transcription', evidenceStrength: 'E3' });
+    expect(transcription.recordIdentifier).toMatch(/1889 printed compilation pp\. 331–338.*transcription-only/);
+    expect(transcription.pageFigureAnchors).toEqual([expect.stringMatching(/chapter-range metadata.*no content-page assignment/)]);
+    expect(transcription.notEstablished.map(item => item.en).join(' ')).toMatch(/exact page within 331–338.*cross-walk to modern BAB drawing codes/);
   });
 
   it('keeps Analytical Engine design, reconstruction, and repository timing separate', () => {

@@ -26,7 +26,7 @@ Current state: the four-track typed atlas separates directly inspected Differenc
 Remaining gaps:
 
 - Curta full operator/service edition mapping, Type II capacity/date/replacement-leaf chronology, and production Type I/II revision/linkage mapping;
-- Analytical Engine inspected H. P. Babbage 1889 facsimile, additional exact printed pages, and source-specific reader/Store/Mill geometry;
+- Analytical Engine content-page images within the Cambridge-confirmed 1889 chapter-32 range pp. 331–338, an inspected drawing catalogue/cross-walk, additional exact printed pages, and source-specific reader/Store/Mill geometry;
 - Babbage-primary drawing interpretation beyond archive titles and the R/E2 reconstruction account, including source-specific lifetime timing/manufacturing evidence;
 - a stable full facsimile of Bush 1931 before construction-paper page/figure claims, and direct Shannon 1941 full-text inspection;
 - exact Bush component interconnection, revision mapping, torque-amplifier construction, and measured error data.
@@ -148,7 +148,7 @@ Keep this bounded to human-machine arithmetic responsibility, not a generic soci
 Only files with real remaining evidence work are listed:
 
 1. `research/curta-source-map.md` — Type II capacity/date/replacement-leaf chronology and production revision/linkage mapping beyond the inspected service leaves;
-2. `research/analytical-engine-information-flow.md` — an inspected H. P. Babbage 1889 facsimile and drawing-level reader/Store/Mill coordination evidence;
+2. `research/analytical-engine-information-flow.md` — content-page images for items 10–20 inside known 1889 chapter pp. 331–338, a defensible printed-catalogue/BAB-code cross-walk, and drawing-level reader/Store/Mill coordination evidence;
 3. `research/differential-analyzer.md` — Bush 1931 facsimile plus component interconnection/error evidence;
 4. `research/difference-engine-source-map.md` — drawing interpretation, timing and manufacturing evidence beyond catalog titles;
 5. `research/control-and-zeroing-source-map.md` — Thomas instructions, partial-stroke correction and production mapping;

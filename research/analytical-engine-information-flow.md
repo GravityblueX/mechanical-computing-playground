@@ -35,9 +35,27 @@ The page images themselves were directly visible; no page number was derived mer
 
 These pages establish published functional roles, not one frozen final machine, exact card holes/readers/synchronisation, Mill–Store linkage geometry, or a complete built Analytical Engine.
 
-## 2. H. P. Babbage 1888: transcription boundary
+## 2. H. P. Babbage paper: 1888 event, 1889 print, modern access layers
 
-Fourmilab transcription:
+### 2.1 Institutional publication identity and access boundary
+
+Cambridge's 2010 reproduction metadata directly identifies:
+
+- Henry P. Babbage (ed.), *Babbage's Calculating Engines: Being a Collection of Papers Relating to them; their History and Construction*;
+- first publication in 1889;
+- chapter 32, *Proceedings of the British Association, 1888*;
+- reproduced chapter pagination **pp. 331–338**;
+- chapter DOI `10.1017/CBO9780511694721.033` and book DOI `10.1017/CBO9780511694721`.
+
+<https://www.cambridge.org/core/books/abs/babbages-calculating-engines/proceedings-of-the-british-association-1888/4F94AD873CF05781394F2D9B91C1DAFB>
+
+Cambridge exposed only the chapter opening through numbered item 5 in this environment. The downloadable-PDF route returned the access page rather than printed page images. The accessible preview did **not** expose items 10–20 or individual printed page breaks within pp. 331–338. The Library of Congress separately identifies the 1982 Tomash volume as a reprint of the 1889 London E. & F. N. Spon edition, but exposes only an illustration, not the relevant text pages.
+
+Consequently, **pp. 331–338 are chapter-range metadata, not inspected content-page anchors**. This pass does not assign Number/Directive/Operation claims to guessed pages within that range and does not upgrade the card/example evidence to E1.
+
+### 2.2 Fourmilab transcription comparison boundary
+
+Specialist transcription:
 
 <https://www.fourmilab.ch/babbage/hpb.html>
 
@@ -51,15 +69,14 @@ Directive cards retain p/q in Store columns 5/6
 final result goes to Store column 7 and printing/stereo-moulding
 ```
 
-Item 20 reports three Operation Cards and fourteen Directive Cards in separate sets/rollers.
-
-A bounded Open Library/Internet Archive discovery attempt did not yield a stable directly inspectable 1889 scan in this environment. Therefore:
+Item 20 reports three Operation Cards and fourteen Directive Cards in separate sets/rollers. Cambridge's visible opening items 1–5 materially match the corresponding transcription wording and numbering apart from presentation/capitalization; that limited comparison does not authenticate unexposed items 10–20 or their page placement.
 
 - historical publication claim type: **H**;
-- current access strength in the typed atlas: **E3 specialist transcription**;
-- no historical printed page number, facsimile typography or figure claim is made.
+- Cambridge publication/chapter metadata: **E1 at bibliographic/chapter-range precision only**;
+- card-role/example content currently remains **E3 specialist transcription**;
+- no historical content-page, facsimile typography or figure claim is made for items 10–20.
 
-This is the historical formula shape used by the repository; values `2,3,4,5` and repository event serialization are P/M.
+The 1888 reading date, 1889 compilation date, and 2010 Cambridge access reproduction are separate facts. The historical formula shape informs the repository; fixture values `2,3,4,5` and repository event serialization remain P/M.
 
 ## 3. Science Museum drawing records
 
@@ -75,7 +92,7 @@ Directly re-inspected:
 - Claim type: **H**.
 - Evidence: **E1 for record identity, metadata and catalogued subject**.
 
-“Superseded” and the separated dates/phases demonstrate design evolution. Titles/images do not prove exact Store–Mill connections, card-reader timing, every depicted geometry, or a completed machine.
+“Superseded” and the separated dates/phases demonstrate design evolution. Cambridge metadata confirms that the 1889 compilation contains separate chapters titled *Catalogue of the Drawings of the Analytical-Engine* and *List of other Drawings of the Analytical-Engine*, but their catalogue pages were not directly exposed. No defensible cross-walk from modern codes `BAB/A/125`, `BAB/D/028`, or `BAB/P/167` to an 1889 entry was therefore made. Titles/images do not prove exact Store–Mill connections, card-reader timing, every depicted geometry, or a completed machine.
 
 ## 4. Walker/Fourmilab reconstruction boundary
 
@@ -97,7 +114,7 @@ The textual `N/L/Z/S/+/-/*//` forms, unified stream, Step control and software s
 | Layer | Safe use |
 |---|---|
 | Menabrea/Lovelace 1843 pages | H/E1 Store/Mill and operation/variable-card functional roles at printed pp. 677, 679, 704 |
-| H. P. Babbage 1888 transcription | `(ab+c)d` Number/Directive/Operation shape without printed-page precision |
+| H. P. Babbage paper | 1888 reading date and 1889 chapter pp. 331–338 remain distinct; Cambridge supplies E1 chapter-range metadata, while items 10–20 and `(ab+c)d` remain E3 transcription content without inspected page precision |
 | Science Museum records | H/E1 design-record identity, date, dimensions and subject |
 | Walker/Fourmilab | R/E2 executable interpretation and merged text-card convention |
 | This repository | tested P/M small-value event trace |

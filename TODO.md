@@ -31,6 +31,7 @@
 - [x] Ground Controlled-key incomplete-stroke responsibility in Turck 1921 and add a tested generic exactly-once key-stroke integrity/interlock lesson.
 - [x] Directly inspect the exposed Thomas 1868 register legend and add a tested generic independent result/revolution-register lifecycle lesson.
 - [x] Harden decimal/integrator replay against serialized provenance tampering and inspect Curta Type II service controls at exact page/leaf precision.
+- [x] Reconcile the H. P. Babbage 1888 reading, 1889 chapter range, modern reproduction metadata, E3 transcription content, and unavailable drawing-catalogue cross-walk without fabricating page claims.
 
 ## Repository maintenance
 

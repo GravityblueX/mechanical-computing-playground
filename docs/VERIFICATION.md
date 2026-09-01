@@ -1,5 +1,26 @@
 # Verification record
 
+## 2026-09-01 — H. P. Babbage 1889 publication-access boundary
+
+The current-main pre-edit baseline passed typecheck and 291 tests across 21 files. Cambridge Core directly confirmed the 1889-first-published Spon compilation, chapter 32 *Proceedings of the British Association, 1888*, reproduced chapter range pp. 331–338, and DOI `10.1017/CBO9780511694721.033`. Its accessible preview exposed only numbered items 1–5; the PDF route returned the access page rather than printed page images. Library of Congress metadata independently identifies the Tomash 1982 volume as a reprint of the 1889 E. & F. N. Spon edition, but exposes only an illustration.
+
+Because items 10–20 and their page breaks were not directly viewable, the source atlas now records pp. 331–338 only as E1 chapter-range metadata while retaining Number/Directive/Operation roles and `(ab+c)d` as E3 Fourmilab transcription content. The printed drawing-catalogue chapters were likewise not exposed, so no cross-walk to modern `BAB/A/125`, `BAB/D/028`, or `BAB/P/167` codes was invented. The Analytical Engine P/M trace was not changed.
+
+- `npm run typecheck` — pass
+- `npm test -- --run` — pass, 291 tests across 21 files
+- `npm run build` — pass
+- `git diff --check` — pass
+- focused source-atlas boundary test remained green within the full suite
+
+Local bilingual browser smoke:
+
+- `#/source-atlas` rendered four Analytical Engine cards with the pp. 331–338 range, E3 marker and explicit no-content-page boundary in English and Chinese;
+- `#/analytical-engine` retained its P/M information-flow lesson;
+- `#/about` retained the evidence-policy boundary;
+- checked routes had no desktop horizontal overflow.
+
+No deployment check was performed for this not-yet-pushed completion commit.
+
 ## 2026-09-01 — decimal/integrator replay integrity and Curta Type II service precision
 
 The current-main pre-edit baseline passed typecheck and 277 tests across 21 files. Reviewed PR #8 exact head `6724e40154151d94bd83c4af2fa457f032927d85` and PR #9 exact head `72a0ca0ea0e7dcd2c3b36f3f5da6a624171f2caf` were used as code/test inputs without importing stale verification prose. The current-main patch now rejects unknown decimal-register event discriminators at runtime and makes integrator replay action-derived, including strict non-empty cycle ids, explicit-null input rejection, endpoint validation and genuine zero-action traces.

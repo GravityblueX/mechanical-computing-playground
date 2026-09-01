@@ -1,6 +1,6 @@
 # Current Status
 
-Last reconciled on 2026-09-01 after decimal/integrator replay hardening and Curta Type II service-page inspection.
+Last reconciled on 2026-09-01 after the bounded H. P. Babbage 1889 publication-access reconciliation.
 
 This file is the **current-state authority** for the repository. `ROADMAP.md` describes where the project should go; `IMPLEMENTATION_PLAN.md` is still useful as a dependency/design specification, but many of its checkboxes predate later implementation and must not be treated as the live task ledger.
 
@@ -100,7 +100,7 @@ The most important remaining gaps are:
 - direct multiplication now has a tested pedagogical functional state/event model and a fourth comparison path, but no source-specific Millionaire geometry is claimed;
 - key-driven computation now has tested accumulator and incomplete-stroke integrity/interlock P/M models; simultaneous multi-column operation, exact Model E/F trigger/release geometry/timing, primary patent mapping, and universal production claims remain intentionally unmodeled;
 - `research/curta-source-map.md` now directly inspects US 2,525,352, the two-page Contina operator guide, the 1967 Model I service-manual cover, and Type II service PDF pp. 1–2, 6/leaf N I-a, 10/leaf O-1-2 and 34/leaf S 3 for document/replacement-leaf, zero-position, carriage, reversing, clearing and zero-positioner responsibilities; Type II capacity/date and full production-revision/linkage mapping remain open;
-- `research/analytical-engine-information-flow.md` now directly anchors 1843 printed pp. 677, 679 and 704, rechecks three Science Museum drawing records, keeps H. P. Babbage 1888 transcription-only, and separates Walker reconstruction; exact reader/Store/Mill geometry and an inspected 1889 facsimile remain open;
+- `research/analytical-engine-information-flow.md` directly anchors 1843 printed pp. 677, 679 and 704 and now separates the 1888 Bath reading, Cambridge-confirmed 1889 compilation chapter 32 / pp. 331–338 range, and Fourmilab items 10–20 transcription; because the relevant page images remain inaccessible, card-role/`(ab+c)d` content stays E3 and no modern BAB-code cross-walk is claimed;
 - `research/subtraction-and-division.md` now separates the directly inspected Curta operator-guide viewer-page-1 controls (H/E1 via specialist mirror) from the E3 division transcription; exact Curta division-example edition/pages and the Thomas 1868 instruction facsimile remain open;
 - `research/differential-analyzer.md` now directly inspects the Smithsonian object group/components and Bush–Caldwell 1931 application facsimile pp. 1898–1902/Figs. 1–3 while keeping application, component, browser-flow and generation roles separate; Bush 1931 construction-paper and Shannon 1941 full text, exact placement/wiring, numerical error, and physical geometry remain open;
 - `research/difference-engine-source-map.md` now directly inspects the complete 232-page 2020 Science Museum Technical Description as R/E2 with exact calculation/output/omission/timing/appendix anchors, alongside H/E1 BAB/B/001, BAB/A/171, printing and notation records; Babbage-primary feature interpretation beyond record precision and lifetime manufacturing/timing proof remain open;
