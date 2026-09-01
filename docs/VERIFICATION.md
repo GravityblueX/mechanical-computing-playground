@@ -297,6 +297,17 @@ The PR was squash-merged as `ccc39d8e0b8a5c8cb83fa9bcf4d82672e30aa0f6`.
 
 Follow-up `STATUS.md` reconciliation is documentation-only. No new browser behavior was introduced in this pass, so browser interaction smoke results below remain the last recorded manual browser check rather than being falsely re-dated.
 
+## 2026-09-01 — revolution-counter replay and safe-integer boundary
+
+The pre-edit remote-main baseline was 217 tests across 19 files. The isolated revolution counter now snapshots each caller-controlled field once, validates non-negative safe state, refuses an increment past `Number.MAX_SAFE_INTEGER`, and rejects unknown event discriminators plus forged sequence, before, or after fields instead of accepting an arbitrary recorded count.
+
+- `npm run typecheck` — pass
+- `npm test -- --run` — pass, 230 tests across 19 files
+- `npm run build` — pass
+- `git diff --check` — pass
+
+No UI, historical claim, or other mechanism is changed. No deployment check was performed for this not-yet-pushed commit.
+
 ## 2026-08-29 — local / browser checkpoint (UTC+8)
 
 ### Local
