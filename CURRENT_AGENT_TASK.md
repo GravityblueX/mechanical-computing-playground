@@ -5,11 +5,11 @@ Owner: local coding/research agent
 Target duration: about one useful hour at the agent's observed throughput
 Repository authority: remote `main`
 
-Previous task is complete and archived at `tasks/archive/2026-09-01-output-contracts.md`.
+Previous task is complete and archived at `tasks/archive/2026-09-01-carry-architecture-provenance.md`.
 
-The output-contract slice landed as `2ad181408d7a3c6d816d3c090604538636919f61` about 42 minutes after assignment, changing 11 files with roughly 345 additions and raising the recorded suite to 150 tests. CI and Pages both passed. The preceding substantial slices were generally closer to 30–33 minutes. This task is therefore slightly broader again, but it remains one coherent question:
+The previous carry-provenance slice landed as `d49b9d8585a99e33fa739b454af1b743519df618` about 31 minutes after assignment. It changed 14 files (roughly 328 additions / 103 deletions), raised the recorded suite from 150 tests in 14 files to 170 tests in 15 files, and CI passed. The prior substantial slices also generally landed in roughly 30–42 minutes. This assignment is therefore deliberately broader, while remaining one coherent question:
 
-> How do different mechanical architectures preserve a carry when another operation is happening, and how can the repository expose that difference without turning its generic carry events into fake historical geometry?
+> In an Odhner-type rotary accumulator, why must successive carries be scheduled rather than treated as simultaneous arithmetic side effects, what failure modes did later patents explicitly identify, and how can the playground expose that engineering constraint without pretending to know unsourced angles, forces, or production geometry?
 
 Fetch/pull remote `main` before starting. Remote state always wins.
 
@@ -21,13 +21,14 @@ Read in this order:
 2. `TODO.md`
 3. `AGENTS.md`
 4. `docs/EVIDENCE_POLICY.md`
-5. `docs/RESEARCH_GAPS.md`, especially Priority 0 carry and Priority 8 reliability
-6. `research/carry-is-the-hard-part.md`
-7. `research/key-driven-computation.md`
-8. `research/control-and-zeroing-source-map.md`
-9. `src/mechanisms/key-driven-accumulator/index.ts` and `tests/key-driven-accumulator.test.ts`
-10. current visible-carry mechanism/UI/tests and `src/main.ts`
-11. `docs/REPRESENTATION_AND_PROTOCOL.md`, `docs/TEACHING_PATH.md`, and `docs/VERIFICATION.md`
+5. `docs/RESEARCH_GAPS.md`, especially remaining carry/reliability gaps
+6. `research/carry-architecture-source-map.md`
+7. `research/carry-is-the-hard-part.md`
+8. `research/multiplication-mechanisms.md`
+9. `src/exhibits/carry-provenance/index.ts` and its tests
+10. current carry-chain / decimal-wheel core and visible-carry UI
+11. `src/mechanisms/pinwheel/index.ts`, current multiplication comparison, and relevant tests
+12. `docs/REPRESENTATION_AND_PROTOCOL.md`, `docs/TEACHING_PATH.md`, `docs/VERIFICATION.md`
 
 Do not use stale `IMPLEMENTATION_PLAN.md` checkboxes as task authority.
 
@@ -37,232 +38,252 @@ Before editing, run the current full test suite once and record the actual basel
 
 Complete four connected parts:
 
-1. deepen carry research from museum-level summary into a **source-separated carry architecture map**, anchored by Felt primary patents and a bounded Pascaline source chain;
-2. harden the existing key-driven accumulator so its carry events are part of the **validated replay contract**, not payload-bearing no-ops that can be tampered with silently;
-3. add typed carry-provenance profiles and a bilingual comparison on the existing visible-carry lesson, showing functional differences among the generic P/M chain, Pascaline sautoir, early Felt key-driven carry, and Felt's later Duplex/delayed-carry design;
-4. update tests/status/verification without inventing source-specific geometry or pretending that one state machine reproduces all of these mechanisms.
+1. build a primary-source map for **rotary / Odhner-family carry scheduling and documented reliability constraints**, distinguishing the 1894 Odhner mechanism, Valentin Odhner's 1921 transfer improvement, and Talamini/Marchant's 1932 carry-spacing improvement;
+2. add a small deterministic **P/M ordinal carry-scheduling model** that demonstrates why a chain of rotary carries needs successively ordered transfer opportunities, without inventing degrees, milliseconds, forces, or exact historical geometry;
+3. extend typed provenance and the public visible-carry lesson so visitors can compare stored-energy/key-overlap carry cases already present with the distinct rotary-actuator scheduling problem;
+4. update tests/status/research gaps/verification, keeping patents as evidence of described/intended mechanisms rather than proof that every production machine used an identical embodiment.
 
-Do **not** build a Pascaline emulator, a Comptometer emulator, a new gear animation, or a source-specific carry linkage in this slice.
+Do **not** build an Odhner emulator, source-specific gear animation, random failure simulator, torque model, or production-speed benchmark in this slice.
 
 ---
 
-# Part A — carry architecture source map
+# Part A — rotary carry / reliability source map
 
-Prefer creating a focused new file:
+Create a focused note, preferably:
 
 ```text
-research/carry-architecture-source-map.md
+research/rotary-carry-scheduling-source-map.md
 ```
 
-Then keep `research/carry-is-the-hard-part.md` as the explanatory essay and link it to the source map. If the repository's current research conventions strongly favor expanding the existing note instead, that is acceptable, but the final structure must make exact source/model boundaries easy to inspect.
+Use the two-axis evidence policy and keep every patent context separate.
 
-Use the two-axis evidence policy.
+## A1. W. T. Odhner, US 514,725 (1894) — baseline mechanism
 
-## A1. Pascaline boundary
+Primary source:
 
-Required source roles:
+- Willgodt Theophil Odhner, US 514,725, *Calculating Apparatus* (1894):
+  <https://patents.google.com/patent/US514725A>
 
-- Musée des Arts et Métiers / Cnam object page for the preserved arithmetic machine and institutional description of automatic carry by the `sautoir`:
-  <https://www.arts-et-metiers.net/musee/machine-arithmetique-de-pascal-chiffres-plus-sous-et-deniers-0>
-- Pascal, *Avis nécessaire à ceux qui auront curiosité de voir la Machine d'Arithmétique et de s'en servir*; a public edited text is available via Wikisource from the Brunschvicg/Boutroux 1923 edition:
-  <https://fr.wikisource.org/wiki/%C5%92uvres_de_Blaise_Pascal/Lettre_D%C3%A9dicatoire_de_la_Machine_Arithm%C3%A9tique_et_Avis_n%C3%A9cessaire/Avis>
-- existing CMU reconstruction material already cited in `research/carry-is-the-hard-part.md` may remain as **R/E2** reconstruction evidence.
+Inspect the patent text and relevant figures directly. At minimum record, at source-supported precision:
 
-Use Pascal's own text only for what it actually establishes: the machine automatically relieves the operator from mental carrying/borrowing and that mechanical complexity was accepted to make operation simple/reliable. Do **not** claim that Pascal's `Avis` itself gives the sautoir geometry if it does not.
+- calculating wheels with selectable projecting pins;
+- intermediate wheels transmitting to registering wheels;
+- the patent's statement that the intermediate wheels help ensure exact registering-wheel movement and prevent movement too far during rapid rotation;
+- the tens-transfer relationship in the text around Figs. 9–10: registering-wheel pin/cam movement places a transfer arm/shoulder into position, and a normally displaced carry pin/tooth is deflected so it advances the next higher registering wheel by one tooth;
+- the return of the transfer arm to normal position after the carry relationship has acted;
+- addition/subtraction use opposite crank directions in the described apparatus.
 
-Keep the institutional object/reconstruction evidence separate from Pascal's own operational claims.
+Treat these as **H/E1 patented mechanism claims**. Do not say this patent proves every later Original-Odhner production revision was geometrically identical.
 
-## A2. Felt 1887 early key-driven carry — primary source
+## A2. Valentin Jakob Odhner, US 1,377,269 (1921) — explicit rapid-rotation failure mode
 
-Required primary patent:
+Primary source:
 
-- Dorr E. Felt, US 366,945, *Adding Machine* (1887):
-  <https://patents.google.com/patent/US366945A/en>
+- Valentin Jakob Odhner, US 1,377,269, *Transfer Mechanism of Calculating-Machines* (1921):
+  <https://patents.google.com/patent/US1377269A/en>
 
-Inspect the patent itself. Record only source-supported roles such as:
+This is important because it states an engineering failure mode explicitly. Record only what the patent supports:
 
-- key-driven numeral wheels / column actuation;
-- carry from a lower numeral wheel to the next denomination;
-- the patent's actual cam/pawl/spring or stop-motion relationships only at the figure/text precision you inspected;
-- why this is an early Felt design and **not yet equivalent to the later Duplex carry scheduling problem**.
+- it identifies the earlier US514725-type transfer arm as prior art/context;
+- it says that especially when the calculating wheel is rotated rapidly, the ten-pins can throw the transfer arm back from its adjusted/operative position so the carry pins do not act and **miscalculation takes place**;
+- the proposed arrangement relocates the fulcrum/contact relationship to reduce the turning moment tending to throw the arm out of position;
+- the patent also describes a conical contact surface intended to increase contact area / reduce wear.
 
-Do not generalize this one patent to every Comptometer revision.
+This gives the repository a real documented reliability constraint, but **not** a numerical safe RPM, spring force, probability-of-failure curve, or production field-failure rate. Those remain open.
 
-## A3. Felt 1904 delayed carry / Duplex problem — primary source
+Label the patented intended improvement **H/E1**. If you discuss reliability consequences beyond the text, label the inference separately **R**, not H.
 
-Required primary patent:
+## A3. Louis Talamini / Marchant, US 1,867,603 (1932) — successive carry scheduling, spiral spacing, capacity/speed tradeoff
 
-- Dorr E. Felt, US 762,520, *Calculating Machine* (1904):
-  <https://patents.google.com/patent/US762520A/en>
+Primary source:
 
-This is the key source for the slice. Inspect the text and relevant figures directly.
+- Louis Talamini, assigned to Marchant Calculating Machine Company, US 1,867,603, *Calculating Machine* (1932):
+  <https://patents.google.com/patent/US1867603>
 
-Capture at source-supported precision:
+This source explicitly describes an Odhner-type carry scheduling problem and later optimization. Record at source-supported precision:
 
-- the machine is direct-key operated;
-- the carrying mechanism stores power for carry;
-- the specification explicitly addresses the problem that a carry may be lost/“swallowed” if it overlaps the larger movement produced by a key in the higher denomination;
-- the described solution delays/controls the carry until the higher-order key/actuator movement is completed;
-- relevant figure numbers / part numbers for the delayed-carry relationship if the patent text makes them clear (for example the carrying spring and delaying latch relationships), without turning them into a new geometric reconstruction.
+- the patent identifies Odhner US514725 as an example of rotary tens-carrying actuators;
+- additive/subtractive carry teeth are normally inactive and become active when the next-lower numeral wheel crosses `9 ↔ 0` and conditions the carry control;
+- successive carry teeth **cannot all operate simultaneously**: higher-order carry opportunities must be displaced/staggered sufficiently later so a carry-created boundary crossing can condition the next higher order;
+- the patent describes the resulting carry teeth as forming addition/subtraction spirals around the actuator and explains how their spacing constrains machine capacity;
+- it explains the two phases of positioning a carry member and driving the next gear, then proposes overlapping those phases to reduce required peripheral spacing;
+- the specification states that in the described practical experiment the safe peripheral displacement was reduced by about **22 percent** without increased care in manufacture/assembly;
+- it also connects spacing/centralization constraints to attainable operating speed.
 
-The historical claim is about the patented intended mechanism. Label it **H/E1**, not “every Model A production machine was exactly this drawing.”
-
-## A4. Production/artifact corroboration
-
-Required institutional source:
-
-- Smithsonian/NMAH, Comptometer Model A `nmah_690484`:
-  <https://www.si.edu/object/comptometer-model%3Anmah_690484>
-
-Use it to establish the model/date context and the catalog statement that the Model A was the first “duplex” machine, with more than one column able to add and each column able to add, receive, and carry simultaneously.
-
-Do not infer the exact US762520 linkage from the museum record alone. Keep:
+Keep the precision honest:
 
 ```text
-patented intended mechanism
+Talamini/Marchant 1932 description of an Odhner-type architecture
 !=
-artifact/catalog production statement
+proof that every Odhner machine had the exact same later Marchant geometry
 ```
 
-If you use Felt US960528A to connect later Felt text back to the 1904 Duplex patents, label that source separately and do not use it as a substitute for the 1904 patent itself.
+The `~22%` statement is specific to the patent's described embodiment/experiment. Do not promote it to a universal Odhner performance number.
 
-## A5. Required conclusion
+## A4. Institutional family context
 
-End the source map with a compact table along these lines:
+Use an institutional source only for bounded family context, not to replace the patents:
 
-| Case | Source/model | Human operation | How carry work is stored/scheduled | Source strength | Not established |
-|---|---|---|---|---|---|
-| repository generic carry | P/M | abstract increment/key action | serialized event chain | tested P/M | historical geometry/timing |
-| Pascaline | identified Pascaline / institutional + reconstruction sources | dial/stylus operation | sautoir/stored-energy automatic carry at supported level | H/R separated | exact universal geometry across surviving revisions |
-| Felt 1887 | US366945A | direct key actuation | source-specific early carry mechanism | H/E1 | later Duplex behavior |
-| Felt 1904 Duplex design | US762520A | overlapping multi-column key operation problem | delayed/controlled carry after higher actuator stroke in described design | H/E1 | every production revision geometry |
-| Model A | Smithsonian object/catalog | multi-column duplex operation | catalog says add/receive/carry simultaneously | H/E2 | exact patent-to-object linkage/timing |
+- Smithsonian/NMAH, *Pinwheel Calculating Machines*:
+  <https://www.si.edu/spotlight/calculating-machines/pinwheel-calculating-machines>
 
-Also record what remains open: source-specific force values, spring constants, tolerances, wear, maximum safe rate, and exact production-revision mapping.
+It is suitable for the broad statement that Odhner-style pinwheel machines set a number by exposing pins and transfer the selected digits through crank rotation. Keep detailed carry timing/mechanism claims anchored to the patents above.
+
+## A5. Required source-map conclusion
+
+End the note with a compact evolution table, for example:
+
+| Source/context | Carry problem exposed | Scheduling / transfer relationship | Evidence | Not established |
+|---|---|---|---|---|
+| US514725A (1894) | perform decimal transfer accurately during rotary operation | register crossing conditions arm; carry pin/tooth advances next order | H/E1 | later production universality, force/speed limits |
+| US1377269A (1921) | rapid rotation can knock transfer arm out and cause miscalculation | revised fulcrum/contact relationship reduces destabilizing moment; larger contact reduces wear | H/E1 | safe RPM, field failure rate, all production revisions |
+| US1867603A (1932) | cascaded carries require successive timing; spacing limits capacity | staggered/spiral carry opportunities; phase-overlap improvement | H/E1 for described patent | universal Odhner geometry; universal 22% gain |
+| repository ordinal schedule | explain dependency ordering only | deterministic P/M sequence slots | P/M | angles, time, torque, geometry, failure probability |
+
+Also list open evidence explicitly: production-revision mapping, exact materials/tolerances, lubrication/wear data, force/spring data, safe rotation rate, and measured failure envelopes.
 
 ---
 
-# Part B — harden key-driven carry replay semantics
+# Part B — deterministic ordinal rotary-carry schedule model
 
-The current `src/mechanisms/key-driven-accumulator/index.ts` exposes useful carry events, but review found a concrete integrity weakness:
-
-- `CARRY_PENDING` and `CARRY_PROPAGATED` currently reduce as no-ops;
-- `replayKeyStroke()` simply reduces the stored event array;
-- therefore a stored carry event's payload/order can be altered or removed in some cases without the same fail-closed action/event verification used by newer mechanism modules.
-
-Fix this conservatively. Do not redesign the whole key-driven mechanism.
-
-## B1. Required replay contract
-
-At minimum, make replay validate the stored trace against the deterministic event stream derived from:
+Add a small mechanism module under `src/mechanisms/`, using an explicit name such as:
 
 ```text
-initial state + action
+src/mechanisms/rotary-carry-schedule/
 ```
 
-before accepting it.
+This is a **P/M explanatory model**, not an Odhner geometric reconstruction.
 
-Required rejection cases:
+## B1. Modeling target
 
-- changed event sequence number;
-- changed `cycleId`;
-- changed `fromColumn` / `toColumn` on `CARRY_PENDING` or `CARRY_PROPAGATED`;
-- omitted carry event;
-- inserted extra carry event;
-- changed digit-advance payload;
-- altered final state;
-- unknown runtime event type rather than silently ignoring it.
+Represent only the dependency that a cascade of carries must receive **successively ordered transfer opportunities** within an abstract operation cycle.
 
-The implementation may follow the printing-ledger pattern: derive expected events from the action, compare them, then reduce and verify final state.
+Do not encode degrees or milliseconds. Use ordinal phase/slot indices such as:
 
-If the cleanest implementation also adds explicit transient `pendingCarry` state so individual carry reducers validate sequencing, that is acceptable, but do not expand state merely for visual effect. The minimum requirement is **fail-closed trace replay**.
+```text
+order 0 boundary crossed
+→ order 1 carry opportunity slot 0
+→ order 1 boundary crossed by that carry
+→ order 2 carry opportunity slot 1
+→ ...
+```
 
-## B2. State validation
+The model should make it impossible to interpret all carries as one simultaneous arithmetic mutation.
 
-Add or strengthen a state assertion if necessary so replay/transition reject malformed runtime state, including invalid digits, non-idle public action start, invalid counts, and impossible active-key/phase combinations.
+Suggested inspectable state/data:
 
-Preserve existing public examples (`7 + 4 = 11`, `99 + 7 = 106`) and deterministic behavior.
+- register width or carry depth;
+- direction: add / subtract if you can model it without adding unsupported mechanics;
+- current source order;
+- next higher target order;
+- ordinal transfer slot / phase index;
+- conditioned/ready relationship;
+- ordered events;
+- final schedule summary.
 
-## B3. Tests
+If direction adds noise, keep the first model direction-neutral and state explicitly that source patents describe additive/subtractive paths but this P/M slice models only ordering dependency.
 
-Add focused tests proving:
+## B2. Required events
 
-1. valid `99 + 7 -> 106` still exposes the two-column carry path and replays;
-2. tampering `CARRY_PENDING.fromColumn` fails;
-3. tampering `CARRY_PROPAGATED.toColumn` fails;
-4. removing one carry event fails;
-5. changing event sequence/cycle identity fails;
-6. changing final state fails;
-7. an unknown runtime event fails instead of becoming a no-op;
-8. malformed input state is rejected explicitly.
+Choose vocabulary consistent with the repo. The observable logic should be equivalent to:
 
-Do not claim this serialized P/M order is historical Comptometer timing.
+```text
+BOUNDARY_CROSSED sourceOrder=0
+NEXT_ORDER_CONDITIONED targetOrder=1
+TRANSFER_OPPORTUNITY slot=0 targetOrder=1
+BOUNDARY_CROSSED sourceOrder=1 causedByCarry=true
+NEXT_ORDER_CONDITIONED targetOrder=2
+TRANSFER_OPPORTUNITY slot=1 targetOrder=2
+...
+```
+
+Do not name an event `TOOTH_AT_37_DEGREES`, `SPRING_RELEASE_MS`, or similar unsupported physical detail.
+
+## B3. Replay / validation
+
+Follow the repository's newer fail-closed pattern:
+
+- deterministic state/action -> expected event sequence;
+- replay validates stored events against expected events;
+- final state/schedule is verified;
+- unknown runtime events fail;
+- malformed widths/orders/slot identities fail rather than being coerced.
+
+## B4. Tests
+
+Add focused Vitest coverage for at least:
+
+1. one carry requires one higher-order transfer opportunity;
+2. a 3-stage chain produces strictly increasing ordinal slots and preserves dependency order;
+3. no two dependent carry transfers share the same slot in the P/M schedule;
+4. a full-width carry-out is represented explicitly rather than indexing beyond the register;
+5. deterministic identical input gives identical schedule/events;
+6. replay reproduces final schedule;
+7. changed slot/order/sequence fails replay;
+8. omitted/inserted event fails replay;
+9. unknown runtime event fails;
+10. malformed width/depth/state is rejected.
+
+Do not write a test asserting an exact historical number of degrees, milliseconds, carry teeth, or safe RPM.
 
 ---
 
-# Part C — typed carry provenance + visible-carry comparison
+# Part C — typed provenance and public carry comparison
 
-Create a typed source dataset under an appropriate path such as:
+Extend the existing carry provenance dataset rather than creating a competing evidence framework.
 
-```text
-src/exhibits/carry-provenance/
-```
+Add source-separated profiles for at least:
 
-Follow the shape conventions already used by `control-provenance` and `output-contracts` rather than inventing a wholly new evidence framework.
+1. Odhner US514725A baseline transfer mechanism;
+2. Valentin Odhner US1377269A rapid-rotation/miscalculation improvement;
+3. Talamini/Marchant US1867603A successive/staggered carry scheduling and phase-overlap improvement;
+4. Smithsonian pinwheel family context only if useful as a separate H/E2 profile.
 
-Each profile should expose at least:
+Each profile must keep:
 
 - stable id;
-- identified family/source/model context;
-- claim type;
-- E1–E4 strength where applicable;
-- source label + URL;
-- documented carry role/relationship;
-- operator-protocol implication;
-- explicit `notEstablished` boundary.
+- source/model/date context;
+- H/R claim type and E1–E4 strength;
+- source URL;
+- documented relationship/failure constraint;
+- operator/architecture implication;
+- non-empty `notEstablished` boundary.
 
-Minimum source-separated profiles:
-
-1. Pascaline institutional/surviving-machine carry case;
-2. US366945A early Felt carry case;
-3. US762520A delayed/controlled Duplex carry design;
-4. Smithsonian Model A production/catalog case.
-
-Do not merge the two Felt patents and the Smithsonian object into one profile called “the Comptometer.”
+Do not merge all three patents into a generic “Odhner carry” profile.
 
 ## C1. Provenance tests
 
-At minimum test:
+At minimum verify:
 
-- IDs unique;
-- every H/R profile has source URL, claim type, strength, and non-empty `notEstablished`;
-- required source profiles exist;
-- US366945A and US762520A remain separate contexts;
-- Model A profile does not claim the exact 762520 linkage;
-- Pascal's historical text and modern/institutional mechanism evidence are not mislabelled as the same kind of source.
+- IDs remain unique;
+- all new H/R profiles have source + strength + `notEstablished`;
+- 1894, 1921, and 1932 patent contexts remain separate;
+- the 1921 profile is the one that records rapid-rotation miscalculation risk;
+- the 1932 profile does not present the ~22% spacing result as a universal Odhner number;
+- the 1932 Marchant patent is not mislabeled as an Odhner-authored patent.
 
-## C2. Public integration
+## C2. Visible-carry integration
 
-Prefer extending the existing `#/visible-carry` lesson instead of creating another route.
+Keep the existing `#/visible-carry` interactive generic carry lesson unchanged as the P/M arithmetic base. Add a compact bilingual subsection/group for **rotary carry scheduling / reliability**.
 
-The existing generic event chain must remain visibly **P/M**. Add a compact bilingual historical comparison beneath or beside it that answers:
+It should answer visibly:
 
 ```text
-same functional problem: a lower denomination crossed its boundary
-but what stores/schedules the carry, and what can overlap with it?
+Why can't a rotary carry chain just happen “all at once”?
+What can go wrong if the transfer element is not reliably conditioned at speed?
+Why did later designers care about spacing/phase overlap?
 ```
 
-Required visible distinctions:
+Show the new ordinal P/M schedule for a short 2–3 transfer chain, but label it clearly:
 
-- generic repository chain = serialized P/M teaching events;
-- Pascaline = sautoir / stored-energy carry at the supported institutional/reconstruction level;
-- Felt 1887 = early direct-key carry design from US366945A;
-- Felt 1904 = delayed/controlled carry designed to avoid carry loss during overlapping higher-denomination key movement;
-- Model A = catalogued duplex production context, not proof that the browser is reproducing patent geometry.
+- ordinal dependency only;
+- not historical angular spacing;
+- not timing in milliseconds;
+- not a failure-probability simulator.
 
-Show source/model/date, claim type/evidence strength, `documented`, and `not established` in text. No meaning only by color.
+Beside it, show the three source contexts with source/model/date, claim/evidence strength, documented point, and `not established` text.
 
-Do not draw a latch, spring, cam, pawl, or gear as if geometrically faithful unless the page explicitly says it is a non-geometric schematic. Prefer state/responsibility diagrams and source cards.
+No source-specific gear, arm, cam, spring, or spiral drawing is required. A textual/ordinal timeline is preferable.
 
 ---
 
@@ -270,14 +291,14 @@ Do not draw a latch, spring, cam, pawl, or gear as if geometrically faithful unl
 
 After Parts A–C are real:
 
-- update `STATUS.md` to record the carry source map, typed provenance comparison, and hardened key-driven replay;
-- update `TODO.md` only if a carry/evidence item genuinely belongs in the short current queue;
-- update the carry row in `docs/REPRESENTATION_AND_PROTOCOL.md` if the new sources materially improve it;
-- update `docs/TEACHING_PATH.md` so the visible-carry lesson points to the architecture comparison;
-- update `research/carry-is-the-hard-part.md` to point to the source map and remove any wording made too broad by the new primary-source inspection;
-- update `docs/RESEARCH_GAPS.md` only in the carry section, marking what is now sourced and what remains open; do not turn the research queue into a status dump;
-- update `docs/VERIFICATION.md` with the actual baseline/final test counts and commands run;
-- update README only if needed to make the carry comparison discoverable.
+- update `STATUS.md` to record the source-backed rotary carry/reliability map and ordinal P/M scheduler;
+- update `TODO.md` only if this completed slice genuinely belongs in the short queue;
+- update the carry row in `docs/REPRESENTATION_AND_PROTOCOL.md` if the new rotary scheduling evidence materially improves it;
+- update `docs/TEACHING_PATH.md` so visitors can discover the rotary scheduling comparison;
+- update `research/carry-is-the-hard-part.md` with a concise pointer to the new source map and the documented rapid-rotation/staggering problem;
+- update only the relevant carry/reliability portions of `docs/RESEARCH_GAPS.md`;
+- update `docs/VERIFICATION.md` with actual baseline/final test counts and commands run;
+- README only if needed for discoverability.
 
 Before commit/push, run:
 
@@ -288,40 +309,41 @@ npm run build
 git diff --check
 ```
 
-Perform a local browser smoke check for `#/visible-carry` in both English and Chinese if the established tooling makes that practical. Record exactly what was checked; do not claim a browser run you did not perform.
+Perform a local browser smoke check for `#/visible-carry` in English and Chinese if the established tooling makes that practical. Record exactly what was checked; do not claim a browser run you did not perform.
 
 # Acceptance
 
-The finished slice must let a visitor/test answer all of these without relying on unsourced gear drawings:
+The finished slice must let a visitor/test answer all of these without unsourced geometry:
 
-1. Why is `0099 + 1 -> 0100` more than a final arithmetic result?
-2. What is the difference between the repository's serialized P/M carry chain and Pascaline/Felt historical carry evidence?
-3. Why did overlapping key movement create a special carry-scheduling problem in Felt's later key-driven design?
-4. Which source supports that claim, and what does it **not** prove about production geometry?
-5. Can a tampered key-driven carry trace now fail closed instead of silently replaying?
+1. How does US514725A describe a carry reaching the next registering order?
+2. What exact rapid-operation failure does US1377269A say could cause miscalculation?
+3. Why does US1867603A say successive carries must be staggered rather than simultaneous?
+4. What did the 1932 patent claim to improve by overlapping operation phases, and what does its ~22% experimental statement **not** prove universally?
+5. Can the repository show a carry dependency schedule without pretending ordinal slots are historical angles/times?
+6. Does tampering that schedule fail closed?
 
 # Evidence boundaries
 
-- mathematical decimal carry relation: **M**;
-- repository carry/key-driven event order: **P/M**;
-- Pascal's own `Avis`: **H/E1** for his stated operational aims/claims, not for geometry absent from the text;
-- Cnam/Musée des Arts et Métiers and CMU reconstruction: institutional **H/E2** and reconstruction **R/E2** roles must remain distinct;
-- US366945A and US762520A: **H/E1** for the patented intended mechanisms described there;
-- Smithsonian Model A catalog: **H/E2** for identified object/model context and catalogued duplex behavior;
-- patent drawing != proof every production machine was manufactured exactly that way;
-- do not infer spring force, maximum speed, wear, tolerance, or exact timing without source evidence.
+- decimal carry relation: **M**;
+- repository ordinal schedule/event order: **P/M**;
+- US514725A, US1377269A, US1867603A: **H/E1** for the mechanisms/failure constraints described in those patents;
+- Smithsonian pinwheel family page: **H/E2** for broad identified family context;
+- a patent proves the described/intended embodiment, not universal production implementation;
+- the 1932 ~22% result belongs to the patent's described practical experiment, not all pinwheel calculators;
+- do not infer safe RPM, spring constants, torque, tolerances, wear life, lubrication intervals, field failure frequency, or precise angular timing without additional sources;
+- do not label Talamini/Marchant's later improvement as Odhner's own 1894 design.
 
 # Stop conditions
 
-Stop and leave a precise blocker rather than guessing if:
+Stop and record a precise blocker rather than guessing if:
 
-- a source cannot actually be inspected and the requested historical claim depends on it;
-- making the visible comparison requires source-specific geometry not supported by inspected material;
-- hardening key-driven carry replay requires a breaking rewrite across unrelated mechanism APIs;
-- a conflicting carry-provenance implementation has already landed on remote `main`;
-- the current carry model has a deeper arithmetic bug that must be fixed before provenance/UI work.
+- one of the three primary patent texts cannot actually be inspected and the requested claim depends on it;
+- implementing an ordinal scheduler would require rewriting unrelated shared carry APIs;
+- the current visible-carry page cannot accept another source group without a broad UI redesign; in that case keep the source map + typed profiles + tested scheduler and add only a minimal discoverability link;
+- a source-specific geometry claim becomes necessary to proceed;
+- a conflicting rotary-carry implementation has already landed on remote `main`.
 
-If all required work finishes substantially before the target duration, use remaining time only for the same question: strengthen carry tamper tests, source figure/section anchors, bilingual accessibility/text-state visibility, or a very small P/M delayed-carry scheduling experiment clearly labelled as engineering pedagogy. **Do not start a new reliability/torque simulation, another machine family, or source-specific geometry in this slice.**
+If all required work finishes substantially before the target duration, use remaining time only on this same question: strengthen tamper tests, add more exact figure/claim anchors from the three patents, improve bilingual/accessibility text-state visibility, or inspect a production/manual source that can genuinely narrow one `notEstablished` field. **Do not start a torque/random-failure simulator or another machine family.**
 
 # Git discipline
 
@@ -332,11 +354,11 @@ If all required work finishes substantially before the target duration, use rema
 - run all acceptance commands;
 - inspect diff for unrelated changes;
 - update status/verification only after tests pass;
-- commit and push to remote `main` according to the established workflow;
+- commit and push;
 - after push, stop and wait for the next `CURRENT_AGENT_TASK.md` revision.
 
 Suggested commit subject:
 
 ```text
-feat: ground carry architecture provenance
+feat: model rotary carry scheduling constraints
 ```
