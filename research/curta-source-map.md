@@ -102,7 +102,33 @@ Directly inspected control/service anchors:
 
 These pages establish Type II service responsibilities and named assemblies, not exact historical operator timing, every linkage, production-wide part identity, capacity, serial range, or equality with repository P/M controls.
 
-### 2.4 Mirror/index boundary
+### 2.4 Type II bill of material and drawing-sheet identity
+
+Two further manufacturer-origin image facsimiles were opened from the existing mycurta index on 2026-09-02. The mirror labels and filenames were treated only as access provenance; claims below come from visible document-internal text.
+
+#### Bill of material
+
+Direct scan: <https://www.mycurta.com/Documents/curta_2_bill_of_material_de.pdf>
+
+- the 14-page access PDF begins with a modern wrapper reading `CURTA 2 Calculator Bill of Material`, `www.museummura.li`, and `Dec. 2013 hansjoerg`; those are access/assembly metadata, not a Contina issue date;
+- the first underlying table visibly identifies `CONTINA A.G. MAUREN` and `CURTA II`;
+- its title block is dated **3.9.52** and exposes columns for drawing number, subject, quantity, material and remarks;
+- directly readable rows include drawing `2.001` (`Stufenwalzenkörper`) and subsequent numbered parts, establishing a manufacturer Type II parts-list identity at this inspected sheet—not a complete production chronology.
+
+#### Engineering drawing set
+
+Direct scan: <https://www.mycurta.com/Documents/Curta_2_Engineering_Drawings_c_de.pdf>
+
+- the 154-page access PDF's first sheet visibly identifies `CONTINA A.G. MAUREN`, `Type II`, subject `Stufenwalzenkörper`, drawing `2'001.-*2`, replacement reference `205'001-2`, and `Stück p. Masch.: 1`;
+- the sheet carries a drawn date **19.9.51** and a change table with visible entries including **1.4.53**; these are sheet-level dates, not proof of Type II production launch or a complete revision sequence;
+- the sheet itself includes type applicability and technical title-block fields. This pass uses it only for document/sheet identity and revision-table existence, not for reverse-engineered shape, dimensions, fits, materials, tolerances or interchangeability.
+
+- Claim type: **H**.
+- Evidence: **E1 at the directly inspected cover/table/first-sheet precision**.
+- Capacity boundary: neither inspected Type II BOM/drawing first page visibly states `11×8×15`; capacity remains independently established only by the already inspected dual-model Contina operator guide.
+- Chronology boundary: the 1951/1952/1953 dates belong to particular drawing/list sheets. They do not establish one frozen manual issue, complete replacement-leaf chronology, production start, or unchanged construction across all Type II machines.
+
+### 2.5 Mirror/index boundary
 
 The mycurta/vcalc index exposes distinct Type I and Type II English/German service-manual, BOM and drawing links. Curta.org separately lists operator-manual transcriptions. These indexes are access/reference layers; filenames or collector descriptions are not silently promoted into manufacturer provenance.
 
@@ -125,13 +151,15 @@ Directly established in this pass:
 ```text
 operator guide: Model I 8×6×11; Model II 11×8×15
 Type I service cover: Model I 8×6×11; autumn 1967
+Type II BOM first table: internal CONTINA A.G. MAUREN / CURTA II identity; sheet date 3.9.52
+Type II drawing-set first sheet: internal Type II identity; drawn 19.9.51 and visible change-table entry 1.4.53
 patent: one identified patented embodiment
 ```
 
 Still open:
 
 - serial/revision mapping from patent embodiment to production machines;
-- Type II capacity/date and replacement-leaf version chronology;
+- a Type II service-manual frozen-issue date and replacement-leaf version chronology; the inspected BOM/drawing dates remain sheet-level only;
 - whether hidden parts/linkages changed across all production revisions;
 - exact handle, clearing, carriage and safety-lock geometry/timing beyond the inspected Type II service responsibilities;
 - tooth profiles, ratios, decade-transfer sequence, tolerances and measured performance.

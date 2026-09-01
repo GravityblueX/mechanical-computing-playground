@@ -25,7 +25,7 @@ Current state: the four-track typed atlas separates directly inspected Differenc
 
 Remaining gaps:
 
-- Curta full operator/service edition mapping, Type II capacity/date/replacement-leaf chronology, and production Type I/II revision/linkage mapping;
+- Curta full operator/service edition mapping, Type II service-issue/replacement-leaf chronology, and production Type I/II revision/linkage mapping; Type II capacity is established by the dual-model operator guide, while newly inspected 1951–1953 BOM/drawing dates remain sheet-level only;
 - Analytical Engine content-page images within the Cambridge-confirmed 1889 chapter-32 range pp. 331–338, an inspected drawing catalogue/cross-walk, additional exact printed pages, and source-specific reader/Store/Mill geometry;
 - Babbage-primary drawing interpretation beyond archive titles and the R/E2 reconstruction account, including source-specific lifetime timing/manufacturing evidence;
 - a stable full facsimile of Bush 1931 before construction-paper page/figure claims, and direct Shannon 1941 full-text inspection; canonical retries on 2026-09-02 remained blocked/closed and are now explicitly encoded in the atlas;
@@ -147,7 +147,7 @@ Keep this bounded to human-machine arithmetic responsibility, not a generic soci
 
 Only files with real remaining evidence work are listed:
 
-1. `research/curta-source-map.md` — Type II capacity/date/replacement-leaf chronology and production revision/linkage mapping beyond the inspected service leaves;
+1. `research/curta-source-map.md` — Type II service-issue/replacement-leaf chronology and production revision/linkage mapping beyond the inspected service/BOM/drawing sheets; capacity is already primary-guide anchored;
 2. `research/analytical-engine-information-flow.md` — content-page images for items 10–20 inside known 1889 chapter pp. 331–338, a defensible printed-catalogue/BAB-code cross-walk, and drawing-level reader/Store/Mill coordination evidence;
 3. `research/differential-analyzer.md` — accessible Bush 1931 and Shannon 1941 full texts, plus component interconnection/error evidence; current canonical publisher routes remain blocked/closed;
 4. `research/difference-engine-source-map.md` — Scheutz/Babbage drawing interpretation, printer timing, modern measured performance, unexposed Scheutz letter, why the catalog retains 2214 despite independently confirmed patent 2216, as-built/specification revision mapping, and manufacturing evidence beyond catalog titles;

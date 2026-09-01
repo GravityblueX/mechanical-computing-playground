@@ -142,6 +142,14 @@ describe('named-machine source anchor atlas', () => {
     expect(type2.notEstablished.map(item => item.en).join(' ')).toMatch(/dated frozen revision.*reused Model I pictures.*repository/);
   });
 
+  it('keeps Type II sheet dates at document precision rather than production chronology or geometry', () => {
+    const sheets = getNamedMachineSourceAnchor('curta-type2-bom-drawing');
+    expect(sheets).toMatchObject({ claimType: 'H', evidenceStrength: 'E1', accessKind: 'specialist-hosted primary facsimile', fullFacsimileInspected: false, documentRole: 'archive drawing' });
+    expect(sheets.supports.map(item => item.en).join(' ')).toMatch(/Type II manufacturer identity.*3\.9\.52.*19\.9\.51.*1\.4\.53/);
+    expect(sheets.notEstablished.map(item => item.en).join(' ')).toMatch(/service-manual issue date.*production launch.*complete revision\/replacement-leaf chronology.*11×8×15.*geometry.*interchangeability.*repository Curta timing/);
+    expect(sheets.pageFigureAnchors).toEqual(expect.arrayContaining([expect.stringMatching(/BOM PDF p\. 1/), expect.stringMatching(/drawing PDF p\. 1/)]));
+  });
+
   it('requires facsimile inspection before Analytical Engine page claims', () => {
     const primary = getNamedMachineSourceAnchor('ae-menabrea-lovelace-1843');
     const transcription = getNamedMachineSourceAnchor('ae-hpb-1888-transcription');

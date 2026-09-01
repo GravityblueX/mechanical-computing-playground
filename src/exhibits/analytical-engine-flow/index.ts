@@ -52,8 +52,31 @@ function calculate(operation: ArithmeticOperation, left: number, right: number):
   safe(result, 'Mill result');
   return result;
 }
-function statesEqual(left: Readonly<AnalyticalFlowState>, right: Readonly<AnalyticalFlowState>): boolean {
-  return JSON.stringify(left) === JSON.stringify(right);
+function semanticallyEqual(left: unknown, right: unknown): boolean {
+  if (Object.is(left, right)) return true;
+  if (Array.isArray(left) || Array.isArray(right)) {
+    if (!Array.isArray(left) || !Array.isArray(right) || left.length !== right.length) return false;
+  }
+  if (left === null || right === null || typeof left !== 'object' || typeof right !== 'object') return false;
+  if (Object.getPrototypeOf(left) !== Object.getPrototypeOf(right)) return false;
+  const enumerableKeys = (value: object) => Reflect.ownKeys(value)
+    .filter((key) => Object.prototype.propertyIsEnumerable.call(value, key));
+  const leftKeys = enumerableKeys(left);
+  const rightKeys = enumerableKeys(right);
+  return leftKeys.length === rightKeys.length
+    && leftKeys.every((key) => Object.prototype.hasOwnProperty.call(right, key)
+      && semanticallyEqual((left as Record<PropertyKey, unknown>)[key], (right as Record<PropertyKey, unknown>)[key]));
+}
+function normalizeFixture(fixture: Readonly<AnalyticalFixture>): AnalyticalFixture {
+  if (fixture === null || typeof fixture !== 'object' || Array.isArray(fixture)) throw new InvalidAnalyticalFlowError('fixture must be an object');
+  const supportedKeys = new Set<PropertyKey>(['a', 'b', 'c', 'd']);
+  const hasUnknownEnumerableKey = Reflect.ownKeys(fixture).some(
+    (key) => Object.prototype.propertyIsEnumerable.call(fixture, key) && !supportedKeys.has(key),
+  );
+  if (hasUnknownEnumerableKey) throw new InvalidAnalyticalFlowError('fixture contains unsupported fields');
+  const normalized = { a: fixture.a, b: fixture.b, c: fixture.c, d: fixture.d };
+  safe(normalized.a, 'a'); safe(normalized.b, 'b'); safe(normalized.c, 'c'); safe(normalized.d, 'd');
+  return normalized;
 }
 
 export function createAnalyticalFlowState(): AnalyticalFlowState {
@@ -121,14 +144,14 @@ function makeEvent(sequence: number, event: AnalyticalEventInput): AnalyticalFlo
 }
 
 export function createAnalyticalFlowTrace(fixture: AnalyticalFixture = { a: 2, b: 3, c: 4, d: 5 }): AnalyticalFlowTrace {
-  safe(fixture.a, 'a'); safe(fixture.b, 'b'); safe(fixture.c, 'c'); safe(fixture.d, 'd');
+  const normalizedFixture = normalizeFixture(fixture);
   const initialState = createAnalyticalFlowState();
   const events: AnalyticalFlowEvent[] = [];
   const add = (event: Parameters<typeof makeEvent>[1]) => events.push(makeEvent(events.length, event));
-  add({ type: 'NUMBER_ASSOCIATED', cardRole: 'NUMBER', location: 'V1', symbol: 'a', value: fixture.a });
-  add({ type: 'NUMBER_ASSOCIATED', cardRole: 'NUMBER', location: 'V2', symbol: 'b', value: fixture.b });
-  add({ type: 'NUMBER_ASSOCIATED', cardRole: 'NUMBER', location: 'V3', symbol: 'c', value: fixture.c });
-  add({ type: 'NUMBER_ASSOCIATED', cardRole: 'NUMBER', location: 'V4', symbol: 'd', value: fixture.d });
+  add({ type: 'NUMBER_ASSOCIATED', cardRole: 'NUMBER', location: 'V1', symbol: 'a', value: normalizedFixture.a });
+  add({ type: 'NUMBER_ASSOCIATED', cardRole: 'NUMBER', location: 'V2', symbol: 'b', value: normalizedFixture.b });
+  add({ type: 'NUMBER_ASSOCIATED', cardRole: 'NUMBER', location: 'V3', symbol: 'c', value: normalizedFixture.c });
+  add({ type: 'NUMBER_ASSOCIATED', cardRole: 'NUMBER', location: 'V4', symbol: 'd', value: normalizedFixture.d });
   const operation = (left: StoreLocation, right: StoreLocation, operation: ArithmeticOperation, target: StoreLocation, symbol: 'p' | 'q' | 'result', leftValue: number, rightValue: number) => {
     add({ type: 'STORE_TO_MILL', cardRole: 'DIRECTIVE', source: left, value: leftValue, inputIndex: 0 });
     add({ type: 'STORE_TO_MILL', cardRole: 'DIRECTIVE', source: right, value: rightValue, inputIndex: 1 });
@@ -138,21 +161,32 @@ export function createAnalyticalFlowTrace(fixture: AnalyticalFixture = { a: 2, b
     add({ type: 'MILL_TO_STORE', cardRole: 'DIRECTIVE', target, symbol, value: result });
     return result;
   };
-  const p = operation('V1', 'V2', 'MULTIPLY', 'V5', 'p', fixture.a, fixture.b);
-  const q = operation('V5', 'V3', 'ADD', 'V6', 'q', p, fixture.c);
-  const result = operation('V6', 'V4', 'MULTIPLY', 'V7', 'result', q, fixture.d);
+  const p = operation('V1', 'V2', 'MULTIPLY', 'V5', 'p', normalizedFixture.a, normalizedFixture.b);
+  const q = operation('V5', 'V3', 'ADD', 'V6', 'q', p, normalizedFixture.c);
+  const result = operation('V6', 'V4', 'MULTIPLY', 'V7', 'result', q, normalizedFixture.d);
   add({ type: 'RESULT_OUTPUT', cardRole: 'OUTPUT', source: 'V7', value: result });
   const finalState = events.reduce(reduceAnalyticalFlowEvent, initialState);
-  return { fixture: structuredClone(fixture), initialState, events, finalState };
+  return { fixture: normalizedFixture, initialState, events, finalState };
+}
+
+function fixtureDerivedTrace(trace: Readonly<AnalyticalFlowTrace>): AnalyticalFlowTrace {
+  const canonical = createAnalyticalFlowTrace(trace.fixture);
+  if (!semanticallyEqual(trace.fixture, canonical.fixture)) throw new InvalidAnalyticalFlowError('fixture contains unsupported fields');
+  if (!semanticallyEqual(trace.initialState, canonical.initialState)) throw new InvalidAnalyticalFlowError('initial state does not match fixture-derived trace');
+  if (!semanticallyEqual(trace.events, canonical.events)) throw new InvalidAnalyticalFlowError('fixture/event mismatch');
+  if (!semanticallyEqual(trace.finalState, canonical.finalState)) throw new InvalidAnalyticalFlowError('fixture/final state mismatch');
+  return canonical;
 }
 
 export function replayAnalyticalFlow(trace: Readonly<AnalyticalFlowTrace>): AnalyticalFlowState {
+  fixtureDerivedTrace(trace);
   const replayed = trace.events.reduce(reduceAnalyticalFlowEvent, structuredClone(trace.initialState));
-  if (!statesEqual(replayed, trace.finalState)) throw new InvalidAnalyticalFlowError('replay final state mismatch');
+  if (!semanticallyEqual(replayed, trace.finalState)) throw new InvalidAnalyticalFlowError('replay final state mismatch');
   return replayed;
 }
 
 export function stateAtAnalyticalEvent(trace: Readonly<AnalyticalFlowTrace>, count: number): AnalyticalFlowState {
   if (!Number.isInteger(count) || count < 0 || count > trace.events.length) throw new InvalidAnalyticalFlowError('event index outside trace');
+  fixtureDerivedTrace(trace);
   return trace.events.slice(0, count).reduce(reduceAnalyticalFlowEvent, structuredClone(trace.initialState));
 }

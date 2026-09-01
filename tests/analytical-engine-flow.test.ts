@@ -7,10 +7,12 @@ import {
   replayAnalyticalFlow,
   stateAtAnalyticalEvent,
   type AnalyticalFlowEvent,
+  type AnalyticalFlowState,
   type AnalyticalFlowTrace,
 } from '../src/exhibits/analytical-engine-flow';
 
 const clone = <T>(value: T): T => structuredClone(value);
+const reverseObjectKeyOrder = <T extends object>(value: T): T => Object.fromEntries(Object.entries(value).reverse()) as T;
 
 describe('Analytical Engine P/M information-flow trace', () => {
   it('reaches 50 through separately stored p=6 and q=10', () => {
@@ -44,6 +46,139 @@ describe('Analytical Engine P/M information-flow trace', () => {
     const trace = createAnalyticalFlowTrace();
     expect(createAnalyticalFlowTrace()).toEqual(trace);
     expect(replayAnalyticalFlow(trace)).toEqual(trace.finalState);
+  });
+
+  it('rejects events and final state generated from a different fixture', () => {
+    const trace = clone(createAnalyticalFlowTrace());
+    const alternate = createAnalyticalFlowTrace({ a: 3, b: 4, c: 5, d: 6 });
+    trace.events = clone(alternate.events);
+    trace.finalState = clone(alternate.finalState);
+
+    expect(() => replayAnalyticalFlow(trace)).toThrow(InvalidAnalyticalFlowError);
+  });
+
+  it('accepts semantic object-key reordering and a JSON round trip', () => {
+    const canonical = createAnalyticalFlowTrace();
+    const reordered = clone(canonical);
+    reordered.fixture = reverseObjectKeyOrder(reordered.fixture);
+    reordered.initialState = reverseObjectKeyOrder(reordered.initialState);
+    reordered.events = reordered.events.map(reverseObjectKeyOrder);
+    reordered.finalState = reverseObjectKeyOrder(reordered.finalState);
+
+    expect(JSON.stringify(reordered.events[0])).not.toBe(JSON.stringify(canonical.events[0]));
+    expect(replayAnalyticalFlow(reordered)).toEqual(canonical.finalState);
+    expect(replayAnalyticalFlow(JSON.parse(JSON.stringify(canonical)) as AnalyticalFlowTrace)).toEqual(canonical.finalState);
+  });
+
+  it('rejects fixture-only tampering and unsupported fixture fields', () => {
+    const changed = clone(createAnalyticalFlowTrace());
+    changed.fixture.a = 3;
+    expect(() => replayAnalyticalFlow(changed)).toThrow(/fixture\/event mismatch/);
+
+    const extra = clone(createAnalyticalFlowTrace()) as AnalyticalFlowTrace & { fixture: AnalyticalFlowTrace['fixture'] & { note?: string } };
+    extra.fixture.note = undefined;
+    expect(() => replayAnalyticalFlow(extra)).toThrow(/unsupported fields/);
+
+    const symbol = clone(createAnalyticalFlowTrace());
+    Object.defineProperty(symbol.fixture, Symbol('unknown'), { enumerable: true, value: undefined });
+    expect(() => replayAnalyticalFlow(symbol)).toThrow(/unsupported fields/);
+  });
+
+  it('validates the fixture before unrelated event and final-state corruption', () => {
+    const trace = clone(createAnalyticalFlowTrace());
+    trace.fixture.a = Number.MAX_SAFE_INTEGER + 1;
+    trace.events[0] = { ...trace.events[0], type: 'UNKNOWN' } as unknown as AnalyticalFlowEvent;
+    trace.finalState.output = 49;
+
+    expect(() => replayAnalyticalFlow(trace)).toThrow('a must be a safe integer');
+  });
+
+  it('rejects a non-canonical initial state', () => {
+    const trace = clone(createAnalyticalFlowTrace());
+    trace.initialState.output = 0;
+
+    expect(() => replayAnalyticalFlow(trace)).toThrow(/initial state.*fixture-derived trace/);
+  });
+
+  it('preserves event-array order and rejects extra event fields', () => {
+    const reordered = clone(createAnalyticalFlowTrace());
+    [reordered.events[0], reordered.events[1]] = [reordered.events[1], reordered.events[0]];
+    expect(() => replayAnalyticalFlow(reordered)).toThrow(/fixture\/event mismatch/);
+
+    const extra = clone(createAnalyticalFlowTrace());
+    (extra.events[0] as AnalyticalFlowEvent & { unexpected: boolean }).unexpected = true;
+    expect(() => replayAnalyticalFlow(extra)).toThrow(/fixture\/event mismatch/);
+  });
+
+  it('replays supported alternate and safe-integer boundary fixtures', () => {
+    const alternate = createAnalyticalFlowTrace({ a: 3, b: 4, c: 5, d: 6 });
+    expect(replayAnalyticalFlow(alternate).output).toBe(102);
+
+    const boundary = createAnalyticalFlowTrace({ a: 1, b: Number.MAX_SAFE_INTEGER, c: 0, d: 1 });
+    expect(replayAnalyticalFlow(boundary).output).toBe(Number.MAX_SAFE_INTEGER);
+  });
+
+  it('binds fixture provenance while stepping the trace', () => {
+    const trace = clone(createAnalyticalFlowTrace());
+    trace.fixture.d = 6;
+
+    expect(() => stateAtAnalyticalEvent(trace, 0)).toThrow(/fixture\/event mismatch/);
+
+    const finalState = clone(createAnalyticalFlowTrace());
+    finalState.finalState.output = 49;
+    expect(() => stateAtAnalyticalEvent(finalState, 0)).toThrow(/fixture\/final state mismatch/);
+  });
+
+  it('rejects a null fixture before consuming the trace', () => {
+    const trace = clone(createAnalyticalFlowTrace());
+    (trace as unknown as { fixture: null }).fixture = null;
+
+    expect(() => replayAnalyticalFlow(trace)).toThrow('fixture must be an object');
+  });
+
+  it.each([Number.NaN, Number.POSITIVE_INFINITY, Number.NEGATIVE_INFINITY])('rejects non-finite fixture value %s', (value) => {
+    const trace = clone(createAnalyticalFlowTrace());
+    trace.fixture.a = value;
+
+    expect(() => replayAnalyticalFlow(trace)).toThrow('a must be a safe integer');
+  });
+
+  it.each([Number.NaN, Number.POSITIVE_INFINITY, Number.NEGATIVE_INFINITY])('does not equate non-finite state value %s with null', (value) => {
+    const initial = clone(createAnalyticalFlowTrace());
+    initial.initialState.currentCardRole = value as unknown as AnalyticalFlowState['currentCardRole'];
+    expect(() => replayAnalyticalFlow(initial)).toThrow(/initial state.*fixture-derived trace/);
+
+    const final = clone(createAnalyticalFlowTrace());
+    final.finalState.mill.result = value;
+    expect(() => replayAnalyticalFlow(final)).toThrow(/fixture\/final state mismatch/);
+  });
+
+  it('rejects enumerable undefined and Symbol extensions throughout the trace contract', () => {
+    const initial = clone(createAnalyticalFlowTrace());
+    (initial.initialState as AnalyticalFlowState & { unexpected?: unknown }).unexpected = undefined;
+    expect(() => replayAnalyticalFlow(initial)).toThrow(/initial state.*fixture-derived trace/);
+
+    const event = clone(createAnalyticalFlowTrace());
+    Object.defineProperty(event.events[0], Symbol('unexpected'), { enumerable: true, value: undefined });
+    expect(() => replayAnalyticalFlow(event)).toThrow(/fixture\/event mismatch/);
+
+    const final = clone(createAnalyticalFlowTrace());
+    (final.finalState as AnalyticalFlowState & { unexpected?: unknown }).unexpected = undefined;
+    expect(() => stateAtAnalyticalEvent(final, 0)).toThrow(/fixture\/final state mismatch/);
+  });
+
+  it('rejects sparse event arrays and enumerable array extensions in replay and stepping', () => {
+    const sparse = clone(createAnalyticalFlowTrace());
+    Reflect.deleteProperty(sparse.events, '0');
+    expect(() => stateAtAnalyticalEvent(sparse, 0)).toThrow(/fixture\/event mismatch/);
+
+    const stringExtension = clone(createAnalyticalFlowTrace());
+    (stringExtension.events as AnalyticalFlowEvent[] & { note?: unknown }).note = true;
+    expect(() => replayAnalyticalFlow(stringExtension)).toThrow(/fixture\/event mismatch/);
+
+    const symbolExtension = clone(createAnalyticalFlowTrace());
+    Object.defineProperty(symbolExtension.events, Symbol('unexpected'), { enumerable: true, value: undefined });
+    expect(() => stateAtAnalyticalEvent(symbolExtension, 0)).toThrow(/fixture\/event mismatch/);
   });
 
   it('requires two Mill operands before operation selection', () => {

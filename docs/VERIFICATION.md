@@ -1,5 +1,26 @@
 # Verification record
 
+## 2026-09-02 — Analytical replay integration and Curta Type II sheet precision
+
+The current-main pre-edit baseline at `d076a061445b6dce498cc92c5a5e890e6b6693ad` passed typecheck and 302 tests across 21 files. The reviewed behavioral content of conflict-blocked PR #11 exact head `4a98fb186978356af5e860b76d0c15d811a28586` was applied only to the Analytical Engine flow and its tests, preserving current-main PR #10 direct-multiplication action-authority changes. Analytical replay and stepping now derive the canonical initial state/events/final state from an exact safe-integer `{a,b,c,d}` fixture and fail closed on fixture-only or alternate-fixture substitution, unknown enumerable string/Symbol fields, non-finite/undefined extensions, sparse or extended/reordered arrays and final-state tampering. Object member insertion order remains non-semantic.
+
+A bounded Curta pass directly inspected the first manufacturer table/sheet in a 14-page Type II bill-of-material PDF and 154-page Type II drawing PDF. Visible internal evidence identifies Contina A.G. Mauren / CURTA II and records BOM table date 3.9.52, drawing `2’001.-*2` drawn 19.9.51, and a visible 1.4.53 change entry. These are sheet-level dates only: they do not establish a frozen service-manual issue, production launch, complete revision/replacement-leaf chronology, capacity on those sheets, hidden geometry or interchangeability. The modern `Dec. 2013` BOM wrapper is recorded as access/assembly metadata, not a manufacturer issue date.
+
+- `npm run typecheck` — pass
+- `npm test -- --run` — pass, 320 tests across 21 files; one later repeat hit transient multi-worker Node OOM, then `npm test -- --run --maxWorkers=1` passed the same 320/21 cleanly
+- `npm run build` — pass
+- `git diff --check` — pass
+- focused Analytical Engine, direct-multiplier and source-atlas tests — 69 tests passed (30 + 22 + 17)
+
+Local bilingual browser smoke:
+
+- `#/source-atlas` rendered the new Type II manufacturer-sheet card and its three sheet dates in English and Chinese;
+- `#/curta` retained the tested P arithmetic/operator abstraction and 8478 result;
+- `#/about` retained the evidence-policy boundary;
+- checked routes had no desktop horizontal overflow.
+
+No deployment check was performed for this not-yet-pushed completion commit.
+
 ## 2026-09-02 — Bush 1931 and Shannon 1941 bounded full-text retry
 
 The current-main pre-edit baseline passed typecheck and 292 tests across 21 files. Canonical full-text access was retried before changing evidence metadata. Bush's DOI resolved to ScienceDirect, whose article route presented human verification rather than pages; Commons exact-title search found no facsimile, the Internet Archive metadata route failed at TLS, and OpenAlex reported a closed work with no repository full text. Wiley's Shannon PDF returned HTTP 403; its rendered landing page exposed bibliographic metadata/references but no article body, Commons found no exact-title facsimile, and OpenAlex likewise reported no repository full text.

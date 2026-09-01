@@ -1,6 +1,6 @@
 # Current Status
 
-Last reconciled on 2026-09-02 after the bounded Bush 1931 / Shannon 1941 full-text access retry and direct-multiplication action-bound replay hardening.
+Last reconciled on 2026-09-02 after integrating Analytical Engine fixture-derived replay provenance and inspecting Type II Curta manufacturer sheets.
 
 This file is the **current-state authority** for the repository. `ROADMAP.md` describes where the project should go; `IMPLEMENTATION_PLAN.md` is still useful as a dependency/design specification, but many of its checkboxes predate later implementation and must not be treated as the live task ledger.
 
@@ -58,7 +58,7 @@ The current browser shell contains non-empty routes or views for:
 - interactive controls area with setting–crank interlock, incomplete-key-stroke integrity, and independently stepped result/revolution-register lifecycle scenarios, each preserving source/P/M boundaries;
 - interactive output-contract lesson exposing `+12, +8, SUBTOTAL, +5, TOTAL`, persistent record versus accumulator state, and source-separated register/listing/Difference Engine comparisons;
 - Curta;
-- interactive Analytical Engine P/M information flow for `(ab+c)d`, with Store/Mill/card roles, intermediate `p/q`, output, stepping, and hardened replay;
+- interactive Analytical Engine P/M information flow for `(ab+c)d`, with Store/Mill/card roles, intermediate `p/q`, output, stepping, and fixture-derived hardened replay that rejects alternate-fixture substitution and adversarial trace shape changes;
 - interactive continuous mechanical integration workbench with A/B inputs, explicit sum, coordinate/integral phases, tracer output, stepping, reset, and a link to the documented frontlash responsibility;
 - bilingual mechanical-error-control comparison preserving distinct Thomas, Odhner/Talamini, and Bush source/problem/control boundaries;
 - bilingual arithmetic-work comparison showing what operators choose/repeat/shift/correct/request versus what mechanisms represent/execute/retain across four existing scenarios;
@@ -99,7 +99,7 @@ The most important remaining gaps are:
 - carry maps now add Thomas 1820 patent/object separation, 1865 rapid overrun/sequential phasing/simultaneous-load false-result evidence, and the 1880 proposal versus R/E3 adoption boundary; exact Thomas and rotary production mapping, factory instructions/direct measurement, force/contact-load/material/lubrication/tolerance/wear/safe-rate/failure envelopes, and source-specific geometry remain open;
 - direct multiplication now has a tested pedagogical functional state/event model and a fourth comparison path, but no source-specific Millionaire geometry is claimed;
 - key-driven computation now has tested accumulator and incomplete-stroke integrity/interlock P/M models; simultaneous multi-column operation, exact Model E/F trigger/release geometry/timing, primary patent mapping, and universal production claims remain intentionally unmodeled;
-- `research/curta-source-map.md` now directly inspects US 2,525,352, the two-page Contina operator guide, the 1967 Model I service-manual cover, and Type II service PDF pp. 1–2, 6/leaf N I-a, 10/leaf O-1-2 and 34/leaf S 3 for document/replacement-leaf, zero-position, carriage, reversing, clearing and zero-positioner responsibilities; Type II capacity/date and full production-revision/linkage mapping remain open;
+- `research/curta-source-map.md` now directly inspects US 2,525,352, the Contina operator guide, Model I/II service material, plus Type II manufacturer BOM/drawing first sheets: internal CONTINA/Type II identity, BOM sheet date 3.9.52, drawing date 19.9.51 and visible 1.4.53 change entry; these sheet dates do not establish a frozen service issue, production chronology, capacity, hidden geometry or interchangeability;
 - `research/analytical-engine-information-flow.md` directly anchors 1843 printed pp. 677, 679 and 704 and now separates the 1888 Bath reading, Cambridge-confirmed 1889 compilation chapter 32 / pp. 331–338 range, and Fourmilab items 10–20 transcription; because the relevant page images remain inaccessible, card-role/`(ab+c)d` content stays E3 and no modern BAB-code cross-walk is claimed;
 - `research/subtraction-and-division.md` now separates the directly inspected Curta operator-guide viewer-page-1 controls (H/E1 via specialist mirror) from the E3 division transcription; exact Curta division-example edition/pages and the Thomas 1868 instruction facsimile remain open;
 - `research/differential-analyzer.md` now directly inspects the Smithsonian object group/components and Bush–Caldwell 1931 application facsimile pp. 1898–1902/Figs. 1–3; bounded 2026-09-02 retries reconfirm Bush 1931 and Shannon 1941 identities but both full texts remain inaccessible, so the atlas encodes separate bibliographic-only construction/theory roles with no false pages, equations, geometry, torque/error or P/M timing claims;
