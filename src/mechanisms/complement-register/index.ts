@@ -30,6 +30,10 @@ const arrayPopIntrinsic = Function.prototype.call.bind(Array.prototype.pop) as u
   array: T[],
 ) => T | undefined;
 
+type ComplementTraceTreeFrame =
+  | { value: object; depth: number; exiting: false }
+  | { value: object; depth: number; exiting: true; array: boolean; keys: PropertyKey[] };
+
 export const COMPLEMENT_REGISTER_MECHANISM_ID = 'complement-register';
 
 export interface ComplementRegisterState {
@@ -128,7 +132,7 @@ const assertComplementTraceTree = (value: unknown): void => {
 
   const active = new WeakSetIntrinsic<object>();
   const seen = new WeakSetIntrinsic<object>();
-  const stack: Array<{ value: object; depth: number; exiting: boolean }> = [{
+  const stack: ComplementTraceTreeFrame[] = [{
     value: value as object,
     depth: 0,
     exiting: false,
@@ -139,7 +143,26 @@ const assertComplementTraceTree = (value: unknown): void => {
     const frame = arrayPopIntrinsic(stack);
     if (!frame) break;
     if (frame.exiting) {
-      structuredCloneIntrinsic(frame.value);
+      const cloned = structuredCloneIntrinsic(frame.value);
+      if (cloned === null || typeof cloned !== 'object') invalid();
+      const clonedArray = arrayIsArrayIntrinsic(cloned);
+      if (
+        clonedArray !== frame.array
+        || objectGetPrototypeOfIntrinsic(cloned) !== (clonedArray ? arrayPrototypeIntrinsic : objectPrototypeIntrinsic)
+      ) invalid();
+      const clonedKeys = reflectOwnKeysIntrinsic(cloned);
+      if (clonedKeys.length !== frame.keys.length) invalid();
+      for (let keyIndex = 0; keyIndex < frame.keys.length; keyIndex += 1) {
+        const expectedKey = frame.keys[keyIndex];
+        let matched = false;
+        for (let cloneKeyIndex = 0; cloneKeyIndex < clonedKeys.length; cloneKeyIndex += 1) {
+          if (clonedKeys[cloneKeyIndex] === expectedKey) {
+            matched = true;
+            break;
+          }
+        }
+        if (!matched) invalid();
+      }
       weakSetDeleteIntrinsic(active, frame.value);
       continue;
     }
@@ -163,11 +186,17 @@ const assertComplementTraceTree = (value: unknown): void => {
       )
     ) invalid();
     weakSetAddIntrinsic(active, frame.value);
-    arrayPushIntrinsic(stack, { value: frame.value, depth: frame.depth, exiting: true });
     const keys = reflectOwnKeysIntrinsic(frame.value);
     const keyCount = keys.length;
     propertyCount += keyCount;
     if (propertyCount > maxProperties) invalid();
+    arrayPushIntrinsic(stack, {
+      value: frame.value,
+      depth: frame.depth,
+      exiting: true,
+      array,
+      keys,
+    });
     for (let keyIndex = 0; keyIndex < keyCount; keyIndex += 1) {
       const key = keys[keyIndex];
       if (typeof key !== 'string') invalid();

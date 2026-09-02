@@ -75,6 +75,7 @@ describe('generic compact P/M complement register', () => {
     expect(trace.finalState.subtractionReadout).toBe(111_111_111_111_110);
     expect(trace.events).toHaveLength(17);
     expect(trace.events.filter(event => event.type === 'CARRY_BOUNDARY_SUMMARY')).toHaveLength(14);
+    expect(replayComplementSubtraction(trace)).toEqual(trace.finalState);
   });
 
   it('uses no per-unit public transition events or exported increment helper', async () => {
@@ -380,6 +381,36 @@ describe('generic compact P/M complement register', () => {
     const trace = clone(traceComplementSubtraction(1200, 345, 4));
     trace.finalState = value as unknown as ComplementRegisterTrace['finalState'];
     expect(() => replayComplementSubtraction(trace)).toThrow('invalid complement trace data');
+  });
+
+  it.each([
+    ['Date', () => new Date(0)],
+    ['Map', () => new Map()],
+    ['Set', () => new Set()],
+    ['boxed Number', () => Object(0)],
+    ['boxed Boolean', () => Object(false)],
+    ['ArrayBuffer', () => new ArrayBuffer(0)],
+    ['DataView', () => new DataView(new ArrayBuffer(0))],
+    ['Uint8Array', () => new Uint8Array(0)],
+  ])('rejects a prototype-spoofed %s with an otherwise valid trace shape', (_label, createExotic) => {
+    const trace = clone(traceComplementSubtraction(1200, 345, 4));
+    const exotic = createExotic();
+    Object.setPrototypeOf(exotic, Object.prototype);
+    Object.assign(exotic, trace);
+    expect(() => replayComplementSubtraction(exotic as ComplementRegisterTrace)).toThrow(
+      'invalid complement trace data',
+    );
+  });
+
+  it.each([
+    ['frozen', Object.freeze],
+    ['sealed', Object.seal],
+  ])('accepts ordinary %s complement data objects', (_label, constrain) => {
+    const trace = clone(traceComplementSubtraction(1200, 345, 4));
+    constrain(trace.finalState);
+    constrain(trace.events);
+    constrain(trace);
+    expect(replayComplementSubtraction(trace)).toEqual(trace.finalState);
   });
 
   it('rejects non-enumerable string properties outside intrinsic array length', () => {
