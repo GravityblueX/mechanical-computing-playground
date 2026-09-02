@@ -112,12 +112,13 @@ export class InvalidComplementRegisterError extends Error {
 }
 
 /**
- * Complement v2 traces are JSON-shaped trees: exact ordinary containers,
- * own enumerable string-keyed data properties, and no repeated identities.
- * Retaining and cloning each post-order frame rejects a Proxy even if one of
- * its structural traps removes it from the root before the walk completes.
+ * Complement v2 replay consumes a stable JSON-shaped snapshot: exact ordinary
+ * containers, own enumerable string-keyed data properties, and no repeated
+ * identities. Retaining and cloning each post-order frame rejects a Proxy even
+ * if one of its structural traps removes it from the root before the walk
+ * completes. The returned root clone, never the inspected input, is trusted.
  */
-const assertComplementTraceTree = (value: unknown): void => {
+const cloneComplementTraceTree = (value: unknown): unknown => {
   // width <= 15 yields at most 17 events and about 22 ordinary containers.
   const maxObjects = 64;
   const maxDepth = 32;
@@ -128,7 +129,7 @@ const assertComplementTraceTree = (value: unknown): void => {
   };
   const valueType = typeof value;
   if (valueType === 'symbol' || valueType === 'function') invalid();
-  if (value === null || valueType !== 'object') return;
+  if (value === null || valueType !== 'object') return value;
 
   const active = new WeakSetIntrinsic<object>();
   const seen = new WeakSetIntrinsic<object>();
@@ -139,6 +140,7 @@ const assertComplementTraceTree = (value: unknown): void => {
   }];
   let objectCount = 0;
   let propertyCount = 0;
+  let stableRoot: object | undefined;
   while (stack.length > 0) {
     const frame = arrayPopIntrinsic(stack);
     if (!frame) break;
@@ -163,6 +165,7 @@ const assertComplementTraceTree = (value: unknown): void => {
         }
         if (!matched) invalid();
       }
+      if (frame.depth === 0) stableRoot = cloned;
       weakSetDeleteIntrinsic(active, frame.value);
       continue;
     }
@@ -217,6 +220,8 @@ const assertComplementTraceTree = (value: unknown): void => {
       }
     }
   }
+  if (!stableRoot) invalid();
+  return stableRoot;
 };
 
 const exactKeys = (value: object, expected: readonly string[], label: string): void => {
@@ -360,22 +365,23 @@ export function traceComplementSubtraction(minuend: number, subtrahend: number, 
 }
 
 export function replayComplementSubtraction(trace: Readonly<ComplementRegisterTrace>): ComplementRegisterState {
+  let stableTrace: Readonly<ComplementRegisterTrace> = trace;
   try {
     if (!trace || typeof trace !== 'object' || arrayIsArrayIntrinsic(trace)) throw new ErrorIntrinsic('invalid complement trace data');
-    assertComplementTraceTree(trace);
-    exactKeys(trace, ['format', 'version', 'mechanismId', 'cycleId', 'initialState', 'action', 'events', 'finalState'], 'trace');
+    stableTrace = cloneComplementTraceTree(trace) as ComplementRegisterTrace;
+    exactKeys(stableTrace, ['format', 'version', 'mechanismId', 'cycleId', 'initialState', 'action', 'events', 'finalState'], 'trace');
   } catch {
     throw new InvalidComplementRegisterError('invalid complement trace data');
   }
   try {
-    if (trace.format !== 'complement-register-trace' || trace.version !== 2 || trace.mechanismId !== COMPLEMENT_REGISTER_MECHANISM_ID || trace.cycleId !== trace.action.cycleId) throw new InvalidComplementRegisterError('unsupported trace envelope');
-    const events = exactArray(trace.events, 'events') as ComplementRegisterEvent[];
-    const finalState = normalizeState(trace.finalState);
-    const expected = transitionComplementRegister(trace.initialState, trace.action);
+    if (stableTrace.format !== 'complement-register-trace' || stableTrace.version !== 2 || stableTrace.mechanismId !== COMPLEMENT_REGISTER_MECHANISM_ID || stableTrace.cycleId !== stableTrace.action.cycleId) throw new InvalidComplementRegisterError('unsupported trace envelope');
+    const events = exactArray(stableTrace.events, 'events') as ComplementRegisterEvent[];
+    const finalState = normalizeState(stableTrace.finalState);
+    const expected = transitionComplementRegister(stableTrace.initialState, stableTrace.action);
     if (!traceValuesEqual(expected.events, events) || !traceValuesEqual(expected.state, finalState)) throw new InvalidComplementRegisterError('trace is not action-derived');
-    let replayed = normalizeState(trace.initialState);
+    let replayed = normalizeState(stableTrace.initialState);
     events.forEach((event, sequence) => {
-      if (event.sequence !== sequence || event.cycleId !== trace.cycleId) throw new InvalidComplementRegisterError('invalid event order');
+      if (event.sequence !== sequence || event.cycleId !== stableTrace.cycleId) throw new InvalidComplementRegisterError('invalid event order');
       replayed = reduceComplementRegisterEvent(replayed, event);
     });
     if (!traceValuesEqual(replayed, finalState)) throw new InvalidComplementRegisterError('trace replay mismatch');

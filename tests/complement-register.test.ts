@@ -402,6 +402,29 @@ describe('generic compact P/M complement register', () => {
     );
   });
 
+  it.each(['trace', 'action', 'final state', 'event'] as const)(
+    'normalizes a clone-demoted host container at the %s boundary',
+    (placement) => {
+      const trace = clone(traceComplementSubtraction(1200, 345, 4));
+      const hostContainer = (fields: object) => {
+        const value = new AbortController();
+        Object.setPrototypeOf(value, Object.prototype);
+        return Object.assign(value, fields);
+      };
+      let input: ComplementRegisterTrace = trace;
+      if (placement === 'trace') {
+        input = hostContainer(trace) as unknown as ComplementRegisterTrace;
+      } else if (placement === 'action') {
+        trace.action = hostContainer(trace.action) as unknown as ComplementRegisterTrace['action'];
+      } else if (placement === 'final state') {
+        trace.finalState = hostContainer(trace.finalState) as unknown as ComplementRegisterTrace['finalState'];
+      } else {
+        trace.events[0] = hostContainer(trace.events[0]) as unknown as ComplementRegisterTrace['events'][number];
+      }
+      expect(replayComplementSubtraction(input)).toEqual(trace.finalState);
+    },
+  );
+
   it.each([
     ['frozen', Object.freeze],
     ['sealed', Object.seal],
