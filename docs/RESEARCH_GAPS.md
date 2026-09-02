@@ -65,7 +65,7 @@ Remaining gaps:
 
 - Thomas multiplication/division procedure pages beyond IIIF `NMAH-AHB2018q019415`'s censused single unnumbered legend opening (which contains no readable procedure), primary Burkhardt procedure pages, and exact Curta division-example edition/page mapping beyond the directly inspected guide controls and E3 transcription;
 - source-specific mode/crank/counter directions and correction linkages beyond the bounded Curta viewer-page-1 controls;
-- primary Pascaline complement setup/digit conventions;
+- complete primary Pascaline subtraction setup/procedure and full digit-pair conventions beyond Pascal's DjVu 359–364 operational claims and Belair 1659 DjVu 371/373 one-direction, masked dual-display, opposite-order statement plus one paired transition;
 - square-root and other derived procedures only when tied to a precise manual/model.
 
 Do not back-fill the generic P/M loop as one universal historical procedure.

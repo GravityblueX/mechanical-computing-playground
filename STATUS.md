@@ -1,6 +1,6 @@
 # Current Status
 
-Last reconciled on 2026-09-02 after auditing the sole exposed Thomas 1868 pamphlet opening and separating 1820/1867/ca.1873 controls from the generic P/M traces.
+Last reconciled on 2026-09-02 after grounding Pascal/Belair subtraction-display evidence and adding a generic replayable P/M complement-register lesson.
 
 This file is the **current-state authority** for the repository. `ROADMAP.md` describes where the project should go; `IMPLEMENTATION_PLAN.md` is still useful as a dependency/design specification, but many of its checkboxes predate later implementation and must not be treated as the live task ledger.
 
@@ -51,7 +51,7 @@ These are not all historical geometric reconstructions. Several intentionally mo
 
 The current browser shell contains non-empty routes or views for:
 
-- visible carry with the existing interactive P/M chain, Pascaline/Felt profiles, one ordinal P/M schedule, and source-separated rotary versus Thomas stepped-drum carry/reliability sections;
+- visible carry with the existing interactive P/M chain, Pascaline/Felt profiles, a Pascal/Belair-grounded one-direction complement panel, a replayable generic complement-register trace, one ordinal P/M schedule, and source-separated rotary versus Thomas carry sections;
 - interactive finite differences plus a separately stepped calculation→persistent-output responsibility flow;
 - interactive multiplication comparison with event/cycle stepping for direct multiplication;
 - interactive operator-division procedure for `8478 ÷ 314` exposing the negative residual in `OVERSHOOT_PENDING` before detection makes add-back correction legal;

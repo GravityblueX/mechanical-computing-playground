@@ -83,12 +83,9 @@ Together these sources support that carriage position, quotient/counter state, o
 
 ## 3. Complement subtraction is not reverse motion
 
-The repository's cited ACONIT/Inria Pascaline account describes the sautoir carry as directional and explains subtraction through complementary representation rather than simply reversing the carry train. CMU's reconstruction supplies engineering evidence for a plausible reconstructed sautoir, not a surviving seventeenth-century mechanism.
+Pascal's *Avis* (1923 edition DjVu pp.362–364) directly claims one movement for opposed operations and relief from mental retaining/borrowing, while explicitly declining written construction detail at pp.359–360. Belair's separate 1659 description (DjVu pp.371, 373) says the input wheels cannot turn the other way and documents a mask selecting lower addition versus upper subtraction figures on the same drums, with opposite digit order and one `1/8 → 0/9` example. It does not enumerate all ten complement pairs or give a complete subtraction procedure.
 
-- Claim type: **H** for the museum synthesis; **R** for reconstruction behavior.
-- Evidence: **E2**.
-
-The present sources justify the high-level contrast—complement representation versus reversed operation—but not a new source-specific Pascaline subtraction geometry. Complement digit conventions, exact setup, and model variations remain future primary-source work.
+The fixed-width nines-complement function and the repository's `C(A)+B → A-B` trace are therefore **M** and **P/M**, not “Pascal's subtraction algorithm.” ACONIT/Inria remains H/E2 institutional synthesis and CMU remains R/E2 reconstruction context. Exact source boundaries and implementation consequences are mapped in [`pascaline-subtraction-source-map.md`](pascaline-subtraction-source-map.md).
 
 ## 4. Control is computation
 

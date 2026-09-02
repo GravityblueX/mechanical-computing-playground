@@ -28,6 +28,10 @@ Pascal says the machine relieves the operator from mentally retaining or borrowi
 
 The inspected `Avis` expressly declines a written construction description. It does **not** establish sautoir geometry.
 
+### Belair 1659 contemporary carry description
+
+Belair's letter to Huygens, reproduced at 1923 DjVu pp.376–377, directly says four gravity pieces transfer movement from units through ten-thousands and that, with addition windows showing `99999`, adding one makes the pieces fall **one after another** and replaces the nines with zeros. This is **H/E1** contemporary description for the five-place machine Belair had in hand; it is not an inventory-number identification, measured timing, or the repository's serialized event order. Its one-direction input and dual subtraction display are mapped separately in [`pascaline-subtraction-source-map.md`](pascaline-subtraction-source-map.md).
+
 ### Cnam preserved object and institutional description
 
 Musée des Arts et Métiers/Cnam, inventory `19600-0000`, object dated 20 May 1652:

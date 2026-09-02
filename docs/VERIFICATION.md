@@ -1,5 +1,21 @@
 # Verification record
 
+## 2026-09-02 — Pascal/Belair complement-subtraction boundary and P/M lesson
+
+The current-main baseline at `4b66bbbf92970d655b3710c4dfbe7da9a2130887` passed typecheck and 362 tests across 21 files. The Wikisource transclusions were resolved to the Brunschvicg/Boutroux 1923 DjVu. Pascal's *Avis* was checked at DjVu pp.359–360 (written construction/use description expressly withheld), p.362 (addition/subtraction and multiplication/division performed by one movement), and pp.363–364 (machine removes mental retaining/borrowing). Belair's separate 1659 letter was checked at DjVu p.371 (five-place machine in hand; input wheels cannot turn the other way), p.373 (mask selects lower addition or upper subtraction figures; opposite order; one `1/8 → 0/9` paired transition), and pp.376–377 (`99999 + 1` sequential falling carry pieces). No full ten-pair complement table, surviving-object identity, or complete historical subtraction procedure is claimed.
+
+A generic `complement-register` P/M mechanism now models fixed-width nines complement, dual readouts, bounded `C(A)+B` forward increments, generic carry-boundary markers, deterministic transition/replay and fail-closed trace validation. The historical panel explicitly separates Pascal/Belair H/E1 claims from M complement arithmetic and the P/M event sequence.
+
+- `npm run typecheck` — pass
+- focused complement-register + decimal-core tests — pass, 70 tests
+- `npm test -- --run` — pass, 375 tests across 22 files
+- `npm run build` — pass
+- `git diff --check` — pass
+
+Bilingual browser smoke for `#/visible-carry` and `#/about` was attempted, but the browser extension remained disconnected; no successful browser smoke is claimed.
+
+No deployment check was performed for this not-yet-pushed completion commit.
+
 ## 2026-09-02 — Thomas 1868 pamphlet/opening and revision boundary audit
 
 The current-main baseline at `2f3ec51c105540769013ff339b42ae8ecd5c47fb` passed typecheck and 361 tests across 21 files. Smithsonian IIIF manifest `NMAH-AHB2018q019415` was resolved directly: it exposes exactly one 3000×1846 canvas labeled `image NMAH-AHB2018q019415`, an unnumbered title/legend opening—not a pamphlet page sequence. The readable 1868 legend anchors setting sliders `A`, operation selector `B`, result windows `C`, multiplier/quotient windows `D`, movable carriage/plate `M`, operating crank `N`, right `O` clearing `D`, left `P` clearing `C`, and the note that `O/P` also lift/slide `M`. It does not expose multiplication/division steps, turn counts, shift order, overshoot, add-back, termination, remainder, or counter direction.
