@@ -1,5 +1,23 @@
 # Verification record
 
+## 2026-09-02 — bounded complement-register v2 trace semantics
+
+The current-main baseline at `2395e9c29d8a7c38b079b7640b779c9694ee1c68` passed typecheck and 375 tests across 22 files. The accepted v1 complement trace emitted one event per unit of the subtrahend and made public `+345` look like 345 meaningful cycles. Version 2 instead represents one bounded forward-add action with begin/end markers, one register-advance event, and exactly one mathematically validated boundary-crossing summary per decimal order. Event count is `width + 2`, independent of delta magnitude; summaries use the change in `floor(value / 10^(order+1))` between before and after.
+
+The large width-15 fixture `999999999999998 - 888888888888888 = 111111111111110` produces 17 events, not a magnitude-sized list. Replay regenerates and compares compact events from state/action before reducing them, rejects v1/unknown envelopes and tampered summaries/order/action/final state/extra fields, and retains explicit underflow/width/value rejection. The public panel now calls `+345` one bounded delta and shows per-order crossing counts, explicitly not physical cycles or historical timing.
+
+The bounded Belair re-check did not close the digit-table uncertainty: DjVu p.373 still directly provides opposite ordering plus the one `1/8 → 0/9` transition, not a readable full ten-pair table. No research-gap claim was narrowed.
+
+- `npm run typecheck` — pass
+- focused complement-register tests — pass, 18 tests
+- `npm test -- --run` — pass, 380 tests across 22 files
+- `npm run build` — pass
+- `git diff --check` — pass
+
+Bilingual browser smoke for `#/visible-carry` and `#/about` was attempted, but the browser extension remained disconnected; no successful browser smoke is claimed.
+
+No deployment check was performed for this not-yet-pushed completion commit.
+
 ## 2026-09-02 — Pascal/Belair complement-subtraction boundary and P/M lesson
 
 The current-main baseline at `4b66bbbf92970d655b3710c4dfbe7da9a2130887` passed typecheck and 362 tests across 21 files. The Wikisource transclusions were resolved to the Brunschvicg/Boutroux 1923 DjVu. Pascal's *Avis* was checked at DjVu pp.359–360 (written construction/use description expressly withheld), p.362 (addition/subtraction and multiplication/division performed by one movement), and pp.363–364 (machine removes mental retaining/borrowing). Belair's separate 1659 letter was checked at DjVu p.371 (five-place machine in hand; input wheels cannot turn the other way), p.373 (mask selects lower addition or upper subtraction figures; opposite order; one `1/8 → 0/9` paired transition), and pp.376–377 (`99999 + 1` sequential falling carry pieces). No full ten-pair complement table, surviving-object identity, or complete historical subtraction procedure is claimed.

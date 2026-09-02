@@ -54,7 +54,7 @@ The algebra `C(A)+B = C(A-B)` for `0 ≤ B ≤ A` is likewise mathematical. Bela
 
 ## What the repository simplifies
 
-`src/mechanisms/complement-register/` supports decimal width 1–15 and bounded `0 ≤ B ≤ A`. It initializes a physical/additive value to `C(A)`, advances only forward by `B`, and exposes ordinary and complementary readouts after every event. It records generic decimal carry boundaries; it does not model a dial, stylus, mask, sautoir, mixed-radix currency, negative result or source-specific timing.
+`src/mechanisms/complement-register/` supports decimal width 1–15 and bounded `0 ≤ B ≤ A`. It initializes a physical/additive value to `C(A)`, applies `B` as **one bounded forward-add action**, and exposes the ordinary and complementary readouts after that action. Its v2 trace has begin/end markers, one register-advance event and at most one mathematical boundary-crossing summary per decimal order; event count is O(width), not O(B). Crossing counts and event order are P/M inspection semantics—not crank, stylus, operator-cycle or historical timing claims. It does not model a dial, mask, sautoir, mixed-radix currency, negative result or source-specific timing.
 
 ## Implementation consequence
 

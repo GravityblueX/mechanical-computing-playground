@@ -37,6 +37,7 @@
 - [x] Ground Controlled-Key addition recovery/release from Felt & Tarrant manuals and Ziehm US1,110,734 without turning the P/M trace into Model F timing.
 - [x] Census the sole exposed Thomas 1868 IIIF opening and separate 1820/1867/ca.1873 controls from generic division/register P/M timing.
 - [x] Ground Pascal/Belair one-direction dual-display subtraction and add a replayable generic P/M complement-register lesson.
+- [x] Bound complement-register v2 traces to one forward-add action and O(width) carry summaries, eliminating per-unit event/cycle implications.
 - [x] Directly inspect the exposed Thomas 1868 register legend and add a tested generic independent result/revolution-register lifecycle lesson.
 - [x] Harden decimal/integrator replay against serialized provenance tampering and inspect Curta Type II service controls at exact page/leaf precision.
 - [x] Reconcile the H. P. Babbage 1888 reading, 1889 chapter range, modern reproduction metadata, E3 transcription content, and unavailable drawing-catalogue cross-walk without fabricating page claims.
