@@ -5,13 +5,13 @@ Owner: local coding/research agent
 Target duration: about one useful hour
 Repository authority: remote `main`
 
-Previous task is complete and archived at `tasks/archive/2026-09-02-controlled-key-recovery.md`.
+Previous task is complete and archived at `tasks/archive/2026-09-02-thomas-1868-operator-protocol.md`.
 
-Administrator review accepted completion commit `2a358451bd6dfc9b10b59b9e643a0e4303c76dc8` (`research: ground Controlled-Key recovery protocol`). Exact-head CI run `33577028049` and Deploy Pages run `33577028032` both passed. Assignment-to-completion was about 35 minutes with an eight-file / 158-line bounded diff, so this slice is intentionally somewhat larger while remaining one coherent source/protocol question.
+Administrator review accepted completion commit `435301cef07306a8aedaf802db7c9e29c2a53999` (`research: ground Thomas 1868 operator protocol`). Exact-head CI run `33581615620` and Deploy Pages run `33581615614` both passed. Assignment-to-completion was about 49 minutes with a nine-file / 157-line bounded diff and 362 passing tests, so this slice is intentionally a little broader while remaining one coherent representation/subtraction question.
 
-**Fetch/pull current remote `main` before doing anything.** The administrator archive commit is `ca5a983e1ba765a86548ad9521869a01fe495826`.
+**Fetch/pull current remote `main` before doing anything.** The administrator archive commit is `5e691f0026749bfc7a71fe93447c9ed98e128023`.
 
-> **Question for this slice:** what does the directly inspectable 1868 Thomas arithmometer instruction pamphlet, together with identified 1867/ca.1873 surviving machines, actually establish about register roles, mode selection, zeroing, carriage/revolution-counter use, and multiplication/division operator procedure—and which parts of the repository's generic division/control traces must remain P/M rather than being silently back-filled as one universal Thomas procedure?
+> **Question for this slice:** what do Pascal's own `Avis` and Charles Belair's 1659 description actually establish about one-direction input, dual addition/subtraction readouts, reversed digit order, and the avoidance of manual borrowing—and can the repository turn that evidence into a small generic P/M complement-register lesson without silently calling its software event sequence “the Pascaline subtraction algorithm”? 
 
 ## Read before work
 
@@ -21,188 +21,209 @@ Fetch/pull remote `main`, then read in order:
 2. `TODO.md`
 3. `AGENTS.md`
 4. `docs/EVIDENCE_POLICY.md`
-5. `docs/RESEARCH_GAPS.md`, especially Priorities 3 and 4
+5. `docs/RESEARCH_GAPS.md`, especially Priority 0 carry and Priority 3 subtraction
 6. `docs/VERIFICATION.md`
-7. `tasks/archive/2026-09-02-controlled-key-recovery.md`
-8. `research/subtraction-and-division.md`
-9. `research/control-and-zeroing-source-map.md`
-10. `research/carry-is-the-hard-part.md` only for existing Thomas revision boundaries
-11. `src/mechanisms/operator-division/index.ts`
-12. `src/mechanisms/dual-register-lifecycle/index.ts`
-13. `src/exhibits/control-provenance/index.ts`
-14. any existing division/control provenance adapters and related tests
-15. the `#/division` and `#/controls` rendering paths in `src/main.ts`
+7. `tasks/archive/2026-09-02-thomas-1868-operator-protocol.md`
+8. `research/carry-is-the-hard-part.md`
+9. `research/carry-architecture-source-map.md`
+10. `research/subtraction-and-division.md`
+11. current decimal-register / carry-chain state, transition, replay and tests
+12. `src/exhibits/control-provenance/index.ts` and the visible-carry/controls rendering paths in `src/main.ts`
 
-Run the current-main baseline before editing and record the actual test count. Do not weaken replay/tamper validation or change generic arithmetic semantics merely to fit a historical source.
+Run the current-main baseline before editing and record the actual test count. Do not weaken existing decimal-register trace provenance or carry validation.
 
-# Part A — recover and census the 1868 instruction object
+# Part A — primary/contemporary Pascaline subtraction-display audit
 
-Start from the Smithsonian/NMAH instruction pamphlet:
+Start with two distinct seventeenth-century texts. Keep authorship and evidentiary role separate.
 
-- *Instructions pour se Servir de l'Arithmomètre*, Thomas, 1868, `MA.318961.02` / `nmah_904757`:
-  <https://americanhistory.si.edu/collections/object/nmah_904757>
+## A1. Pascal's own `Avis`
 
-The catalog exposes IIIF/Mirador links. Resolve the actual IIIF manifest/canvases rather than treating the landing-page thumbnail as the whole pamphlet.
+Blaise Pascal, *Avis nécessaire à ceux qui auront curiosité de voir la Machine d'Arithmétique et de s'en servir*, inspected through the Brunschvicg/Boutroux 1923 edition/transcription:
 
-Record:
+<https://fr.wikisource.org/wiki/%C5%92uvres_de_Blaise_Pascal/Lettre_D%C3%A9dicatoire_de_la_Machine_Arithm%C3%A9tique_et_Avis_n%C3%A9cessaire/Avis>
 
-- object/catalog identity;
-- manifest URL or stable media identifiers if exposed;
-- number of canvases/images actually available;
-- canvas/page labels and readable printed page numbers;
-- whether pages are single leaves, spreads, fronts/backs, or only one exposed image;
-- exact image/page locations used for each claim.
+Directly inspect the edited text and, where practical, the linked scan pages behind it. Record exact edited/scanned page locations for the passages you use.
 
-If the public IIIF object still exposes only one readable spread, **say so and stop that branch**. Do not reconstruct missing pages from modern summaries. If a complete institutional/public-domain scan of the same 1868 issue is discoverable from a reliable repository, inspect it and record edition identity before using it.
+Target claims to verify precisely:
 
-The catalog description itself establishes only that the pamphlet gives operating instructions for the Thomas arithmometer and is related to `MA.335215`; do not promote that metadata into page-level procedure evidence.
+- Pascal says opposed operations such as addition/subtraction and multiplication/division are practiced through one and the same movement;
+- he contrasts hand calculation's need to retain/borrow with the machine doing the required operation without the operator mentally retaining/borrowing;
+- the `Avis` explicitly declines a written construction description, so it is **not** a source for sautoir geometry or exact subtraction linkage.
 
-# Part B — identify the machines and keep revisions separate
+Treat this as **H/E1 authored operational claim via later edited reproduction**, not a full operating manual.
 
-Directly inspect the related and comparison object records:
+## A2. Charles Belair to Huygens, 1659
 
-- ca. 1873 Thomas arithmometer `MA.335215` / `nmah_690686`:
-  <https://americanhistory.si.edu/collections/object/nmah_690686>
-- 1867 Thomas arithmometer `nmah_690683`:
-  <https://www.si.edu/object/thomas-arithmometer%3Anmah_690683>
-- early surviving Thomas example `nmah_690692`:
-  <https://americanhistory.si.edu/collections/object/nmah_690692>
+Charles Belair, *Explication de la Machine de M. Pascal, par laquelle on pratique l'Arithmetique*, letter to Christiaan Huygens (1659), reproduced in the same 1923 volume, pp. 315–321:
 
-Use additional Smithsonian object records only if they resolve one exact capacity/control/revision question. Do not turn this into a full Thomas serial-number census.
+<https://fr.wikisource.org/wiki/%C5%92uvres_de_Blaise_Pascal/Lettre_D%C3%A9dicatoire_de_la_Machine_Arithm%C3%A9tique_et_Avis_n%C3%A9cessaire/Appendice>
 
-Build a compact identity/control table that keeps machines distinct. At minimum record, where directly described:
+This source is especially important because the currently exposed transcription says, at the inspected text level, that:
 
-- date / object ID / serial mark if cataloged;
-- setting-lever count;
-- result-register capacity;
-- revolution-register presence/capacity;
-- addition/multiplication versus subtraction/division selector;
-- operating crank versus earlier ribbon actuation;
-- result/revolution zeroing controls;
-- carriage movement/positions;
-- documented direction of the revolution register under add/multiply versus subtract/divide;
-- any direct relationship between `MA.335215` and the 1868 instruction booklet.
+- the input wheels turn in one direction and cannot simply be driven the other way;
+- a sliding rule hides one half of each drum window;
+- the lower figures are exposed for addition and the upper figures for subtraction;
+- the upper figures are arranged in the opposite order to the lower figures;
+- one concrete example pairs the lower transition `1 → 0` with the upper transition `8 → 9`;
+- the same description separately explains the sequential falling carry pieces for `9999 + 1`.
 
-A ca.1873 object paired with an 1868 instruction book does not prove every 1868 procedure applies unchanged to every 1867 or earlier machine. Preserve object/revision boundaries.
+Do **not** stop at those paraphrases. Inspect the source yourself, recover exact edited/scanned page/figure anchors where possible, and answer:
 
-# Part C — operator-protocol extraction, source-first
+1. Does the text/figure establish a digitwise `d ↔ 9-d` relationship for all displayed decimal digits, or only reversed order plus one example?
+2. Is the machine Belair had “in hand” identifiable as one specific surviving object? If not, do not assign it to a modern inventory number.
+3. Does Belair actually describe a subtraction procedure, or only the dual display and one-way physical relation?
+4. Which claims are Belair's direct contemporary description, versus Pascal's own operational claims?
 
-From directly readable 1868 instruction pages, extract only procedures actually present. The target questions are:
+Treat Belair as **H/E1 contemporary primary correspondence/description at the exact text/figure precision inspected**, while preserving that it is not Pascal-authored and need not describe every surviving Pascaline revision.
 
-## C1. Addition / multiplication
+## A3. Object/reconstruction context only as needed
 
-Determine whether the primary instructions directly establish:
+Use existing repository sources conservatively:
 
-- how the setting levers are used;
-- which mode/selector position is required;
-- what one operating turn/stroke contributes;
-- whether multiplication is described as repeated turns;
-- how/when carriage shifting changes decimal place;
-- how the revolution register is used/read during multiplication;
-- any zeroing/setup steps before an operation.
+- Cnam Pascal machine `19600-0000` for identified preserved-object context;
+- CMU Pascaline reconstruction only as **R/E2** for one working reconstruction;
+- CMU teaching material about nines-complement arithmetic only as **M/P teaching orientation**, never as proof of Pascal's exact operator procedure.
 
-## C2. Subtraction / division
+Do not spend the slice doing a surviving-object census or geometric reconstruction.
 
-Determine whether the primary instructions directly establish:
+# Part B — create a focused source map
 
-- how dividend/result state is initialized;
-- which selector/mode is used;
-- carriage starting position and shift order;
-- repeated subtraction procedure;
-- how quotient/revolution counts are read;
-- what happens on overshoot/negative indication;
-- whether an add-back/correction turn is explicitly instructed;
-- exact result/revolution register directions if stated;
-- termination and remainder reading.
-
-The current generic repository trace uses explicit `OVERSHOOT_PENDING → DETECTED → ADD_BACK` causality. Do **not** call that a Thomas historical event sequence unless the inspected primary instructions support the corresponding operator responsibilities. It may remain P/M even if the broad repeated-subtraction procedure is historical.
-
-## C3. Zeroing / register lifecycle
-
-Keep distinct:
-
-- setting/input state;
-- result register;
-- revolution/quotient register;
-- independent zeroing/clearing actions;
-- carriage position;
-- arithmetic mode.
-
-The repository's generic dual-register lifecycle is P/M. Historical evidence can support that separate controls/roles existed on a named object without proving the repository's event order, latch semantics, or hidden linkage.
-
-# Part D — source crosswalk and model boundary
-
-Update `research/subtraction-and-division.md` and `research/control-and-zeroing-source-map.md` with a compact crosswalk such as:
+Create:
 
 ```text
-claim / operator step | source/object/revision | direct support | claim/evidence | repository consequence | not established
+research/pascaline-subtraction-source-map.md
+```
+
+Use the repository research contract:
+
+```text
+Question
+Claim types
+Sources
+Exact locations inspected
+What each source directly establishes
+What is inferred / mathematical
+What the repository simplifies
+Implementation consequence
+Uncertainties
+Date checked
+```
+
+Include a compact crosswalk:
+
+```text
+claim / representation step | source | direct support | claim/evidence | repository consequence | not established
 ```
 
 At minimum separate:
 
-1. **H/E1 1868 instruction pamphlet pages** — only directly readable procedure text;
-2. **H/E1 1867 surviving object** — cataloged controls/registers/directions at object precision;
-3. **H/E1 ca.1873 `MA.335215` object** — controls/capacity and the associated 1868 instruction-book relationship;
-4. **H/E1 early Thomas object** — earlier ribbon-actuated / no-revolution-register differences where directly described;
-5. **R/E2 or E3 secondary reconstruction/orientation** — only when needed to identify a source or unresolved revision issue;
-6. **P/M repository operator-division and dual-register traces** — deterministic teaching decompositions.
+1. Pascal `Avis` — H/E1 authored operational claims;
+2. Belair 1659 — H/E1 contemporary description of one machine/display/carry relation;
+3. Cnam object context — H/E2 institutional object description, only at its stated precision;
+4. CMU physical reconstruction — R/E2;
+5. mathematical digitwise nines complement — M;
+6. repository generic complement-register/subtraction trace — P/M.
 
-Answer explicitly:
+Also update `research/carry-architecture-source-map.md` and/or `research/subtraction-and-division.md` only where the new source audit materially sharpens an existing sentence. Avoid duplicating the full new note into three files.
 
-- Which multiplication/division steps are directly documented in 1868, and which are only later/general descriptions?
-- Is add-back correction after division overshoot directly instructed in the inspected issue? At what page?
-- Is revolution-counter direction a directly cataloged object fact, a manual instruction, or both?
-- Which zeroing controls are independent on the identified objects?
-- Which claims differ between the early ribbon-operated machine and later crank/revolution-register machines?
-- Does any source justify mapping the generic repository phase names to Thomas terminology? Default answer should be no unless directly established.
+# Part C — bounded generic complement-register mechanism
 
-# Part E — bounded typed/public integration
-
-Only after Parts A–D establish a sharper boundary, add a compact source-aware profile or adapter. Prefer extending an existing provenance module rather than introducing another parallel evidence framework.
-
-A good integration should expose something equivalent to:
-
-- Thomas 1868 instruction source identity/page anchors;
-- 1867 object identity/control facts;
-- ca.1873 `MA.335215` object/control facts;
-- `supports` and `notEstablished` arrays;
-- explicit link to the generic P/M division/register lessons without geometric identity claims.
-
-If the 1868 pages directly support a useful operator sequence, add a **small bilingual historical-evidence panel** to the existing `#/division` and/or `#/controls` lesson. Keep two visible layers:
+Only after Part A/B makes the historical boundary explicit, add a small deterministic P/M mechanism under `src/mechanisms/`, using existing naming conventions, for example:
 
 ```text
-Thomas source-backed operator/control evidence
-vs
-repository generic P/M deterministic trace
+src/mechanisms/complement-register/
 ```
 
-Do not create a full Thomas route, 3D mechanism, stepped-drum linkage animation, or source-specific timing model.
+This is **not** a Pascaline emulator. It is a mathematical/pedagogical model that makes the representation trick inspectable.
 
-Add focused tests asserting:
+## C1. Minimum representation
 
-- source/object IDs and exact page labels used;
-- H/E1 versus R/E2/E3/P-M boundaries;
-- `supports` / `notEstablished` statements;
-- that the generic division trace remains P/M and is not renamed as Thomas historical timing;
-- any object-revision distinctions you expose publicly.
+Support configurable decimal width within safe integer limits. Make explicit:
 
-**Default expectation:** no change to `operator-division`, carry, or dual-register core transition semantics. If the source audit shows a genuine semantic error in the generic model, document the conflict and stop before redesigning the core.
+- width / modulus `10^width`;
+- physical/additive register value or digits;
+- ordinary/addition readout;
+- complementary/subtraction readout;
+- encoded minuend;
+- subtrahend action;
+- before/after register state;
+- ordered carry events where the existing decimal-register core provides them naturally;
+- cycle/action count only if it helps inspection;
+- deterministic replay / action-derived validation consistent with the repository's current provenance hardening.
 
-# Part F — reconciliation and verification
+A mathematical helper such as `ninesComplement(value, width)` is acceptable and should be labeled **M**, not H.
 
-After source/provenance work:
+## C2. Teaching operation
 
-- update `STATUS.md` only for evidence actually improved;
-- add one concise completed line to `TODO.md`;
-- narrow Priority 3 / Priority 4 and the relevant file-deepening item in `docs/RESEARCH_GAPS.md` only for gaps actually closed;
-- update `docs/VERIFICATION.md` with baseline/final test counts and commands actually run;
-- do not alter Controlled-Key, Millionaire, Curta Type II service chronology, Scheutz patent-number reconciliation, Analytical Engine, Differential Analyzer, output, continuous, or backprop tracks in this slice.
-
-If public division/control evidence changes, attempt bilingual browser smoke for:
+Model one bounded non-negative subtraction teaching flow, conceptually:
 
 ```text
-#/division
-#/controls
+want to display minuend A in subtraction/complement view
+→ physical/additive register holds C(A)
+→ add subtrahend B in the one permitted additive direction
+→ physical register becomes C(A) + B
+→ complementary readout shows A - B
+```
+
+Scope this to `0 <= B <= A < 10^width`. Reject unsupported negative-result/underflow cases explicitly rather than inventing sign conventions.
+
+The source audit may justify saying that Belair documents a dual reversed display and one-way input. It does **not** automatically justify calling the software sequence above Belair's or Pascal's exact operator instructions. Keep the trace **P/M** unless the inspected contemporary text directly supplies the corresponding step.
+
+## C3. Required tests
+
+Add focused Vitest coverage for at least:
+
+1. `ninesComplement(1234, 4) = 8765`;
+2. complement is involutive at fixed width: `C(C(n)) = n`;
+3. the two readouts remain complementary for every state touched in a fixture;
+4. a simple subtraction fixture such as `5678 - 1234 = 4444` reaches the correct complement readout;
+5. a carry-bearing fixture such as `1200 - 345 = 855` exposes carry in the physical/additive register transition if reuse of the decimal-register core makes that natural;
+6. `B = 0` and `B = A` boundary cases;
+7. unsupported `B > A`, invalid width/value, and overflow/malformed serialized inputs reject explicitly;
+8. same initial state + action yields the same ordered result/events;
+9. replay reproduces the final state and fails closed on a tampered action/event/final-state envelope if the module owns serialized traces.
+
+Prefer reuse/composition of the hardened decimal-register core for digit/carry transitions if it fits cleanly. **Do not rewrite shared carry semantics merely to satisfy this lesson.** If reuse would require a broad core migration, keep the complement model smaller and record that carry-detail integration remains open.
+
+# Part D — minimal public teaching integration
+
+Add one compact bilingual panel to an existing route rather than a new full machine page. Prefer `#/visible-carry` because the repository already discusses Pascal/Felt carry there; `#/controls` is acceptable only if it yields a cleaner boundary.
+
+The panel should make two layers visibly separate:
+
+```text
+H/E1 historical evidence:
+- Pascal: same movement / no mental borrowing claim
+- Belair: one-direction input + dual addition/subtraction display relation
+
+P/M teaching model:
+- explicit complement register state
+- one bounded subtraction example
+- carry events from the generic decimal core where modeled
+```
+
+Expose enough state/text that a visitor can answer:
+
+> Why can a one-direction arithmetic mechanism still present subtraction without pretending that “subtract = reverse the carry train”?
+
+Do not draw source-specific sautoir/linkage geometry or claim the repository's event names/timing were used historically.
+
+Add focused tests for the typed evidence profile/panel if you introduce one. Keep the historical source IDs/locations and `supports` / `notEstablished` boundaries testable.
+
+# Part E — reconciliation and verification
+
+After source/model/UI work:
+
+- update `STATUS.md` only for evidence/model work that actually landed;
+- add one concise completed line to `TODO.md`;
+- narrow the Pascaline complement item in `docs/RESEARCH_GAPS.md` only for gaps actually closed;
+- update `docs/VERIFICATION.md` with baseline/final test counts and commands actually run;
+- do not alter Thomas, Controlled-Key, Millionaire, Curta, Analytical Engine, Differential Analyzer, Scheutz, output, continuous, or backprop tracks in this slice.
+
+If the public panel changes, attempt bilingual browser smoke for:
+
+```text
+#/visible-carry
 #/about
 ```
 
@@ -217,7 +238,7 @@ npm run build
 git diff --check
 ```
 
-Run focused tests for every touched provenance/lesson module. All final required checks must pass.
+Run focused tests for every new mechanism/provenance module. All final required checks must pass.
 
 After push:
 
@@ -228,29 +249,34 @@ After push:
 Suggested commit subject:
 
 ```text
-research: ground Thomas 1868 operator protocol
+research: ground Pascaline complement subtraction
+```
+
+or, if the mechanism dominates the diff:
+
+```text
+feat: add complement-register subtraction lesson
 ```
 
 # Evidence boundaries
 
-- directly read 1868 Thomas instruction pages = **H/E1 only at the exact issue/page/procedure inspected**;
-- Smithsonian catalog/object records = **H/E1 at object identity and directly described control/register precision**;
-- a catalog relationship between an object and instruction book does not prove unchanged procedure across all Thomas revisions;
-- modern institutional/scholarly reconstruction = **R/E2** where directly inspected and appropriately scoped;
-- generic web summaries / specialist orientation = **E3 navigation/secondary evidence** unless they expose the original source being cited;
-- repository `operator-division` and `dual-register-lifecycle` events = **P/M** unless an individual responsibility is separately source-backed;
-- no exact gear/linkage geometry, carry phasing, torque, safe speed, wear, operator throughput, production-wide revision mapping, or event timing without direct evidence.
+- Pascal's `Avis` = **H/E1 authored operational claim via later edited reproduction**, not construction geometry;
+- Belair 1659 = **H/E1 contemporary description at exact text/figure precision**, not Pascal-authored and not automatically every surviving Pascaline;
+- Cnam object page = **H/E2 institutional object context** unless direct artifact measurement is performed;
+- CMU physical reconstruction = **R/E2**, not seventeenth-century identity;
+- nines-complement arithmetic = **M**;
+- repository complement-register transitions/UI = **P/M**;
+- do not call the P/M software sequence “Pascal's subtraction algorithm” unless a directly inspected historical procedure explicitly establishes those steps;
+- do not infer reverse carry, gear geometry, sautoir dimensions/timing, force, wear, safe operating speed, or universal production revision from the dual-display evidence.
 
 # Stop conditions
 
 Stop a subpart and preserve the boundary rather than guessing if:
 
-- the 1868 IIIF manifest exposes only a single readable spread or page;
-- another scan cannot be matched to the same edition/issue with sufficient identity;
-- a modern summary describes an operation not visible in the primary pamphlet;
-- the 1867 and ca.1873 object controls differ in a way that makes a universal Thomas procedure unsafe;
-- division add-back/correction is not explicitly documented in the inspected primary source;
-- integrating source evidence would require pretending the generic P/M event order is historical physical timing;
-- work starts expanding into full stepped-drum geometry, complete serial-number chronology, measured performance/reliability, square-root procedures, or another machine family.
+- the linked 1923 scans cannot be matched to the transcribed Pascal/Belair text at usable page precision;
+- Belair's text/figures do not justify a full digitwise `d ↔ 9-d` relation beyond the one example and reversed-order statement;
+- no primary/contemporary source directly describes the operator subtraction sequence you hoped to name historically;
+- composing with the decimal-register core would require weakening or broadly redesigning its hardened replay/carry contract;
+- the work starts expanding into full Pascaline geometry, surviving-machine revision census, mixed livres/sols/deniers arithmetic, or a full emulator.
 
-If Parts A–E finish substantially before one hour, spend remaining time resolving IIIF canvas/page identity, checking one directly related Thomas object/manual revision, and strengthening evidence-boundary tests. **Do not start another machine family.**
+If Parts A–D finish substantially before one hour, spend remaining time strengthening scan/page/figure anchors, adversarial replay tests, accessibility/text-state visibility, and the historical/P-M boundary. **Do not start another machine family.**
