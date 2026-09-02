@@ -1,5 +1,18 @@
 # Verification record
 
+## 2026-09-02 — complement-register structural replay equality
+
+The exact remote-main baseline `e3788aaba731d5594d9caa70a0475b9452f6db15` reproduced two complementary fixture-integrity failures: reordered but otherwise identical object members were rejected, while an unsupported enumerable `undefined` field on `finalState` was discarded by `JSON.stringify` and accepted. Complement replay now applies the shared stable-data-tree preflight before reading nested trace data, validates the final state, and uses the shared order-independent exact comparison rather than JSON serialization.
+
+Regressions cover reordered final-state and event members, plus fail-closed enumerable `undefined`, Symbol, accessor and cyclic data. The accessor fixture also verifies that replay rejects the descriptor without invoking its getter. No arithmetic transition, event vocabulary, research claim or browser rendering changed.
+
+- `npm run lint --if-present` — pass; no lint script is configured
+- `npm run typecheck` — pass
+- focused shared-trace/complement tests — pass, 83 tests across 3 files
+- `npm test` — pass, 386 tests across 22 files
+- `npm run build` — pass
+- `git diff --check` — pass
+
 ## 2026-09-02 — bounded complement-register v2 trace semantics
 
 The current-main baseline at `2395e9c29d8a7c38b079b7640b779c9694ee1c68` passed typecheck and 375 tests across 22 files. The accepted v1 complement trace emitted one event per unit of the subtrahend and made public `+345` look like 345 meaningful cycles. Version 2 instead represents one bounded forward-add action with begin/end markers, one register-advance event, and exactly one mathematically validated boundary-crossing summary per decimal order. Event count is `width + 2`, independent of delta magnitude; summaries use the change in `floor(value / 10^(order+1))` between before and after.

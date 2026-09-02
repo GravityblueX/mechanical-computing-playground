@@ -73,6 +73,69 @@ describe('generic compact P/M complement register', () => {
     expect(replayComplementSubtraction(trace)).toEqual(trace.finalState);
   });
 
+  it('treats object member order as irrelevant during replay', () => {
+    const trace = clone(traceComplementSubtraction(1200, 345, 4));
+    const finalState = trace.finalState;
+    trace.finalState = {
+      actionCount: finalState.actionCount,
+      encodedMinuend: finalState.encodedMinuend,
+      subtractionReadout: finalState.subtractionReadout,
+      additionReadout: finalState.additionReadout,
+      physicalValue: finalState.physicalValue,
+      modulus: finalState.modulus,
+      width: finalState.width,
+      mechanismId: finalState.mechanismId,
+    };
+    expect(replayComplementSubtraction(trace)).toEqual(finalState);
+  });
+
+  it('treats event member order as irrelevant during replay', () => {
+    const trace = clone(traceComplementSubtraction(1200, 345, 4));
+    const begin = trace.events[0];
+    if (begin.type !== 'FORWARD_ADD_BEGIN') throw new Error('expected forward-add begin event');
+    trace.events[0] = {
+      delta: begin.delta,
+      physicalBefore: begin.physicalBefore,
+      type: begin.type,
+      sequence: begin.sequence,
+      cycleId: begin.cycleId,
+      mechanismId: begin.mechanismId,
+    };
+    expect(replayComplementSubtraction(trace)).toEqual(trace.finalState);
+  });
+
+  it('rejects unsupported final-state fields that JSON serialization would discard', () => {
+    const trace = clone(traceComplementSubtraction(1200, 345, 4));
+    Object.assign(trace.finalState, { unsupported: undefined });
+    expect(() => replayComplementSubtraction(trace)).toThrow();
+  });
+
+  it('rejects enumerable Symbol fields in the final state', () => {
+    const trace = clone(traceComplementSubtraction(1200, 345, 4));
+    Object.defineProperty(trace.finalState, Symbol('unsupported'), { value: true, enumerable: true });
+    expect(() => replayComplementSubtraction(trace)).toThrow();
+  });
+
+  it('rejects accessors before reading dynamic trace data', () => {
+    const trace = clone(traceComplementSubtraction(1200, 345, 4));
+    let accessed = false;
+    Object.defineProperty(trace.finalState, 'subtractionReadout', {
+      enumerable: true,
+      get: () => {
+        accessed = true;
+        return 855;
+      },
+    });
+    expect(() => replayComplementSubtraction(trace)).toThrow(/dynamic or cyclic/);
+    expect(accessed).toBe(false);
+  });
+
+  it('rejects cyclic trace data before structural comparison', () => {
+    const trace = clone(traceComplementSubtraction(1200, 345, 4));
+    Object.assign(trace.finalState, { cycle: trace.finalState });
+    expect(() => replayComplementSubtraction(trace)).toThrow(/dynamic or cyclic/);
+  });
+
   it.each(['action', 'summary', 'order', 'final', 'version', 'extra', 'unknown'] as const)('fails closed on %s tampering', kind => {
     const trace = clone(traceComplementSubtraction(1200, 345, 4));
     if (kind === 'action') trace.action.subtrahend += 1;

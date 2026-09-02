@@ -1,3 +1,5 @@
+import { assertStableEnumerableDataTree, traceValuesEqual } from '../../core/trace';
+
 export const COMPLEMENT_REGISTER_MECHANISM_ID = 'complement-register';
 
 export interface ComplementRegisterState {
@@ -218,15 +220,21 @@ export function traceComplementSubtraction(minuend: number, subtrahend: number, 
 export function replayComplementSubtraction(trace: Readonly<ComplementRegisterTrace>): ComplementRegisterState {
   if (!trace || typeof trace !== 'object' || Array.isArray(trace)) throw new InvalidComplementRegisterError('trace must be an object');
   exactKeys(trace, ['format', 'version', 'mechanismId', 'cycleId', 'initialState', 'action', 'events', 'finalState'], 'trace');
+  try {
+    assertStableEnumerableDataTree(trace, 'trace contains dynamic or cyclic data');
+  } catch {
+    throw new InvalidComplementRegisterError('trace contains dynamic or cyclic data');
+  }
   if (trace.format !== 'complement-register-trace' || trace.version !== 2 || trace.mechanismId !== COMPLEMENT_REGISTER_MECHANISM_ID || trace.cycleId !== trace.action.cycleId) throw new InvalidComplementRegisterError('unsupported trace envelope');
   const events = exactArray(trace.events, 'events') as ComplementRegisterEvent[];
+  const finalState = normalizeState(trace.finalState);
   const expected = transitionComplementRegister(trace.initialState, trace.action);
-  if (JSON.stringify(expected.events) !== JSON.stringify(events) || JSON.stringify(expected.state) !== JSON.stringify(trace.finalState)) throw new InvalidComplementRegisterError('trace is not action-derived');
+  if (!traceValuesEqual(expected.events, events) || !traceValuesEqual(expected.state, finalState)) throw new InvalidComplementRegisterError('trace is not action-derived');
   let replayed = normalizeState(trace.initialState);
   events.forEach((event, sequence) => {
     if (event.sequence !== sequence || event.cycleId !== trace.cycleId) throw new InvalidComplementRegisterError('invalid event order');
     replayed = reduceComplementRegisterEvent(replayed, event);
   });
-  if (JSON.stringify(replayed) !== JSON.stringify(trace.finalState)) throw new InvalidComplementRegisterError('trace replay mismatch');
+  if (!traceValuesEqual(replayed, finalState)) throw new InvalidComplementRegisterError('trace replay mismatch');
   return replayed;
 }
