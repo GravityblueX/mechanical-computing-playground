@@ -6,11 +6,11 @@ The exact remote-main baseline `e3788aaba731d5594d9caa70a0475b9452f6db15` reprod
 
 Before reading nested complement data, a mechanism-scoped bounded preflight now admits only the v2 JSON-tree shape: current-realm `Object.prototype` objects, exact `Array.prototype` arrays, own enumerable string-keyed data properties except intrinsic array `length`, and no Symbol/Function leaves, accessors, custom containers, cycles or repeated identities. Its limits are conservatively derived from width `<= 15` and at most 17 events. Retained post-order clone checks reject top-level, nested, array, self-detaching and mutation-attempting Proxies without invoking their `get` traps or injected accessors. Failures from the first exact-key check through final comparison are contained as `InvalidComplementRegisterError`; unexpected failures use `invalid complement trace data`. The generic trace path remains alias-compatible for existing decimal events that intentionally share wheel objects.
 
-Regressions cover reordered final-state and event members; fail-closed `undefined`, Symbol, Function, non-enumerable, accessor, cyclic, aliased and non-ordinary data; structural budgets; transparent and dual-view Proxies; Proxy mutation attempts; and normalization of a throwing `ownKeys` trap. No arithmetic transition, event vocabulary, research claim or browser rendering changed.
+Regressions cover reordered final-state and event members; fail-closed `undefined`, Symbol, Function, non-enumerable, accessor, cyclic, aliased and non-ordinary data; structural budgets; transparent and dual-view Proxies; Proxy mutation attempts; and fresh normalization of ordinary and domain-typed errors thrown by an `ownKeys` trap. No arithmetic transition, event vocabulary, research claim or browser rendering changed.
 
 - `npm run typecheck` — pass
-- focused mechanism-core, trace-fixture and complement-register tests — pass, 101 tests across 3 files
-- `npm test` — pass, 404 tests across 22 files
+- focused mechanism-core, trace-fixture and complement-register tests — pass, 102 tests across 3 files
+- `npm test` — pass, 405 tests across 22 files
 - `npm run build` — pass
 - `go run github.com/rhysd/actionlint/cmd/actionlint@v1.7.12 .github/workflows/ci.yml .github/workflows/pages.yml` — pass
 - `git diff --check` — pass

@@ -300,9 +300,13 @@ export function traceComplementSubtraction(minuend: number, subtrahend: number, 
 
 export function replayComplementSubtraction(trace: Readonly<ComplementRegisterTrace>): ComplementRegisterState {
   try {
-    if (!trace || typeof trace !== 'object' || Array.isArray(trace)) throw new InvalidComplementRegisterError('trace must be an object');
-    exactKeys(trace, ['format', 'version', 'mechanismId', 'cycleId', 'initialState', 'action', 'events', 'finalState'], 'trace');
-    assertComplementTraceTree(trace);
+    try {
+      if (!trace || typeof trace !== 'object' || Array.isArray(trace)) throw new Error('invalid complement trace data');
+      exactKeys(trace, ['format', 'version', 'mechanismId', 'cycleId', 'initialState', 'action', 'events', 'finalState'], 'trace');
+      assertComplementTraceTree(trace);
+    } catch {
+      throw new InvalidComplementRegisterError('invalid complement trace data');
+    }
     if (trace.format !== 'complement-register-trace' || trace.version !== 2 || trace.mechanismId !== COMPLEMENT_REGISTER_MECHANISM_ID || trace.cycleId !== trace.action.cycleId) throw new InvalidComplementRegisterError('unsupported trace envelope');
     const events = exactArray(trace.events, 'events') as ComplementRegisterEvent[];
     const finalState = normalizeState(trace.finalState);

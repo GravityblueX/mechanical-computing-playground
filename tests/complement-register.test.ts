@@ -231,6 +231,24 @@ describe('generic compact P/M complement register', () => {
     expect((caught as Error).message).toBe('invalid complement trace data');
   });
 
+  it('replaces a domain-typed structural trap error without preserving its identity or message', () => {
+    const sentinel = new InvalidComplementRegisterError('attacker sentinel');
+    const trace = new Proxy(clone(traceComplementSubtraction(1200, 345, 4)), {
+      ownKeys: () => {
+        throw sentinel;
+      },
+    }) as ComplementRegisterTrace;
+    let caught: unknown;
+    try {
+      replayComplementSubtraction(trace);
+    } catch (error) {
+      caught = error;
+    }
+    expect(caught).toBeInstanceOf(InvalidComplementRegisterError);
+    expect(caught).not.toBe(sentinel);
+    expect((caught as Error).message).toBe('invalid complement trace data');
+  });
+
   it('rejects unsupported final-state fields that JSON serialization would discard', () => {
     const trace = clone(traceComplementSubtraction(1200, 345, 4));
     Object.assign(trace.finalState, { unsupported: undefined });
