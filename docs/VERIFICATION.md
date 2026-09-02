@@ -2,15 +2,17 @@
 
 ## 2026-09-02 — complement-register structural replay equality
 
-The exact remote-main baseline `e3788aaba731d5594d9caa70a0475b9452f6db15` reproduced two complementary fixture-integrity failures: reordered but otherwise identical object members were rejected, while an unsupported enumerable `undefined` field on `finalState` was discarded by `JSON.stringify` and accepted. Complement replay now applies the shared stable-data-tree preflight before reading nested trace data, validates the final state, and uses the shared order-independent exact comparison rather than JSON serialization.
+The exact remote-main baseline `e3788aaba731d5594d9caa70a0475b9452f6db15` reproduced two complementary fixture-integrity failures: reordered but otherwise identical object members were rejected, while an unsupported enumerable `undefined` field on `finalState` was discarded by `JSON.stringify` and accepted. Complement replay now validates the final state and uses the shared order-independent exact comparison rather than JSON serialization.
 
-Regressions cover reordered final-state and event members, plus fail-closed enumerable `undefined`, Symbol, accessor and cyclic data. The accessor fixture also verifies that replay rejects the descriptor without invoking its getter. No arithmetic transition, event vocabulary, research claim or browser rendering changed.
+Before reading nested complement data, a mechanism-scoped bounded preflight now admits only the v2 JSON-tree shape: current-realm `Object.prototype` objects, exact `Array.prototype` arrays, own enumerable string-keyed data properties except intrinsic array `length`, and no Symbol/Function leaves, accessors, custom containers, cycles or repeated identities. Its limits are conservatively derived from width `<= 15` and at most 17 events. Retained post-order clone checks reject top-level, nested, array, self-detaching and mutation-attempting Proxies without invoking their `get` traps or injected accessors. Failures from the first exact-key check through final comparison are contained as `InvalidComplementRegisterError`; unexpected failures use `invalid complement trace data`. The generic trace path remains alias-compatible for existing decimal events that intentionally share wheel objects.
 
-- `npm run lint --if-present` — pass; no lint script is configured
+Regressions cover reordered final-state and event members; fail-closed `undefined`, Symbol, Function, non-enumerable, accessor, cyclic, aliased and non-ordinary data; structural budgets; transparent and dual-view Proxies; Proxy mutation attempts; and normalization of a throwing `ownKeys` trap. No arithmetic transition, event vocabulary, research claim or browser rendering changed.
+
 - `npm run typecheck` — pass
-- focused shared-trace/complement tests — pass, 83 tests across 3 files
-- `npm test` — pass, 386 tests across 22 files
+- focused mechanism-core, trace-fixture and complement-register tests — pass, 101 tests across 3 files
+- `npm test` — pass, 404 tests across 22 files
 - `npm run build` — pass
+- `go run github.com/rhysd/actionlint/cmd/actionlint@v1.7.12 .github/workflows/ci.yml .github/workflows/pages.yml` — pass
 - `git diff --check` — pass
 
 ## 2026-09-02 — bounded complement-register v2 trace semantics

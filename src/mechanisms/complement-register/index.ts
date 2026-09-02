@@ -1,4 +1,4 @@
-import { assertStableEnumerableDataTree, traceValuesEqual } from '../../core/trace';
+import { traceValuesEqual } from '../../core/trace';
 
 export const COMPLEMENT_REGISTER_MECHANISM_ID = 'complement-register';
 
@@ -76,6 +76,87 @@ export class InvalidComplementRegisterError extends Error {
     this.name = 'InvalidComplementRegisterError';
   }
 }
+
+/**
+ * Complement v2 traces are JSON-shaped trees: exact ordinary containers,
+ * own enumerable string-keyed data properties, and no repeated identities.
+ * Retaining and cloning each post-order frame rejects a Proxy even if one of
+ * its structural traps removes it from the root before the walk completes.
+ */
+const assertComplementTraceTree = (value: unknown): void => {
+  // width <= 15 yields at most 17 events and about 22 ordinary containers.
+  const maxObjects = 64;
+  const maxDepth = 32;
+  const maxProperties = 512;
+  const maxArrayLength = 17;
+  const invalid = (): never => {
+    throw new Error('invalid complement trace data');
+  };
+  const valueType = typeof value;
+  if (valueType === 'symbol' || valueType === 'function') invalid();
+  if (value === null || valueType !== 'object') return;
+
+  const active = new WeakSet<object>();
+  const seen = new WeakSet<object>();
+  const stack: Array<{ value: object; depth: number; exiting: boolean }> = [{
+    value: value as object,
+    depth: 0,
+    exiting: false,
+  }];
+  let objectCount = 0;
+  let propertyCount = 0;
+  while (stack.length > 0) {
+    const frame = stack.pop();
+    if (!frame) break;
+    if (frame.exiting) {
+      structuredClone(frame.value);
+      active.delete(frame.value);
+      continue;
+    }
+    if (active.has(frame.value) || seen.has(frame.value)) invalid();
+    seen.add(frame.value);
+    objectCount += 1;
+    if (objectCount > maxObjects || frame.depth > maxDepth) invalid();
+
+    const array = Array.isArray(frame.value);
+    if (Object.getPrototypeOf(frame.value) !== (array ? Array.prototype : Object.prototype)) invalid();
+    const arrayLength = array ? Object.getOwnPropertyDescriptor(frame.value, 'length') : undefined;
+    if (
+      array
+      && (
+        !arrayLength
+        || arrayLength.enumerable
+        || !('value' in arrayLength)
+        || !Number.isInteger(arrayLength.value)
+        || arrayLength.value < 0
+        || arrayLength.value > maxArrayLength
+      )
+    ) invalid();
+    active.add(frame.value);
+    stack.push({ value: frame.value, depth: frame.depth, exiting: true });
+    const keys = Reflect.ownKeys(frame.value);
+    propertyCount += keys.length;
+    if (propertyCount > maxProperties) invalid();
+    for (const key of keys) {
+      if (typeof key !== 'string') invalid();
+      const descriptor = array && key === 'length'
+        ? arrayLength
+        : Object.getOwnPropertyDescriptor(frame.value, key);
+      if (!descriptor) throw new Error('invalid complement trace data');
+      if (array && key === 'length') {
+        if (descriptor.enumerable || !('value' in descriptor)) invalid();
+        continue;
+      }
+      if (!descriptor.enumerable || !('value' in descriptor)) invalid();
+      const child = descriptor.value;
+      const childType = typeof child;
+      if (childType === 'symbol' || childType === 'function') invalid();
+      if (child !== null && childType === 'object') {
+        stack.push({ value: child, depth: frame.depth + 1, exiting: false });
+      }
+    }
+  }
+};
 
 const exactKeys = (value: object, expected: readonly string[], label: string): void => {
   if (Object.getPrototypeOf(value) !== Object.prototype) throw new InvalidComplementRegisterError(`${label} must be a plain object`);
@@ -218,23 +299,24 @@ export function traceComplementSubtraction(minuend: number, subtrahend: number, 
 }
 
 export function replayComplementSubtraction(trace: Readonly<ComplementRegisterTrace>): ComplementRegisterState {
-  if (!trace || typeof trace !== 'object' || Array.isArray(trace)) throw new InvalidComplementRegisterError('trace must be an object');
-  exactKeys(trace, ['format', 'version', 'mechanismId', 'cycleId', 'initialState', 'action', 'events', 'finalState'], 'trace');
   try {
-    assertStableEnumerableDataTree(trace, 'trace contains dynamic or cyclic data');
-  } catch {
-    throw new InvalidComplementRegisterError('trace contains dynamic or cyclic data');
+    if (!trace || typeof trace !== 'object' || Array.isArray(trace)) throw new InvalidComplementRegisterError('trace must be an object');
+    exactKeys(trace, ['format', 'version', 'mechanismId', 'cycleId', 'initialState', 'action', 'events', 'finalState'], 'trace');
+    assertComplementTraceTree(trace);
+    if (trace.format !== 'complement-register-trace' || trace.version !== 2 || trace.mechanismId !== COMPLEMENT_REGISTER_MECHANISM_ID || trace.cycleId !== trace.action.cycleId) throw new InvalidComplementRegisterError('unsupported trace envelope');
+    const events = exactArray(trace.events, 'events') as ComplementRegisterEvent[];
+    const finalState = normalizeState(trace.finalState);
+    const expected = transitionComplementRegister(trace.initialState, trace.action);
+    if (!traceValuesEqual(expected.events, events) || !traceValuesEqual(expected.state, finalState)) throw new InvalidComplementRegisterError('trace is not action-derived');
+    let replayed = normalizeState(trace.initialState);
+    events.forEach((event, sequence) => {
+      if (event.sequence !== sequence || event.cycleId !== trace.cycleId) throw new InvalidComplementRegisterError('invalid event order');
+      replayed = reduceComplementRegisterEvent(replayed, event);
+    });
+    if (!traceValuesEqual(replayed, finalState)) throw new InvalidComplementRegisterError('trace replay mismatch');
+    return replayed;
+  } catch (error) {
+    if (error instanceof InvalidComplementRegisterError) throw error;
+    throw new InvalidComplementRegisterError('invalid complement trace data');
   }
-  if (trace.format !== 'complement-register-trace' || trace.version !== 2 || trace.mechanismId !== COMPLEMENT_REGISTER_MECHANISM_ID || trace.cycleId !== trace.action.cycleId) throw new InvalidComplementRegisterError('unsupported trace envelope');
-  const events = exactArray(trace.events, 'events') as ComplementRegisterEvent[];
-  const finalState = normalizeState(trace.finalState);
-  const expected = transitionComplementRegister(trace.initialState, trace.action);
-  if (!traceValuesEqual(expected.events, events) || !traceValuesEqual(expected.state, finalState)) throw new InvalidComplementRegisterError('trace is not action-derived');
-  let replayed = normalizeState(trace.initialState);
-  events.forEach((event, sequence) => {
-    if (event.sequence !== sequence || event.cycleId !== trace.cycleId) throw new InvalidComplementRegisterError('invalid event order');
-    replayed = reduceComplementRegisterEvent(replayed, event);
-  });
-  if (!traceValuesEqual(replayed, finalState)) throw new InvalidComplementRegisterError('trace replay mismatch');
-  return replayed;
 }

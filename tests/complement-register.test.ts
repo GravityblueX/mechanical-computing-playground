@@ -2,13 +2,29 @@ import { describe, expect, it } from 'vitest';
 import {
   carryBoundarySummaries,
   createComplementRegister,
+  InvalidComplementRegisterError,
   ninesComplement,
   replayComplementSubtraction,
   traceComplementSubtraction,
   transitionComplementRegister,
+  type ComplementRegisterTrace,
 } from '../src/mechanisms/complement-register';
 
 const clone = <T>(value: T): T => structuredClone(value);
+
+const countedProxy = <T extends object>(target: T, dualView = false) => {
+  let getCount = 0;
+  return {
+    proxy: new Proxy(target, {
+      get: (object, key, receiver) => {
+        getCount += 1;
+        if (dualView && key === 'subtractionReadout') return -1;
+        return Reflect.get(object, key, receiver);
+      },
+    }),
+    getCount: () => getCount,
+  };
+};
 
 describe('generic compact P/M complement register', () => {
   it('computes fixed-width mathematical nines complement and is involutive', () => {
@@ -104,16 +120,173 @@ describe('generic compact P/M complement register', () => {
     expect(replayComplementSubtraction(trace)).toEqual(trace.finalState);
   });
 
+  it('rejects a transparent top-level Proxy without invoking its get trap', () => {
+    const counted = countedProxy(clone(traceComplementSubtraction(1200, 345, 4)));
+    expect(() => replayComplementSubtraction(counted.proxy)).toThrow(InvalidComplementRegisterError);
+    expect(counted.getCount()).toBe(0);
+  });
+
+  it('rejects a nested Proxy without invoking its get trap', () => {
+    const trace = clone(traceComplementSubtraction(1200, 345, 4));
+    const counted = countedProxy(trace.finalState);
+    trace.finalState = counted.proxy;
+    expect(() => replayComplementSubtraction(trace)).toThrow(InvalidComplementRegisterError);
+    expect(counted.getCount()).toBe(0);
+  });
+
+  it('rejects an array Proxy without invoking its get trap', () => {
+    const trace = clone(traceComplementSubtraction(1200, 345, 4));
+    const counted = countedProxy(trace.events);
+    trace.events = counted.proxy;
+    expect(() => replayComplementSubtraction(trace)).toThrow(InvalidComplementRegisterError);
+    expect(counted.getCount()).toBe(0);
+  });
+
+  it('rejects a dual-view Proxy without reading its forged value', () => {
+    const trace = clone(traceComplementSubtraction(1200, 345, 4));
+    const counted = countedProxy(trace.finalState, true);
+    trace.finalState = counted.proxy;
+    expect(() => replayComplementSubtraction(trace)).toThrow(InvalidComplementRegisterError);
+    expect(counted.getCount()).toBe(0);
+  });
+
+  it('rejects a retained Proxy that detaches itself during structural inspection', () => {
+    const trace = clone(traceComplementSubtraction(1200, 345, 4));
+    const initialState = trace.initialState;
+    let getCount = 0;
+    trace.initialState = new Proxy(initialState, {
+      get: (target, key, receiver) => {
+        getCount += 1;
+        return Reflect.get(target, key, receiver);
+      },
+      getPrototypeOf: (target) => {
+        trace.initialState = initialState;
+        return Reflect.getPrototypeOf(target);
+      },
+    });
+
+    let caught: unknown;
+    try {
+      replayComplementSubtraction(trace);
+    } catch (error) {
+      caught = error;
+    }
+    expect(caught).toBeInstanceOf(InvalidComplementRegisterError);
+    expect((caught as Error).message).toBe('invalid complement trace data');
+    expect(getCount).toBe(0);
+  });
+
+  it('does not invoke an accessor injected into a seen node by a Proxy trap', () => {
+    const trace = clone(traceComplementSubtraction(1200, 345, 4));
+    const initialState = trace.initialState;
+    const victim = trace.finalState as ComplementRegisterTrace['finalState'] & { injected?: number };
+    let getCount = 0;
+    let reads = 0;
+    trace.initialState = new Proxy({ bridge: { victim } }, {
+      get: (target, key, receiver) => {
+        getCount += 1;
+        return Reflect.get(target, key, receiver);
+      },
+      getPrototypeOf: (target) => {
+        trace.initialState = initialState;
+        Object.defineProperty(victim, 'injected', {
+          configurable: true,
+          enumerable: true,
+          get: () => {
+            reads += 1;
+            return 2;
+          },
+        });
+        return Reflect.getPrototypeOf(target);
+      },
+    }) as unknown as ComplementRegisterTrace['initialState'];
+
+    let caught: unknown;
+    try {
+      replayComplementSubtraction(trace);
+    } catch (error) {
+      caught = error;
+    }
+    expect(caught).toBeInstanceOf(InvalidComplementRegisterError);
+    expect((caught as Error).message).toBe('invalid complement trace data');
+    expect(getCount).toBe(0);
+    expect(reads).toBe(0);
+  });
+
+  it('normalizes a top-level ownKeys trap failure to the mechanism error type', () => {
+    const sentinel = new Error('ownKeys sentinel');
+    const trace = new Proxy(clone(traceComplementSubtraction(1200, 345, 4)), {
+      ownKeys: () => {
+        throw sentinel;
+      },
+    }) as ComplementRegisterTrace;
+    let caught: unknown;
+    try {
+      replayComplementSubtraction(trace);
+    } catch (error) {
+      caught = error;
+    }
+    expect(caught).toBeInstanceOf(InvalidComplementRegisterError);
+    expect(caught).not.toBe(sentinel);
+    expect((caught as Error).message).toBe('invalid complement trace data');
+  });
+
   it('rejects unsupported final-state fields that JSON serialization would discard', () => {
     const trace = clone(traceComplementSubtraction(1200, 345, 4));
     Object.assign(trace.finalState, { unsupported: undefined });
     expect(() => replayComplementSubtraction(trace)).toThrow();
   });
 
-  it('rejects enumerable Symbol fields in the final state', () => {
+  it('rejects every Symbol key, including non-enumerable fields', () => {
     const trace = clone(traceComplementSubtraction(1200, 345, 4));
-    Object.defineProperty(trace.finalState, Symbol('unsupported'), { value: true, enumerable: true });
-    expect(() => replayComplementSubtraction(trace)).toThrow();
+    Object.defineProperty(trace.finalState, Symbol('unsupported'), { value: true, enumerable: false });
+    expect(() => replayComplementSubtraction(trace)).toThrow('invalid complement trace data');
+  });
+
+  it.each([
+    ['Symbol', Symbol('leaf')],
+    ['Function', () => 1],
+  ])('rejects a %s leaf before comparison', (_label, leaf) => {
+    const trace = clone(traceComplementSubtraction(1200, 345, 4));
+    (trace.finalState as unknown as Record<string, unknown>).subtractionReadout = leaf;
+    expect(() => replayComplementSubtraction(trace)).toThrow('invalid complement trace data');
+  });
+
+  it.each([
+    ['Date', new Date(0)],
+    ['Map', new Map([['key', 'value']])],
+    ['Set', new Set(['value'])],
+    ['custom prototype', Object.create({ inherited: true })],
+    ['array subclass', new (class TraceArray extends Array<unknown> {})(1)],
+  ])('rejects a %s outside the exact ordinary-container contract', (_label, value) => {
+    const trace = clone(traceComplementSubtraction(1200, 345, 4));
+    trace.finalState = value as unknown as ComplementRegisterTrace['finalState'];
+    expect(() => replayComplementSubtraction(trace)).toThrow('invalid complement trace data');
+  });
+
+  it('rejects non-enumerable string properties outside intrinsic array length', () => {
+    const trace = clone(traceComplementSubtraction(1200, 345, 4));
+    Object.defineProperty(trace.finalState, 'hidden', { value: true, enumerable: false });
+    expect(() => replayComplementSubtraction(trace)).toThrow('invalid complement trace data');
+  });
+
+  it('rejects an events array beyond the width-derived structural budget', () => {
+    const trace = clone(traceComplementSubtraction(1200, 345, 4));
+    trace.events.length = 18;
+    expect(() => replayComplementSubtraction(trace)).toThrow('invalid complement trace data');
+  });
+
+  it('rejects nested data beyond the complement-tree depth budget', () => {
+    const trace = clone(traceComplementSubtraction(1200, 345, 4));
+    const probe: Record<string, unknown> = {};
+    let cursor = probe;
+    for (let depth = 0; depth < 33; depth += 1) {
+      const next: Record<string, unknown> = {};
+      cursor.next = next;
+      cursor = next;
+    }
+    Object.assign(trace.action, { probe });
+    expect(() => replayComplementSubtraction(trace)).toThrow('invalid complement trace data');
   });
 
   it('rejects accessors before reading dynamic trace data', () => {
@@ -126,14 +299,20 @@ describe('generic compact P/M complement register', () => {
         return 855;
       },
     });
-    expect(() => replayComplementSubtraction(trace)).toThrow(/dynamic or cyclic/);
+    expect(() => replayComplementSubtraction(trace)).toThrow('invalid complement trace data');
     expect(accessed).toBe(false);
   });
 
   it('rejects cyclic trace data before structural comparison', () => {
     const trace = clone(traceComplementSubtraction(1200, 345, 4));
     Object.assign(trace.finalState, { cycle: trace.finalState });
-    expect(() => replayComplementSubtraction(trace)).toThrow(/dynamic or cyclic/);
+    expect(() => replayComplementSubtraction(trace)).toThrow('invalid complement trace data');
+  });
+
+  it('rejects repeated object identities outside the complement JSON-tree shape', () => {
+    const trace = clone(traceComplementSubtraction(1200, 345, 4));
+    trace.finalState = trace.initialState;
+    expect(() => replayComplementSubtraction(trace)).toThrow('invalid complement trace data');
   });
 
   it.each(['action', 'summary', 'order', 'final', 'version', 'extra', 'unknown'] as const)('fails closed on %s tampering', kind => {
