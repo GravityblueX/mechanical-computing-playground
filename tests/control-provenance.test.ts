@@ -6,7 +6,7 @@ describe('typed control provenance dataset', () => {
     const ids = CONTROL_EVIDENCE_PROFILES.map(profile => profile.id);
     expect(new Set(ids).size).toBe(ids.length);
     expect(ids).toEqual(expect.arrayContaining([
-      'thomas-1867-object', 'odhner-us1510100', 'felt-us960528', 'turck-us1154897',
+      'thomas-1868-pamphlet', 'thomas-1867-object', 'thomas-ca1873-object', 'thomas-ca1820-object', 'odhner-us1510100', 'felt-us960528', 'turck-us1154897',
       'ziehm-us1110734', 'felt-controlled-key-manuals', 'comptometer-model-f-objects',
       'controlled-key-model-mapping-e3', 'pascaline-complement',
     ]));
@@ -32,6 +32,23 @@ describe('typed control provenance dataset', () => {
         expect(item.zh.trim()).not.toBe('');
       }
     }
+  });
+
+  it('keeps Thomas pamphlet, 1867, ca.1873, early object and P/M boundaries distinct', () => {
+    const pamphlet = getControlEvidenceProfile('thomas-1868-pamphlet');
+    const object1867 = getControlEvidenceProfile('thomas-1867-object');
+    const object1873 = getControlEvidenceProfile('thomas-ca1873-object');
+    const early = getControlEvidenceProfile('thomas-ca1820-object');
+    expect(pamphlet).toMatchObject({ claimType: 'H', evidenceStrength: 'E1', dateOrModel: expect.stringMatching(/MA\.318961\.02.*NMAH-AHB2018q019415.*1 canvas.*unnumbered opening/) });
+    expect(pamphlet.documentedRoles.map(item => item.en).join(' ')).toMatch(/A setting sliders.*B selects.*C windows.*D windows.*N is.*O independently zeros D.*P independently zeros C.*lift and slide.*M/);
+    expect(pamphlet.notEstablished.map(item => item.en).join(' ')).toMatch(/step sequence.*repeated-turn counts.*overshoot.*add-back.*counter direction.*phase names.*Thomas terminology/);
+    expect(object1867.documentedRoles.map(item => item.en).join(' ')).toMatch(/eight setting levers.*seven positions.*clockwise for subtraction\/division.*counterclockwise for addition\/multiplication.*right knob zeros/);
+    expect(object1867.notEstablished.map(item => item.en).join(' ')).toMatch(/result-zeroing control.*1868 pamphlet procedure applicability/);
+    expect(object1873).toMatchObject({ dateOrModel: expect.stringMatching(/MA\.335215.*serial 1068/) });
+    expect(object1873.documentedRoles.map(item => item.en).join(' ')).toMatch(/ten setting levers.*11 multiplier\/quotient.*20 result.*right black knob.*left knob.*instruction book.*1868/);
+    expect(object1873.notEstablished.map(item => item.en).join(' ')).toMatch(/every procedure.*unchanged.*1867 object.*overshoot\/add-back/);
+    expect(early.documentedRoles.map(item => item.en).join(' ')).toMatch(/three setting levers.*multiplication lever.*red\/black result-window.*red ribbon.*no revolution register/);
+    expect(early.notEstablished.map(item => item.en).join(' ')).toMatch(/later crank.*dual-register.*1820 patent drawings/);
   });
 
   it('separates Controlled-Key manual, patent, object, E3 mapping and P/M boundaries', () => {

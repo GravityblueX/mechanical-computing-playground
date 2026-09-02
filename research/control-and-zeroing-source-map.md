@@ -50,13 +50,28 @@ The ca.1873 object `nmah_690686` / `MA.335215`, maker No. 1068, has ten setting 
 
 Both manifests expose object photographs only (one canvas each); catalog descriptions and visible objects are H/E1 at their stated precision. The two capacities, knob descriptions and provenance histories must not be merged into one canonical revision.
 
-### 1.3 Oxford / 1865 booklet attribution
+The older `nmah_690692` (ca.1820) is a stronger negative boundary: its catalog describes three digit levers plus a single-digit multiplication lever, paired red/black result windows, individual result-digit zeroing thumbscrews, red-ribbon actuation, and **no revolution register**. Later crank, dual-register, carriage and operator protocols cannot be back-filled into it.
+
+### 1.3 Control/register crosswalk
+
+| Responsibility | Direct source | H/E1 support | Repository consequence | Not established |
+|---|---|---|---|---|
+| set operation and expose two register roles | 1868 sole IIIF opening | `A/B/C/D`; `C` result, `D` multiplier/quotient | mode/register labels may be compared | arithmetic transition order |
+| independently clear `D` and `C` | 1868 sole IIIF opening | right `O` clears `D`; left `P` clears `C` | generic independent lifecycle has a historical analogue | hidden clear linkage or event order |
+| move carriage | 1868 sole IIIF opening | `O/P` also lift and slide `M` | place state is historically relevant | place direction/order in multiplication/division |
+| counter direction and 1867 capacities | `MA.327900` catalog | clockwise SUB/DIV; counterclockwise ADD/MULT; 9/16 windows | preserve source-specific direction separately | manual procedure or universal revision rule |
+| ca.1873 capacities and clears | `MA.335215` catalog | 11/20 windows and independent clear knobs | keep object identity explicit | unchanged applicability of incomplete pamphlet |
+| generic mode/clear events | repository `register-lifecycle` | deterministic P/M reducer/replay | teaching state hygiene | Thomas terminology, latch semantics or timing |
+
+No visible 1868 page instructs multiplication turns, division setup/subtraction, overshoot, add-back, quotient/remainder termination or counter direction. Those remain open rather than reconstructed from the labeled controls.
+
+### 1.4 Oxford / 1865 booklet attribution
 
 Stephen Johnston's Museum of the History of Science institutional account, *Making the arithmometer count* (1997), says its Figure 1 engraving comes from an 1865 instruction booklet. It describes mature-machine result dials `C`, quotient/counter dials `D`, and independent zeroing by the two knurled knobs at opposite carriage ends (`O`, `P`). This is used as **R/E2 institutional reconstruction/synthesis**: the web article and figure attribution were inspected, not a bibliographically complete primary booklet scan.
 
 <https://www.mhs.ox.ac.uk/staff/saj/arithmometer/>
 
-### 1.4 Remaining boundary
+### 1.5 Remaining boundary
 
 Specialist `arithmometre.org` chronology remains E3 orientation for serial/revision mapping. The directly inspected evidence supports separate register responsibilities on identified 1860s/1870s sources. It does not establish one linkage, action timing, knob geometry, clearing procedure, or production revision history for every Thomas arithmometer.
 

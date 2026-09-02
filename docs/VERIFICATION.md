@@ -1,5 +1,23 @@
 # Verification record
 
+## 2026-09-02 — Thomas 1868 pamphlet/opening and revision boundary audit
+
+The current-main baseline at `2f3ec51c105540769013ff339b42ae8ecd5c47fb` passed typecheck and 361 tests across 21 files. Smithsonian IIIF manifest `NMAH-AHB2018q019415` was resolved directly: it exposes exactly one 3000×1846 canvas labeled `image NMAH-AHB2018q019415`, an unnumbered title/legend opening—not a pamphlet page sequence. The readable 1868 legend anchors setting sliders `A`, operation selector `B`, result windows `C`, multiplier/quotient windows `D`, movable carriage/plate `M`, operating crank `N`, right `O` clearing `D`, left `P` clearing `C`, and the note that `O/P` also lift/slide `M`. It does not expose multiplication/division steps, turn counts, shift order, overshoot, add-back, termination, remainder, or counter direction.
+
+Object records were kept revision-specific. `MA.327900` (1867) supplies 8 setting levers, 7 carriage positions, 9/16 register windows, ADD/MULT versus SUB/DIV selector, counterclockwise versus clockwise revolution-register direction, and right revolution-register clear at catalog precision; its left control is cataloged only as a lifting knob. `MA.335215` (ca.1873, serial 1068) supplies different 10-lever, 11/20-window capacities and independent right/left register clears, and is cataloged as received with the separately stored 1868 book. The ca.1820 `nmah_690692` boundary is ribbon-operated, has individual result-digit clears and no revolution register; later crank/dual-register procedure was not back-filled into it.
+
+The generic operator-division and register-lifecycle transitions were not changed. Their phase/event names, signed overshoot, separate detection, mandatory add-back and lifecycle order remain deterministic P/M choices, not Thomas terminology or timing.
+
+- `npm run typecheck` — pass
+- focused provenance/operator-division/register-lifecycle tests — pass, 48 tests
+- `npm test -- --run` — pass, 362 tests across 21 files
+- `npm run build` — pass
+- `git diff --check` — pass
+
+Bilingual browser smoke for `#/division`, `#/controls`, and `#/about` was attempted, but the browser extension remained disconnected; no successful browser smoke is claimed.
+
+No deployment check was performed for this not-yet-pushed completion commit.
+
 ## 2026-09-02 — Controlled-Key recovery/release protocol grounding
 
 The current-main baseline at `d552a7744ca70363a219c593f56cec1b63126932` passed typecheck and 360 tests across 21 files. The image-only Felt & Tarrant scans were rendered locally and directly inspected. *Easy Instructions* ca. 1920 gives the general “complete unfinished stroke → release key → continue” account on PDF p.2 and the red Correction Button decision rules on printed p.8 / PDF p.5. *Methods of Operating the Comptometer* 1921 gives Model H locking/correction on printed pp.IX–XI / PDF pp.7–8: other columns lock, addition correction completes/retries the partial key before the red Release Button, multiple faulty columns each require correction, and multiplication/division guidance says cancel and redo.

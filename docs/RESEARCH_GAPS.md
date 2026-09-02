@@ -63,7 +63,7 @@ Current state: `research/subtraction-and-division.md` and a tested generic `8478
 
 Remaining gaps:
 
-- Thomas multiplication/division procedure pages beyond the directly inspected single 1868 legend spread, primary Burkhardt procedure pages, and exact Curta division-example edition/page mapping beyond the directly inspected guide controls and E3 transcription;
+- Thomas multiplication/division procedure pages beyond IIIF `NMAH-AHB2018q019415`'s censused single unnumbered legend opening (which contains no readable procedure), primary Burkhardt procedure pages, and exact Curta division-example edition/page mapping beyond the directly inspected guide controls and E3 transcription;
 - source-specific mode/crank/counter directions and correction linkages beyond the bounded Curta viewer-page-1 controls;
 - primary Pascaline complement setup/digit conventions;
 - square-root and other derived procedures only when tied to a precise manual/model.
@@ -76,7 +76,7 @@ Current state: tested setting–crank, key-stroke-integrity, and independent dua
 
 Remaining gaps:
 
-- additional Thomas procedure pages plus exact zeroing linkage/timing and production-revision mapping;
+- additional Thomas procedure pages plus exact zeroing linkage/timing and production-revision mapping; the exposed 1868 opening now anchors A/B/C/D/M/N/O/P roles and the 1820/1867/ca.1873 object distinctions are explicit;
 - production use of Odhner patented locking embodiments;
 - exact trigger/registration timing and patent-to-production mapping for Model E/F/J controlled-key revisions; addition recovery/release is now directly anchored to ca.1920/1921 company pages and Ziehm's patented design;
 - source-specific overflow, carry inhibition, and recovery geometry.

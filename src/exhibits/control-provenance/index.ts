@@ -3,7 +3,7 @@ export type ControlEvidenceStrength = 'E1' | 'E2' | 'E3' | 'E4';
 export interface BilingualText { en: string; zh: string; }
 
 export interface ControlEvidenceProfile {
-  id: 'thomas-1867-object' | 'odhner-us1510100' | 'felt-us960528' | 'turck-us1154897' | 'ziehm-us1110734' | 'felt-controlled-key-manuals' | 'comptometer-model-f-objects' | 'controlled-key-model-mapping-e3' | 'pascaline-complement';
+  id: 'thomas-1868-pamphlet' | 'thomas-1867-object' | 'thomas-ca1873-object' | 'thomas-ca1820-object' | 'odhner-us1510100' | 'felt-us960528' | 'turck-us1154897' | 'ziehm-us1110734' | 'felt-controlled-key-manuals' | 'comptometer-model-f-objects' | 'controlled-key-model-mapping-e3' | 'pascaline-complement';
   family: BilingualText;
   dateOrModel: string;
   claimType: ControlClaimType;
@@ -16,6 +16,24 @@ export interface ControlEvidenceProfile {
 
 export const CONTROL_EVIDENCE_PROFILES: readonly ControlEvidenceProfile[] = [
   {
+    id: 'thomas-1868-pamphlet',
+    family: { en: 'Thomas 1868 instruction pamphlet—exposed opening only', zh: 'Thomas 1868 操作说明——仅公开一幅展开页' },
+    dateOrModel: 'MA.318961.02 / nmah_904757; IIIF NMAH-AHB2018q019415; 1 canvas, unnumbered opening',
+    claimType: 'H',
+    evidenceStrength: 'E1',
+    sourceLabel: "Thomas, Instructions pour se Servir de l'Arithmomètre (1868), exposed title/legend opening",
+    sourceUrl: 'https://ids.si.edu/ids/manifest/NMAH-AHB2018q019415',
+    documentedRoles: [
+      { en: 'A setting sliders mark digits; B selects the operation; C windows show results; D windows show multiplier and quotient', zh: 'A 设定滑钮标记数字；B 选择运算；C 窗显示结果；D 窗显示乘数与商' },
+      { en: 'N is the operating crank; O independently zeros D; P independently zeros C', zh: 'N 是操作曲柄；O 独立清零 D；P 独立清零 C' },
+      { en: 'O and P also lift and slide movable plate/carriage M', zh: 'O 与 P 还用于抬起并滑动活动板/位架 M' },
+    ],
+    notEstablished: [
+      { en: 'multiplication/division step sequence, repeated-turn counts, shift order, overshoot, add-back, remainder termination, or counter direction from the sole exposed opening', zh: '从唯一公开展开页推断乘除步骤、重复转数、移位顺序、超越、加回、余数终止或计数器方向' },
+      { en: 'the repository division/register phase names or event order as Thomas terminology or timing', zh: '把本仓除法/寄存器阶段名或事件顺序视为 Thomas 术语或时序' },
+    ],
+  },
+  {
     id: 'thomas-1867-object',
     family: { en: 'Thomas arithmometer', zh: 'Thomas 算术机' },
     dateOrModel: 'identified 1867 object; NMAH nmah_690683',
@@ -24,13 +42,48 @@ export const CONTROL_EVIDENCE_PROFILES: readonly ControlEvidenceProfile[] = [
     sourceLabel: 'Smithsonian/NMAH, Thomas Arithmometer, nmah_690683',
     sourceUrl: 'https://americanhistory.si.edu/collections/object/nmah_690683',
     documentedRoles: [
-      { en: 'mode lever separates addition/multiplication from subtraction/division', zh: '模式杆区分加法/乘法与减法/除法' },
-      { en: 'revolution register direction differs between the two mode groups', zh: '两组模式下转数寄存器方向不同' },
-      { en: 'identified Thomas examples document controls for zeroing result/revolution registers', zh: '特定 Thomas 实例记录了结果/转数寄存器的归零控制' },
+      { en: 'eight setting levers, ADD/MULT versus SUB/DIV selector, operating crank, and a carriage with seven positions', zh: '8 个设定杆、加乘/减除选择器、操作曲柄，以及具有 7 个位置的位架' },
+      { en: '9-window revolution register turns clockwise for subtraction/division and counterclockwise for addition/multiplication; result register has 16 windows', zh: '9 窗转数寄存器在减除时顺时针、加乘时逆时针；结果寄存器有 16 窗' },
+      { en: 'right knob zeros the revolution register; thumbscrews can enter values in both registers', zh: '右钮清零转数寄存器；两寄存器均可用拇指轮输入数值' },
     ],
     notEstablished: [
-      { en: 'one canonical linkage, timing, or zeroing geometry across Thomas revisions', zh: '跨 Thomas 修订版统一的连杆、时序或归零几何' },
-      { en: 'contents of uninspected pages in the 1868 instruction pamphlet', zh: '尚未检查的 1868 年说明书页面内容' },
+      { en: 'one canonical linkage, timing, procedure, or zeroing geometry across Thomas revisions', zh: '跨 Thomas 修订版统一的连杆、时序、流程或清零几何' },
+      { en: 'an independently cataloged result-zeroing control on this 1867 object, or 1868 pamphlet procedure applicability', zh: '该 1867 实物上独立编目的结果清零控制，或 1868 说明流程对其适用性' },
+    ],
+  },
+  {
+    id: 'thomas-ca1873-object',
+    family: { en: 'Thomas arithmometer associated with 1868 pamphlet', zh: '与 1868 说明书关联的 Thomas 算术机' },
+    dateOrModel: 'ca. 1873; MA.335215 / nmah_690686; serial 1068',
+    claimType: 'H',
+    evidenceStrength: 'E1',
+    sourceLabel: 'Smithsonian/NMAH, Thomas Arithmometer, MA.335215',
+    sourceUrl: 'https://americanhistory.si.edu/collections/object/nmah_690686',
+    documentedRoles: [
+      { en: 'ten setting levers, ADD/MULT versus SUB/DIV selector, operating crank, movable carriage, 11 multiplier/quotient and 20 result windows', zh: '10 个设定杆、加乘/减除选择器、操作曲柄、活动位架、11 个乘数/商窗与 20 个结果窗' },
+      { en: 'right black knob zeros the revolution register and left knob zeros the result register; both registers also have entry thumbscrews', zh: '右侧黑钮清零转数寄存器，左钮清零结果寄存器；两寄存器另有输入拇指轮' },
+      { en: 'catalog states that a separately stored instruction book received with this instrument is dated 1868', zh: '目录明确记载随该仪器接收、另存的说明书日期为 1868 年' },
+    ],
+    notEstablished: [
+      { en: 'that every procedure in the incompletely exposed 1868 pamphlet applies unchanged to this ca. 1873 object or to the 1867 object', zh: '未完整公开的 1868 说明书中所有流程均原样适用于约 1873 实物或 1867 实物' },
+      { en: 'revolution-register direction, division overshoot/add-back procedure, or hidden zeroing/carriage linkage from this catalog record', zh: '从该目录推断转数寄存器方向、除法超越/加回流程或隐藏清零/位架连杆' },
+    ],
+  },
+  {
+    id: 'thomas-ca1820-object',
+    family: { en: 'oldest surviving Thomas object boundary', zh: '最早留存 Thomas 实物边界' },
+    dateOrModel: 'ca. 1820; nmah_690692; early ribbon-operated object',
+    claimType: 'H',
+    evidenceStrength: 'E1',
+    sourceLabel: 'Smithsonian/NMAH, oldest surviving Thomas Arithmometer, nmah_690692',
+    sourceUrl: 'https://americanhistory.si.edu/collections/object/nmah_690692',
+    documentedRoles: [
+      { en: 'three setting levers plus a multiplication lever, paired red/black result-window sets, and individual result-digit zeroing thumbscrews', zh: '3 个设定杆加 1 个乘法杆、成对红黑结果窗，以及逐位结果清零拇指轮' },
+      { en: 'a red ribbon operates this early object; it has no revolution register', zh: '该早期实物由红色拉带驱动，且没有转数寄存器' },
+    ],
+    notEstablished: [
+      { en: 'later crank, dual-register, selector, zeroing, carriage, multiplication, or division procedure on this early object', zh: '把后期曲柄、双寄存器、选择器、清零、位架、乘除流程套用于该早期实物' },
+      { en: 'identity between this survivor, the 1820 patent drawings, and later commercial Thomas revisions', zh: '该留存实物、1820 专利图与后续商用 Thomas 修订版之间的同一性' },
     ],
   },
   {

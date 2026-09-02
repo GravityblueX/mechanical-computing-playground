@@ -32,16 +32,29 @@ The Smithsonian pages are museum catalog/institutional synthesis, generally **H/
 
 Keep the control responsibilities separate rather than treating them as one bundle:
 
-- identified Thomas object `nmah_690683` (1867): a lever selects addition/multiplication versus subtraction/division, and its catalog description associates opposite revolution-register direction with those mode groups;
-- identified later Thomas examples: separate controls/knobs are documented for zeroing result and revolution registers; these must remain attached to their own object/date records;
+- Thomas `nmah_690683` / `MA.327900` (1867): eight setting levers, ADD/MULT versus SUB/DIV selector, operating crank, seven carriage positions, nine revolution and sixteen result windows; the catalog directly assigns clockwise revolution-register motion to subtraction/division and counterclockwise to addition/multiplication, and a right knob to revolution-register zeroing;
+- Thomas `nmah_690686` / `MA.335215` (ca.1873): ten setting levers, eleven revolution and twenty result windows, right revolution-zeroing and left result-zeroing knobs; the catalog states that its separately stored instruction book is dated 1868;
+- oldest survivor `nmah_690692` (ca.1820): three setting levers plus a single-digit multiplication lever, paired red/black result windows, individual result-digit zeroing, red-ribbon actuation, and **no revolution register**—not the later crank/dual-register protocol;
 - Burkhardt object `nmah_690681`: the catalog describes a bell when subtraction passes through zero, especially for division—an **overshoot indication**, not proof of a universal correction linkage;
-- Thomas instruction pamphlet `nmah_904757` (1868): catalog existence/date/provenance is established, but its uninspected pages are not evidence for an operator sequence here;
-- operator correction/add-back: supported at generic procedure level and by separately identified Curta material below, not inferred from the Thomas mode lever or Burkhardt bell.
+- Thomas pamphlet `nmah_904757` (1868): IIIF `NMAH-AHB2018q019415` exposes only one unnumbered opening. Its legend identifies setting sliders `A`, operation selector `B`, result windows `C`, multiplier/quotient windows `D`, crank `N`, independently zeroing `O`/`P`, and lifting/sliding carriage `M`; no step-by-step multiplication or division procedure is exposed;
+- operator correction/add-back: supported at generic procedure level and by separately identified Curta material below, **not** inferred from the Thomas legend, mode lever, counter direction, or Burkhardt bell.
 
 - Claim type: **H**.
 - Evidence: identified museum objects/catalog descriptions, **E1–E2** at the precision stated.
 
-These records support a workflow involving modes, registers, repeated operations, carriage place and sometimes an overshoot indication. They do **not** establish one universal gear train, counter sign convention, zeroing geometry, bell timing, or add-back path for all arithmometers. Detailed control provenance is mapped in [`control-and-zeroing-source-map.md`](control-and-zeroing-source-map.md).
+The exposed Thomas opening directly supports control/register roles, independent clears and a movable carriage, but **not** repeated-turn multiplication, division subtraction/shift order, quotient termination, overshoot, or add-back. Revolution-counter direction is a 1867 object-catalog fact here, not readable manual procedure. No source justifies mapping `OVERSHOOT_PENDING`, `OVERSHOOT_DETECTED`, `CORRECT_ADD_BACK`, or the register lifecycle event names to Thomas terminology/timing.
+
+### Thomas historical / P–M crosswalk
+
+| Claim / operator step | Source/object/revision | Direct support | Claim/evidence | Repository consequence | Not established |
+|---|---|---|---|---|---|
+| inputs/mode/windows/crank/carriage/independent clears | 1868 pamphlet, sole unnumbered IIIF opening | legend `A/B/C/D/M/N/O/P` | H/E1 exact opening | historical panel may name these roles | procedure, counts, direction, linkage/timing |
+| later crank/revolution controls | `MA.327900`, 1867 | 8 levers, 7 carriage places, 9/16 windows, mode groups, counter direction, right counter clear | H/E1 catalog/object | supports separate mode/place/counter state | result-clear control, division steps, add-back |
+| associated later capacities/clears | `MA.335215`, ca.1873 | 10 levers, 11/20 windows, independent right/left clears, associated 1868 book | H/E1 catalog/object | supports independent register responsibilities | unchanged 1868 procedure or 1867 identity |
+| early revision contrast | `nmah_690692`, ca.1820 | ribbon actuation, no revolution register, individual result-digit clears | H/E1 catalog/object | prevents universal Thomas back-fill | later crank/dual-register workflow |
+| `8478 ÷ 314` subtraction/overshoot/detect/add-back/shift | repository deterministic trace | tested signed residual and per-place quotient state/events | P/M | teaching procedure remains replayable | Thomas names, timing, counter sign, bell/add-back linkage |
+
+These records do **not** establish one universal gear train, counter convention, zeroing geometry, bell timing, or add-back path for all arithmometers. Detailed control provenance is mapped in [`control-and-zeroing-source-map.md`](control-and-zeroing-source-map.md).
 
 ## 2. Curta operator procedure
 
