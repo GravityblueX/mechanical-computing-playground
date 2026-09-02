@@ -249,6 +249,106 @@ describe('generic compact P/M complement register', () => {
     expect((caught as Error).message).toBe('invalid complement trace data');
   });
 
+  it('rejects a Proxy after its structural trap replaces ambient validator intrinsics', () => {
+    const trace = clone(traceComplementSubtraction(1200, 345, 4));
+    const originalStructuredClone = globalThis.structuredClone;
+    const originalArrayIsArray = Array.isArray;
+    const originalArrayIterator = Array.prototype[Symbol.iterator];
+    const originalArrayPop = Array.prototype.pop;
+    const originalArrayPush = Array.prototype.push;
+    const originalNumberIsInteger = Number.isInteger;
+    const originalObjectGetOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
+    const originalObjectGetPrototypeOf = Object.getPrototypeOf;
+    const originalReflectOwnKeys = Reflect.ownKeys;
+    const originalWeakSetAdd = WeakSet.prototype.add;
+    const originalWeakSetDelete = WeakSet.prototype.delete;
+    const originalWeakSetHas = WeakSet.prototype.has;
+    let ambientCalls = 0;
+    let getCount = 0;
+    const proxy = new Proxy(trace.events, {
+      get: (target, key, receiver) => {
+        getCount += 1;
+        return Reflect.get(target, key, receiver);
+      },
+      getPrototypeOf: (target) => {
+        globalThis.structuredClone = (<T>(value: T) => {
+          ambientCalls += 1;
+          return value;
+        }) as typeof globalThis.structuredClone;
+        Array.isArray = ((value: unknown) => {
+          ambientCalls += 1;
+          return originalArrayIsArray(value);
+        }) as typeof Array.isArray;
+        Array.prototype[Symbol.iterator] = (function (this: unknown[]) {
+          ambientCalls += 1;
+          return originalArrayIterator.call(this);
+        }) as typeof originalArrayIterator;
+        Array.prototype.pop = (function (this: unknown[]) {
+          ambientCalls += 1;
+          return originalArrayPop.call(this);
+        }) as typeof Array.prototype.pop;
+        Array.prototype.push = (function (this: unknown[], ...items: unknown[]) {
+          ambientCalls += 1;
+          return originalArrayPush.apply(this, items);
+        }) as typeof Array.prototype.push;
+        Number.isInteger = ((value: unknown) => {
+          ambientCalls += 1;
+          return originalNumberIsInteger(value);
+        }) as typeof Number.isInteger;
+        Object.getOwnPropertyDescriptor = ((value: object, key: PropertyKey) => {
+          ambientCalls += 1;
+          return originalObjectGetOwnPropertyDescriptor(value, key);
+        }) as typeof Object.getOwnPropertyDescriptor;
+        Object.getPrototypeOf = ((value: object) => {
+          ambientCalls += 1;
+          return originalObjectGetPrototypeOf(value);
+        }) as typeof Object.getPrototypeOf;
+        Reflect.ownKeys = ((value: object) => {
+          ambientCalls += 1;
+          return originalReflectOwnKeys(value);
+        }) as typeof Reflect.ownKeys;
+        WeakSet.prototype.add = (function (this: WeakSet<object>, value: object) {
+          ambientCalls += 1;
+          return originalWeakSetAdd.call(this, value);
+        }) as typeof WeakSet.prototype.add;
+        WeakSet.prototype.delete = (function (this: WeakSet<object>, value: object) {
+          ambientCalls += 1;
+          return originalWeakSetDelete.call(this, value);
+        }) as typeof WeakSet.prototype.delete;
+        WeakSet.prototype.has = (function (this: WeakSet<object>, value: object) {
+          ambientCalls += 1;
+          return originalWeakSetHas.call(this, value);
+        }) as typeof WeakSet.prototype.has;
+        return originalObjectGetPrototypeOf(target);
+      },
+    });
+    trace.events = proxy;
+
+    let caught: unknown;
+    try {
+      replayComplementSubtraction(trace);
+    } catch (error) {
+      caught = error;
+    } finally {
+      globalThis.structuredClone = originalStructuredClone;
+      Array.isArray = originalArrayIsArray;
+      Array.prototype[Symbol.iterator] = originalArrayIterator;
+      Array.prototype.pop = originalArrayPop;
+      Array.prototype.push = originalArrayPush;
+      Number.isInteger = originalNumberIsInteger;
+      Object.getOwnPropertyDescriptor = originalObjectGetOwnPropertyDescriptor;
+      Object.getPrototypeOf = originalObjectGetPrototypeOf;
+      Reflect.ownKeys = originalReflectOwnKeys;
+      WeakSet.prototype.add = originalWeakSetAdd;
+      WeakSet.prototype.delete = originalWeakSetDelete;
+      WeakSet.prototype.has = originalWeakSetHas;
+    }
+    expect(caught).toBeInstanceOf(InvalidComplementRegisterError);
+    expect((caught as Error).message).toBe('invalid complement trace data');
+    expect(ambientCalls).toBe(0);
+    expect(getCount).toBe(0);
+  });
+
   it('rejects unsupported final-state fields that JSON serialization would discard', () => {
     const trace = clone(traceComplementSubtraction(1200, 345, 4));
     Object.assign(trace.finalState, { unsupported: undefined });
