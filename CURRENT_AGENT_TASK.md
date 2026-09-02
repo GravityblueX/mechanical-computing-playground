@@ -5,13 +5,13 @@ Owner: local coding/research agent
 Target duration: about one useful hour
 Repository authority: remote `main`
 
-Previous task is complete and archived at `tasks/archive/2026-09-02-scheutz-patent-identity-audit.md`.
+Previous task is complete and archived at `tasks/archive/2026-09-02-millionaire-operator-protocol.md`.
 
-Administrator review also merged external PR #13 as `8b26b9f645d40e2ef55695b52c158405997262fd`, which hardens shared decimal-register trace/action provenance. **Fetch/pull current remote `main` before doing anything** and run the current-main baseline; do not assume the 320-test count from the previous research slice is still current. PR #13 reported 360 tests across 21 files on its exact head.
+Administrator review accepted completion commit `a94a0b01f77460b0434d90fc607f61ceb8f988d4` (`research: ground Millionaire operator protocol`). The exact-head CI run `33572128376` and Deploy Pages run `33572128381` both passed. Assignment-to-completion was about 29 minutes with a bounded eight-file diff, so this slice is intentionally somewhat larger while remaining one coherent evidence question.
 
-The Scheutz task completed in about 36 minutes with a tightly scoped 7-file diff, so this slice is intentionally somewhat larger while remaining one coherent question.
+**Fetch/pull current remote `main` before doing anything.** The administrator archive commit is `90f645a7339f991ff5f860ef2df8df4a4f762221`.
 
-> **Question for this slice:** what can directly inspected Millionaire/Steiger sources establish about the real operator protocol of direct multiplication—especially multiplier-digit selection, one complete operating turn per multiplier digit, carriage/place handling, visible registers, and mode controls—and which parts of the repository's two-cycle `314 × 27` model must remain P/M rather than being silently upgraded to historical mechanism claims?
+> **Question for this slice:** what do directly inspectable company manuals, patents, and identified surviving objects establish about Controlled-Key Comptometer incomplete-stroke detection, correction, release/recovery, and operator locking—and which parts of the repository's generic `key-stroke-integrity` controller must remain P/M rather than being silently upgraded to a Model E/F reconstruction?
 
 ## Read before work
 
@@ -21,153 +21,170 @@ Fetch/pull remote `main`, then read in order:
 2. `TODO.md`
 3. `AGENTS.md`
 4. `docs/EVIDENCE_POLICY.md`
-5. `docs/RESEARCH_GAPS.md`, especially Priority 1 and the source-precision guardrails
+5. `docs/RESEARCH_GAPS.md`, especially Priority 2 and Priority 4
 6. `docs/VERIFICATION.md`
-7. `tasks/archive/2026-09-02-scheutz-patent-identity-audit.md`
-8. `research/multiplication-mechanisms.md`
-9. `src/mechanisms/direct-multiplier/index.ts`
-10. `src/exhibits/multiplication-compare/index.ts`
-11. the multiplication rendering/evidence code in the public shell and its tests
+7. `tasks/archive/2026-09-02-millionaire-operator-protocol.md`
+8. `research/key-driven-computation.md`
+9. `research/control-and-interlocks.md`
+10. `research/control-and-zeroing-source-map.md`
+11. `src/mechanisms/key-driven-accumulator/index.ts`
+12. `src/mechanisms/key-stroke-integrity/index.ts`
+13. `src/exhibits/control-provenance/index.ts`
+14. related control/key-driven tests and the public controls rendering in `src/main.ts`
 
-Run baseline typecheck/tests before editing and record the actual test count. Inspect current replay semantics after merged PR #13; do not weaken or bypass them.
+Run the current-main baseline before editing. Record the actual test count. Do not weaken replay/tamper validation to make source integration easier.
 
-# Part A — direct primary/source audit of the Millionaire operator protocol
+# Part A — primary operator-manual audit of Controlled-Key recovery
 
-The repository already has Steiger patent references and a P/M direct-multiplication model, but its operator-protocol claims need better source separation.
+The repository already has Turck 1921 printed pp. 159–162 establishing incomplete-stroke signaling, blocking of other orders, and correction-before-continuation. The unresolved point is the **operator recovery procedure** and its edition/model boundary.
 
-## A1. Inspect Steiger US558,913 at operation-text precision
+## A1. Directly inspect period Felt & Tarrant operating material
 
-Directly inspect the patent text/figures rather than relying on repository paraphrase or search snippets:
+Start with the directly available period scan:
 
-- Otto Steiger, US 558,913 (1896): <https://patents.google.com/patent/US558913A/en>
+- *Easy Instructions for Operating the Controlled-Key Comptometer Adding and Calculating Machine* (period Felt & Tarrant material):
+  <https://www.jaapsch.net/mechcalc/pdf/easyinstr1920.pdf>
 
-Record exact figure/page/column or clearly locatable patent passages for the multiplication sequence, including only what is directly supported, such as:
+Use the manual index only as navigation, not as primary evidence itself:
 
-- the multiplier lever/scale and what selecting a multiplier digit controls;
-- the statement that the controlling mechanism represents the multiplication table;
-- multiplicand setting/indication if directly described;
-- the instruction to set the multiplier lever to a multiplier figure and turn the operating crank one complete rotation, repeated for successive multiplier figures;
-- how primary/secondary transfer of tens/units partial products is described;
-- factor/multiplier indication if directly stated;
-- any explicit carriage/place-shift operation actually described.
+- <https://www.jaapsch.net/mechcalc/comptometer_books.htm>
 
-Do not infer production-machine geometry from the patent beyond the claimed/described design. Patent = H/E1 for the described patented design, not proof that every surviving Egli machine implements every detail unchanged.
+From that index, inspect the most relevant directly scanned edition of *Methods of Operating the Comptometer* (prefer the 1921/1928-era material if readable) for sections on:
 
-If US538,710 materially clarifies a point that US558,913 references as the former patent, inspect the exact relevant passage only; do not turn this into a complete two-patent mechanical reconstruction.
+- Controlled-Key mechanism / incomplete key strokes;
+- error signaling or locked keyboard/orders;
+- how an operator corrects or completes an imperfect stroke;
+- any release/reset/control key or button used after correction;
+- distinction between recovery from an incomplete stroke and clearing/zeroing the accumulator;
+- any edition/model wording that prevents generalizing one procedure to every Comptometer.
 
-## A2. Inspect surviving-object records and related Millionaire documentation
+Record **printed page number and viewer/PDF page** where both are available. Short quotation fragments are fine for identification, but summarize rather than copying long passages.
 
-Use directly inspectable institutional records to separate **produced-object controls** from **patented design**.
+## A2. Smithsonian company-publication boundary
 
-Start with NMAH Millionaire object records, especially examples that directly describe:
+Inspect the Smithsonian record:
 
-- lever-set manual machines;
-- multiplier control selectable 0–9;
-- A/M/D/S operation selector;
-- operating crank;
-- multiplier/quotient and result/dividend registers;
-- carriage-shift control;
-- zeroing knobs;
-- the instruction sheet inside the lid.
+- *Applied Mechanical Arithmetic As Practiced on the Controlled Key Comptometer*, Felt & Tarrant, 1914 publication / cataloged 1920 revision, `nmah_905178`:
+  <https://americanhistory.si.edu/collections/object/nmah_905178>
 
-Useful object records include:
+Resolve any publicly exposed IIIF/page sequence if possible. If the catalog exposes only an object image or metadata, record **identity/catalog precision only** and do not invent page-level procedure text.
 
-- <https://americanhistory.si.edu/collections/object/nmah_694185>
-- <https://americanhistory.si.edu/collections/object/nmah_694184>
-- <https://www.si.edu/object/nmah_694169>
+Use the catalog description to establish only what it directly supports: training/use context, revision identity, and the statement that the machine did not allow imperfect key strokes if that wording is present in the record.
 
-The same accession points to documentation `MA.319929.03` through `.07`. Resolve and inspect whichever records are publicly exposed. Two known starting records are:
+## A3. Identified surviving Model F / Controlled-Key objects
 
-- `MA.319929.04`, *Leaflet, The Millionaire Calculating Machine*: <https://americanhistory.si.edu/collections/object/nmah_694406>
-- `MA.319929.05`, *Pamphlet, The Millionaire Calculating-Machine*: <https://americanhistory.si.edu/collections/object/nmah_694407>
+Inspect object identity/control records, keeping hidden mechanism claims out:
 
-Important: `.05` is described as disassembly instructions, so do not mislabel it as an operator manual merely because it is a booklet. Record document role exactly.
+- Smithsonian Model F, `nmah_690479`:
+  <https://americanhistory.si.edu/collections/object/nmah_690479>
+- Smithsonian Model F, `nmah_690481`:
+  <https://americanhistory.si.edu/collections/object/nmah_690481>
+- Science Museum Group section of Model F Controlled-Key Comptometer, `1921-16`:
+  <https://collection.sciencemuseumgroup.org.uk/objects/co60749/section-of-model-f-controlled-key-comptometer-by-felt-and-tarrant-manufacturing-co-model-calculating-machine>
 
-Also inspect the Powerhouse Collection record for the 1907 Egli booklet associated with a Millionaire:
+Record only directly described model/date/patent-plate/visible-control facts. A surviving Model F with a last patent date does **not** by itself prove which patent implements which hidden controlled-key action.
 
-- <https://collection.powerhouse.com.au/object/263911>
+# Part B — patent mapping, bounded and fail-closed
 
-Its catalog says it is a 9-page booklet plus five figure pages and gives a title about taking the machine apart. If images/pages are publicly renderable, inspect them only for directly readable document identity/control/mechanical information. Respect copyright/display restrictions: record facts and page locations; do not copy long text or redistribute images.
+A specialist patent index points to Kurt F. Ziehm US 1,110,734 (filed 1914; granted 15 September 1914) as a Controlled-Key mechanism lead. Treat that index as **E3 navigation only** until the patent itself is inspected.
 
-## A3. Bounded operator-instruction hunt
+Directly inspect:
 
-Spend a bounded portion of the slice looking for a directly inspectable **operating** instruction sheet/manual, not merely a modern how-to transcription.
+- US 1,110,734, Kurt F. Ziehm:
+  <https://patents.google.com/patent/US1110734A/en>
 
-Good leads may include:
+Determine, from the actual specification/claims/figures:
 
-- lid-instruction images/IIIF from Smithsonian or another museum;
-- accession-linked documentation;
-- a digitized Egli/Morschhauser instruction sheet or catalog;
-- a period trade/technical publication reproducing the operating sequence.
+- what error/incomplete-stroke condition the patented mechanism detects or prevents;
+- what is locked, disabled, signaled, or released;
+- whether the patent itself describes an operator action to recover after a partial stroke;
+- whether completion of the errant stroke is part of the described recovery;
+- whether a release key/button is actually named/described and what it controls;
+- which statements concern the patented design versus a specific commercial model.
 
-A modern specialist transcription such as the BHT Berlin Millionaire page may be used as **E3 navigation/secondary evidence only** unless it exposes/scans the original source it transcribes. Do not upgrade it to E1.
+Record exact page/column/line/figure/claim locations at the precision available in the patent facsimile/text.
 
-If no primary operating sheet is readable within the time budget, that is an acceptable negative result. The Steiger patent plus surviving-object controls can still sharpen the boundary.
+Do **not** write “Model F used US 1,110,734” as H/E1 merely because a secondary patent list says “presumably introduced” and a surviving machine plate ends on the same grant date. If direct Felt & Tarrant documentation or an object record explicitly maps the patent to the model, record that; otherwise preserve the production mapping as E3/open.
 
-# Part B — build a compact historical/P-M protocol crosswalk
+If the patent points to one earlier Felt/Ziehm patent that is essential to understand a single recovery step, inspect only that exact dependency. Do not expand into a complete Comptometer patent genealogy.
 
-Update `research/multiplication-mechanisms.md` or create `research/millionaire-operating-protocol.md` **only if the directly inspected evidence is substantial enough to justify a separate file**.
+# Part C — historical / P–M recovery crosswalk
 
-Create a compact table like:
+Update `research/key-driven-computation.md` and, only where directly relevant, `research/control-and-interlocks.md` or `research/control-and-zeroing-source-map.md`.
+
+Build a compact crosswalk:
 
 ```text
-claim / operation step | source/model/date | direct support | claim/evidence | repository consequence | not established
+claim / recovery step | source / edition / model | direct support | claim/evidence | repository consequence | not established
 ```
 
-At minimum distinguish:
+At minimum separate:
 
-1. **H/E1 patented design** — multiplier selection + complete operating rotation sequence as directly described in Steiger;
-2. **H/E1 surviving-object/catalog controls** — actual control/register identities on identified Smithsonian examples;
-3. **H/E1/E2 documentation object identity** — instruction/leaflet/disassembly documents, only at content precision actually inspected;
-4. **P/M repository trace** — `314 × 27` decomposed as selected 7 contribution, shift, selected 2 contribution, with two modeled operation cycles.
+1. **H/E1 contemporary technical account** — Turck 1921 incomplete-stroke signaling / other-order blocking / correction-before-continuation;
+2. **H/E1 company operating manual** — exact recovery sequence only if directly readable in the period scan;
+3. **H/E1 patented design** — exact locking/release/correction responsibility directly described in US 1,110,734;
+4. **H/E1 object/catalog identity** — identified Model F / company-publication facts at catalog precision;
+5. **E3 specialist orientation** — any chronology or “presumably introduced” patent-to-model mapping not independently established;
+6. **P/M repository controller** — `key-stroke-integrity` phases/events and exactly-once arithmetic commit.
 
 Answer explicitly:
 
-- Is “one modeled operation cycle per multiplier digit” historically supported at operator-protocol level, or only analogous to a patent crank rotation?
-- Does the historical source establish the exact order/direction of multiplier digits used on production machines?
-- Does it establish when/how carriage shifting occurs between multiplier digits?
-- Does it establish that the repository's encoded `0..9` lookup table matches actual control-plate internal representation? If not, preserve P/M.
-- Which registers/controls are directly present on identified surviving machines, and which are generic repository abstractions?
+- Does a primary company/manual source establish “finish the incomplete/errant stroke, then release the lock,” or only a more general correction instruction?
+- Is a white/release button directly documented in the inspected primary source? If yes, what is it called and what exactly does it release? If no, keep that operator sequence E3/open.
+- Does the mechanism block all keys, other orders/columns, or some narrower set? Keep the source's wording and model/edition boundary.
+- At what point does arithmetic registration occur relative to the incomplete stroke and correction, according to the source? If exact timing is not stated, do not infer it.
+- Is recovery/reset distinct from result-register zeroing/clearing? Do not merge those controls because both “reset something.”
+- Which current P/M events (`INCOMPLETE_STROKE`, detection, input lock, exactly-once commit, lock release, etc.) are pedagogical decompositions rather than historical event names/timing?
 
-Do not let “one turn per digit” become a fake speed/throughput benchmark.
+# Part D — bounded source-aware code/public integration
 
-# Part C — public multiplication evidence integration, bounded
+Only after Parts A–C establish a sharper boundary, add a compact typed evidence adapter/profile rather than rewriting the core mechanism.
 
-If Parts A/B materially sharpen the protocol, update the multiplication exhibit so the visitor can see **two separate layers**:
+Preferred location:
+
+- `src/exhibits/control-provenance/index.ts`
+
+Add something equivalent to a `controlledKeyRecoveryEvidence` profile that exposes:
+
+- exact source identity / edition or patent number;
+- claim type and evidence strength;
+- `supports`;
+- `notEstablished`;
+- explicit link to the generic P/M controller without claiming geometric identity.
+
+If the primary sources support a clear operator recovery sequence, integrate a small bilingual historical-evidence panel into the existing controls lesson in `src/main.ts`. Show two layers:
 
 ```text
-Historical operator/control evidence (identified source/model)
+Historical Controlled-Key recovery evidence
 vs
-Repository P/M event trace (functional abstraction)
+Repository generic P/M integrity trace
 ```
 
-A small evidence/protocol panel is enough. Do not redraw the Millionaire internals.
+Do **not** create a new full Comptometer route. Do not add decorative keyboard geometry.
 
-The public layer should be able to state only claims directly supported, for example:
+Add focused tests, likely in:
 
-- a Steiger patent describes setting the multiplier lever for a multiplier figure and one complete crank rotation, repeated for successive figures;
-- identified surviving Millionaire records expose multiplier control, operation selector, operating crank, registers and carriage-shift control;
-- the repository models this distinction with one abstract selection/operation cycle per decimal multiplier digit, but does not claim exact cam/control-plate geometry or production timing.
+- `tests/control-provenance.test.ts`;
+- `tests/key-stroke-integrity.test.ts` only if a genuine P/M semantic clarification is needed.
 
-If the source audit does **not** improve public precision enough, do not touch UI merely to create churn.
+Tests must assert source IDs/edition labels, H/E1 versus E3/P-M boundaries, and `notEstablished` statements so future edits cannot silently historicalize the generic controller.
 
-If UI/source data changes, add focused tests asserting source identity, claim/evidence labels, and explicit `notEstablished` boundaries. Preserve the existing direct-multiplier replay and arithmetic tests.
+**Default expectation:** the generic arithmetic/control state machine should remain unchanged. If the source audit reveals that its current semantic claim is actually wrong (not merely differently named), stop and document the conflict before redesigning core transitions.
 
-# Part D — reconciliation and verification
+# Part E — reconciliation and verification
 
-After the audit:
+After the audit/integration:
 
-- update `STATUS.md` only if Millionaire provenance is genuinely sharper;
+- update `STATUS.md` only for provenance actually improved;
 - add one concise completed line to `TODO.md`;
-- narrow Priority 1 in `docs/RESEARCH_GAPS.md` only for gaps actually closed;
-- update `docs/VERIFICATION.md` with baseline/final test counts and commands actually run;
-- do not alter unrelated Curta, Scheutz, Analytical Engine, Differential Analyzer, carry, key-driven, division, output, continuous or backprop tracks.
+- narrow Priority 2 / Priority 4 in `docs/RESEARCH_GAPS.md` only for gaps actually closed;
+- update `docs/VERIFICATION.md` with exact baseline/final test counts and commands actually run;
+- do not alter Millionaire, Curta, Thomas division, Scheutz, Analytical Engine, Differential Analyzer, output, continuous, or backprop tracks in this slice.
 
-If public multiplication UI/evidence changes, perform a bilingual browser smoke for:
+If public controls evidence changes, perform bilingual browser smoke for:
 
 ```text
-#/multiplication
-#/source-atlas (only if atlas data is touched)
+#/controls
 #/about
 ```
 
@@ -182,7 +199,7 @@ npm run build
 git diff --check
 ```
 
-Run focused multiplication/evidence tests for any touched area. All final required checks must pass.
+Run focused control/key-integrity tests for touched files. All final required checks must pass.
 
 After push:
 
@@ -193,30 +210,30 @@ After push:
 Suggested commit subject:
 
 ```text
-research: ground Millionaire operator protocol
+research: ground Controlled-Key recovery protocol
 ```
 
 # Evidence boundaries
 
-- Steiger patent text/figures directly inspected = **H/E1 for the patented design actually described**;
-- Smithsonian/Powerhouse catalog records = **H/E1 at object/document identity and directly described control precision**;
-- readable period instruction sheets/manual pages = **H/E1 at the exact procedure text inspected**;
-- modern museum synthesis = H/E2 unless it is simply reporting object-visible controls;
-- modern specialist transcription without exposed original = **E3 navigation/secondary evidence**;
-- repository direct-multiplier events/table = **P/M**, even if they intentionally mirror a historically documented operator-level distinction;
-- patent rotation count is not measured production speed, effort, reliability, or timing;
-- object controls do not prove hidden control-plate/cam geometry;
-- do not infer production revision chronology from serial-number estimates unless the source directly supports that chronology.
+- directly read period Felt & Tarrant manual pages = **H/E1 at the exact edition/page/procedure inspected**;
+- Turck 1921 directly inspected pages = **H/E1 contemporary technical/historical account**, with author/priority-context caveat already recorded;
+- US 1,110,734 directly inspected = **H/E1 for the patented design actually described**;
+- Smithsonian / Science Museum catalog = **H/E1 at object/publication identity and directly described control precision**;
+- specialist patent/manual indexes = **E3 navigation/secondary evidence** unless they expose the original source being cited;
+- patent grant date matching a machine plate is not sufficient proof of patent-feature production mapping;
+- repository `key-stroke-integrity` state/events = **P/M** unless a particular individual statement is separately source-backed;
+- no source-specific trigger geometry, key travel, timing, spring/linkage path, simultaneous multi-column behavior, throughput, error rate, training effect, or production-wide revision claim without direct evidence.
 
 # Stop conditions
 
 Stop a subpart and preserve the boundary rather than guessing if:
 
-- instruction-sheet images are present but not readable at reliable resolution;
-- museum pages expose only catalog metadata, not the document's actual procedure text;
-- exact carriage-shift order for multiplication cannot be established directly;
-- a source describes a later keyboard/electric Millionaire and cannot be safely generalized to the lever-set manual model;
-- geometry claims would require interpreting an unlabelled photograph or patent drawing beyond the text;
-- the work starts expanding into complete Millionaire disassembly, performance benchmarking, production serial chronology, division reconstruction, or another machine family.
+- a manual scan is unreadable or lacks reliable page identity;
+- the Smithsonian publication exposes only catalog metadata/object photography rather than readable pages;
+- US 1,110,734 does not actually support the recovery step a secondary source attributes to it;
+- a release button/operator sequence appears only in a modern specialist description and cannot be matched to primary material;
+- Model E/F chronology or patent-to-production mapping conflicts across sources;
+- integrating historical evidence would require pretending the generic P/M event order is physical timing;
+- work starts expanding into full keyboard/carry geometry, simultaneous duplex operation, measured operator productivity, or another machine family.
 
-If Parts A–C finish substantially before one hour, spend remaining time tightening exact patent figure/passage anchors, resolving accession documentation `.03`–`.07`, and strengthening focused evidence tests. **Do not start a new mechanism family in this slice.**
+If Parts A–D finish substantially before one hour, spend remaining time resolving exact manual edition/page anchors, directly mapping patent figure/claim language, and strengthening evidence-boundary tests. **Do not start another mechanism or machine family in this slice.**
