@@ -5,13 +5,13 @@ Owner: local coding/research agent
 Target duration: about one useful hour
 Repository authority: remote `main`
 
-Previous task is complete and archived at `tasks/archive/2026-09-02-millionaire-operator-protocol.md`.
+Previous task is complete and archived at `tasks/archive/2026-09-02-controlled-key-recovery.md`.
 
-Administrator review accepted completion commit `a94a0b01f77460b0434d90fc607f61ceb8f988d4` (`research: ground Millionaire operator protocol`). The exact-head CI run `33572128376` and Deploy Pages run `33572128381` both passed. Assignment-to-completion was about 29 minutes with a bounded eight-file diff, so this slice is intentionally somewhat larger while remaining one coherent evidence question.
+Administrator review accepted completion commit `2a358451bd6dfc9b10b59b9e643a0e4303c76dc8` (`research: ground Controlled-Key recovery protocol`). Exact-head CI run `33577028049` and Deploy Pages run `33577028032` both passed. Assignment-to-completion was about 35 minutes with an eight-file / 158-line bounded diff, so this slice is intentionally somewhat larger while remaining one coherent source/protocol question.
 
-**Fetch/pull current remote `main` before doing anything.** The administrator archive commit is `90f645a7339f991ff5f860ef2df8df4a4f762221`.
+**Fetch/pull current remote `main` before doing anything.** The administrator archive commit is `ca5a983e1ba765a86548ad9521869a01fe495826`.
 
-> **Question for this slice:** what do directly inspectable company manuals, patents, and identified surviving objects establish about Controlled-Key Comptometer incomplete-stroke detection, correction, release/recovery, and operator locking—and which parts of the repository's generic `key-stroke-integrity` controller must remain P/M rather than being silently upgraded to a Model E/F reconstruction?
+> **Question for this slice:** what does the directly inspectable 1868 Thomas arithmometer instruction pamphlet, together with identified 1867/ca.1873 surviving machines, actually establish about register roles, mode selection, zeroing, carriage/revolution-counter use, and multiplication/division operator procedure—and which parts of the repository's generic division/control traces must remain P/M rather than being silently back-filled as one universal Thomas procedure?
 
 ## Read before work
 
@@ -21,174 +21,192 @@ Fetch/pull remote `main`, then read in order:
 2. `TODO.md`
 3. `AGENTS.md`
 4. `docs/EVIDENCE_POLICY.md`
-5. `docs/RESEARCH_GAPS.md`, especially Priority 2 and Priority 4
+5. `docs/RESEARCH_GAPS.md`, especially Priorities 3 and 4
 6. `docs/VERIFICATION.md`
-7. `tasks/archive/2026-09-02-millionaire-operator-protocol.md`
-8. `research/key-driven-computation.md`
-9. `research/control-and-interlocks.md`
-10. `research/control-and-zeroing-source-map.md`
-11. `src/mechanisms/key-driven-accumulator/index.ts`
-12. `src/mechanisms/key-stroke-integrity/index.ts`
+7. `tasks/archive/2026-09-02-controlled-key-recovery.md`
+8. `research/subtraction-and-division.md`
+9. `research/control-and-zeroing-source-map.md`
+10. `research/carry-is-the-hard-part.md` only for existing Thomas revision boundaries
+11. `src/mechanisms/operator-division/index.ts`
+12. `src/mechanisms/dual-register-lifecycle/index.ts`
 13. `src/exhibits/control-provenance/index.ts`
-14. related control/key-driven tests and the public controls rendering in `src/main.ts`
+14. any existing division/control provenance adapters and related tests
+15. the `#/division` and `#/controls` rendering paths in `src/main.ts`
 
-Run the current-main baseline before editing. Record the actual test count. Do not weaken replay/tamper validation to make source integration easier.
+Run the current-main baseline before editing and record the actual test count. Do not weaken replay/tamper validation or change generic arithmetic semantics merely to fit a historical source.
 
-# Part A — primary operator-manual audit of Controlled-Key recovery
+# Part A — recover and census the 1868 instruction object
 
-The repository already has Turck 1921 printed pp. 159–162 establishing incomplete-stroke signaling, blocking of other orders, and correction-before-continuation. The unresolved point is the **operator recovery procedure** and its edition/model boundary.
+Start from the Smithsonian/NMAH instruction pamphlet:
 
-## A1. Directly inspect period Felt & Tarrant operating material
+- *Instructions pour se Servir de l'Arithmomètre*, Thomas, 1868, `MA.318961.02` / `nmah_904757`:
+  <https://americanhistory.si.edu/collections/object/nmah_904757>
 
-Start with the directly available period scan:
+The catalog exposes IIIF/Mirador links. Resolve the actual IIIF manifest/canvases rather than treating the landing-page thumbnail as the whole pamphlet.
 
-- *Easy Instructions for Operating the Controlled-Key Comptometer Adding and Calculating Machine* (period Felt & Tarrant material):
-  <https://www.jaapsch.net/mechcalc/pdf/easyinstr1920.pdf>
+Record:
 
-Use the manual index only as navigation, not as primary evidence itself:
+- object/catalog identity;
+- manifest URL or stable media identifiers if exposed;
+- number of canvases/images actually available;
+- canvas/page labels and readable printed page numbers;
+- whether pages are single leaves, spreads, fronts/backs, or only one exposed image;
+- exact image/page locations used for each claim.
 
-- <https://www.jaapsch.net/mechcalc/comptometer_books.htm>
+If the public IIIF object still exposes only one readable spread, **say so and stop that branch**. Do not reconstruct missing pages from modern summaries. If a complete institutional/public-domain scan of the same 1868 issue is discoverable from a reliable repository, inspect it and record edition identity before using it.
 
-From that index, inspect the most relevant directly scanned edition of *Methods of Operating the Comptometer* (prefer the 1921/1928-era material if readable) for sections on:
+The catalog description itself establishes only that the pamphlet gives operating instructions for the Thomas arithmometer and is related to `MA.335215`; do not promote that metadata into page-level procedure evidence.
 
-- Controlled-Key mechanism / incomplete key strokes;
-- error signaling or locked keyboard/orders;
-- how an operator corrects or completes an imperfect stroke;
-- any release/reset/control key or button used after correction;
-- distinction between recovery from an incomplete stroke and clearing/zeroing the accumulator;
-- any edition/model wording that prevents generalizing one procedure to every Comptometer.
+# Part B — identify the machines and keep revisions separate
 
-Record **printed page number and viewer/PDF page** where both are available. Short quotation fragments are fine for identification, but summarize rather than copying long passages.
+Directly inspect the related and comparison object records:
 
-## A2. Smithsonian company-publication boundary
+- ca. 1873 Thomas arithmometer `MA.335215` / `nmah_690686`:
+  <https://americanhistory.si.edu/collections/object/nmah_690686>
+- 1867 Thomas arithmometer `nmah_690683`:
+  <https://www.si.edu/object/thomas-arithmometer%3Anmah_690683>
+- early surviving Thomas example `nmah_690692`:
+  <https://americanhistory.si.edu/collections/object/nmah_690692>
 
-Inspect the Smithsonian record:
+Use additional Smithsonian object records only if they resolve one exact capacity/control/revision question. Do not turn this into a full Thomas serial-number census.
 
-- *Applied Mechanical Arithmetic As Practiced on the Controlled Key Comptometer*, Felt & Tarrant, 1914 publication / cataloged 1920 revision, `nmah_905178`:
-  <https://americanhistory.si.edu/collections/object/nmah_905178>
+Build a compact identity/control table that keeps machines distinct. At minimum record, where directly described:
 
-Resolve any publicly exposed IIIF/page sequence if possible. If the catalog exposes only an object image or metadata, record **identity/catalog precision only** and do not invent page-level procedure text.
+- date / object ID / serial mark if cataloged;
+- setting-lever count;
+- result-register capacity;
+- revolution-register presence/capacity;
+- addition/multiplication versus subtraction/division selector;
+- operating crank versus earlier ribbon actuation;
+- result/revolution zeroing controls;
+- carriage movement/positions;
+- documented direction of the revolution register under add/multiply versus subtract/divide;
+- any direct relationship between `MA.335215` and the 1868 instruction booklet.
 
-Use the catalog description to establish only what it directly supports: training/use context, revision identity, and the statement that the machine did not allow imperfect key strokes if that wording is present in the record.
+A ca.1873 object paired with an 1868 instruction book does not prove every 1868 procedure applies unchanged to every 1867 or earlier machine. Preserve object/revision boundaries.
 
-## A3. Identified surviving Model F / Controlled-Key objects
+# Part C — operator-protocol extraction, source-first
 
-Inspect object identity/control records, keeping hidden mechanism claims out:
+From directly readable 1868 instruction pages, extract only procedures actually present. The target questions are:
 
-- Smithsonian Model F, `nmah_690479`:
-  <https://americanhistory.si.edu/collections/object/nmah_690479>
-- Smithsonian Model F, `nmah_690481`:
-  <https://americanhistory.si.edu/collections/object/nmah_690481>
-- Science Museum Group section of Model F Controlled-Key Comptometer, `1921-16`:
-  <https://collection.sciencemuseumgroup.org.uk/objects/co60749/section-of-model-f-controlled-key-comptometer-by-felt-and-tarrant-manufacturing-co-model-calculating-machine>
+## C1. Addition / multiplication
 
-Record only directly described model/date/patent-plate/visible-control facts. A surviving Model F with a last patent date does **not** by itself prove which patent implements which hidden controlled-key action.
+Determine whether the primary instructions directly establish:
 
-# Part B — patent mapping, bounded and fail-closed
+- how the setting levers are used;
+- which mode/selector position is required;
+- what one operating turn/stroke contributes;
+- whether multiplication is described as repeated turns;
+- how/when carriage shifting changes decimal place;
+- how the revolution register is used/read during multiplication;
+- any zeroing/setup steps before an operation.
 
-A specialist patent index points to Kurt F. Ziehm US 1,110,734 (filed 1914; granted 15 September 1914) as a Controlled-Key mechanism lead. Treat that index as **E3 navigation only** until the patent itself is inspected.
+## C2. Subtraction / division
 
-Directly inspect:
+Determine whether the primary instructions directly establish:
 
-- US 1,110,734, Kurt F. Ziehm:
-  <https://patents.google.com/patent/US1110734A/en>
+- how dividend/result state is initialized;
+- which selector/mode is used;
+- carriage starting position and shift order;
+- repeated subtraction procedure;
+- how quotient/revolution counts are read;
+- what happens on overshoot/negative indication;
+- whether an add-back/correction turn is explicitly instructed;
+- exact result/revolution register directions if stated;
+- termination and remainder reading.
 
-Determine, from the actual specification/claims/figures:
+The current generic repository trace uses explicit `OVERSHOOT_PENDING → DETECTED → ADD_BACK` causality. Do **not** call that a Thomas historical event sequence unless the inspected primary instructions support the corresponding operator responsibilities. It may remain P/M even if the broad repeated-subtraction procedure is historical.
 
-- what error/incomplete-stroke condition the patented mechanism detects or prevents;
-- what is locked, disabled, signaled, or released;
-- whether the patent itself describes an operator action to recover after a partial stroke;
-- whether completion of the errant stroke is part of the described recovery;
-- whether a release key/button is actually named/described and what it controls;
-- which statements concern the patented design versus a specific commercial model.
+## C3. Zeroing / register lifecycle
 
-Record exact page/column/line/figure/claim locations at the precision available in the patent facsimile/text.
+Keep distinct:
 
-Do **not** write “Model F used US 1,110,734” as H/E1 merely because a secondary patent list says “presumably introduced” and a surviving machine plate ends on the same grant date. If direct Felt & Tarrant documentation or an object record explicitly maps the patent to the model, record that; otherwise preserve the production mapping as E3/open.
+- setting/input state;
+- result register;
+- revolution/quotient register;
+- independent zeroing/clearing actions;
+- carriage position;
+- arithmetic mode.
 
-If the patent points to one earlier Felt/Ziehm patent that is essential to understand a single recovery step, inspect only that exact dependency. Do not expand into a complete Comptometer patent genealogy.
+The repository's generic dual-register lifecycle is P/M. Historical evidence can support that separate controls/roles existed on a named object without proving the repository's event order, latch semantics, or hidden linkage.
 
-# Part C — historical / P–M recovery crosswalk
+# Part D — source crosswalk and model boundary
 
-Update `research/key-driven-computation.md` and, only where directly relevant, `research/control-and-interlocks.md` or `research/control-and-zeroing-source-map.md`.
-
-Build a compact crosswalk:
+Update `research/subtraction-and-division.md` and `research/control-and-zeroing-source-map.md` with a compact crosswalk such as:
 
 ```text
-claim / recovery step | source / edition / model | direct support | claim/evidence | repository consequence | not established
+claim / operator step | source/object/revision | direct support | claim/evidence | repository consequence | not established
 ```
 
 At minimum separate:
 
-1. **H/E1 contemporary technical account** — Turck 1921 incomplete-stroke signaling / other-order blocking / correction-before-continuation;
-2. **H/E1 company operating manual** — exact recovery sequence only if directly readable in the period scan;
-3. **H/E1 patented design** — exact locking/release/correction responsibility directly described in US 1,110,734;
-4. **H/E1 object/catalog identity** — identified Model F / company-publication facts at catalog precision;
-5. **E3 specialist orientation** — any chronology or “presumably introduced” patent-to-model mapping not independently established;
-6. **P/M repository controller** — `key-stroke-integrity` phases/events and exactly-once arithmetic commit.
+1. **H/E1 1868 instruction pamphlet pages** — only directly readable procedure text;
+2. **H/E1 1867 surviving object** — cataloged controls/registers/directions at object precision;
+3. **H/E1 ca.1873 `MA.335215` object** — controls/capacity and the associated 1868 instruction-book relationship;
+4. **H/E1 early Thomas object** — earlier ribbon-actuated / no-revolution-register differences where directly described;
+5. **R/E2 or E3 secondary reconstruction/orientation** — only when needed to identify a source or unresolved revision issue;
+6. **P/M repository operator-division and dual-register traces** — deterministic teaching decompositions.
 
 Answer explicitly:
 
-- Does a primary company/manual source establish “finish the incomplete/errant stroke, then release the lock,” or only a more general correction instruction?
-- Is a white/release button directly documented in the inspected primary source? If yes, what is it called and what exactly does it release? If no, keep that operator sequence E3/open.
-- Does the mechanism block all keys, other orders/columns, or some narrower set? Keep the source's wording and model/edition boundary.
-- At what point does arithmetic registration occur relative to the incomplete stroke and correction, according to the source? If exact timing is not stated, do not infer it.
-- Is recovery/reset distinct from result-register zeroing/clearing? Do not merge those controls because both “reset something.”
-- Which current P/M events (`INCOMPLETE_STROKE`, detection, input lock, exactly-once commit, lock release, etc.) are pedagogical decompositions rather than historical event names/timing?
+- Which multiplication/division steps are directly documented in 1868, and which are only later/general descriptions?
+- Is add-back correction after division overshoot directly instructed in the inspected issue? At what page?
+- Is revolution-counter direction a directly cataloged object fact, a manual instruction, or both?
+- Which zeroing controls are independent on the identified objects?
+- Which claims differ between the early ribbon-operated machine and later crank/revolution-register machines?
+- Does any source justify mapping the generic repository phase names to Thomas terminology? Default answer should be no unless directly established.
 
-# Part D — bounded source-aware code/public integration
+# Part E — bounded typed/public integration
 
-Only after Parts A–C establish a sharper boundary, add a compact typed evidence adapter/profile rather than rewriting the core mechanism.
+Only after Parts A–D establish a sharper boundary, add a compact source-aware profile or adapter. Prefer extending an existing provenance module rather than introducing another parallel evidence framework.
 
-Preferred location:
+A good integration should expose something equivalent to:
 
-- `src/exhibits/control-provenance/index.ts`
+- Thomas 1868 instruction source identity/page anchors;
+- 1867 object identity/control facts;
+- ca.1873 `MA.335215` object/control facts;
+- `supports` and `notEstablished` arrays;
+- explicit link to the generic P/M division/register lessons without geometric identity claims.
 
-Add something equivalent to a `controlledKeyRecoveryEvidence` profile that exposes:
-
-- exact source identity / edition or patent number;
-- claim type and evidence strength;
-- `supports`;
-- `notEstablished`;
-- explicit link to the generic P/M controller without claiming geometric identity.
-
-If the primary sources support a clear operator recovery sequence, integrate a small bilingual historical-evidence panel into the existing controls lesson in `src/main.ts`. Show two layers:
+If the 1868 pages directly support a useful operator sequence, add a **small bilingual historical-evidence panel** to the existing `#/division` and/or `#/controls` lesson. Keep two visible layers:
 
 ```text
-Historical Controlled-Key recovery evidence
+Thomas source-backed operator/control evidence
 vs
-Repository generic P/M integrity trace
+repository generic P/M deterministic trace
 ```
 
-Do **not** create a new full Comptometer route. Do not add decorative keyboard geometry.
+Do not create a full Thomas route, 3D mechanism, stepped-drum linkage animation, or source-specific timing model.
 
-Add focused tests, likely in:
+Add focused tests asserting:
 
-- `tests/control-provenance.test.ts`;
-- `tests/key-stroke-integrity.test.ts` only if a genuine P/M semantic clarification is needed.
+- source/object IDs and exact page labels used;
+- H/E1 versus R/E2/E3/P-M boundaries;
+- `supports` / `notEstablished` statements;
+- that the generic division trace remains P/M and is not renamed as Thomas historical timing;
+- any object-revision distinctions you expose publicly.
 
-Tests must assert source IDs/edition labels, H/E1 versus E3/P-M boundaries, and `notEstablished` statements so future edits cannot silently historicalize the generic controller.
+**Default expectation:** no change to `operator-division`, carry, or dual-register core transition semantics. If the source audit shows a genuine semantic error in the generic model, document the conflict and stop before redesigning the core.
 
-**Default expectation:** the generic arithmetic/control state machine should remain unchanged. If the source audit reveals that its current semantic claim is actually wrong (not merely differently named), stop and document the conflict before redesigning core transitions.
+# Part F — reconciliation and verification
 
-# Part E — reconciliation and verification
+After source/provenance work:
 
-After the audit/integration:
-
-- update `STATUS.md` only for provenance actually improved;
+- update `STATUS.md` only for evidence actually improved;
 - add one concise completed line to `TODO.md`;
-- narrow Priority 2 / Priority 4 in `docs/RESEARCH_GAPS.md` only for gaps actually closed;
-- update `docs/VERIFICATION.md` with exact baseline/final test counts and commands actually run;
-- do not alter Millionaire, Curta, Thomas division, Scheutz, Analytical Engine, Differential Analyzer, output, continuous, or backprop tracks in this slice.
+- narrow Priority 3 / Priority 4 and the relevant file-deepening item in `docs/RESEARCH_GAPS.md` only for gaps actually closed;
+- update `docs/VERIFICATION.md` with baseline/final test counts and commands actually run;
+- do not alter Controlled-Key, Millionaire, Curta Type II service chronology, Scheutz patent-number reconciliation, Analytical Engine, Differential Analyzer, output, continuous, or backprop tracks in this slice.
 
-If public controls evidence changes, perform bilingual browser smoke for:
+If public division/control evidence changes, attempt bilingual browser smoke for:
 
 ```text
+#/division
 #/controls
 #/about
 ```
 
-If browser tooling is unavailable, state that explicitly; build/tests are not a browser smoke.
+If browser tooling is unavailable, state that explicitly; build/tests are not browser smoke.
 
 Before commit/push, run:
 
@@ -199,7 +217,7 @@ npm run build
 git diff --check
 ```
 
-Run focused control/key-integrity tests for touched files. All final required checks must pass.
+Run focused tests for every touched provenance/lesson module. All final required checks must pass.
 
 After push:
 
@@ -210,30 +228,29 @@ After push:
 Suggested commit subject:
 
 ```text
-research: ground Controlled-Key recovery protocol
+research: ground Thomas 1868 operator protocol
 ```
 
 # Evidence boundaries
 
-- directly read period Felt & Tarrant manual pages = **H/E1 at the exact edition/page/procedure inspected**;
-- Turck 1921 directly inspected pages = **H/E1 contemporary technical/historical account**, with author/priority-context caveat already recorded;
-- US 1,110,734 directly inspected = **H/E1 for the patented design actually described**;
-- Smithsonian / Science Museum catalog = **H/E1 at object/publication identity and directly described control precision**;
-- specialist patent/manual indexes = **E3 navigation/secondary evidence** unless they expose the original source being cited;
-- patent grant date matching a machine plate is not sufficient proof of patent-feature production mapping;
-- repository `key-stroke-integrity` state/events = **P/M** unless a particular individual statement is separately source-backed;
-- no source-specific trigger geometry, key travel, timing, spring/linkage path, simultaneous multi-column behavior, throughput, error rate, training effect, or production-wide revision claim without direct evidence.
+- directly read 1868 Thomas instruction pages = **H/E1 only at the exact issue/page/procedure inspected**;
+- Smithsonian catalog/object records = **H/E1 at object identity and directly described control/register precision**;
+- a catalog relationship between an object and instruction book does not prove unchanged procedure across all Thomas revisions;
+- modern institutional/scholarly reconstruction = **R/E2** where directly inspected and appropriately scoped;
+- generic web summaries / specialist orientation = **E3 navigation/secondary evidence** unless they expose the original source being cited;
+- repository `operator-division` and `dual-register-lifecycle` events = **P/M** unless an individual responsibility is separately source-backed;
+- no exact gear/linkage geometry, carry phasing, torque, safe speed, wear, operator throughput, production-wide revision mapping, or event timing without direct evidence.
 
 # Stop conditions
 
 Stop a subpart and preserve the boundary rather than guessing if:
 
-- a manual scan is unreadable or lacks reliable page identity;
-- the Smithsonian publication exposes only catalog metadata/object photography rather than readable pages;
-- US 1,110,734 does not actually support the recovery step a secondary source attributes to it;
-- a release button/operator sequence appears only in a modern specialist description and cannot be matched to primary material;
-- Model E/F chronology or patent-to-production mapping conflicts across sources;
-- integrating historical evidence would require pretending the generic P/M event order is physical timing;
-- work starts expanding into full keyboard/carry geometry, simultaneous duplex operation, measured operator productivity, or another machine family.
+- the 1868 IIIF manifest exposes only a single readable spread or page;
+- another scan cannot be matched to the same edition/issue with sufficient identity;
+- a modern summary describes an operation not visible in the primary pamphlet;
+- the 1867 and ca.1873 object controls differ in a way that makes a universal Thomas procedure unsafe;
+- division add-back/correction is not explicitly documented in the inspected primary source;
+- integrating source evidence would require pretending the generic P/M event order is historical physical timing;
+- work starts expanding into full stepped-drum geometry, complete serial-number chronology, measured performance/reliability, square-root procedures, or another machine family.
 
-If Parts A–D finish substantially before one hour, spend remaining time resolving exact manual edition/page anchors, directly mapping patent figure/claim language, and strengthening evidence-boundary tests. **Do not start another mechanism or machine family in this slice.**
+If Parts A–E finish substantially before one hour, spend remaining time resolving IIIF canvas/page identity, checking one directly related Thomas object/manual revision, and strengthening evidence-boundary tests. **Do not start another machine family.**
