@@ -34,6 +34,7 @@
 - [x] Ground Millionaire operator/control provenance from Steiger and identified NMAH objects while keeping the two-cycle `314 × 27` trace P/M.
 - [x] Harden operator-division quotient-nine/exact-zero causality and replay, then separate Curta facsimile controls from E3 division transcription without back-filling named-machine states.
 - [x] Ground Controlled-key incomplete-stroke responsibility in Turck 1921 and add a tested generic exactly-once key-stroke integrity/interlock lesson.
+- [x] Ground Controlled-Key addition recovery/release from Felt & Tarrant manuals and Ziehm US1,110,734 without turning the P/M trace into Model F timing.
 - [x] Directly inspect the exposed Thomas 1868 register legend and add a tested generic independent result/revolution-register lifecycle lesson.
 - [x] Harden decimal/integrator replay against serialized provenance tampering and inspect Curta Type II service controls at exact page/leaf precision.
 - [x] Reconcile the H. P. Babbage 1888 reading, 1889 chapter range, modern reproduction metadata, E3 transcription content, and unavailable drawing-catalogue cross-walk without fabricating page claims.

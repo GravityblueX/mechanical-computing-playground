@@ -53,7 +53,7 @@ Remaining gaps:
 
 - exact Model A and later revision geometry/timing;
 - simultaneous multi-column input;
-- exact primary operator release procedure and controlled-key patent/figure mapping beyond Turck's functional account;
+- exact patent-to-production Model E/F/J mapping, trigger/registration threshold and physical timing beyond the now-inspected company addition-recovery pages and Ziehm US1,110,734 lock/release responsibility;
 - production mapping of carry/cancel/interlock mechanisms;
 - operator manuals and measured training/throughput evidence.
 
@@ -78,7 +78,7 @@ Remaining gaps:
 
 - additional Thomas procedure pages plus exact zeroing linkage/timing and production-revision mapping;
 - production use of Odhner patented locking embodiments;
-- exact primary release-button procedure, trigger/registration timing, and patent-to-production mapping for Model E/F controlled-key revisions;
+- exact trigger/registration timing and patent-to-production mapping for Model E/F/J controlled-key revisions; addition recovery/release is now directly anchored to ca.1920/1921 company pages and Ziehm's patented design;
 - source-specific overflow, carry inhibition, and recovery geometry.
 
 ## Priority 5 — Representation and human-machine protocol

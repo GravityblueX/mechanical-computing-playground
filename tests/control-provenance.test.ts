@@ -6,7 +6,9 @@ describe('typed control provenance dataset', () => {
     const ids = CONTROL_EVIDENCE_PROFILES.map(profile => profile.id);
     expect(new Set(ids).size).toBe(ids.length);
     expect(ids).toEqual(expect.arrayContaining([
-      'thomas-1867-object', 'odhner-us1510100', 'felt-us960528', 'turck-us1154897', 'pascaline-complement',
+      'thomas-1867-object', 'odhner-us1510100', 'felt-us960528', 'turck-us1154897',
+      'ziehm-us1110734', 'felt-controlled-key-manuals', 'comptometer-model-f-objects',
+      'controlled-key-model-mapping-e3', 'pascaline-complement',
     ]));
   });
 
@@ -30,6 +32,23 @@ describe('typed control provenance dataset', () => {
         expect(item.zh.trim()).not.toBe('');
       }
     }
+  });
+
+  it('separates Controlled-Key manual, patent, object, E3 mapping and P/M boundaries', () => {
+    const patent = getControlEvidenceProfile('ziehm-us1110734');
+    const manual = getControlEvidenceProfile('felt-controlled-key-manuals');
+    const objects = getControlEvidenceProfile('comptometer-model-f-objects');
+    const mapping = getControlEvidenceProfile('controlled-key-model-mapping-e3');
+    expect(patent).toMatchObject({ claimType: 'H', evidenceStrength: 'E1', dateOrModel: expect.stringMatching(/US 1,110,734.*claims 11, 16, 19/) });
+    expect(patent.documentedRoles.map(item => item.en).join(' ')).toMatch(/partial depression.*other columns.*fully depressing.*release key 134.*does not permanently release/);
+    expect(patent.notEstablished.map(item => item.en).join(' ')).toMatch(/repository event names.*exactly-once commit.*patent-to-production/);
+    expect(manual).toMatchObject({ claimType: 'H', evidenceStrength: 'E1', dateOrModel: expect.stringMatching(/printed p\. 8.*printed pp\. IX–XI/) });
+    expect(manual.documentedRoles.map(item => item.en).join(' ')).toMatch(/addition.*red Correction\/Release Button.*all columns except.*multiplication\/division.*cancel/);
+    expect(manual.notEstablished.map(item => item.en).join(' ')).toMatch(/every edition or model.*registration threshold.*clearing\/zeroing/);
+    expect(objects).toMatchObject({ claimType: 'H', evidenceStrength: 'E1' });
+    expect(objects.notEstablished.map(item => item.en).join(' ')).toMatch(/last plate date.*US 1,110,734.*photographs/);
+    expect(mapping).toMatchObject({ claimType: 'H', evidenceStrength: 'E3' });
+    expect(mapping.notEstablished.map(item => item.en).join(' ')).toMatch(/primary proof.*commercial Model E\/F.*matching dates/);
   });
 
   it('does not relabel the repository P/M event sequence as historical evidence', () => {

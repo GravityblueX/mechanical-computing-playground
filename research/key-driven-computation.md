@@ -147,11 +147,42 @@ Science Museum Group object `1921-16` identifies a section of Model F controlled
 
 <https://collection.sciencemuseumgroup.org.uk/objects/co60749/section-of-model-f-controlled-key-comptometer-by-felt-and-tarrant-manufacturing-co-model-calculating-machine>
 
-### Secondary orientation and remaining limits
+### Felt & Tarrant operator recovery, directly inspected
 
-John Wolff's specialist history describes Model E/F chronology and an operator sequence of completing the errant stroke then clearing a lock with a white button. This remains **E3 orientation** here because that exact release sequence, trigger geometry, interference guards and upstroke ratchet were not independently matched to an inspected primary page/patent in this bounded pass.
+Two directly scanned company manuals now establish the operator procedure at edition/page precision:
 
-Historical sources therefore establish that incomplete strokes were detected/blocked/corrected in particular controlled-key contexts without establishing the repository's event names, commit phases, exact trigger geometry, timing, or one universal Comptometer mechanism.
+- *Easy Instructions for Operating the Controlled Key Comptometer*, ca. 1920, PDF p. 2 (unnumbered spread): an incomplete stroke locks the machine; the operator “completed the unfinished stroke, touched the release key and went right on”; printed p. **8** / PDF p. **5** gives the fuller rules and calls the control the red **Correction Button**;
+- *Methods of Operating the Comptometer*, 1921 edition, printed pp. **IX–XI** / PDF pp. **7–8**: the Model H description says all other columns lock while the fault column stays identifiable; for addition, depress the partial key fully, then depress the **Release Button** near the 9-key and continue; each misoperated column must be corrected before release succeeds; multiplication/division guidance says cancel completely and redo rather than reuse the addition correction recipe.
+
+The 1921 p. XI decision rule is more precise than a universal “finish then release”: try the last key; if it works, complete it and touch the red release button; if that last key is itself locked, touch release and add the previous key. The manual also gives a separate subtraction-cutoff/9-key/release/1-key correction for an unwanted partial depression. These are **H/E1 company operating procedures for the inspected editions**, not universal Comptometer behavior.
+
+### Ziehm US 1,110,734 patented responsibility
+
+The directly inspected 1914 facsimile supports the same core responsibility at patented-design precision:
+
+- specification p. 1 describes locks against a further adding movement until the key returns to normal, plus locking other columns after partial depression and release;
+- specification p. 4 (facsimile lines 65–91) says a partial depression/release arrests the accumulator and locks every other actuator; completing the formerly partial key gives the intended accumulation; release key `134` then releases all orders;
+- the same passage explicitly says using release before completing the correction does **not** permanently release the keys;
+- claims 11, 16 and 19 state partial depression/release → other-column lock → means for release; claims 3, 5 and 7 separately guard a completed adding movement until return to normal.
+
+This is **H/E1 for the patented design**, not direct proof that every Model E/F used this exact embodiment. It does not historicalize repository event names, the exact `ARITHMETIC_COMMITTED` phase, or reducer timing.
+
+### Object/catalog and production-mapping boundary
+
+NMAH Model F objects `MA.335357` (1915) and `MA.333576` (1917) expose full keyboards, subtraction controls, result windows, separate zeroing handles and patent plates ending 15 September 1914. Science Museum Group `1921-16` identifies a Model F controlled-key section. These are **H/E1 object/catalog facts**. A matching plate/grant date does not prove which hidden lock uses US 1,110,734, so exact patent-to-production mapping remains E3/open.
+
+Recovery is also distinct from result clearing: the company manuals name a Correction/Release Button for an integrity lock, while the identified objects separately describe a zeroing handle. The generic repository controller therefore remains **P/M**: its `INCOMPLETE_STROKE_*`, `INPUT_LOCKED`, exactly-once arithmetic commit and lock-release events are pedagogical decompositions, not historical event names or physical timing.
+
+### Historical / P–M recovery crosswalk
+
+| Claim / recovery step | Source / edition / model | Direct support | Claim/evidence | Repository consequence | Not established |
+|---|---|---|---|---|---|
+| incomplete stroke signals error; other orders blocked | Turck 1921, pp. 159–162 | contemporary technical account | H/E1 | motivates visible integrity responsibility | exact button procedure, neutral priority history |
+| correct addition lock | *Easy Instructions* ca.1920 p.8; *Methods* 1921 pp.IX–XI | retry/complete errant key, red Correction/Release Button, then continue; branch if last key is locked | H/E1 company manual | historical panel may state edition-bounded operator sequence | every model/edition, physical trigger/timing |
+| patented lock/release | Ziehm US1,110,734 p.4; claims 11/16/19 | partial release locks other columns; complete errant stroke; key 134 releases; early release fails to persist | H/E1 patented design | supports correction-before-release responsibility | universal Model E/F embodiment or repository event timing |
+| Model F / publication identity | NMAH `MA.335357`, `MA.333576`, `nmah_905178`; SMG `1921-16` | identified objects/publication and visible/cataloged controls | H/E1 catalog precision | separates object/manual identity and zeroing control | patent-feature production mapping, hidden geometry |
+| model/patent chronology | specialist indexes | navigation and orientation | H/E3 | keep explicit open mapping | primary production proof |
+| interrupted `7` trace | repository `key-stroke-integrity` | deterministic action/state/event model; arithmetic committed exactly once | P/M | testable teaching decomposition | historic names, threshold, trigger path or physical time |
 
 ## 5. Subtraction is an operator-interface problem too
 

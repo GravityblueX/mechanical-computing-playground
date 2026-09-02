@@ -1,5 +1,23 @@
 # Verification record
 
+## 2026-09-02 — Controlled-Key recovery/release protocol grounding
+
+The current-main baseline at `d552a7744ca70363a219c593f56cec1b63126932` passed typecheck and 360 tests across 21 files. The image-only Felt & Tarrant scans were rendered locally and directly inspected. *Easy Instructions* ca. 1920 gives the general “complete unfinished stroke → release key → continue” account on PDF p.2 and the red Correction Button decision rules on printed p.8 / PDF p.5. *Methods of Operating the Comptometer* 1921 gives Model H locking/correction on printed pp.IX–XI / PDF pp.7–8: other columns lock, addition correction completes/retries the partial key before the red Release Button, multiple faulty columns each require correction, and multiplication/division guidance says cancel and redo.
+
+Ziehm US1,110,734 was checked in the patent facsimile. Specification p.4 says partial depression/release arrests accumulation and locks other columns; completing the formerly partial key gives the intended accumulation; release key 134 then releases all orders; release before correction does not permanently release them. Claims 11, 16 and 19 preserve the partial-release/other-column/release responsibility. NMAH Model F records `MA.335357` and `MA.333576`, publication `1989.3054.01`, and SMG `1921-16` were kept at object/catalog precision. Matching the 15 September 1914 plate date to the patent grant date was not treated as production-feature proof. Recovery/Correction is also kept separate from the cataloged zeroing handle.
+
+The generic `key-stroke-integrity` transition/replay model was not changed. Its named detection, locking, exactly-once commit and release events remain P/M rather than Model F event names or physical timing.
+
+- `npm run typecheck` — pass
+- focused `tests/control-provenance.test.ts` + `tests/key-stroke-integrity.test.ts` — pass, 19 tests
+- `npm test -- --run` — pass, 361 tests across 21 files
+- `npm run build` — pass
+- `git diff --check` — pass
+
+Bilingual browser smoke for `#/controls` and `#/about` was attempted, but the browser extension remained disconnected; no successful browser smoke is claimed.
+
+No deployment check was performed for this not-yet-pushed completion commit.
+
 ## 2026-09-02 — Millionaire operator/control protocol grounding
 
 The current-main baseline at `86700edf0b3613f9f8f34f7c5fbf9d1d5c929c27` passed typecheck and 360 tests across 21 files after the merged decimal-register replay hardening. Direct inspection of US 558,913 anchors the patented-design distinction: multiplication-table controlling plates, multiplier lever/scale selection, multiplicand setting/indication, and one complete crank rotation repeated for each multiplier figure. The patent's described form starts at the left of the multiplier but explicitly calls that arrangement a convenience and describes an alternate right-starting units/shift/tens ordering; it therefore does not historicalize the repository's right-to-left `7 → shift → 2` trace.
