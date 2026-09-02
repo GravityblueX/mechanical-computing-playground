@@ -5,13 +5,13 @@ Owner: local coding/research agent
 Target duration: about one useful hour
 Repository authority: remote `main`
 
-Previous task is complete and archived at `tasks/archive/2026-09-02-pascaline-complement-subtraction.md`.
+Previous task is complete and archived at `tasks/archive/2026-09-02-complement-register-v2.md`.
 
-Administrator review accepted completion commit `ac65e47f1df84688c893099ac680b1956b2ef5b6` (`feat: add complement-register subtraction lesson`). Exact-head CI run `33585386764` and Deploy Pages run `33585386792` both passed. Assignment-to-completion was about 45 minutes with a 10-file / 362-line diff and the test suite rose from 362 to 375 tests, so this slice is slightly broader while remaining one coherent correction/teaching question.
+Administrator review accepted completion commit `999b4a9902e60ac1b6346ab16d59f63ba12dc022` (`fix: bound complement-register trace semantics`). Exact-head CI run `33588235192` and Deploy Pages run `33588235237` both passed. Assignment-to-completion was about 30 minutes with a 7-file / ~274-line diff and the suite rose from 375 to 380 tests, so this slice is deliberately somewhat broader while staying one coherent evidence/teaching question.
 
-**Fetch/pull current remote `main` before doing anything.** The administrator archive commit is `631584d0cbbed026f0bb0b8cc5151d8369481d5b`.
+**Fetch/pull current remote `main` before doing anything.** The administrator archive commit is `1a71ce913359764d2be1d6d350f362dcd2412e71`.
 
-> **Question for this slice:** can the new complement-register lesson represent one bounded forward-add action and its carry consequences without generating one event per unit of the subtrahend—or accidentally suggesting that `+345` means 345 historically meaningful Pascaline operation cycles?
+> **Question for this slice:** can the playground show that the modern Difference Engine No. 2 reconstruction interprets carry as a staged responsibility—giving-off/addition, warning/carry handling, restoration/reset—without turning reconstruction detail into a Babbage-lifetime mechanism claim or inventing geometry/timing?
 
 ## Read before work
 
@@ -21,146 +21,140 @@ Fetch/pull remote `main`, then read in order:
 2. `TODO.md`
 3. `AGENTS.md`
 4. `docs/EVIDENCE_POLICY.md`
-5. `docs/RESEARCH_GAPS.md`, especially Priority 0 carry and Priority 3 subtraction
+5. `docs/RESEARCH_GAPS.md`, especially Priority 0 carry architecture and named-machine source anchors
 6. `docs/VERIFICATION.md`
-7. `tasks/archive/2026-09-02-pascaline-complement-subtraction.md`
-8. `research/pascaline-subtraction-source-map.md`
-9. `research/carry-architecture-source-map.md`
-10. `research/subtraction-and-division.md`
-11. `src/mechanisms/complement-register/index.ts`
-12. `tests/complement-register.test.ts`
-13. the visible-carry rendering path in `src/main.ts`
-14. the hardened decimal-register/carry trace implementation only for patterns worth reusing
+7. `tasks/archive/2026-09-02-complement-register-v2.md`
+8. `research/difference-engine-source-map.md`
+9. `research/carry-is-the-hard-part.md`
+10. `research/carry-architecture-source-map.md`
+11. `src/exhibits/carry-provenance/index.ts`
+12. `tests/carry-provenance.test.ts`
+13. the `#/visible-carry` rendering path in `src/main.ts`
+14. `src/exhibits/source-atlas/index.ts` and `tests/source-atlas.test.ts` only for reusable provenance/test patterns
 
-Run the current-main baseline before editing and record the actual test count. Do not weaken any existing fail-closed replay contract.
+Run the current-main baseline before editing and record the actual test count.
 
-# Part A — replace unit-event explosion with bounded action-level semantics
+# Part A — bounded re-inspection of the DE2 technical source
 
-The accepted complement-register model is mathematically correct for its fixtures, but `transitionComplementRegister()` currently loops once per unit of `subtrahend` and emits one `REGISTER_INCREMENTED` event each time. With width up to 15 digits, a valid action can therefore request an enormous event list. The public panel also currently reports `+345` as `345 generic increments`, which is a P/M implementation artifact and can be mistaken for a physical/operator cycle count.
+Use the already identified institutional source, not a generic web summary:
 
-Refactor the complement lesson so trace size is bounded by decimal width / event vocabulary, **not by the magnitude of the subtrahend**.
+Doron D. Swade, *Charles Babbage's Difference Engine No. 2: Technical Description*, Science Museum, March 2020.
 
-## Required semantic result
+The repository already records these directly inspected anchors:
 
-Represent one generic forward-add action at action level:
+- p. i — scope: interpretation of Babbage designs plus modern engineering decisions/modifications;
+- pp. 4–9 — source/editorial boundary; omitted original specifications such as materials/manufacture/precision/finish;
+- pp. 21–24, Figs. 3.2–3.4 — interpretation of original timing/addition material;
+- pp. 33–45, Figs. 3.16–3.20 — warning, carriage of tens, restoration, warning-latch reset in the reconstructed account;
+- pp. 187–188 — original timing diagram does not supply exact lock phasing; modern drawing `337 X 21` supplies reconstruction detail;
+- pp. 212–218 — original/archive versus modern construction drawing mapping.
 
-```text
-encoded physical/addition value before
-+ subtrahend delta
-→ encoded physical/addition value after
-→ complementary/subtraction readout after
-```
+Re-open/re-check only the pages needed for this slice. Do not perform another broad Difference Engine census.
 
-Expose carry consequences compactly, for example as one typed summary per decimal boundary/order with a crossing count, or another deterministic O(width) representation.
+## Research deliverable
 
-A good compact model could expose concepts equivalent to:
+Tighten `research/difference-engine-source-map.md` with a compact **carry-phase responsibility table** if the pages support it. For each stage/responsibility record:
 
-```text
-FORWARD_ADD_BEGIN
-CARRY_SUMMARY order=0 count=...
-CARRY_SUMMARY order=1 count=...
-...
-REGISTER_ADVANCED before=... delta=... after=...
-FORWARD_ADD_END
-```
+- exact source page / figure;
+- source wording or conservative paraphrase;
+- whether it is Babbage-source identity (**H/E1 at archive-record precision**) or Swade/Science Museum reconstruction interpretation (**R/E2**);
+- what is *not* established by that source.
 
-The exact event names are your implementation choice. The important properties are:
-
-- no loop whose iteration count is proportional to `subtrahend`;
-- no event list whose length is proportional to `subtrahend`;
-- carry information remains inspectable by decimal order;
-- final arithmetic remains exact for the supported safe-integer width;
-- the trace stays deterministic, serialized, action-derived and fail-closed;
-- replay must validate the compact carry summary against the action/state rather than trusting serialized counts.
-
-Do not call the compact event count a historical crank/stroke count. It is P/M inspection structure.
-
-## Carry-summary arithmetic
-
-You may derive boundary-crossing counts mathematically instead of simulating every unit. For a no-wrap forward delta, a useful invariant for the boundary at `10^(order+1)` is the change in the corresponding quotient between before and after. Use a formulation that remains exact under the repository's safe-integer constraints and test it thoroughly.
-
-The existing `0 <= B <= A` rule means `C(A)+B <= 10^width-1`, so this bounded lesson need not invent register wrap/sign handling.
-
-## Trace version / compatibility
-
-If the serialized event shape changes incompatibly, bump the complement trace version rather than pretending old and new envelopes are identical. This repository has no requirement to preserve persisted user traces for this new lesson, so prefer an explicit version boundary over ambiguous compatibility glue.
-
-Reject unsupported old/new envelope shapes fail-closed. Do not silently coerce them.
-
-# Part B — required tests, including a large valid input
-
-Update/add focused Vitest coverage for at least:
-
-1. existing arithmetic examples still hold:
-   - `5678 - 1234 = 4444`;
-   - `1200 - 345 = 855`;
-   - `B = 0`;
-   - `B = A`;
-2. carry summaries are correct for a fixture with multiple decimal boundaries;
-3. trace/event count is bounded independently of `B`—assert a structural bound, **not wall-clock timing**;
-4. one large valid width-15 case (for example values near `10^15-1`) produces the correct final subtraction readout while keeping the event list bounded to a small function of width;
-5. there is no exported/public helper on the transition path that still performs a loop proportional to `subtrahend` merely to reconstruct the trace;
-6. same state + action yields identical compact events/result;
-7. replay reproduces final state and fails closed on tampered action, carry summary, event order, final state, envelope/version, extra serialized fields and unknown discriminators;
-8. invalid width/value and `B > A` remain explicit errors.
-
-Do not add flaky performance timers to CI.
-
-# Part C — public panel must stop implying 345 physical cycles
-
-Update the `#/visible-carry` complement panel so it no longer says or visually implies that `1200 - 345` requires `345 generic increments` as a meaningful operation count.
-
-Instead expose compact P/M state such as:
+The table must keep at least these boundaries visible:
 
 ```text
-physical/addition register before = C(1200)
-forward delta = +345
-physical/addition register after = ...
-complement/subtraction readout = 855
-carry boundary summaries by order
+Babbage archive/drawing identity ≠ modern reconstructed phase interpretation
+modern reconstructed phase interpretation ≠ lifetime-built machine
+phase responsibility/order ≠ measured duration/force/geometry
+modern lock phasing ≠ Babbage-specified exact lock phasing
 ```
 
-If the compact trace naturally supports stepping, add a very small step/replay control using the new events; otherwise a text/state summary is sufficient. Do not create a new route or redesign the whole visible-carry page.
+If exact terminology/order on the re-opened pages differs from the shorthand currently in the repository, follow the source and correct the shorthand. Do not force the words in this task into the source.
 
-The visitor must be able to answer:
+Do not infer tooth counts, linkage paths, spring forces, material choices, manufacturing tolerances, safe speed, wear, or timing duration.
 
-> What part is historical evidence, what part is mathematical complement representation, and what part is the repository's compact P/M inspection trace?
+# Part B — typed DE2 carry provenance / phase responsibility model
 
-Keep the existing explicit statement that this is not “Pascal's subtraction algorithm.”
+Add the smallest useful typed representation under the existing carry-provenance exhibit layer. Prefer extending `src/exhibits/carry-provenance/` rather than creating a new mechanism or machine emulator.
 
-# Part D — one bounded Belair figure/text re-check, only if it resolves a real open claim
+The model should let code/tests/UI inspect something equivalent to:
 
-Spend a small bounded research pass on the exact Belair 1659 material already used—especially the reproduced figure/text around 1923 DjVu p.373 and immediately adjacent pages—to answer only this question:
+```text
+source identity
+claim type = R
+evidence strength = E2
+ordered reconstructed carry responsibilities
+exact page/figure anchors per responsibility
+explicit not-established boundaries
+```
 
-> Does the directly readable reproduced figure/text itself establish the complete digit-pair mapping for the dual display, or only opposite ordering plus the one `1/8 → 0/9` transition already recorded?
+If a compact deterministic teaching sequence adds explanatory value, it may expose one ordered P/R inspection trace mapped to the sourced responsibilities. It must **not** pretend to reproduce physical timing or Babbage-lifetime event timing.
 
 Rules:
 
-- if the scan/figure visibly establishes all pairs at usable precision, record exactly what can be read and where;
-- if it does not, keep the current uncertainty explicitly—**do not derive a full historical table from the mathematical nines-complement function**;
-- do not start a Pascaline object census, sautoir geometry reconstruction, mixed-radix currency study, or new machine family;
-- update `research/pascaline-subtraction-source-map.md` only if this re-check materially sharpens the claim boundary.
+- source-derived phase/responsibility names must come from the re-checked source at the precision actually readable;
+- any repository event names or simplified sequence are **P/R mapping**, not historical event terminology;
+- do not modify the generic decimal carry core merely to fit DE2;
+- do not claim that the existing `0099 + 1` generic carry trace is a DE2 simulation;
+- do not copy modern reconstruction geometry into a generic carry diagram.
 
-This research subpart is intentionally small; the main deliverable is the trace semantic correction.
+A typed profile/card may be enough if that is the cleanest architecture. A new numeric mechanism is not required.
+
+# Part C — public visible-carry integration
+
+Add a compact bilingual DE2 reconstruction section to the existing `#/visible-carry` route. Do not create a new route.
+
+The visitor should be able to distinguish three layers:
+
+1. generic P/M decimal carry behavior already demonstrated by `0099 + 1`;
+2. H/E1 archive/drawing identity for Babbage source records;
+3. R/E2 Science Museum reconstruction interpretation of staged carry responsibilities.
+
+Minimum public information:
+
+- source title/institution and exact relevant page/figure anchors;
+- an ordered text/state phase strip or responsibility list derived from the typed profile;
+- explicit statement that this is a **modern reconstruction interpretation**, not proof that an identical fully built Babbage machine operated this way in his lifetime;
+- explicit statement that phase order/responsibility is not a duration, force, tooth-count, linkage, or material claim;
+- one sentence explaining why this matters pedagogically: a carry is not just a value change; an engineered machine must schedule detection/transfer/restoration responsibilities.
+
+Reuse existing evidence/provenance UI patterns. No decorative gearing and no large redesign.
+
+# Part D — tests and fail-closed provenance boundaries
+
+Add focused tests in `tests/carry-provenance.test.ts` or a narrowly justified adjacent file.
+
+At minimum verify:
+
+1. the DE2 profile/sequence uses claim type `R` and evidence strength `E2` for the modern reconstruction interpretation;
+2. page/figure anchors for the included responsibilities are explicit and stable;
+3. ordered responsibilities are deterministic and cannot silently reorder through UI/adaptor code;
+4. the profile explicitly records that exact lifetime lock phasing, materials, tolerances, duration/force and source-specific geometry are not established;
+5. no adapter promotes the R/E2 phase interpretation into H/E1 merely because Babbage archive identifiers are also cited;
+6. generic `0099 + 1` arithmetic/carry tests remain unchanged and passing;
+7. if you introduce a serialized teaching trace, same input yields identical events and replay/validation rejects unknown/reordered/tampered phase identifiers rather than trusting serialized data;
+8. the public adapter consumes the typed profile rather than maintaining a second contradictory hard-coded source list.
+
+Do not add meaningless assertions that only restate string literals without protecting an evidence boundary or public contract.
 
 # Part E — reconciliation and verification
 
-After code/UI/research work:
+After research/code/UI work:
 
-- update `STATUS.md` only for the bounded compact-trace correction actually landed;
+- update `STATUS.md` only for the DE2 carry-provenance/teaching layer actually landed;
 - add one concise completed line to `TODO.md`;
-- update `docs/RESEARCH_GAPS.md` only if the Belair digit-pair uncertainty genuinely changes;
+- update `docs/RESEARCH_GAPS.md` only if this slice genuinely narrows a listed DE2/Babbage carry-source gap;
 - update `docs/VERIFICATION.md` with baseline/final test counts and commands actually run;
-- do not modify Thomas, Controlled-Key, Millionaire, Curta, Analytical Engine, Differential Analyzer, Scheutz, printing-ledger, continuous, or backprop tracks in this slice.
+- do not modify Curta, Analytical Engine, Differential Analyzer, Millionaire, Controlled-Key, Thomas, Pascaline complement, printing-ledger, division, continuous or backprop tracks in this slice except for a necessary cross-reference sentence.
 
-If the visible-carry panel changes, attempt bilingual browser smoke for:
+Attempt bilingual browser smoke for:
 
 ```text
 #/visible-carry
 #/about
 ```
 
-If browser tooling is unavailable, state that explicitly; build/tests are not browser smoke.
+If browser tooling is unavailable/disconnected, say so explicitly; do not convert build success into a browser-smoke claim.
 
 Before commit/push, run:
 
@@ -171,7 +165,7 @@ npm run build
 git diff --check
 ```
 
-Run the complement-register focused tests separately as well. All final required checks must pass.
+Run the carry-provenance focused tests separately as well. All final required checks must pass.
 
 After push:
 
@@ -182,35 +176,36 @@ After push:
 Suggested commit subject:
 
 ```text
-fix: bound complement-register trace semantics
+feat: add DE2 carry-phase provenance lesson
 ```
 
 # Evidence boundaries
 
-- Pascal *Avis* operational statements = **H/E1 via edited reproduction** at the exact pages already recorded;
-- Belair 1659 one-direction/dual-display/carry statements = **H/E1 contemporary description** at the exact readable precision;
-- full fixed-width nines complement and carry-summary arithmetic = **M**;
-- compact complement-register transition/events/UI = **P/M**;
-- event counts, carry-summary counts and event ordering are repository inspection semantics, not historical cycle/timing claims;
-- do not infer reverse carry, sautoir/linkage geometry, force, wear, safe speed, universal revision applicability or a historical operator procedure from the P/M trace.
+- Babbage archive record identity/title/date/subject where directly catalogued = **H/E1 at catalog precision**;
+- Swade / Science Museum 2020 technical description of the constructed DE2 and its interpreted mechanism = **R/E2**;
+- repository ordering/adaptor/phase strip = **P/R mapping** unless it is merely presenting source text;
+- modern construction drawing `337 X 21`, modern lock phasing, materials, fixes and modifications must not be rewritten as Babbage-lifetime specifications;
+- do not infer physical duration, torque, force, contact load, wear, safe speed, tooth counts, linkage geometry or manufacturing tolerance from phase sequence;
+- do not call the Science Museum reconstruction a surviving nineteenth-century Difference Engine No. 2.
 
 # Stop conditions
 
 Stop a subpart and preserve the boundary rather than guessing if:
 
-- bounded carry summaries cannot be derived without losing arithmetic/replay correctness;
-- a compact trace would require weakening the hardened decimal-register/carry core;
-- Belair's reproduced figure remains unreadable or ambiguous at digit-pair precision;
-- the work starts expanding into full Pascaline geometry, mixed-radix historical machines, or source-specific timing.
+- the cited PDF/pages cannot be re-opened at usable precision;
+- the source does not support a stable responsibility/order claim beyond what is already written;
+- exact phase terminology is ambiguous enough that the UI would overstate it;
+- implementation would require changing shared decimal-carry semantics or constructing a source-specific geometric emulator;
+- the work starts expanding into printer geometry, Scheutz, manufacturing/tolerance research, or another machine family.
 
-If Parts A–D finish substantially before one hour, spend remaining time on adversarial replay/property-style tests, accessibility/text-state visibility, and exact source-location wording. **Do not start another machine family.**
+If Parts A–D finish substantially before one hour, spend remaining time on source-boundary/adversarial tests, accessibility/text-state visibility, and exact page/figure wording. **Do not start another machine family.**
 
 ## Git discipline
 
 - remote `main` is authoritative;
 - fetch/pull before work;
-- inspect current code/tests before changing abstractions;
-- keep this one coherent correction/research checkpoint;
+- inspect current code/tests before adding abstractions;
+- keep this one coherent provenance/teaching checkpoint;
 - run all acceptance commands;
 - inspect diff for unrelated edits;
 - update status/verification only after tests pass;
