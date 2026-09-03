@@ -1,5 +1,20 @@
 # Verification record
 
+## 2026-09-02 — complement-register structural replay equality
+
+The exact remote-main baseline `e3788aaba731d5594d9caa70a0475b9452f6db15` reproduced two complementary fixture-integrity failures: reordered but otherwise identical object members were rejected, while an unsupported enumerable `undefined` field on `finalState` was discarded by `JSON.stringify` and accepted. Complement replay now validates the final state and uses the shared order-independent exact comparison rather than JSON serialization.
+
+Before reading nested complement data, a mechanism-scoped bounded preflight constructs the v2 replay input as a stable ordinary snapshot: current-realm `Object.prototype` objects, exact `Array.prototype` arrays, own enumerable string-keyed data properties except intrinsic array `length`, and no Symbol/Function leaves, accessors, cycles or repeated identities. Its limits are conservatively derived from width `<= 15` and at most 17 events. Retained post-order clone checks reject top-level, nested, array, self-detaching and mutation-attempting Proxies without invoking their `get` traps or injected accessors. Clone container brands and own-key sets must match the inspected frames, which rejects brand-preserving built-ins whose prototypes were spoofed to `Object.prototype` without rejecting ordinary frozen or sealed data. A host container that `structuredClone` demotes to an ordinary object is never consumed directly: all envelope checks, transitions, comparisons and replay operate on the returned ordinary snapshot. The walk uses module-captured structural intrinsics and pre-bound collection methods, so a structural callback cannot replace ambient validators partway through the check. Failures from the initial structural gate through final comparison are contained as `InvalidComplementRegisterError`; unexpected failures use `invalid complement trace data`. The generic trace path remains alias-compatible for existing decimal events that intentionally share wheel objects.
+
+Regressions cover reordered final-state and event members; fail-closed `undefined`, Symbol, Function, non-enumerable, accessor, cyclic and aliased data; structural budgets; transparent and dual-view Proxies; Proxy mutation and ambient-intrinsic replacement attempts; prototype-spoofed brand-preserving built-ins; clone-demoted host containers at the root, action, final-state and event boundaries; fresh normalization of ordinary and domain-typed errors thrown by an `ownKeys` trap; frozen/sealed ordinary inputs; and width-15 replay. No arithmetic transition, event vocabulary, research claim or browser rendering changed.
+
+- `npm run typecheck` — pass
+- focused mechanism-core, trace-fixture and complement-register tests — pass, 117 tests across 3 files
+- `npm test` — pass, 420 tests across 22 files
+- `npm run build` — pass
+- `go run github.com/rhysd/actionlint/cmd/actionlint@v1.7.12 .github/workflows/ci.yml .github/workflows/pages.yml` — pass
+- `git diff --check` — pass
+
 ## 2026-09-02 — bounded complement-register v2 trace semantics
 
 The current-main baseline at `2395e9c29d8a7c38b079b7640b779c9694ee1c68` passed typecheck and 375 tests across 22 files. The accepted v1 complement trace emitted one event per unit of the subtrahend and made public `+345` look like 345 meaningful cycles. Version 2 instead represents one bounded forward-add action with begin/end markers, one register-advance event, and exactly one mathematically validated boundary-crossing summary per decimal order. Event count is `width + 2`, independent of delta magnitude; summaries use the change in `floor(value / 10^(order+1))` between before and after.

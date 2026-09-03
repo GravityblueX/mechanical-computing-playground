@@ -67,7 +67,7 @@ function isDenseOrdinaryArray(value: unknown): value is unknown[] {
 }
 
 /** Reject dynamic or cyclic enumerable graphs before trusted replay code reads them. */
-function assertStableEnumerableDataTree(value: unknown, message: string): void {
+export function assertStableEnumerableDataTree(value: unknown, message: string): void {
   if (value === null || typeof value !== 'object') return;
   const active = new WeakSet<object>();
   const visited = new WeakSet<object>();
@@ -124,7 +124,7 @@ function hasOwnEnumerableEnvelope(
   );
 }
 
-function traceValuesEqual(left: unknown, right: unknown): boolean {
+function stableTraceValuesEqual(left: unknown, right: unknown): boolean {
   if (Object.is(left, right)) return true;
   if (Array.isArray(left) || Array.isArray(right)) {
     if (!Array.isArray(left) || !Array.isArray(right) || left.length !== right.length) return false;
@@ -136,10 +136,18 @@ function traceValuesEqual(left: unknown, right: unknown): boolean {
   const rightKeys = enumerableKeys(right);
   return leftKeys.length === rightKeys.length
     && leftKeys.every((key) => Object.prototype.hasOwnProperty.call(right, key)
-      && traceValuesEqual(
+      && stableTraceValuesEqual(
         (left as Record<PropertyKey, unknown>)[key],
         (right as Record<PropertyKey, unknown>)[key],
       ));
+}
+
+/** Reject dynamic/cyclic inputs before performing an order-independent exact comparison. */
+export function traceValuesEqual(left: unknown, right: unknown): boolean {
+  const malformedValue = 'trace comparison requires stable enumerable data';
+  assertStableEnumerableDataTree(left, malformedValue);
+  assertStableEnumerableDataTree(right, malformedValue);
+  return stableTraceValuesEqual(left, right);
 }
 
 export function replayTrace<State, Action, Event extends MechanismEvent>(
@@ -214,20 +222,20 @@ export function replayTrace<State, Action, Event extends MechanismEvent>(
   }
   const events = eventsValue as Event[];
   const replayed = applyEvents(initialState, events, reducer);
-  if (!traceValuesEqual(replayed, finalState)) {
+  if (!stableTraceValuesEqual(replayed, finalState)) {
     throw new Error('trace replay did not produce the recorded final state');
   }
 
-  if (!traceValuesEqual(expectedEventsValue, events)) {
+  if (!stableTraceValuesEqual(expectedEventsValue, events)) {
     throw new Error('trace action did not produce the recorded events');
   }
-  if (!traceValuesEqual(expectedWarnings, warnings)) {
+  if (!stableTraceValuesEqual(expectedWarnings, warnings)) {
     throw new Error('trace action did not produce the recorded warnings');
   }
-  if (!traceValuesEqual(expectedErrors, errors)) {
+  if (!stableTraceValuesEqual(expectedErrors, errors)) {
     throw new Error('trace action did not produce the recorded errors');
   }
-  if (!traceValuesEqual(expectedState, finalState)) {
+  if (!stableTraceValuesEqual(expectedState, finalState)) {
     throw new Error('trace action did not produce the recorded final state');
   }
   return replayed;

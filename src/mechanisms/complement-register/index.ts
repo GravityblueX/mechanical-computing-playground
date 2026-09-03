@@ -1,3 +1,39 @@
+import { traceValuesEqual } from '../../core/trace';
+
+const arrayIsArrayIntrinsic = Array.isArray;
+const arrayPrototypeIntrinsic = Array.prototype;
+const ErrorIntrinsic = Error;
+const objectGetOwnPropertyDescriptorIntrinsic = Object.getOwnPropertyDescriptor;
+const objectGetPrototypeOfIntrinsic = Object.getPrototypeOf;
+const objectPrototypeIntrinsic = Object.prototype;
+const numberIsIntegerIntrinsic = Number.isInteger;
+const reflectOwnKeysIntrinsic = Reflect.ownKeys;
+const structuredCloneIntrinsic = globalThis.structuredClone;
+const WeakSetIntrinsic = WeakSet;
+const weakSetAddIntrinsic = Function.prototype.call.bind(WeakSet.prototype.add) as unknown as (
+  set: WeakSet<object>,
+  value: object,
+) => WeakSet<object>;
+const weakSetDeleteIntrinsic = Function.prototype.call.bind(WeakSet.prototype.delete) as unknown as (
+  set: WeakSet<object>,
+  value: object,
+) => boolean;
+const weakSetHasIntrinsic = Function.prototype.call.bind(WeakSet.prototype.has) as unknown as (
+  set: WeakSet<object>,
+  value: object,
+) => boolean;
+const arrayPushIntrinsic = Function.prototype.call.bind(Array.prototype.push) as unknown as <T>(
+  array: T[],
+  value: T,
+) => number;
+const arrayPopIntrinsic = Function.prototype.call.bind(Array.prototype.pop) as unknown as <T>(
+  array: T[],
+) => T | undefined;
+
+type ComplementTraceTreeFrame =
+  | { value: object; depth: number; exiting: false }
+  | { value: object; depth: number; exiting: true; array: boolean; keys: PropertyKey[] };
+
 export const COMPLEMENT_REGISTER_MECHANISM_ID = 'complement-register';
 
 export interface ComplementRegisterState {
@@ -74,6 +110,119 @@ export class InvalidComplementRegisterError extends Error {
     this.name = 'InvalidComplementRegisterError';
   }
 }
+
+/**
+ * Complement v2 replay consumes a stable JSON-shaped snapshot: exact ordinary
+ * containers, own enumerable string-keyed data properties, and no repeated
+ * identities. Retaining and cloning each post-order frame rejects a Proxy even
+ * if one of its structural traps removes it from the root before the walk
+ * completes. The returned root clone, never the inspected input, is trusted.
+ */
+const cloneComplementTraceTree = (value: unknown): unknown => {
+  // width <= 15 yields at most 17 events and about 22 ordinary containers.
+  const maxObjects = 64;
+  const maxDepth = 32;
+  const maxProperties = 512;
+  const maxArrayLength = 17;
+  const invalid = (): never => {
+    throw new ErrorIntrinsic('invalid complement trace data');
+  };
+  const valueType = typeof value;
+  if (valueType === 'symbol' || valueType === 'function') invalid();
+  if (value === null || valueType !== 'object') return value;
+
+  const active = new WeakSetIntrinsic<object>();
+  const seen = new WeakSetIntrinsic<object>();
+  const stack: ComplementTraceTreeFrame[] = [{
+    value: value as object,
+    depth: 0,
+    exiting: false,
+  }];
+  let objectCount = 0;
+  let propertyCount = 0;
+  let stableRoot: object | undefined;
+  while (stack.length > 0) {
+    const frame = arrayPopIntrinsic(stack);
+    if (!frame) break;
+    if (frame.exiting) {
+      const cloned = structuredCloneIntrinsic(frame.value);
+      if (cloned === null || typeof cloned !== 'object') invalid();
+      const clonedArray = arrayIsArrayIntrinsic(cloned);
+      if (
+        clonedArray !== frame.array
+        || objectGetPrototypeOfIntrinsic(cloned) !== (clonedArray ? arrayPrototypeIntrinsic : objectPrototypeIntrinsic)
+      ) invalid();
+      const clonedKeys = reflectOwnKeysIntrinsic(cloned);
+      if (clonedKeys.length !== frame.keys.length) invalid();
+      for (let keyIndex = 0; keyIndex < frame.keys.length; keyIndex += 1) {
+        const expectedKey = frame.keys[keyIndex];
+        let matched = false;
+        for (let cloneKeyIndex = 0; cloneKeyIndex < clonedKeys.length; cloneKeyIndex += 1) {
+          if (clonedKeys[cloneKeyIndex] === expectedKey) {
+            matched = true;
+            break;
+          }
+        }
+        if (!matched) invalid();
+      }
+      if (frame.depth === 0) stableRoot = cloned;
+      weakSetDeleteIntrinsic(active, frame.value);
+      continue;
+    }
+    if (weakSetHasIntrinsic(active, frame.value) || weakSetHasIntrinsic(seen, frame.value)) invalid();
+    weakSetAddIntrinsic(seen, frame.value);
+    objectCount += 1;
+    if (objectCount > maxObjects || frame.depth > maxDepth) invalid();
+
+    const array = arrayIsArrayIntrinsic(frame.value);
+    if (objectGetPrototypeOfIntrinsic(frame.value) !== (array ? arrayPrototypeIntrinsic : objectPrototypeIntrinsic)) invalid();
+    const arrayLength = array ? objectGetOwnPropertyDescriptorIntrinsic(frame.value, 'length') : undefined;
+    if (
+      array
+      && (
+        !arrayLength
+        || arrayLength.enumerable
+        || !('value' in arrayLength)
+        || !numberIsIntegerIntrinsic(arrayLength.value)
+        || arrayLength.value < 0
+        || arrayLength.value > maxArrayLength
+      )
+    ) invalid();
+    weakSetAddIntrinsic(active, frame.value);
+    const keys = reflectOwnKeysIntrinsic(frame.value);
+    const keyCount = keys.length;
+    propertyCount += keyCount;
+    if (propertyCount > maxProperties) invalid();
+    arrayPushIntrinsic(stack, {
+      value: frame.value,
+      depth: frame.depth,
+      exiting: true,
+      array,
+      keys,
+    });
+    for (let keyIndex = 0; keyIndex < keyCount; keyIndex += 1) {
+      const key = keys[keyIndex];
+      if (typeof key !== 'string') invalid();
+      const descriptor = array && key === 'length'
+        ? arrayLength
+        : objectGetOwnPropertyDescriptorIntrinsic(frame.value, key);
+      if (!descriptor) throw new ErrorIntrinsic('invalid complement trace data');
+      if (array && key === 'length') {
+        if (descriptor.enumerable || !('value' in descriptor)) invalid();
+        continue;
+      }
+      if (!descriptor.enumerable || !('value' in descriptor)) invalid();
+      const child = descriptor.value;
+      const childType = typeof child;
+      if (childType === 'symbol' || childType === 'function') invalid();
+      if (child !== null && childType === 'object') {
+        arrayPushIntrinsic(stack, { value: child, depth: frame.depth + 1, exiting: false });
+      }
+    }
+  }
+  if (!stableRoot) invalid();
+  return stableRoot;
+};
 
 const exactKeys = (value: object, expected: readonly string[], label: string): void => {
   if (Object.getPrototypeOf(value) !== Object.prototype) throw new InvalidComplementRegisterError(`${label} must be a plain object`);
@@ -216,17 +365,29 @@ export function traceComplementSubtraction(minuend: number, subtrahend: number, 
 }
 
 export function replayComplementSubtraction(trace: Readonly<ComplementRegisterTrace>): ComplementRegisterState {
-  if (!trace || typeof trace !== 'object' || Array.isArray(trace)) throw new InvalidComplementRegisterError('trace must be an object');
-  exactKeys(trace, ['format', 'version', 'mechanismId', 'cycleId', 'initialState', 'action', 'events', 'finalState'], 'trace');
-  if (trace.format !== 'complement-register-trace' || trace.version !== 2 || trace.mechanismId !== COMPLEMENT_REGISTER_MECHANISM_ID || trace.cycleId !== trace.action.cycleId) throw new InvalidComplementRegisterError('unsupported trace envelope');
-  const events = exactArray(trace.events, 'events') as ComplementRegisterEvent[];
-  const expected = transitionComplementRegister(trace.initialState, trace.action);
-  if (JSON.stringify(expected.events) !== JSON.stringify(events) || JSON.stringify(expected.state) !== JSON.stringify(trace.finalState)) throw new InvalidComplementRegisterError('trace is not action-derived');
-  let replayed = normalizeState(trace.initialState);
-  events.forEach((event, sequence) => {
-    if (event.sequence !== sequence || event.cycleId !== trace.cycleId) throw new InvalidComplementRegisterError('invalid event order');
-    replayed = reduceComplementRegisterEvent(replayed, event);
-  });
-  if (JSON.stringify(replayed) !== JSON.stringify(trace.finalState)) throw new InvalidComplementRegisterError('trace replay mismatch');
-  return replayed;
+  let stableTrace: Readonly<ComplementRegisterTrace> = trace;
+  try {
+    if (!trace || typeof trace !== 'object' || arrayIsArrayIntrinsic(trace)) throw new ErrorIntrinsic('invalid complement trace data');
+    stableTrace = cloneComplementTraceTree(trace) as ComplementRegisterTrace;
+    exactKeys(stableTrace, ['format', 'version', 'mechanismId', 'cycleId', 'initialState', 'action', 'events', 'finalState'], 'trace');
+  } catch {
+    throw new InvalidComplementRegisterError('invalid complement trace data');
+  }
+  try {
+    if (stableTrace.format !== 'complement-register-trace' || stableTrace.version !== 2 || stableTrace.mechanismId !== COMPLEMENT_REGISTER_MECHANISM_ID || stableTrace.cycleId !== stableTrace.action.cycleId) throw new InvalidComplementRegisterError('unsupported trace envelope');
+    const events = exactArray(stableTrace.events, 'events') as ComplementRegisterEvent[];
+    const finalState = normalizeState(stableTrace.finalState);
+    const expected = transitionComplementRegister(stableTrace.initialState, stableTrace.action);
+    if (!traceValuesEqual(expected.events, events) || !traceValuesEqual(expected.state, finalState)) throw new InvalidComplementRegisterError('trace is not action-derived');
+    let replayed = normalizeState(stableTrace.initialState);
+    events.forEach((event, sequence) => {
+      if (event.sequence !== sequence || event.cycleId !== stableTrace.cycleId) throw new InvalidComplementRegisterError('invalid event order');
+      replayed = reduceComplementRegisterEvent(replayed, event);
+    });
+    if (!traceValuesEqual(replayed, finalState)) throw new InvalidComplementRegisterError('trace replay mismatch');
+    return replayed;
+  } catch (error) {
+    if (error instanceof InvalidComplementRegisterError) throw error;
+    throw new InvalidComplementRegisterError('invalid complement trace data');
+  }
 }
