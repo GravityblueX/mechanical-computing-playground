@@ -22,6 +22,12 @@ const fullTrace = () => traceRegisterLifecycle(createRegisterLifecycle(8478, 27)
 const withCounters = (
   counters: Pick<RegisterLifecycleState, 'clearActionCount' | 'humanOperationCount' | 'nextSequence'>,
 ): RegisterLifecycleState => ({ ...createRegisterLifecycle(7, 3), ...counters });
+const withImpossibleClearHistory = (): RegisterLifecycleState => ({
+  ...createRegisterLifecycle(7, 3),
+  clearActionCount: 1,
+  humanOperationCount: 1,
+  nextSequence: 1,
+});
 
 describe('generic dual-register lifecycle', () => {
   it('creates valid non-zero independent registers', () => {
@@ -93,6 +99,96 @@ describe('generic dual-register lifecycle', () => {
     expect(() => replayRegisterLifecycle(zeroActionTrace(inconsistent))).toThrow(InvalidRegisterLifecycleError);
     const excessiveClears = withCounters({ clearActionCount: 1, humanOperationCount: 0, nextSequence: 0 });
     expect(() => replayRegisterLifecycle(zeroActionTrace(excessiveClears))).toThrow(InvalidRegisterLifecycleError);
+  });
+
+  it('rejects a clear history that leaves both registers non-zero at assertion', () => {
+    expect(() => assertRegisterLifecycleState(withImpossibleClearHistory())).toThrow(InvalidRegisterLifecycleError);
+  });
+
+  it('rejects a clear history that leaves both registers non-zero at transition', () => {
+    expect(() => transitionRegisterLifecycle(withImpossibleClearHistory(), {
+      type: 'SET_MODE',
+      cycleId: 'resume-impossible',
+      mode: 'SUBTRACT_DIVIDE',
+    })).toThrow(InvalidRegisterLifecycleError);
+  });
+
+  it('rejects a clear history that leaves both registers non-zero at direct reduction', () => {
+    expect(() => reduceRegisterLifecycleEvent(withImpossibleClearHistory(), {
+      mechanismId: 'register-lifecycle',
+      type: 'MODE_SELECTED',
+      cycleId: 'resume-impossible',
+      sequence: 1,
+      modeBefore: 'ADD_MULTIPLY',
+      modeAfter: 'SUBTRACT_DIVIDE',
+      humanBefore: 1,
+      humanAfter: 2,
+    })).toThrow(InvalidRegisterLifecycleError);
+  });
+
+  it('rejects a clear history that leaves both registers non-zero at zero-action replay', () => {
+    const impossible = withImpossibleClearHistory();
+    expect(() => replayRegisterLifecycle({
+      initialState: clone(impossible),
+      actions: [],
+      events: [],
+      finalState: clone(impossible),
+    })).toThrow(InvalidRegisterLifecycleError);
+  });
+
+  it('accepts all and only producer-reachable bounded register/counter projections', () => {
+    const projectionActions: RegisterLifecycleAction[] = [
+      { type: 'SET_MODE', cycleId: 'enumerate', mode: 'ADD_MULTIPLY' },
+      { type: 'SET_MODE', cycleId: 'enumerate', mode: 'SUBTRACT_DIVIDE' },
+      { type: 'CLEAR_REVOLUTION_REGISTER', cycleId: 'enumerate' },
+      { type: 'CLEAR_RESULT_REGISTER', cycleId: 'enumerate' },
+    ];
+    const key = (state: RegisterLifecycleState): string => JSON.stringify(state);
+    const reachable = new Set<string>();
+    const visit = (state: RegisterLifecycleState, remaining: number): void => {
+      reachable.add(key(state));
+      if (remaining === 0) return;
+      for (const action of projectionActions) {
+        visit(transitionRegisterLifecycle(state, action).state, remaining - 1);
+      }
+    };
+
+    for (const resultRegister of [0, 1]) {
+      for (const revolutionCount of [0, 1]) {
+        for (const mode of ['ADD_MULTIPLY', 'SUBTRACT_DIVIDE'] as const) {
+          visit(createRegisterLifecycle(resultRegister, revolutionCount, mode), 4);
+        }
+      }
+    }
+
+    const accepted = new Set<string>();
+    for (const resultRegister of [0, 1]) {
+      for (const revolutionCount of [0, 1]) {
+        for (const mode of ['ADD_MULTIPLY', 'SUBTRACT_DIVIDE'] as const) {
+          for (let humanOperationCount = 0; humanOperationCount <= 4; humanOperationCount += 1) {
+            for (let clearActionCount = 0; clearActionCount <= humanOperationCount; clearActionCount += 1) {
+              const state: RegisterLifecycleState = {
+                mechanismId: 'register-lifecycle',
+                resultRegister,
+                revolutionRegister: { count: revolutionCount },
+                mode,
+                clearActionCount,
+                humanOperationCount,
+                nextSequence: humanOperationCount,
+              };
+              try {
+                assertRegisterLifecycleState(state);
+                accepted.add(key(state));
+              } catch (error) {
+                expect(error).toBeInstanceOf(InvalidRegisterLifecycleError);
+              }
+            }
+          }
+        }
+      }
+    }
+
+    expect([...accepted].sort()).toEqual([...reachable].sort());
   });
 
   it('accepts consistent persisted counters, including zero and safe-integer exhaustion', () => {
