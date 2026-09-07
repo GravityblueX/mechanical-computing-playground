@@ -1,6 +1,6 @@
 # Current Status
 
-Last reconciled on 2026-09-05 after binding the continuous-flow replay to its recorded fixture and exact enumerable trace shape.
+Last reconciled on 2026-09-08 after separating fixed multiplicand settings from repeated crank work in the multiplication lesson.
 
 This file is the **current-state authority** for the repository. `ROADMAP.md` describes where the project should go; `IMPLEMENTATION_PLAN.md` is still useful as a dependency/design specification, but many of its checkboxes predate later implementation and must not be treated as the live task ledger.
 
@@ -13,7 +13,7 @@ This file is the **current-state authority** for the repository. `ROADMAP.md` de
 - GitHub Actions CI and a Pages deployment workflow.
 - Deterministic state/event/replay primitives under `src/core/`.
 - Golden carry fixtures under `fixtures/carry/`.
-- The latest local code verification (`docs/VERIFICATION.md`, 2026-09-02 UTC+8) reports typecheck, 360 tests across 21 files, production build, and diff check passing. The most recent bilingual browser smoke was the preceding source-atlas pass; this trace-only slice does not change UI output.
+- The latest local code verification (`docs/VERIFICATION.md`, 2026-09-08 UTC+8) reports Node 22.23.2 typecheck, 485 tests across 23 files, production build and diff check passing. The repeated-crank lesson passed actual English/Chinese browser checks at 1440px and 390px, including keyboard/focus, shift-without-addition, route/language state preservation and independent direct-multiplication controls.
 
 Remote CI run `33437862103` passed for the previous operator-division checkpoint `7bebcea2d187f0ed2411de4098c846963df8b32a`. This status still does **not** substitute for CI on later commits.
 
@@ -27,6 +27,7 @@ Remote CI run `33437862103` passed for the previous operator-division checkpoint
 - revolution counter;
 - stepped-drum conceptual model;
 - pinwheel conceptual model;
+- a bounded fixed-314 repeated-crank P/M lesson separating unchanged setting columns from seven units-place turns, one non-arithmetic carriage shift, and two tens-place turns; full-turn events expose per-column contribution maps, accumulator changes, actual turn counts and per-place counts without historical geometry/timing;
 - direction-neutral ordinal rotary-carry scheduler with boundary/conditioning/strictly increasing transfer-slot/carry-out events and fail-closed replay;
 - direct-multiplication functional model with an inspectable encoded-multiple table, digit selection, operation cycles, carriage shifts, and fail-closed action-derived replay;
 - generic key-driven accumulator with place-value contribution, serialized carry, key-stroke cycles, validated state, and fail-closed action-derived replay that rejects carry/event/final-state tampering;
@@ -53,7 +54,7 @@ The current browser shell contains non-empty routes or views for:
 
 - visible carry with the existing interactive P/M chain, Pascaline/Felt profiles, a Pascal/Belair-grounded one-direction complement panel, and a replayable generic complement-register v2 trace whose one forward-add action yields O(width) decimal-boundary summaries rather than one event per unit;
 - interactive finite differences plus a separately stepped calculation→persistent-output responsibility flow;
-- interactive multiplication comparison with event/cycle stepping for direct multiplication;
+- interactive multiplication comparison with visitor-requested single turns and explicit carriage shift for the fixed-314 repeated path, constant 3/1/4 actuator settings, event snapshots and trace-derived summaries; the existing direct path retains its separate event/cycle stepping. Guide-controlled buttons are explicitly not historical interlocks;
 - interactive operator-division procedure for `8478 ÷ 314` exposing the negative residual in `OVERSHOOT_PENDING` before detection makes add-back correction legal;
 - interactive controls area with setting–crank interlock, incomplete-key-stroke integrity, and independently stepped result/revolution-register lifecycle scenarios, each preserving source/P/M boundaries;
 - interactive output-contract lesson exposing `+12, +8, SUBTOTAL, +5, TOTAL`, persistent record versus accumulator state, and source-separated register/listing/Difference Engine comparisons;

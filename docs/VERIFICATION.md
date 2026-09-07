@@ -1,5 +1,21 @@
 # Verification record
 
+## 2026-09-08 — fixed multiplicand settings and repeated crank work
+
+At exact main `ae41f5b0f25b5dd613f363bc85839676752fbd4a`, two tests using existing imports failed by assertion: the 314 comparison's active-pin settings were `[7, 2]` instead of `[4, 1, 3]`, and `steppedDrum(4, 0)` described four cranks instead of one actuation with four effective steps. Neither failure was an import, fixture or harness error.
+
+The new bounded P/M lesson generates complete-turn and independent carriage-shift events. Fixed settings yield seven 314 contributions, a shift that preserves 2198 and seven turns, then two 3140 contributions. The final amount is 8478 after nine turns and one shift. Setting-column identity is separate from carriage offset; existing direct-multiplication events and operator-work summary consumers remain intact. Tests cover every guide boundary, per-column contribution maps, snapshot isolation, request replay, setting/turn separation and downstream comparison values. No shared arithmetic/replay core, dependency or workflow changed.
+
+- Node **22.23.2** `npm ci` — pass from the unchanged lockfile.
+- `npm run typecheck` — pass.
+- `npm test` — **485 tests / 23 files** pass, including 21 new tests.
+- `npm run build` — pass, 38 modules.
+- `git diff --check` — pass.
+- Actual headless Chromium, English/Chinese × 1440px/390px — **4/4** cases pass: all nine individual turns, non-arithmetic shift, exact ten-event history, blocked synthetic out-of-guide clicks, reset, original direct cycles, two route/language round trips, Tab/Enter/Space and maintained focus. All four viewport/document widths match; no page errors or non-local requests.
+- One stable live-status node survives all rerenders/route trips in each case: same connected object, zero removals, final text matching visible feedback. This is DOM/keyboard evidence, not screen-reader speech certification.
+
+The guided controls explicitly are not historical interlocks; both actuator representations share an abstract contribution map, not physical contact order or carry geometry. Earlier unrelated successful CI runs do not certify this new candidate. No remote push, PR, merge or Pages deployment is claimed here.
+
 ## 2026-09-05 — continuous-flow fixture-derived replay
 
 The exact current-main baseline `c9e2ea0efd9a1563d38fa854f0e2d09e9bcf0102` accepted two contradictory continuous-flow traces: changing only `fixture.inputA` from `2` to `99` did not affect replay, and an unsupported enumerable `undefined` field on `finalState` disappeared under `JSON.stringify`. The first case detached the recorded provenance from the events it purported to generate; the second made accepted in-memory trace shape differ from serialized data.
