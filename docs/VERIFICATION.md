@@ -1,5 +1,22 @@
 # Verification record
 
+## 2026-09-08 — Visible Carry Space-key ownership
+
+The exact main baseline `ae41f5b0f25b5dd613f363bc85839676752fbd4a` consumed Space even when a native button owned the key. Focusing “Show the whole addition” and pressing/releasing Space produced `0099`, event `1 / 9`, instead of `0100`, `9 / 9`; reset and language switching were also replaced by a single carry step. This was an operator-action routing defect, not incorrect arithmetic in the carry core.
+
+The page now claims only an unmodified, uncanceled, non-composing Space whose composed path has no interactive or editable owner. Native controls, ARIA widgets, focusable elements and their descendants keep their key; the original background shortcut still advances one event per keydown. Using the composed path also protects a native control inside an open shadow root. Existing click handlers, carry arithmetic/events, render structure, other-route handlers and historical/P-M boundaries are unchanged; this does not add a separate focus-restoration redesign.
+
+- Node.js `24.11.1`
+- `npm test -- tests/keyboard.test.ts` — pass, 18 behavioral unit tests for event gating and composed-path ownership; element-boundary doubles do not claim browser DOM/native-action coverage
+- `npm run typecheck` — pass
+- `npm test` — pass, 482 tests across 23 files
+- `npm run build` — pass
+- `git diff --check` — pass
+- Actual Chromium `148.0.7778.96`, English/Chinese — 78/78 targeted cases pass, including the original 26 Space/Enter/mouse/body comparisons, input/textarea/checkbox/select/summary/editable contexts, custom/focusable controls, shadow-path ownership, canceled/modified events and another-route carry-state isolation. Native Space produces exactly one trusted button click and no competing global step. Twelve descendant/IME cases deliberately dispatch synthetic events and are not called trusted keyboard input.
+- The same 78-case browser regression was run first on the unchanged baseline: 58 actual behavior failures and 20 positive controls. The failures record wrong state, swallowed native activation/editing, or improper shortcut cancellation, not an absent new helper or failed import. Every case reloads and checks its initial state. No page errors or non-local requests occurred before or after the fix.
+
+No workflow, dependency, carry core or deployment configuration changed. These are local candidate checks, not remote CI, merge, deployment or screen-reader speech certification. The unmerged interlock, Controlled-Key and repeated-crank PRs are not included in this standalone candidate.
+
 ## 2026-09-05 — continuous-flow fixture-derived replay
 
 The exact current-main baseline `c9e2ea0efd9a1563d38fa854f0e2d09e9bcf0102` accepted two contradictory continuous-flow traces: changing only `fixture.inputA` from `2` to `99` did not affect replay, and an unsupported enumerable `undefined` field on `finalState` disappeared under `JSON.stringify`. The first case detached the recorded provenance from the events it purported to generate; the second made accepted in-memory trace shape differ from serialized data.

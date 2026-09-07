@@ -1,6 +1,6 @@
 # Current Status
 
-Last reconciled on 2026-09-05 after binding the continuous-flow replay to its recorded fixture and exact enumerable trace shape.
+Last reconciled on 2026-09-08 after restoring focused controls' Space-key ownership in the Visible Carry lesson.
 
 This file is the **current-state authority** for the repository. `ROADMAP.md` describes where the project should go; `IMPLEMENTATION_PLAN.md` is still useful as a dependency/design specification, but many of its checkboxes predate later implementation and must not be treated as the live task ledger.
 
@@ -13,7 +13,7 @@ This file is the **current-state authority** for the repository. `ROADMAP.md` de
 - GitHub Actions CI and a Pages deployment workflow.
 - Deterministic state/event/replay primitives under `src/core/`.
 - Golden carry fixtures under `fixtures/carry/`.
-- The latest local code verification (`docs/VERIFICATION.md`, 2026-09-02 UTC+8) reports typecheck, 360 tests across 21 files, production build, and diff check passing. The most recent bilingual browser smoke was the preceding source-atlas pass; this trace-only slice does not change UI output.
+- The latest local code verification (`docs/VERIFICATION.md`, 2026-09-08 UTC+8) reports Node 24.11.1 typecheck, 482 tests across 23 files, production build, and diff check passing. All 78 targeted English/Chinese browser cases pass for carry button activation, interactive/editable/ancestor ownership, canceled/modified Space, the background shortcut, and route isolation; 12 ancestor/IME probes are explicitly synthetic events. No newer remote CI or deployment is claimed by these local checks.
 
 Remote CI run `33437862103` passed for the previous operator-division checkpoint `7bebcea2d187f0ed2411de4098c846963df8b32a`. This status still does **not** substitute for CI on later commits.
 
@@ -52,6 +52,7 @@ These are not all historical geometric reconstructions. Several intentionally mo
 The current browser shell contains non-empty routes or views for:
 
 - visible carry with the existing interactive P/M chain, Pascaline/Felt profiles, a Pascal/Belair-grounded one-direction complement panel, and a replayable generic complement-register v2 trace whose one forward-add action yields O(width) decimal-boundary summaries rather than one event per unit;
+- Visible Carry's background Space shortcut leaves native/custom interactive controls, editable contexts, already-canceled events, modifiers and IME composition with their own keyboard owner; Space activates the complete/reset/language buttons without a competing carry step;
 - interactive finite differences plus a separately stepped calculation→persistent-output responsibility flow;
 - interactive multiplication comparison with event/cycle stepping for direct multiplication;
 - interactive operator-division procedure for `8478 ÷ 314` exposing the negative residual in `OVERSHOOT_PENDING` before detection makes add-back correction legal;
