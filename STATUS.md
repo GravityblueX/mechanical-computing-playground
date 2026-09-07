@@ -1,6 +1,6 @@
 # Current Status
 
-Last reconciled on 2026-09-05 after binding the continuous-flow replay to its recorded fixture and exact enumerable trace shape.
+Last reconciled on 2026-09-08 after making the existing Controlled-Key lesson operable through its deterministic action model.
 
 This file is the **current-state authority** for the repository. `ROADMAP.md` describes where the project should go; `IMPLEMENTATION_PLAN.md` is still useful as a dependency/design specification, but many of its checkboxes predate later implementation and must not be treated as the live task ledger.
 
@@ -13,7 +13,7 @@ This file is the **current-state authority** for the repository. `ROADMAP.md` de
 - GitHub Actions CI and a Pages deployment workflow.
 - Deterministic state/event/replay primitives under `src/core/`.
 - Golden carry fixtures under `fixtures/carry/`.
-- The latest local code verification (`docs/VERIFICATION.md`, 2026-09-02 UTC+8) reports typecheck, 360 tests across 21 files, production build, and diff check passing. The most recent bilingual browser smoke was the preceding source-atlas pass; this trace-only slice does not change UI output.
+- The latest local code verification (`docs/VERIFICATION.md`, 2026-09-08 UTC+8) reports Node 22 typecheck, 474 tests across 23 files, production build, and diff check passing. The Controlled-Key workbench passed actual English/Chinese browser checks at desktop and 390px widths, including keyboard operation and focus, error recovery, carry inspection, replay, and route/language state preservation.
 
 Remote CI run `33437862103` passed for the previous operator-division checkpoint `7bebcea2d187f0ed2411de4098c846963df8b32a`. This status still does **not** substitute for CI on later commits.
 
@@ -55,7 +55,7 @@ The current browser shell contains non-empty routes or views for:
 - interactive finite differences plus a separately stepped calculation→persistent-output responsibility flow;
 - interactive multiplication comparison with event/cycle stepping for direct multiplication;
 - interactive operator-division procedure for `8478 ÷ 314` exposing the negative residual in `OVERSHOOT_PENDING` before detection makes add-back correction legal;
-- interactive controls area with setting–crank interlock, incomplete-key-stroke integrity, and independently stepped result/revolution-register lifecycle scenarios, each preserving source/P/M boundaries;
+- interactive controls area with setting–crank interlock, an operator-controlled incomplete-key-stroke workbench, and independently stepped result/revolution-register lifecycle scenarios, each preserving source/P/M boundaries; the key workbench accepts normal/interrupted strokes, permits rejected-input/early-release experiments, exposes nested place-value/carry events, and replays the visitor's actual accepted history without permitting operations on historical views;
 - interactive output-contract lesson exposing `+12, +8, SUBTOTAL, +5, TOTAL`, persistent record versus accumulator state, and source-separated register/listing/Difference Engine comparisons;
 - Curta;
 - interactive Analytical Engine P/M information flow for `(ab+c)d`, with Store/Mill/card roles, intermediate `p/q`, output, stepping, and fixture-derived hardened replay that rejects alternate-fixture substitution and adversarial trace shape changes;

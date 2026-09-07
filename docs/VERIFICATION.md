@@ -1,5 +1,23 @@
 # Verification record
 
+## 2026-09-08 — operable Controlled-Key recovery workbench
+
+The `#/controls` integrity lesson previously played one fixed six-event recovery trace for units key 7. Visitors can now operate normal or interrupted strokes, try blocked input and early lock release, complete a known errant key exactly once, release the integrity lock, and continue with another place-value key. A thin exhibit adapter reuses the unchanged key-stroke-integrity and key-driven-accumulator mechanisms. Only successful actions enter the mechanism history; rejected attempts preserve its state, counters and events. Recorded-event replay is read-only until returning to the current action boundary.
+
+The existing arithmetic-commit payload supplies the visible place-value, digit and carry details. The `099 + 7` recovery exposes two carry transfers and retains `106` through lock release. The display distinguishes completed integrity cycles from arithmetic commitment: `CORRECTED_LOCKED` already contains the corrected value, but the recovery cycle finishes only after release. The historical panel remains edition/source bounded, and the interactive branch is explicitly P/M, one active key, generic addition with a known errant key. Teaching reset is distinct from historical Correction/Release or zeroing.
+
+- `npm run typecheck` — pass on Node 22.23.2, matching the CI major version
+- `npm test` — pass, 474 tests across 23 files, including 10 new workbench tests
+- `npm run build` — pass, 38 modules
+- actual Chromium headless browser checks — pass in English and Chinese at 1440px and 390px: normal `7 + 4`, rejected other-column and early-release attempts, exactly-once correction, continued `7 + 20`, active-key identity after selection changes, tens-key `3 → 30`, `099 → 106` with nested carry evidence, read-only replay, return to current state, and reset from replay
+- keyboard checks — pass with Tab, Shift+Tab, Enter and Space; focused controls retain a visible outline, and focus moves to an enabled operation when the source button becomes disabled
+- route/language checks — pass while ERROR_LOCKED and CORRECTED_LOCKED; no repeated arithmetic submission or lost state
+- narrow layout — no horizontal document overflow at 390px; rejected-operation feedback is visible text with a stable polite live status region outside the shell's replaced subtree; no browser page errors
+- live-region DOM checks — the same single connected status node survives all operations and language/route changes in each of the four browser cases; MutationObserver reports 43 text updates and zero removals per case, and its text agrees with the visible feedback
+- `git diff --check` — pass
+
+Browser checks inspected the locally built candidate; they are not a deployment or screen-reader speech certification. No dependency, workflow, core mechanism transition, event vocabulary or historical source claim changed.
+
 ## 2026-09-05 — continuous-flow fixture-derived replay
 
 The exact current-main baseline `c9e2ea0efd9a1563d38fa854f0e2d09e9bcf0102` accepted two contradictory continuous-flow traces: changing only `fixture.inputA` from `2` to `99` did not affect replay, and an unsupported enumerable `undefined` field on `finalState` disappeared under `JSON.stringify`. The first case detached the recorded provenance from the events it purported to generate; the second made accepted in-memory trace shape differ from serialized data.
