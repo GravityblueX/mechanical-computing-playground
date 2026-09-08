@@ -1,5 +1,19 @@
 # Verification record
 
+## 2026-09-08 — repeated-crank lesson refreshed onto current main
+
+Merged actual main `d14adc4469ad6fc7e0ec29a0b54e7cd89b1d6a67` into the repeated-crank candidate `b4cfceea6576689d6fc3a8af170f719b13beb831` in an isolated clone. Three conflicts were reproduced: this record, `STATUS.md`, and the import block in `src/main.ts`. Resolution keeps the repeated-crank imports alongside main's Controlled-Key workbench imports; neither mechanism is replaced. Both earlier verification sections remain separately recorded below. Main's setting–crank interlock hardening is also retained.
+
+- Node **22.23.2** `npm ci` — pass; committed lockfile unchanged.
+- Fresh `npm run typecheck` — pass.
+- Fresh `npm test` — **507 tests / 24 files**, all pass.
+- Fresh `npm run build` — pass, **39 modules**.
+- `git diff --check` — pass after conflict resolution.
+- Fresh headless Chromium against this production build — **4/4** cases pass, English/Chinese × 1440px/390px. Each executes every repeated-crank turn, confirms that the shift preserves 2198 and seven turns, finishes at 8478 after nine turns, and checks blocked out-of-guide actions, reset isolation, keyboard/focus and the stable live-status node.
+- The same four cases exercise both workbenches together: a Controlled-Key `099` interrupted stroke remains locked across multiplication-route visits; repeated-crank state advances independently; correction reaches `106` with two carries, lock release does not add again, replay disables new input, and return restores the current state. The direct path independently stays at 8478. No page errors, non-local requests or 390px horizontal overflow occurred.
+
+This is a main-refresh compatibility checkpoint, not a new historical/mechanical claim. The guided P/M boundary is unchanged. Browser checks are local DOM/keyboard evidence, not screen-reader speech certification. No remote CI, PR update, merge or Pages deployment is certified by this local record.
+
 ## 2026-09-08 — fixed multiplicand settings and repeated crank work
 
 At exact main `ae41f5b0f25b5dd613f363bc85839676752fbd4a`, two tests using existing imports failed by assertion: the 314 comparison's active-pin settings were `[7, 2]` instead of `[4, 1, 3]`, and `steppedDrum(4, 0)` described four cranks instead of one actuation with four effective steps. Neither failure was an import, fixture or harness error.
@@ -15,6 +29,24 @@ The new bounded P/M lesson generates complete-turn and independent carriage-shif
 - One stable live-status node survives all rerenders/route trips in each case: same connected object, zero removals, final text matching visible feedback. This is DOM/keyboard evidence, not screen-reader speech certification.
 
 The guided controls explicitly are not historical interlocks; both actuator representations share an abstract contribution map, not physical contact order or carry geometry. Earlier unrelated successful CI runs do not certify this new candidate. No remote push, PR, merge or Pages deployment is claimed here.
+
+## 2026-09-08 — operable Controlled-Key recovery workbench
+
+The `#/controls` integrity lesson previously played one fixed six-event recovery trace for units key 7. Visitors can now operate normal or interrupted strokes, try blocked input and early lock release, complete a known errant key exactly once, release the integrity lock, and continue with another place-value key. A thin exhibit adapter reuses the unchanged key-stroke-integrity and key-driven-accumulator mechanisms. Only successful actions enter the mechanism history; rejected attempts preserve its state, counters and events. Recorded-event replay is read-only until returning to the current action boundary.
+
+The existing arithmetic-commit payload supplies the visible place-value, digit and carry details. The `099 + 7` recovery exposes two carry transfers and retains `106` through lock release. The display distinguishes completed integrity cycles from arithmetic commitment: `CORRECTED_LOCKED` already contains the corrected value, but the recovery cycle finishes only after release. The historical panel remains edition/source bounded, and the interactive branch is explicitly P/M, one active key, generic addition with a known errant key. Teaching reset is distinct from historical Correction/Release or zeroing.
+
+- `npm run typecheck` — pass on Node 22.23.2, matching the CI major version
+- `npm test` — pass, 474 tests across 23 files, including 10 new workbench tests
+- `npm run build` — pass, 38 modules
+- actual Chromium headless browser checks — pass in English and Chinese at 1440px and 390px: normal `7 + 4`, rejected other-column and early-release attempts, exactly-once correction, continued `7 + 20`, active-key identity after selection changes, tens-key `3 → 30`, `099 → 106` with nested carry evidence, read-only replay, return to current state, and reset from replay
+- keyboard checks — pass with Tab, Shift+Tab, Enter and Space; focused controls retain a visible outline, and focus moves to an enabled operation when the source button becomes disabled
+- route/language checks — pass while ERROR_LOCKED and CORRECTED_LOCKED; no repeated arithmetic submission or lost state
+- narrow layout — no horizontal document overflow at 390px; rejected-operation feedback is visible text with a stable polite live status region outside the shell's replaced subtree; no browser page errors
+- live-region DOM checks — the same single connected status node survives all operations and language/route changes in each of the four browser cases; MutationObserver reports 43 text updates and zero removals per case, and its text agrees with the visible feedback
+- `git diff --check` — pass
+
+Browser checks inspected the locally built candidate; they are not a deployment or screen-reader speech certification. No dependency, workflow, core mechanism transition, event vocabulary or historical source claim changed.
 
 ## 2026-09-05 — continuous-flow fixture-derived replay
 
@@ -690,6 +722,22 @@ Desktop browser smoke check against local Vite at the available 1072px viewport:
 - the ordered text log remained understandable without animation/color.
 
 The browser environment did not expose a reliable narrow viewport despite a window resize request, so mobile layout is not claimed in this checkpoint.
+
+## 2026-09-07 — setting–crank action-derived replay
+
+The exact current-main baseline `ae41f5b0f25b5dd613f363bc85839676752fbd4a`, including the merged backprop, printing-ledger, register-lifecycle and rotary-carry fixes, replayed only the recorded interlock events and final state; it never inspected the accompanying action history. Removing an action, changing the selected setting, replacing an action discriminator, or changing either side of an action/event cycle identity therefore left the trace accepted. A zero-event trace also bypassed initial-state validation.
+
+Replay now validates both snapshots, requires action/event arrays, regenerates the complete globally sequenced event stream from the recorded actions, and requires both those events and the action-derived final state to match before accepting the reducer result. Event comparison checks the exact own enumerable string fields and scalar values without assigning meaning to object-field insertion order. Existing reducer-first diagnostics for malformed serialized events remain intact. No transition, event vocabulary, UI behavior, historical claim, or evidence boundary changed.
+
+- exact-current-main test-only first red — 10 failed and 17 passed in the 27-test focused file on Node 20.19.5 and Node 22.20.0
+- independent positive regression — the earlier candidate rejected a JSON-round-tripped trace with only event field order reversed; the refreshed comparison accepts it
+- positive controls — producer-derived active initial state, unchanged-value setting, repeated cycle IDs, and incomplete action-history prefixes remain replayable
+- bounded action-history oracle — 69 producer-valid histories and 4,761 pairwise substitutions; the baseline accepted all 4,692 non-producer substitutions, while the candidate accepts none
+- Node 20.19.5 and Node 22.20.0 full suite — pass, 476 tests across 22 files on each runtime, including all 27 interlock tests
+- TypeScript typecheck and production build — pass on both runtimes
+- `git diff --check` — pass
+
+The production artifacts are byte-identical across both runtimes and to the previously verified combined tree. No browser or deployment check was performed. This checkpoint does not extend the existing state-equality or hostile JavaScript-object boundary.
 
 ## 2026-09-01 — operator-driven division procedure
 
