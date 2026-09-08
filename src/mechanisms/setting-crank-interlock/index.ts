@@ -175,7 +175,23 @@ function statesEqual(left: Readonly<SettingCrankInterlockState>, right: Readonly
   return JSON.stringify(left) === JSON.stringify(right);
 }
 
+function eventsEqual(expected: readonly InterlockEvent[], recorded: readonly InterlockEvent[]): boolean {
+  return expected.length === recorded.length && expected.every((event, index) => {
+    const actual = recorded[index];
+    // Event fields are scalar; their insertion order is not part of the trace.
+    return actual != null && !Array.isArray(actual)
+      && Object.keys(actual).length === Object.keys(event).length
+      && Object.entries(event).every(([key, value]) =>
+        Object.prototype.hasOwnProperty.call(actual, key) && Reflect.get(actual, key) === value);
+  });
+}
+
 export function replayInterlock(trace: Readonly<InterlockTrace>): SettingCrankInterlockState {
+  if (!Array.isArray(trace.actions) || !Array.isArray(trace.events)) {
+    throw new InvalidInterlockStateError('interlock trace requires action and event arrays');
+  }
+  assertInterlockInvariant(trace.initialState);
+  assertInterlockInvariant(trace.finalState);
   let expectedSequence = 0;
   const replayed = trace.events.reduce<SettingCrankInterlockState>((state, event) => {
     if (event.sequence !== expectedSequence) throw new Error('interlock event sequence is not contiguous');
@@ -183,6 +199,13 @@ export function replayInterlock(trace: Readonly<InterlockTrace>): SettingCrankIn
     return reduceInterlockEvent(state, event);
   }, structuredClone(trace.initialState));
   if (!statesEqual(replayed, trace.finalState)) throw new Error('interlock replay final state mismatch');
+  const expected = traceInterlockActions(trace.initialState, trace.actions);
+  if (!eventsEqual(expected.events, trace.events)) {
+    throw new InvalidInterlockStateError('interlock action/event mismatch');
+  }
+  if (!statesEqual(expected.finalState, trace.finalState)) {
+    throw new InvalidInterlockStateError('interlock action-derived final state mismatch');
+  }
   return replayed;
 }
 

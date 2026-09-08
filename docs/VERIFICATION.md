@@ -675,6 +675,22 @@ Desktop browser smoke check against local Vite at the available 1072px viewport:
 
 The browser environment did not expose a reliable narrow viewport despite a window resize request, so mobile layout is not claimed in this checkpoint.
 
+## 2026-09-07 — setting–crank action-derived replay
+
+The exact current-main baseline `ae41f5b0f25b5dd613f363bc85839676752fbd4a`, including the merged backprop, printing-ledger, register-lifecycle and rotary-carry fixes, replayed only the recorded interlock events and final state; it never inspected the accompanying action history. Removing an action, changing the selected setting, replacing an action discriminator, or changing either side of an action/event cycle identity therefore left the trace accepted. A zero-event trace also bypassed initial-state validation.
+
+Replay now validates both snapshots, requires action/event arrays, regenerates the complete globally sequenced event stream from the recorded actions, and requires both those events and the action-derived final state to match before accepting the reducer result. Event comparison checks the exact own enumerable string fields and scalar values without assigning meaning to object-field insertion order. Existing reducer-first diagnostics for malformed serialized events remain intact. No transition, event vocabulary, UI behavior, historical claim, or evidence boundary changed.
+
+- exact-current-main test-only first red — 10 failed and 17 passed in the 27-test focused file on Node 20.19.5 and Node 22.20.0
+- independent positive regression — the earlier candidate rejected a JSON-round-tripped trace with only event field order reversed; the refreshed comparison accepts it
+- positive controls — producer-derived active initial state, unchanged-value setting, repeated cycle IDs, and incomplete action-history prefixes remain replayable
+- bounded action-history oracle — 69 producer-valid histories and 4,761 pairwise substitutions; the baseline accepted all 4,692 non-producer substitutions, while the candidate accepts none
+- Node 20.19.5 and Node 22.20.0 full suite — pass, 476 tests across 22 files on each runtime, including all 27 interlock tests
+- TypeScript typecheck and production build — pass on both runtimes
+- `git diff --check` — pass
+
+The production artifacts are byte-identical across both runtimes and to the previously verified combined tree. No browser or deployment check was performed. This checkpoint does not extend the existing state-equality or hostile JavaScript-object boundary.
+
 ## 2026-09-01 — operator-driven division procedure
 
 Added the generic P/M `operator-division` mechanism, hardened event replay, `8478 ÷ 314 = 27` and `1000 ÷ 64 = 15 remainder 40` traces, source/evidence note, simulator matrix, and a public `#/division` stepping path.
