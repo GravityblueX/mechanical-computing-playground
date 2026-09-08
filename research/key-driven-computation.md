@@ -240,6 +240,8 @@ Use a state such as `...9` and then press a key that forces carry while another 
 
 Implemented in `src/mechanisms/key-stroke-integrity/` as a tested **P/M generic controller** wrapping the existing accumulator. An interrupted stroke does not mutate arithmetic; detection locks unrelated input; completing the errant stroke commits once through `key-driven-accumulator`; releasing the integrity lock preserves that result and returns to idle. These software phases expose the sourced control responsibility without claiming Model E/F linkage timing.
 
+The `#/controls` workbench now lets the visitor choose normal completion or interruption, attempt blocked input/early release, correct the known errant key, and release the lock. It records only accepted mechanism actions and shows rejected attempts as lesson feedback. Its `099 + 7` example exposes the existing nested carry events, and a read-only event replay is separate from current operation. This connects Cases A/B/D within the existing single-active-key P/M model; it does not implement simultaneous multi-column entry, all company-manual recovery branches, or historical timing. An integrity cycle is complete only after any required lock release; the corrected arithmetic may already have committed before that boundary.
+
 ## 7. Cross-machine teaching value
 
 The Comptometer adds a genuinely new axis to the playground:
