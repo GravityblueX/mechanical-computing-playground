@@ -1,6 +1,6 @@
 # Current Status
 
-Last reconciled on 2026-09-08 after restoring focused controls' Space-key ownership in the Visible Carry lesson.
+Last reconciled on 2026-09-08 after restoring focused controls' Space-key ownership and respecting valid mixed-case false editing markers in the Visible Carry lesson.
 
 This file is the **current-state authority** for the repository. `ROADMAP.md` describes where the project should go; `IMPLEMENTATION_PLAN.md` is still useful as a dependency/design specification, but many of its checkboxes predate later implementation and must not be treated as the live task ledger.
 
@@ -13,7 +13,7 @@ This file is the **current-state authority** for the repository. `ROADMAP.md` de
 - GitHub Actions CI and a Pages deployment workflow.
 - Deterministic state/event/replay primitives under `src/core/`.
 - Golden carry fixtures under `fixtures/carry/`.
-- The latest local code verification (`docs/VERIFICATION.md`, 2026-09-08 UTC+8) reports Node 24.11.1 typecheck, 482 tests across 23 files, production build, and diff check passing. All 78 targeted English/Chinese browser cases pass for carry button activation, interactive/editable/ancestor ownership, canceled/modified Space, the background shortcut, and route isolation; 12 ancestor/IME probes are explicitly synthetic events. No newer remote CI or deployment is claimed by these local checks.
+- The latest local code verification (`docs/VERIFICATION.md`, 2026-09-08 UTC+8) reports Node 24.11.1 typecheck, 482 tests across 23 files, production build, and diff check passing. All 86 targeted English/Chinese production-browser cases pass for carry button activation, interactive/editable/ancestor ownership, canceled/modified Space, valid case-insensitive false editing markers, the background shortcut, and route isolation; 14 ancestor/IME probes are explicitly synthetic events. No newer remote CI or deployment is claimed by these local checks.
 
 Remote CI run `33437862103` passed for the previous operator-division checkpoint `7bebcea2d187f0ed2411de4098c846963df8b32a`. This status still does **not** substitute for CI on later commits.
 

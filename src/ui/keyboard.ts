@@ -1,7 +1,8 @@
 const SPACE_OWNERS = [
   'button', 'a[href]', 'area[href]', 'input', 'select', 'textarea', 'summary',
   'audio[controls]', 'video[controls]', '[tabindex]',
-  '[contenteditable]:not([contenteditable="false"])',
+  // HTML's valid false keyword is ASCII-case-insensitive.
+  '[contenteditable]:not([contenteditable="false" i])',
   ...[
     'button', 'link', 'checkbox', 'radio', 'switch', 'menuitem', 'menuitemcheckbox',
     'menuitemradio', 'option', 'tab', 'treeitem', 'slider', 'spinbutton', 'textbox',

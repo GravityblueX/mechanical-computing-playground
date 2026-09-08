@@ -1,5 +1,17 @@
 # Verification record
 
+## 2026-09-08 — case-insensitive false editing boundary
+
+Independent review of candidate `0d64bd49bd360b38b36c1e09182efdf801934acf` found that the CSS owner selector treated `contenteditable="FaLsE"` as an editor even though the browser correctly reports `contentEditable === 'false'` and `isContentEditable === false`. With that valid marker on the body, trusted Space incorrectly left carry at event 0; the equivalent lowercase marker allowed the background shortcut to advance to 1.
+
+The selector now excludes `[contenteditable="false" i]`, matching the ASCII-case-insensitive HTML keyword. A real enclosing editor still owns Space from its noneditable child. This is a normal follow-up commit, not a rewrite of the reviewed candidate; no invalid-token policy, focus behavior, arithmetic, event sequence, dependency or workflow is changed.
+
+- The expanded 86-case production-browser regression was first run on clean `0d64bd49…`: 4 actual failures (mixed/uppercase false in both languages), 82 positive controls, no page errors or external requests.
+- After the selector change, the same 86 cases pass in Chromium `148.0.7778.96`, English/Chinese. They include all original 78 cases, six trusted body-Space false-spelling checks and two synthetic mixed-false-child/actual-editor-ancestor checks. In total, 72 cases use actual keyboard/mouse input and 14 descendant/IME probes are explicitly synthetic.
+- Node `24.11.1`: typecheck, all 482 tests across 23 files, production build and diff check — pass. The existing 18 unit tests continue to cover event gating/path behavior; CSS enumeration/selector semantics are checked in the real DOM, not claimed from element doubles.
+
+All earlier verification sections and receipts remain intact. These are local author checks, not remote CI, deployment or screen-reader certification.
+
 ## 2026-09-08 — Visible Carry Space-key ownership
 
 The exact main baseline `ae41f5b0f25b5dd613f363bc85839676752fbd4a` consumed Space even when a native button owned the key. Focusing “Show the whole addition” and pressing/releasing Space produced `0099`, event `1 / 9`, instead of `0100`, `9 / 9`; reset and language switching were also replaced by a single carry step. This was an operator-action routing defect, not incorrect arithmetic in the carry core.
