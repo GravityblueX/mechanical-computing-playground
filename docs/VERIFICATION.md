@@ -1,5 +1,20 @@
 # Verification record
 
+## 2026-09-08 — main d14 integration with Visible Carry Space ownership
+
+The exact published Space-ownership head `8b29c9df63ade8003b4c0ed813d68a0d2635cd21` was locally integrated with main `d14adc4469ad6fc7e0ec29a0b54e7cd89b1d6a67`, which contains the accepted action-bound interlock replay and Controlled-Key workbench. An ordinary main-into-PR merge required only two `STATUS.md` conflict blocks and one verification-heading conflict block to be reconciled. The automatic source merge is unchanged; repeated-crank PR #22 is not a dependency or part of this integration.
+
+- Node `22.23.2`, matching the CI major: fresh `npm ci`, `npm run typecheck`, all **504 tests across 24 files**, and `npm run build` — pass; production build transforms 39 modules.
+- `git diff --check` — pass. All 163 non-documentation source blobs equal the diagnosed automatic merge. Removing only the Space-helper import and restoring the old shortcut condition reconstructs every byte of d14's main module. All 48 historical verification sections and the entire older d14 verification tail are retained without rewriting their original scope or results.
+- Actual Chromium `148.0.7778.96`, locally built production assets: the expanded **86/86 English/Chinese ownership cases** pass, including native carry-complete/reset/language actions, interactive/editable and open-shadow ownership, cancellation/modifiers, mixed-case false editing markers and route isolation. **72 cases use actual keyboard/mouse input; 14 descendant/IME probes are deliberately synthetic.**
+- Four additional actual-input coexistence workflows — English/Chinese at 1440px and 390px — pass with **31 inspected states and 25 native-Space button actions each**. Each native action separately verifies unchanged state on keydown, then exactly one trusted click after keyup. Background repeated Space still advances once for each of two trusted keydowns.
+- Controlled-Key recovery: `099 → ERROR_LOCKED → 106/CORRECTED_LOCKED → 106/IDLE`, both recorded carry transfers, rejected other-column/early-release/repeated-correction attempts, active-key identity after selection changes, and continued tens entry to `126` all pass. Six-step read-only replay matches its recorded phase/count boundaries, return-to-current retains the live state, and reset from replay discards only that experiment.
+- Route, language and browser-history trips preserve the error lock, corrected-but-locked value, carry progress and independent resets. Tab/Shift+Tab and native Space/Enter remain operable; disabled-operation focus falls back to the expected enabled control with a visible outline.
+- The same connected polite status node survives all four workflows: 24 observed updates and zero removals per workflow, with text matching visible feedback on the controls route. There is no horizontal document overflow at 390px, no page error and no non-local browser request.
+- Both browser suites inspected the same production asset hashes. The JavaScript asset SHA-256 is `4900730b4e02834ea680665b4d1cfb636166739d0dded492917d0d7febf3bf9a`; documentation-only verification updates do not alter those tested assets.
+
+These are fresh local checks for this exact integration, not the earlier standalone or all-PR combination, new remote CI, deployment, real operating-system IME or screen-reader speech certification. No source changes beyond the normal automatic merge, dependency/workflow changes, evidence-boundary changes, or security/configuration overrides were introduced.
+
 ## 2026-09-08 — case-insensitive false editing boundary
 
 Independent review of candidate `0d64bd49bd360b38b36c1e09182efdf801934acf` found that the CSS owner selector treated `contenteditable="FaLsE"` as an editor even though the browser correctly reports `contentEditable === 'false'` and `isContentEditable === false`. With that valid marker on the body, trusted Space incorrectly left carry at event 0; the equivalent lowercase marker allowed the background shortcut to advance to 1.
@@ -28,6 +43,24 @@ The page now claims only an unmodified, uncanceled, non-composing Space whose co
 - The same 78-case browser regression was run first on the unchanged baseline: 58 actual behavior failures and 20 positive controls. The failures record wrong state, swallowed native activation/editing, or improper shortcut cancellation, not an absent new helper or failed import. Every case reloads and checks its initial state. No page errors or non-local requests occurred before or after the fix.
 
 No workflow, dependency, carry core or deployment configuration changed. These are local candidate checks, not remote CI, merge, deployment or screen-reader speech certification. The unmerged interlock, Controlled-Key and repeated-crank PRs are not included in this standalone candidate.
+
+## 2026-09-08 — operable Controlled-Key recovery workbench
+
+The `#/controls` integrity lesson previously played one fixed six-event recovery trace for units key 7. Visitors can now operate normal or interrupted strokes, try blocked input and early lock release, complete a known errant key exactly once, release the integrity lock, and continue with another place-value key. A thin exhibit adapter reuses the unchanged key-stroke-integrity and key-driven-accumulator mechanisms. Only successful actions enter the mechanism history; rejected attempts preserve its state, counters and events. Recorded-event replay is read-only until returning to the current action boundary.
+
+The existing arithmetic-commit payload supplies the visible place-value, digit and carry details. The `099 + 7` recovery exposes two carry transfers and retains `106` through lock release. The display distinguishes completed integrity cycles from arithmetic commitment: `CORRECTED_LOCKED` already contains the corrected value, but the recovery cycle finishes only after release. The historical panel remains edition/source bounded, and the interactive branch is explicitly P/M, one active key, generic addition with a known errant key. Teaching reset is distinct from historical Correction/Release or zeroing.
+
+- `npm run typecheck` — pass on Node 22.23.2, matching the CI major version
+- `npm test` — pass, 474 tests across 23 files, including 10 new workbench tests
+- `npm run build` — pass, 38 modules
+- actual Chromium headless browser checks — pass in English and Chinese at 1440px and 390px: normal `7 + 4`, rejected other-column and early-release attempts, exactly-once correction, continued `7 + 20`, active-key identity after selection changes, tens-key `3 → 30`, `099 → 106` with nested carry evidence, read-only replay, return to current state, and reset from replay
+- keyboard checks — pass with Tab, Shift+Tab, Enter and Space; focused controls retain a visible outline, and focus moves to an enabled operation when the source button becomes disabled
+- route/language checks — pass while ERROR_LOCKED and CORRECTED_LOCKED; no repeated arithmetic submission or lost state
+- narrow layout — no horizontal document overflow at 390px; rejected-operation feedback is visible text with a stable polite live status region outside the shell's replaced subtree; no browser page errors
+- live-region DOM checks — the same single connected status node survives all operations and language/route changes in each of the four browser cases; MutationObserver reports 43 text updates and zero removals per case, and its text agrees with the visible feedback
+- `git diff --check` — pass
+
+Browser checks inspected the locally built candidate; they are not a deployment or screen-reader speech certification. No dependency, workflow, core mechanism transition, event vocabulary or historical source claim changed.
 
 ## 2026-09-05 — continuous-flow fixture-derived replay
 
@@ -703,6 +736,22 @@ Desktop browser smoke check against local Vite at the available 1072px viewport:
 - the ordered text log remained understandable without animation/color.
 
 The browser environment did not expose a reliable narrow viewport despite a window resize request, so mobile layout is not claimed in this checkpoint.
+
+## 2026-09-07 — setting–crank action-derived replay
+
+The exact current-main baseline `ae41f5b0f25b5dd613f363bc85839676752fbd4a`, including the merged backprop, printing-ledger, register-lifecycle and rotary-carry fixes, replayed only the recorded interlock events and final state; it never inspected the accompanying action history. Removing an action, changing the selected setting, replacing an action discriminator, or changing either side of an action/event cycle identity therefore left the trace accepted. A zero-event trace also bypassed initial-state validation.
+
+Replay now validates both snapshots, requires action/event arrays, regenerates the complete globally sequenced event stream from the recorded actions, and requires both those events and the action-derived final state to match before accepting the reducer result. Event comparison checks the exact own enumerable string fields and scalar values without assigning meaning to object-field insertion order. Existing reducer-first diagnostics for malformed serialized events remain intact. No transition, event vocabulary, UI behavior, historical claim, or evidence boundary changed.
+
+- exact-current-main test-only first red — 10 failed and 17 passed in the 27-test focused file on Node 20.19.5 and Node 22.20.0
+- independent positive regression — the earlier candidate rejected a JSON-round-tripped trace with only event field order reversed; the refreshed comparison accepts it
+- positive controls — producer-derived active initial state, unchanged-value setting, repeated cycle IDs, and incomplete action-history prefixes remain replayable
+- bounded action-history oracle — 69 producer-valid histories and 4,761 pairwise substitutions; the baseline accepted all 4,692 non-producer substitutions, while the candidate accepts none
+- Node 20.19.5 and Node 22.20.0 full suite — pass, 476 tests across 22 files on each runtime, including all 27 interlock tests
+- TypeScript typecheck and production build — pass on both runtimes
+- `git diff --check` — pass
+
+The production artifacts are byte-identical across both runtimes and to the previously verified combined tree. No browser or deployment check was performed. This checkpoint does not extend the existing state-equality or hostile JavaScript-object boundary.
 
 ## 2026-09-01 — operator-driven division procedure
 

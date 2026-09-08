@@ -1,6 +1,6 @@
 # Current Status
 
-Last reconciled on 2026-09-08 after restoring focused controls' Space-key ownership and respecting valid mixed-case false editing markers in the Visible Carry lesson.
+Last reconciled on 2026-09-08 after verifying Visible Carry's focused-control Space ownership and case-insensitive false editing boundary together with the operable Controlled-Key workbench and action-bound interlock replay.
 
 This file is the **current-state authority** for the repository. `ROADMAP.md` describes where the project should go; `IMPLEMENTATION_PLAN.md` is still useful as a dependency/design specification, but many of its checkboxes predate later implementation and must not be treated as the live task ledger.
 
@@ -13,7 +13,7 @@ This file is the **current-state authority** for the repository. `ROADMAP.md` de
 - GitHub Actions CI and a Pages deployment workflow.
 - Deterministic state/event/replay primitives under `src/core/`.
 - Golden carry fixtures under `fixtures/carry/`.
-- The latest local code verification (`docs/VERIFICATION.md`, 2026-09-08 UTC+8) reports Node 24.11.1 typecheck, 482 tests across 23 files, production build, and diff check passing. All 86 targeted English/Chinese production-browser cases pass for carry button activation, interactive/editable/ancestor ownership, canceled/modified Space, valid case-insensitive false editing markers, the background shortcut, and route isolation; 14 ancestor/IME probes are explicitly synthetic events. No newer remote CI or deployment is claimed by these local checks.
+- The latest local integration verification (`docs/VERIFICATION.md`, 2026-09-08 UTC+8) reports Node 22.23.2 clean install, typecheck, 504 tests across 24 files, production build and diff check passing. The 86 English/Chinese Space-ownership browser cases pass (72 actual keyboard/mouse cases, 14 explicitly synthetic probes), as do four English/Chinese 1440px/390px Controlled-Key and Visible Carry coexistence workflows covering native Space actions, lock recovery, two carry transfers, read-only replay, focus, persistent status and route/language state. The individual historical checkpoints remain intact; no new remote CI or deployment is claimed.
 
 Remote CI run `33437862103` passed for the previous operator-division checkpoint `7bebcea2d187f0ed2411de4098c846963df8b32a`. This status still does **not** substitute for CI on later commits.
 
@@ -56,7 +56,7 @@ The current browser shell contains non-empty routes or views for:
 - interactive finite differences plus a separately stepped calculation→persistent-output responsibility flow;
 - interactive multiplication comparison with event/cycle stepping for direct multiplication;
 - interactive operator-division procedure for `8478 ÷ 314` exposing the negative residual in `OVERSHOOT_PENDING` before detection makes add-back correction legal;
-- interactive controls area with setting–crank interlock, incomplete-key-stroke integrity, and independently stepped result/revolution-register lifecycle scenarios, each preserving source/P/M boundaries;
+- interactive controls area with setting–crank interlock, an operator-controlled incomplete-key-stroke workbench, and independently stepped result/revolution-register lifecycle scenarios, each preserving source/P/M boundaries; the key workbench accepts normal/interrupted strokes, permits rejected-input/early-release experiments, exposes nested place-value/carry events, and replays the visitor's actual accepted history without permitting operations on historical views;
 - interactive output-contract lesson exposing `+12, +8, SUBTOTAL, +5, TOTAL`, persistent record versus accumulator state, and source-separated register/listing/Difference Engine comparisons;
 - Curta;
 - interactive Analytical Engine P/M information flow for `(ab+c)d`, with Store/Mill/card roles, intermediate `p/q`, output, stepping, and fixture-derived hardened replay that rejects alternate-fixture substitution and adversarial trace shape changes;

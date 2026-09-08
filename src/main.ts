@@ -1,8 +1,9 @@
 import { createCrankTrace, digitsToString, createDecimalRegister, reduceDecimalRegisterEvent } from './mechanism-core';
 import { squarePreset, cubicPreset, transitionDifference, type DifferenceState } from './mechanisms/difference-column';
 import { compare314x27 } from './exhibits/multiplication-compare';
-import { accumulatorValue, createKeyDrivenAccumulator, createKeyStrokeTrace } from './mechanisms/key-driven-accumulator';
-import { createKeyStrokeIntegrity, reduceKeyStrokeIntegrityEvent, traceKeyStrokeIntegrity, type IntegrityEvent } from './mechanisms/key-stroke-integrity';
+import { accumulatorValue, createKeyDrivenAccumulator, createKeyStrokeTrace, type KeyDrivenEvent } from './mechanisms/key-driven-accumulator';
+import { type IntegrityAction, type IntegrityEvent } from './mechanisms/key-stroke-integrity';
+import { applyWorkbenchAction, createKeyStrokeWorkbench, displayedWorkbenchState, returnToCurrentWorkbench, startWorkbenchReplay, stepWorkbenchReplay, type WorkbenchAction } from './exhibits/key-stroke-workbench';
 import { traceComplementSubtraction } from './mechanisms/complement-register';
 import { reduceDirectMultiplierEvent, type DirectMultiplierEvent } from './mechanisms/direct-multiplier';
 import { quotientValue, reduceDivisionEvent, traceOperatorDivision, type DivisionEvent } from './mechanisms/operator-division';
@@ -50,13 +51,9 @@ let controlState: SettingCrankInterlockState = createSettingCrankInterlock(314);
 let controlEvents: InterlockEvent[] = [];
 let controlMessage = '';
 let controlCycle = 0;
-const integrityTrace = traceKeyStrokeIntegrity(createKeyStrokeIntegrity(createKeyDrivenAccumulator(3)), [
-  { type: 'BEGIN_KEY_STROKE', cycleId: 'integrity-begin', column: 0, digit: 7 },
-  { type: 'RELEASE_INCOMPLETE', cycleId: 'integrity-early-release' },
-  { type: 'COMPLETE_ERRANT_STROKE', cycleId: 'integrity-correct' },
-  { type: 'RELEASE_ERROR_LOCK', cycleId: 'integrity-release-lock' },
-]);
-let integrityEventIndex = 0;
+let integrityWorkbench = createKeyStrokeWorkbench();
+let integrityPreset: 0 | 99 = 0;
+let integritySelection = { column: 0, digit: 7 };
 const lifecycleTrace = traceRegisterLifecycle(createRegisterLifecycle(8478, 27), [
   { type: 'SET_MODE', cycleId: 'lifecycle-mode', mode: 'SUBTRACT_DIVIDE' },
   { type: 'CLEAR_REVOLUTION_REGISTER', cycleId: 'lifecycle-clear-revolutions' },
@@ -267,17 +264,137 @@ function division() {
   document.querySelector('#division-reset')?.addEventListener('click', () => { divisionEventIndex = 0; division(); });
 }
 
+function integrityPlace(column: number): string {
+  return [t('units', '个位'), t('tens', '十位'), t('hundreds', '百位')][column];
+}
+
+function integrityActionName(type: IntegrityAction['type']): string {
+  return {
+    BEGIN_KEY_STROKE: t('Begin key stroke', '开始键程'),
+    COMPLETE_KEY_STROKE: t('Complete normal stroke', '正常按完整'),
+    RELEASE_INCOMPLETE: t('Release before completion', '未按完整便松手'),
+    COMPLETE_ERRANT_STROKE: t('Complete errant stroke', '补完整出错键'),
+    RELEASE_ERROR_LOCK: t('Release integrity lock', '解除完整性锁'),
+  }[type];
+}
+
+function integrityFeedbackText(): string {
+  if (integrityWorkbench.replayIndex !== null) return t('Inspect the recorded events here. Return to the current state to choose another operation.', '这里用于检查已记录事件。请返回当前状态后再选择操作。');
+  const feedback = integrityWorkbench.feedback;
+  if (!feedback) return t('Choose a key, then either complete its stroke or let go early.', '选择按键，再决定正常按完还是提前松手。');
+  if (feedback.kind === 'accepted') return {
+    BEGIN_KEY_STROKE: t('Key started. Completing it and letting go early have different consequences.', '键程已开始。按完整与提前松手会产生不同后果。'),
+    COMPLETE_KEY_STROKE: t('Normal stroke completed: the selected amount was added once. You can begin another key.', '正常键程已完成：所选数值已累加一次，可以开始下一个按键。'),
+    RELEASE_INCOMPLETE: t('Incomplete stroke detected. The number is unchanged; complete the errant key before releasing the lock.', '已检测到不完整键程。数值未变；先补完整出错键，再解锁。'),
+    COMPLETE_ERRANT_STROKE: t('The errant amount was added exactly once. Other input stays locked until you release the integrity lock.', '出错键的数值已恰好累加一次。解除完整性锁前，其他输入仍被锁定。'),
+    RELEASE_ERROR_LOCK: t('Lock released. The corrected number is retained; nothing was added or cleared by release.', '已解锁。纠正后的数值保留；解锁没有再次累加，也没有清零。'),
+  }[feedback.actionType];
+  const lockedAdvice = integrityWorkbench.trace.finalState.phase === 'CORRECTED_LOCKED'
+    ? t('The amount is already committed; release the integrity lock before entering another key.', '数值已经提交；先解除完整性锁，再输入其他按键。')
+    : t('Finish the active or errant key before entering another column.', '先按完整活动键或出错键，再输入其他列。');
+  return t('Blocked: ', '已阻止：') + {
+    'input-blocked': lockedAdvice,
+    'finish-first': t('Complete the errant key first. Releasing now cannot resume input.', '先补完整出错键。现在解锁不能恢复输入。'),
+    'already-committed': t('This stroke has already added its value. Completing it again would double-count; release the lock instead.', '这次键程的数值已经累加。再次完成会重复计数；请解除锁定。'),
+    'out-of-order': t('That operation does not apply in the current phase. Follow the active-key and lock state.', '当前阶段不能执行该操作。请依据活动按键与锁状态选择操作。'),
+    overflow: t('The contribution would exceed this three-digit register. Reset the experiment to try a smaller entry.', '本次贡献会超出三位寄存器容量。请重置实验后尝试较小数值。'),
+    'invalid-key': t('Choose a digit from 1 to 9 and one of the three columns.', '请选择 1 至 9 的数字及三个数位之一。'),
+    'replay-only': t('This is a read-only replay. Return to the current state before operating.', '当前为只读回放。请返回当前状态后再操作。'),
+  }[feedback.reason];
+}
+
+function integrityArithmeticLabel(event: KeyDrivenEvent): string {
+  if (event.type === 'PLACE_VALUE_CONTRIBUTION') return t(`contribution ${event.contribution}; accumulator ${event.accumulatorBefore} → ${event.accumulatorAfter}`, `位值贡献 ${event.contribution}；累加器 ${event.accumulatorBefore} → ${event.accumulatorAfter}`);
+  if (event.type === 'DIGIT_ADVANCE') return `${integrityPlace(event.column)}: ${event.from} → ${event.to} (+${event.amount})`;
+  if (event.type === 'CARRY_PENDING') return t(`carry pending: ${integrityPlace(event.fromColumn)} → ${integrityPlace(event.toColumn)}`, `进位待传递：${integrityPlace(event.fromColumn)} → ${integrityPlace(event.toColumn)}`);
+  if (event.type === 'CARRY_PROPAGATED') return t(`carry transferred: ${integrityPlace(event.fromColumn)} → ${integrityPlace(event.toColumn)}`, `进位已传递：${integrityPlace(event.fromColumn)} → ${integrityPlace(event.toColumn)}`);
+  return `${event.type === 'KEY_STROKE_BEGIN' ? t('arithmetic begins', '算术开始') : t('key returns', '按键返回')} · ${event.digit} @ ${integrityPlace(event.column)}`;
+}
+
+function integrityEventLabel(event: IntegrityEvent): string {
+  if (event.type === 'KEY_STROKE_BEGUN') return `${t('begin key', '开始按键')} ${event.digit} @ ${integrityPlace(event.column)}`;
+  if (event.type === 'INCOMPLETE_STROKE_RELEASED') return t('release incomplete; accumulator unchanged', '未按完整便松手；累加器不变');
+  if (event.type === 'INCOMPLETE_STROKE_DETECTED') return t('detect incomplete stroke', '检测到不完整键程');
+  if (event.type === 'INPUT_LOCKED') return t('lock other input', '锁定其他输入');
+  if (event.type === 'ARITHMETIC_COMMITTED') {
+    const action = integrityWorkbench.trace.actions.find(item => item.cycleId === event.cycleId)!;
+    return `${integrityActionName(action.type)} · ${event.digit} @ ${integrityPlace(event.column)}`;
+  }
+  return t('release lock; retain accumulator', '解锁；保留累加器');
+}
+
+function integrityWorkbenchMarkup(historicalEvidence: string): string {
+  const state = displayedWorkbenchState(integrityWorkbench);
+  const replaying = integrityWorkbench.replayIndex !== null;
+  const phase = state.phase;
+  const phaseLabel = {
+    IDLE: t('Ready for input', '可以输入'),
+    STROKE_IN_PROGRESS: t('Stroke in progress', '键程进行中'),
+    ERROR_LOCKED: t('Incomplete, locked', '未完成，已锁定'),
+    CORRECTED_LOCKED: t('Corrected, still locked', '已纠正，仍锁定'),
+  }[phase];
+  const events = integrityWorkbench.trace.events.slice(0, integrityWorkbench.replayIndex ?? integrityWorkbench.trace.events.length);
+  const disabled = (condition: boolean) => condition ? 'disabled' : '';
+  const otherColumn = state.activeColumn === null ? 1 : (state.activeColumn + 1) % 3;
+  const eventsMarkup = events.map(event => {
+    const label = `${String(event.sequence).padStart(2, '0')} · ${integrityEventLabel(event)}`;
+    if (event.type !== 'ARITHMETIC_COMMITTED') return `<li>${esc(label)}</li>`;
+    const inner = event.accumulatorEvents.map(item => `${String(item.sequence).padStart(2, '0')} · ${item.type} · ${integrityArithmeticLabel(item)}`).join('\n');
+    return `<li><details class="integrity-arithmetic" open><summary>${esc(label)} — ${t('inspect arithmetic and carry', '查看算术与进位')}</summary><pre>${esc(inner)}</pre></details></li>`;
+  }).join('');
+  return `<section id="integrity-workbench" aria-labelledby="integrity-title">
+    <h2 id="integrity-title">${t('What if a key is released before its stroke completes?', '如果按键尚未走完整个行程就松手呢？')}</h2>
+    <p>${t('Try a normal stroke, then an interrupted one. Discover why correcting the number and releasing the lock are separate operations.', '先试正常键程，再试提前松手。亲自发现为什么纠正数值与解除锁定是两个操作。')}</p>
+    <div class="structure-callout">${evidenceBadge('TEACHING', locale)} ${t('Generic P/M addition with one active key and recovery of a known errant key. Turck 1921 pp. 159–162 documents the control responsibility; these software phases are not historical linkage timing or a complete Comptometer procedure.', '单活动键的通用 P/M 加法课程，恢复流程针对已知出错键。Turck 1921 第 159–162 页记录了控制责任；这些软件阶段不是历史连杆时序，也不是完整 Comptometer 操作程序。')}</div>
+    <div class="state-grid">
+      <div><small>${t('accumulator', '累加器')}</small><strong id="integrity-value">${[...state.accumulator.digits].reverse().join('')}</strong></div>
+      <div><small>${t('active / errant key', '活动 / 出错按键')}</small><strong id="integrity-active-key">${state.activeDigit === null ? '—' : `${state.activeDigit} @ ${integrityPlace(state.activeColumn!)}`}</strong></div>
+      <div><small>${t('integrity phase', '完整性阶段')}</small><strong id="integrity-phase" data-phase="${phase}">${phaseLabel}</strong><code class="integrity-phase-code">${phase}</code></div>
+      <div><small>${t('ordinary input', '普通输入')}</small><strong id="integrity-permission">${state.inputPermitted ? t('PERMITTED', '允许') : t('LOCKED', '锁定')}</strong></div>
+      <div><small>${t('completed integrity cycles / accepted actions', '已完成完整性周期 / 已接受动作')}</small><strong id="integrity-counts">${state.integrityCycleCount} / ${state.humanOperationCount}</strong></div>
+    </div>
+    <p class="model-note">${t('In this P/M model, a recovery cycle finishes after lock release; completing the errant key commits the arithmetic earlier.', '此 P/M 模型在解锁后才完成恢复周期；补完整出错键会先提交算术。')}</p>
+    <p id="integrity-view-mode" class="model-note">${replaying ? t(`Read-only replay · event ${integrityWorkbench.replayIndex} / ${integrityWorkbench.trace.events.length}. Return to current state to operate.`, `只读回放 · 事件 ${integrityWorkbench.replayIndex} / ${integrityWorkbench.trace.events.length}。返回当前状态后才能操作。`) : t('Current state. Each accepted operation records its events; rejected attempts leave this state unchanged.', '当前状态。每个被接受的操作记录其事件；被拒绝的尝试不改变这个状态。')}</p>
+    <div class="integrity-selectors">
+      <label for="integrity-column">${t('Column for the next key', '下一个按键的数位')}<select id="integrity-column" ${disabled(replaying)}>${[0, 1, 2].map(column => `<option value="${column}" ${column === integritySelection.column ? 'selected' : ''}>${integrityPlace(column)}</option>`).join('')}</select></label>
+      <label for="integrity-digit">${t('Digit for the next key', '下一个按键的数字')}<select id="integrity-digit" ${disabled(replaying)}>${Array.from({ length: 9 }, (_, index) => index + 1).map(digit => `<option value="${digit}" ${digit === integritySelection.digit ? 'selected' : ''}>${digit}</option>`).join('')}</select></label>
+    </div>
+    <p class="model-note">${t('Changing these choices does not change the active key. Begin and complete are P/M inspection boundaries within one stroke, not two historical keystrokes.', '改变这两个选择不会替换活动按键。“开始”和“完成”是同一键程中的 P/M 检查边界，不是两次历史按键。')}</p>
+    <div class="controls integrity-actions">
+      <button id="integrity-begin" ${disabled(replaying || phase !== 'IDLE')}>${integrityActionName('BEGIN_KEY_STROKE')}</button>
+      <button id="integrity-complete" ${disabled(replaying || phase !== 'STROKE_IN_PROGRESS')}>${integrityActionName('COMPLETE_KEY_STROKE')}</button>
+      <button id="integrity-interrupt" class="secondary" ${disabled(replaying || phase !== 'STROKE_IN_PROGRESS')}>${integrityActionName('RELEASE_INCOMPLETE')}</button>
+      <button id="integrity-correct" ${disabled(replaying || (phase !== 'ERROR_LOCKED' && phase !== 'CORRECTED_LOCKED'))}>${phase === 'CORRECTED_LOCKED' ? t('Try completing again', '尝试再次补完整') : integrityActionName('COMPLETE_ERRANT_STROKE')}</button>
+      <button id="integrity-release" ${disabled(replaying || (phase !== 'ERROR_LOCKED' && phase !== 'CORRECTED_LOCKED'))}>${phase === 'ERROR_LOCKED' ? t('Try releasing early', '尝试提前解锁') : integrityActionName('RELEASE_ERROR_LOCK')}</button>
+      <button id="integrity-other" class="secondary" ${disabled(replaying || phase === 'IDLE')}>${t(`Try key 2 in ${integrityPlace(otherColumn)}`, `尝试${integrityPlace(otherColumn)}键 2`)}</button>
+    </div>
+    <p id="integrity-feedback" class="integrity-feedback">${esc(integrityFeedbackText())}</p>
+    <div class="controls">
+      <button id="integrity-replay" class="secondary" ${disabled(replaying || !integrityWorkbench.trace.events.length)}>${t('Replay recorded events', '重放已记录事件')}</button>
+      <button id="integrity-replay-step" class="secondary" ${disabled(!replaying || integrityWorkbench.replayIndex! >= integrityWorkbench.trace.events.length)}>${t('Step replay event', '推进一个回放事件')}</button>
+      <button id="integrity-current" class="secondary" ${disabled(!replaying)}>${t('Return to current state', '返回当前状态')}</button>
+    </div>
+    <details id="integrity-history" open><summary>${t('Recorded operation events and arithmetic', '已记录的操作事件与算术')} · ${events.length} / ${integrityWorkbench.trace.events.length}</summary>${events.length ? `<ol class="integrity-events">${eventsMarkup}</ol>` : `<p>${t('No event in this view yet.', '当前视图还没有事件。')}</p>`}</details>
+    <div class="integrity-reset-row"><label for="integrity-preset">${t('Next experiment starts at', '下一次实验起始值')}<select id="integrity-preset"><option value="0" ${integrityPreset === 0 ? 'selected' : ''}>000</option><option value="99" ${integrityPreset === 99 ? 'selected' : ''}>099 · ${t('carry example', '进位示例')}</option></select></label><button id="integrity-reset" class="secondary">${t('Reset experiment', '重置实验')}</button></div>
+    <p class="model-note">${t('Reset discards this experiment and starts at the selected value. It is a teaching control, not the historical Correction/Release Button or a zeroing handle. Event order is P/M; counts are not historical time or productivity.', '重置会清除本次实验记录，并从所选数值开始。这是教学控件，不是历史纠错/释放按钮或归零把手。事件顺序为 P/M，计数不表示历史时间或生产率。')}</p>
+    ${historicalEvidence}
+  </section>`;
+}
+
 function controls() {
-  const integrityState = integrityTrace.events.slice(0, integrityEventIndex).reduce(reduceKeyStrokeIntegrityEvent, structuredClone(integrityTrace.initialState));
-  const integrityLabel = (event: IntegrityEvent) => {
-    if (event.type === 'KEY_STROKE_BEGUN') return t(`begin units key ${event.digit}`, `开始个位键 ${event.digit}`);
-    if (event.type === 'INCOMPLETE_STROKE_RELEASED') return t('release before the stroke completes; accumulator unchanged', '行程未完成便松手；累加器不变');
-    if (event.type === 'INCOMPLETE_STROKE_DETECTED') return t('detect incomplete stroke', '检测到不完整键程');
-    if (event.type === 'INPUT_LOCKED') return t('lock unrelated input', '锁定无关输入');
-    if (event.type === 'ARITHMETIC_COMMITTED') return t(`complete errant stroke; commit ${event.digit} exactly once`, `完成出错键程；仅提交一次 ${event.digit}`);
-    return t('release integrity lock and return idle', '解除完整性锁并返回空闲');
-  };
-  const integrityLog = integrityTrace.events.slice(0, integrityEventIndex).map(event => `${String(event.sequence).padStart(2, '0')} · ${integrityLabel(event)}`).join('\n') || t('No integrity event yet.', '还没有完整性事件。');
+  const previousFocus = document.activeElement instanceof HTMLElement ? document.activeElement.id : '';
+  // The shell replaces main's contents. Keep the course's live region mounted
+  // outside that subtree so subsequent feedback is a text update, not a new region.
+  let announcement = document.getElementById('integrity-announcement');
+  if (!announcement) {
+    announcement = document.createElement('p');
+    announcement.id = 'integrity-announcement';
+    announcement.className = 'integrity-announcement';
+    announcement.setAttribute('role', 'status');
+    announcement.setAttribute('aria-live', 'polite');
+    announcement.setAttribute('aria-atomic', 'true');
+    document.body.append(announcement);
+  }
   const lifecycleState = lifecycleTrace.events.slice(0, lifecycleEventIndex).reduce(reduceRegisterLifecycleEvent, structuredClone(lifecycleTrace.initialState));
   const lifecycleLabel = (event: RegisterLifecycleEvent) => event.type === 'MODE_SELECTED'
     ? t(`select ${event.modeAfter}`, `选择 ${event.modeAfter}`)
@@ -303,7 +420,7 @@ function controls() {
   shell(
     { en: 'Why is a lock part of the calculation?', zh: '锁并不表示数字，为什么仍属于计算？' },
     { en: 'It prevents setting and operation from becoming valid at the same time.', zh: '它阻止设定与运转在同一时刻同时有效。' },
-    `${lesson({ en: 'Protect one complete arithmetic cycle from a mid-operation setting change.', zh: '保护一个完整运算周期，不让设定值在途中改变。' }, { en: 'Change the setting, begin a cycle, then try changing it while active.', zh: '先改变设定、开始周期，再在运转中尝试改变设定。' }, { en: 'Permission and phase carry algorithmic meaning even though they contain no number.', zh: '权限与阶段即使不承载数字，也具有算法意义。' })}<section><div class="structure-callout">${evidenceBadge('TEACHING', locale)} ${t('P/M generic interlock informed by Odhner patent and Curta operator evidence—not either machine’s lock geometry.', 'P/M 通用互锁模型，受 Odhner 专利和 Curta 操作资料启发——不是任何一台机器的锁具几何复原。')}</div><div class="state-grid"><div><small>${t('setting / revision', '设定值 / 修订号')}</small><strong>${controlState.settingValue} / r${controlState.settingRevision}</strong></div><div><small>${t('crank position', '曲柄位置')}</small><strong>${controlState.crankPosition}</strong><span>${controlState.crankLocked ? t('locked', '已锁定') : t('released', '已释放')}</span></div><div><small>${t('setting control', '设定控制')}</small><strong>${controlState.settingLocked ? t('LOCKED', '锁定') : t('FREE', '可用')}</strong></div><div><small>${t('phase', '阶段')}</small><strong>${controlState.phase}</strong></div><div><small>${t('completed cycles', '已完成周期')}</small><strong>${controlState.completedCycleCount}</strong><span>${t('human operations: ', '人工动作：')}${controlState.humanOperationCount}</span></div></div><div class="controls"><button id="control-setting" ${controlState.settingLocked ? 'disabled' : ''}>${t('Change setting', '改变设定值')}</button><button id="control-begin" ${controlState.phase !== 'HOME_FREE' ? 'disabled' : ''}>${t('Begin crank cycle', '开始曲柄周期')}</button><button id="control-attempt" ${!active ? 'disabled' : ''}>${t('Try setting while active', '运转中尝试改设定')}</button><button id="control-complete" ${!active ? 'disabled' : ''}>${t('Complete and return home', '完成并返回原位')}</button><button class="secondary" id="control-reset">${t('Reset', '重置')}</button></div><p class="status" aria-live="polite">${controlMessage || t('At home: crank locked, setting free.', '原位状态：曲柄锁定，设定控制可用。')}</p><details open><summary>${t('Ordered control events', '有序控制事件')}</summary><pre>${esc(log)}</pre></details><p class="model-note">${t('If both controls stayed free, one nominal cycle could transfer parts of two settings. The lock preserves the operand and cycle boundary.', '如果两套控制同时自由，一个名义周期就可能传递两个设定值的不同部分。互锁保护的是操作数与周期边界。')}</p><h2>${t('Documented controls are family-specific', '历史控制必须逐机器家族辨认')}</h2><p class="structure-callout">${t('The P/M event sequence above is not reconstructed from any one profile below. These cards preserve source identity, claim/evidence labels, documented roles, and what each source does not establish.', '上方 P/M 事件顺序并非从下方任一资料复原而来。这些卡片保留来源身份、声明/证据标签、资料支持的角色，以及每项来源不能证明的内容。')}</p>${evidenceProfiles}</section><section><h2>${t('What if a key is released before its stroke completes?', '如果按键尚未走完整个行程就松手呢？')}</h2><div class="structure-callout">${evidenceBadge('TEACHING', locale)} ${t('Generic P/M integrity controller. Turck 1921, printed pp. 159–162, documents the Controlled-key problem and responsibility; these event names and exact commit phases are not historical linkage timing.', '通用 P/M 完整性控制器。Turck 1921 印刷页 159–162 记录了 Controlled-key 的问题与控制责任；这里的事件名及精确提交阶段不是历史连杆时序。')}</div><div class="state-grid"><div><small>${t('accumulator', '累加器')}</small><strong>${accumulatorValue(integrityState.accumulator)}</strong></div><div><small>${t('active / errant key', '活动 / 出错按键')}</small><strong>${integrityState.activeDigit === null ? '—' : `${integrityState.activeDigit} @ ${integrityState.activeColumn === 0 ? t('units', '个位') : integrityState.activeColumn}`}</strong></div><div><small>${t('integrity phase', '完整性阶段')}</small><strong>${integrityState.phase}</strong></div><div><small>${t('ordinary input', '普通输入')}</small><strong>${integrityState.inputPermitted ? t('PERMITTED', '允许') : t('LOCKED', '锁定')}</strong></div><div><small>${t('integrity cycles / human actions', '完整性周期 / 人工动作')}</small><strong>${integrityState.integrityCycleCount} / ${integrityState.humanOperationCount}</strong></div></div><div class="controls"><button id="integrity-step" ${integrityEventIndex >= integrityTrace.events.length ? 'disabled' : ''}>${t('Step one integrity event', '推进一个完整性事件')}</button><button class="secondary" id="integrity-reset">${t('Reset integrity lesson', '重置完整性课程')}</button></div><p class="status" aria-live="polite">${t('Integrity event', '完整性事件')} ${integrityEventIndex} / ${integrityTrace.events.length}</p><details open><summary>${t('Ordered incomplete-stroke trace', '有序不完整键程事件流')}</summary><pre>${esc(integrityLog)}</pre></details><div class="structure-callout"><b>${t('Historical Controlled-Key recovery evidence', '历史 Controlled-Key 恢复证据')}</b><ul><li>${t('H/E1 · Felt & Tarrant manuals: Easy Instructions ca. 1920 p. 8 and Methods 1921 pp. IX–XI say that, in addition, the operator retries or completes the partial key, touches the red Correction/Release Button, then continues. Multiple faulty columns must each be corrected; multiplication/division guidance says cancel and redo.', 'H/E1 · Felt & Tarrant 说明书：约 1920 年 Easy Instructions 第 8 页及 1921 年 Methods 第 IX–XI 页说明，加法中应重按或补完整未按到底的键，触碰红色纠错/释放按钮，再继续。若多列出错须逐列纠正；乘除法则要求清除后重做。')}</li><li>${t('H/E1 · Ziehm US 1,110,734 p. 4 and claims 11/16/19: partial depression/release locks other columns; completing the errant key gives its intended accumulation; release key 134 then releases the orders. Release before correction does not persist.', 'H/E1 · Ziehm US 1,110,734 第 4 页及权利要求 11/16/19：部分下压后松开会锁住其他列；补完整出错键会完成预期累加；随后释放键 134 解锁。若纠正前先释放，解锁不会保持。')}</li><li>${t('P/M · repository trace: the named detection, lock, exactly-once arithmetic-commit and release events are a deterministic teaching decomposition—not patent event names, physical timing, or a Model E/F reconstruction. Integrity release is distinct from accumulator zeroing.', 'P/M · 本站轨迹：具名的检测、锁定、恰好一次算术提交与释放事件是确定性教学分解——不是专利事件名、物理时序或 Model E/F 复原。完整性解锁也不同于累加器归零。')}</li></ul></div></section><section><h2>${t('Why clear two registers independently?', '为什么要分别清除两个寄存器？')}</h2><div class="structure-callout">${evidenceBadge('TEACHING', locale)} ${t('Generic P/M register lifecycle—not a Thomas linkage reconstruction. The 8478 / 27 fixture illustrates state hygiene, not a claim about one historical calculation.', '通用 P/M 寄存器生命周期——不是 Thomas 连杆复原。8478 / 27 仅用于说明状态管理，不代表某次历史计算。')}</div><div class="state-grid"><div><small>${t('result register', '结果寄存器')}</small><strong>${lifecycleState.resultRegister}</strong></div><div><small>${t('revolution / cycle register', '转数 / 周期寄存器')}</small><strong>${lifecycleState.revolutionRegister.count}</strong></div><div><small>${t('operation mode', '运算模式')}</small><strong>${lifecycleState.mode}</strong></div><div><small>${t('clear actions / human actions', '清除动作 / 人工动作')}</small><strong>${lifecycleState.clearActionCount} / ${lifecycleState.humanOperationCount}</strong></div></div><div class="controls"><button id="lifecycle-step" ${lifecycleEventIndex >= lifecycleTrace.events.length ? 'disabled' : ''}>${t('Step one lifecycle event', '推进一个生命周期事件')}</button><button class="secondary" id="lifecycle-reset">${t('Reset register lesson', '重置寄存器课程')}</button></div><p class="status" aria-live="polite">${t('Lifecycle event', '生命周期事件')} ${lifecycleEventIndex} / ${lifecycleTrace.events.length}</p><details open><summary>${t('Independent register events', '独立寄存器事件')}</summary><pre>${esc(lifecycleLog)}</pre></details><div class="structure-callout"><b>${t('Direct source boundary', '直接来源边界')}</b><ul><li>${t('The Smithsonian 1868 pamphlet manifest exposes one readable open-spread image: its legend identifies result windows C, multiplier/quotient windows D, right knob O clearing D, and left knob P clearing C.', 'Smithsonian 1868 小册子的 IIIF 清单仅公开一张可读展开图：图例标明结果窗 C、乘数/商窗 D、右旋钮 O 清除 D、左旋钮 P 清除 C。')}</li><li>${t('NMAH 1867 object MA.327900 and ca.1873 object MA.335215 have different capacities and catalog details; they are not merged into one revision.', 'NMAH 1867 实物 MA.327900 与约 1873 实物 MA.335215 的容量和目录细节不同；这里不把它们合并为同一修订版。')}</li><li>${t('Oxford attributes independent zeroing knobs to an 1865 booklet engraving at R/E2 precision; exact linkage and timing remain open.', 'Oxford 以 R/E2 精度把独立归零旋钮归于 1865 年说明册图版；确切连杆与时序仍未确认。')}</li></ul></div></section>`
+    `${lesson({ en: 'Protect one complete arithmetic cycle from a mid-operation setting change.', zh: '保护一个完整运算周期，不让设定值在途中改变。' }, { en: 'Change the setting, begin a cycle, then try changing it while active.', zh: '先改变设定、开始周期，再在运转中尝试改变设定。' }, { en: 'Permission and phase carry algorithmic meaning even though they contain no number.', zh: '权限与阶段即使不承载数字，也具有算法意义。' })}<section><div class="structure-callout">${evidenceBadge('TEACHING', locale)} ${t('P/M generic interlock informed by Odhner patent and Curta operator evidence—not either machine’s lock geometry.', 'P/M 通用互锁模型，受 Odhner 专利和 Curta 操作资料启发——不是任何一台机器的锁具几何复原。')}</div><div class="state-grid"><div><small>${t('setting / revision', '设定值 / 修订号')}</small><strong>${controlState.settingValue} / r${controlState.settingRevision}</strong></div><div><small>${t('crank position', '曲柄位置')}</small><strong>${controlState.crankPosition}</strong><span>${controlState.crankLocked ? t('locked', '已锁定') : t('released', '已释放')}</span></div><div><small>${t('setting control', '设定控制')}</small><strong>${controlState.settingLocked ? t('LOCKED', '锁定') : t('FREE', '可用')}</strong></div><div><small>${t('phase', '阶段')}</small><strong>${controlState.phase}</strong></div><div><small>${t('completed cycles', '已完成周期')}</small><strong>${controlState.completedCycleCount}</strong><span>${t('human operations: ', '人工动作：')}${controlState.humanOperationCount}</span></div></div><div class="controls"><button id="control-setting" ${controlState.settingLocked ? 'disabled' : ''}>${t('Change setting', '改变设定值')}</button><button id="control-begin" ${controlState.phase !== 'HOME_FREE' ? 'disabled' : ''}>${t('Begin crank cycle', '开始曲柄周期')}</button><button id="control-attempt" ${!active ? 'disabled' : ''}>${t('Try setting while active', '运转中尝试改设定')}</button><button id="control-complete" ${!active ? 'disabled' : ''}>${t('Complete and return home', '完成并返回原位')}</button><button class="secondary" id="control-reset">${t('Reset', '重置')}</button></div><p class="status" aria-live="polite">${controlMessage || t('At home: crank locked, setting free.', '原位状态：曲柄锁定，设定控制可用。')}</p><details open><summary>${t('Ordered control events', '有序控制事件')}</summary><pre>${esc(log)}</pre></details><p class="model-note">${t('If both controls stayed free, one nominal cycle could transfer parts of two settings. The lock preserves the operand and cycle boundary.', '如果两套控制同时自由，一个名义周期就可能传递两个设定值的不同部分。互锁保护的是操作数与周期边界。')}</p><h2>${t('Documented controls are family-specific', '历史控制必须逐机器家族辨认')}</h2><p class="structure-callout">${t('The P/M event sequence above is not reconstructed from any one profile below. These cards preserve source identity, claim/evidence labels, documented roles, and what each source does not establish.', '上方 P/M 事件顺序并非从下方任一资料复原而来。这些卡片保留来源身份、声明/证据标签、资料支持的角色，以及每项来源不能证明的内容。')}</p>${evidenceProfiles}</section>${integrityWorkbenchMarkup(`<div class="structure-callout"><b>${t('Historical Controlled-Key recovery evidence', '历史 Controlled-Key 恢复证据')}</b><ul><li>${t('H/E1 · Felt & Tarrant manuals: Easy Instructions ca. 1920 p. 8 and Methods 1921 pp. IX–XI say that, in addition, the operator retries or completes the partial key, touches the red Correction/Release Button, then continues. Multiple faulty columns must each be corrected; multiplication/division guidance says cancel and redo.', 'H/E1 · Felt & Tarrant 说明书：约 1920 年 Easy Instructions 第 8 页及 1921 年 Methods 第 IX–XI 页说明，加法中应重按或补完整未按到底的键，触碰红色纠错/释放按钮，再继续。若多列出错须逐列纠正；乘除法则要求清除后重做。')}</li><li>${t('H/E1 · Ziehm US 1,110,734 p. 4 and claims 11/16/19: partial depression/release locks other columns; completing the errant key gives its intended accumulation; release key 134 then releases the orders. Release before correction does not persist.', 'H/E1 · Ziehm US 1,110,734 第 4 页及权利要求 11/16/19：部分下压后松开会锁住其他列；补完整出错键会完成预期累加；随后释放键 134 解锁。若纠正前先释放，解锁不会保持。')}</li><li>${t('P/M · repository trace: the named detection, lock, exactly-once arithmetic-commit and release events are a deterministic teaching decomposition—not patent event names, physical timing, or a Model E/F reconstruction. Integrity release is distinct from accumulator zeroing.', 'P/M · 本站轨迹：具名的检测、锁定、恰好一次算术提交与释放事件是确定性教学分解——不是专利事件名、物理时序或 Model E/F 复原。完整性解锁也不同于累加器归零。')}</li></ul></div>`)}<section><h2>${t('Why clear two registers independently?', '为什么要分别清除两个寄存器？')}</h2><div class="structure-callout">${evidenceBadge('TEACHING', locale)} ${t('Generic P/M register lifecycle—not a Thomas linkage reconstruction. The 8478 / 27 fixture illustrates state hygiene, not a claim about one historical calculation.', '通用 P/M 寄存器生命周期——不是 Thomas 连杆复原。8478 / 27 仅用于说明状态管理，不代表某次历史计算。')}</div><div class="state-grid"><div><small>${t('result register', '结果寄存器')}</small><strong>${lifecycleState.resultRegister}</strong></div><div><small>${t('revolution / cycle register', '转数 / 周期寄存器')}</small><strong>${lifecycleState.revolutionRegister.count}</strong></div><div><small>${t('operation mode', '运算模式')}</small><strong>${lifecycleState.mode}</strong></div><div><small>${t('clear actions / human actions', '清除动作 / 人工动作')}</small><strong>${lifecycleState.clearActionCount} / ${lifecycleState.humanOperationCount}</strong></div></div><div class="controls"><button id="lifecycle-step" ${lifecycleEventIndex >= lifecycleTrace.events.length ? 'disabled' : ''}>${t('Step one lifecycle event', '推进一个生命周期事件')}</button><button class="secondary" id="lifecycle-reset">${t('Reset register lesson', '重置寄存器课程')}</button></div><p class="status" aria-live="polite">${t('Lifecycle event', '生命周期事件')} ${lifecycleEventIndex} / ${lifecycleTrace.events.length}</p><details open><summary>${t('Independent register events', '独立寄存器事件')}</summary><pre>${esc(lifecycleLog)}</pre></details><div class="structure-callout"><b>${t('Direct source boundary', '直接来源边界')}</b><ul><li>${t('The Smithsonian 1868 pamphlet manifest exposes one readable open-spread image: its legend identifies result windows C, multiplier/quotient windows D, right knob O clearing D, and left knob P clearing C.', 'Smithsonian 1868 小册子的 IIIF 清单仅公开一张可读展开图：图例标明结果窗 C、乘数/商窗 D、右旋钮 O 清除 D、左旋钮 P 清除 C。')}</li><li>${t('NMAH 1867 object MA.327900 and ca.1873 object MA.335215 have different capacities and catalog details; they are not merged into one revision.', 'NMAH 1867 实物 MA.327900 与约 1873 实物 MA.335215 的容量和目录细节不同；这里不把它们合并为同一修订版。')}</li><li>${t('Oxford attributes independent zeroing knobs to an 1865 booklet engraving at R/E2 precision; exact linkage and timing remain open.', 'Oxford 以 R/E2 精度把独立归零旋钮归于 1865 年说明册图版；确切连杆与时序仍未确认。')}</li></ul></div></section>`
   );
   const apply = (type: 'CHANGE_SETTING' | 'BEGIN_CRANK_CYCLE' | 'COMPLETE_CRANK_CYCLE', value?: number) => {
     try {
@@ -324,13 +441,37 @@ function controls() {
   };
   document.querySelector('#lifecycle-step')?.addEventListener('click', () => { lifecycleEventIndex = Math.min(lifecycleEventIndex + 1, lifecycleTrace.events.length); controls(); });
   document.querySelector('#lifecycle-reset')?.addEventListener('click', () => { lifecycleEventIndex = 0; controls(); });
-  document.querySelector('#integrity-step')?.addEventListener('click', () => { integrityEventIndex = Math.min(integrityEventIndex + 1, integrityTrace.events.length); controls(); });
-  document.querySelector('#integrity-reset')?.addEventListener('click', () => { integrityEventIndex = 0; controls(); });
+  const operateKey = (request: WorkbenchAction) => { integrityWorkbench = applyWorkbenchAction(integrityWorkbench, request); controls(); };
+  document.querySelector('#integrity-column')?.addEventListener('change', event => { integritySelection.column = Number((event.target as HTMLSelectElement).value); });
+  document.querySelector('#integrity-digit')?.addEventListener('change', event => { integritySelection.digit = Number((event.target as HTMLSelectElement).value); });
+  document.querySelector('#integrity-preset')?.addEventListener('change', event => { integrityPreset = (event.target as HTMLSelectElement).value === '99' ? 99 : 0; });
+  document.querySelector('#integrity-begin')?.addEventListener('click', () => operateKey({ type: 'BEGIN_KEY_STROKE', ...integritySelection }));
+  document.querySelector('#integrity-complete')?.addEventListener('click', () => operateKey({ type: 'COMPLETE_KEY_STROKE' }));
+  document.querySelector('#integrity-interrupt')?.addEventListener('click', () => operateKey({ type: 'RELEASE_INCOMPLETE' }));
+  document.querySelector('#integrity-correct')?.addEventListener('click', () => operateKey({ type: 'COMPLETE_ERRANT_STROKE' }));
+  document.querySelector('#integrity-release')?.addEventListener('click', () => operateKey({ type: 'RELEASE_ERROR_LOCK' }));
+  document.querySelector('#integrity-other')?.addEventListener('click', () => operateKey({ type: 'BEGIN_KEY_STROKE', column: (integrityWorkbench.trace.finalState.activeColumn! + 1) % 3, digit: 2 }));
+  document.querySelector('#integrity-replay')?.addEventListener('click', () => { integrityWorkbench = startWorkbenchReplay(integrityWorkbench); controls(); });
+  document.querySelector('#integrity-replay-step')?.addEventListener('click', () => { integrityWorkbench = stepWorkbenchReplay(integrityWorkbench); controls(); });
+  document.querySelector('#integrity-current')?.addEventListener('click', () => { integrityWorkbench = returnToCurrentWorkbench(integrityWorkbench); controls(); });
+  document.querySelector('#integrity-reset')?.addEventListener('click', () => { integrityWorkbench = createKeyStrokeWorkbench(integrityPreset); integritySelection = { column: 0, digit: 7 }; controls(); });
   document.querySelector('#control-setting')?.addEventListener('click', () => apply('CHANGE_SETTING'));
   document.querySelector('#control-begin')?.addEventListener('click', () => apply('BEGIN_CRANK_CYCLE'));
   document.querySelector('#control-attempt')?.addEventListener('click', () => apply('CHANGE_SETTING'));
   document.querySelector('#control-complete')?.addEventListener('click', () => apply('COMPLETE_CRANK_CYCLE'));
   document.querySelector('#control-reset')?.addEventListener('click', () => { controlState = createSettingCrankInterlock(314); controlEvents = []; controlMessage = ''; controlCycle = 0; controls(); });
+  announcement.textContent = integrityFeedbackText();
+  if (previousFocus.startsWith('integrity-') || previousFocus === 'language-toggle') {
+    let focus = document.getElementById(previousFocus);
+    if (!focus || (focus instanceof HTMLButtonElement && focus.disabled)) {
+      const phase = integrityWorkbench.trace.finalState.phase;
+      const next = integrityWorkbench.replayIndex !== null
+        ? (integrityWorkbench.replayIndex < integrityWorkbench.trace.events.length ? 'replay-step' : 'current')
+        : ({ IDLE: 'begin', STROKE_IN_PROGRESS: 'complete', ERROR_LOCKED: 'correct', CORRECTED_LOCKED: 'release' } as const)[phase];
+      focus = document.getElementById(`integrity-${next}`);
+    }
+    focus?.focus({ preventScroll: true });
+  }
 }
 
 function curta() {
